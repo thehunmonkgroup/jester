@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Helper script to make calling Jester help less typing intensive.
+#
+# Instead of 'cd /path/to/scripts; lua jester.lua help [topic] [subtopic]',
+# simply set the FREESWITCH_SCRIPTS_DIR variable to the full path to your
+# FreeSWITCH 'scripts' directory (where jester.lua is located), put this
+# script somewhere in your $PATH, then run 'jhelp [topic] [subtopic]'.
+#
+# This script should work on most Linux/Unix systems, but not on Windows,
+# sorry!
+
+FREESWITCH_SCRIPTS_DIR="/usr/local/freeswitch/scripts"
+
+CURRENT_DIR=`pwd`
+cd $FREESWITCH_SCRIPTS_DIR
+lua jester.lua 'help' $@
+cd $CURRENT_DIR
+

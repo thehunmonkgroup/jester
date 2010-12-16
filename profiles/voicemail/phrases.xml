@@ -1,0 +1,487 @@
+<!-- Custom phrase macros for Apartment Lines. -->
+<include><!--This line will be ignored it's here to validate the xml and is optional -->
+
+  <!-- Voicemail message options -->
+  <macro name="advanced_options">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-advopts.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="prev_message">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-prev.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="repeat_message">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-repeat.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="next_message">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-next.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="delete_message">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-delete.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="undelete_message">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-undelete.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="forward_message">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-toforward.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="save_message">
+    <input pattern="^([0-9#*])$">
+      <match>
+        <action function="play-file" data="vm-savemessage.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="main_menu">
+    <input pattern="^([0-9#*])$">
+      <match>
+        <action function="play-file" data="vm-starmain.wav"/>
+      </match>
+    </input>
+  </macro>
+  <macro name="help_exit">
+    <input pattern="^([0-9#*])$">
+      <match>
+        <action function="play-file" data="vm-helpexit.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Silence stream -->
+  <macro name="silence">
+    <input pattern="^([1-9][0-9]+)$">
+      <match>
+        <action function="play-file" data="silence_stream://$1"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="message_number">
+    <input pattern="^(first|last)$">
+      <match>
+        <action function="play-file" data="vm-$1.wav"/>
+        <action function="play-file" data="vm-message.wav"/>
+      </match>
+    </input>
+    <input pattern="^(\d+)$">
+      <match>
+        <action function="play-file" data="vm-message.wav"/>
+        <action function="say" data="$1" method="pronounced" type="items"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="cid_envelope">
+    <input pattern="^(yes):(\d+):(yes|no):(\+1|1)?(\d+)$">
+      <match>
+        <action function="play-file" data="vm-received.wav"/>
+        <action function="say" data="$2" method="pronounced" type="current_date_time"/>
+      </match>
+    </input>
+    <input pattern="^(yes|no):(\d+):(yes):(\+1|1)?(\d+)$">
+      <match>
+        <action function="play-file" data="vm-from-phonenumber.wav"/>
+        <action function="say" data="$5" method="pronounced" type="name_spelled"/>
+      </match>
+    </input>
+    <!-- 
+    TODO: This optionally plays the pause only if any cid_envelope information
+    is read, use this or the one below which always pauses?
+    <input pattern="^(no):(\d+):(no):(\+1|1)?(\d+)$">
+      <nomatch>
+        <action function="play-file" data="silence_stream://500"/>
+      </nomatch>
+    </input>
+    -->
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="silence_stream://500"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="get_mailbox_number">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-login.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="get_password">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-password.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="announce_new_old_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-youhave.wav"/>
+      </match>
+    </input>
+    <!-- No messages. -->
+    <input pattern="^(0:0)$">
+      <match>
+        <action function="play-file" data="vm-no.wav"/>
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+    <!-- Only new messages. -->
+    <input pattern="^([1-9]\d*):0$">
+      <match>
+        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-INBOX.wav"/> 
+      </match>
+    </input>
+    <input pattern="^1:0$">
+      <match>
+        <action function="play-file" data="vm-message.wav"/>
+      </match>
+    </input>
+    <input pattern="^([2-9]\d*):0$">
+      <match>
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+    <!-- Only old messages. -->
+    <input pattern="^0:([1-9]\d*)$">
+      <match>
+        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-Old.wav"/> 
+      </match>
+    </input>
+    <input pattern="^0:1$">
+      <match>
+        <action function="play-file" data="vm-message.wav"/>
+      </match>
+    </input>
+    <input pattern="^0:([2-9]\d*)$">
+      <match>
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+    <!-- New and old messages. -->
+    <input pattern="^([1-9]\d*):([1-9]\d*)$">
+      <match>
+        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-INBOX.wav"/> 
+        <action function="play-file" data="vm-and.wav"/> 
+        <action function="say" data="$2" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-Old.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([1-9]\d*):1$">
+      <match>
+        <action function="play-file" data="vm-message.wav"/>
+      </match>
+    </input>
+    <input pattern="^([1-9]\d*):([2-9]\d*)$">
+      <match>
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="login_incorrect_mailbox">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-incorrect-mailbox.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="login_incorrect">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-incorrect.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="goodbye">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-goodbye.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="invalid_extension">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="invalid.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="default_greeting">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-intro.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="no_more_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-nomore.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="change_to_folder">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-changeto.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <macro name="save_to_folder">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-savefolder.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- New messages. -->
+  <macro name="new_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-press.wav"/>
+        <action function="say" data="0" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-for.wav"/>
+        <action function="play-file" data="vm-INBOX.wav"/> 
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Old messages. -->
+  <macro name="old_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="say" data="1" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-for.wav"/>
+        <action function="play-file" data="vm-Old.wav"/> 
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Work messages. -->
+  <macro name="work_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="say" data="2" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-for.wav"/>
+        <action function="play-file" data="vm-Work.wav"/> 
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Family messages. -->
+  <macro name="family_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="say" data="3" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-for.wav"/>
+        <action function="play-file" data="vm-Family.wav"/> 
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Friends messages. -->
+  <macro name="friends_messages">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="say" data="4" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-for.wav"/>
+        <action function="play-file" data="vm-Friends.wav"/> 
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Pound to cancel. -->
+  <macro name="pound_cancel">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-tocancel.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Announce folder. -->
+  <macro name="announce_folder">
+    <!-- This is here to prevent log warnings about no matches in the
+         macro -->
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="silence_stream://10"/>
+      </match>
+    </input>
+    <input pattern="^0$">
+      <match>
+        <action function="play-file" data="vm-INBOX.wav"/> 
+      </match>
+    </input>
+    <input pattern="^1$">
+      <match>
+        <action function="play-file" data="vm-Old.wav"/> 
+      </match>
+    </input>
+    <input pattern="^2$">
+      <match>
+        <action function="play-file" data="vm-Work.wav"/> 
+      </match>
+    </input>
+    <input pattern="^3$">
+      <match>
+        <action function="play-file" data="vm-Family.wav"/> 
+      </match>
+    </input>
+    <input pattern="^4$">
+      <match>
+        <action function="play-file" data="vm-Friends.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d)$">
+      <match>
+        <action function="play-file" data="vm-messages.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Help. -->
+  <macro name="help">
+    <input pattern="^([^0]\d*):(\d)$">
+      <match>
+        <action function="play-file" data="vm-onefor.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([^0]\d*):0$">
+      <match>
+        <action function="play-file" data="vm-INBOX.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([^0]\d*):1$">
+      <match>
+        <action function="play-file" data="vm-Old.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([^0]\d*):2$">
+      <match>
+        <action function="play-file" data="vm-Work.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([^0]\d*):3$">
+      <match>
+        <action function="play-file" data="vm-Family.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([^0]\d*):4$">
+      <match>
+        <action function="play-file" data="vm-Friends.wav"/> 
+      </match>
+    </input>
+    <input pattern="^([^0]\d*):(\d)$">
+      <match>
+        <action function="play-file" data="vm-messages.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-opts.wav"/> 
+        <action function="play-file" data="vm-helpexit.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Message saved. -->
+  <macro name="message_saved">
+    <input pattern="^(\d+):(\d)$">
+      <match>
+        <action function="play-file" data="vm-message.wav"/> 
+        <action function="say" data="1" method="pronounced" type="items"/>
+        <action function="play-file" data="vm-savedto.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d+):0$">
+      <match>
+        <action function="play-file" data="vm-INBOX.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d+):1$">
+      <match>
+        <action function="play-file" data="vm-Old.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d+):2$">
+      <match>
+        <action function="play-file" data="vm-Work.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d+):3$">
+      <match>
+        <action function="play-file" data="vm-Family.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d+):4$">
+      <match>
+        <action function="play-file" data="vm-Friends.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(\d+):(\d)$">
+      <match>
+        <action function="play-file" data="vm-messages.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Message deleted/undeleted. -->
+  <macro name="message_deleted_undeleted">
+    <input pattern="^1$">
+      <match>
+        <action function="play-file" data="vm-deleted.wav"/> 
+      </match>
+      <nomatch>
+        <action function="play-file" data="vm-undeleted.wav"/> 
+      </nomatch>
+    </input>
+  </macro>
+
+</include><!--This line will be ignored it's here to validate the xml and is optional -->
