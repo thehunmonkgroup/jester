@@ -28,7 +28,7 @@ modules = {
   "tracker",
   "hangup",
 }
-sequence_path = jester.conf.sequence_path .. "/voicemail"
+sequence_path = jester.conf.profile_path .. "/voicemail/sequences"
 
 voicemail_dir = jester.conf.base_dir .. "/storage/voicemail"
 temp_recording_dir = "/tmp"
