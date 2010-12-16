@@ -10,6 +10,7 @@ if session then
   sounds_dir = jester.get_variable("sounds_dir")
   jester_dir = base_dir .. "/scripts/jester"
   sequence_path = jester_dir .. "/sequences"
+  profile_path = jester_dir .. "/profiles"
 end
 
 help_path = "jester/help"

@@ -25,13 +25,6 @@ if args[1] and args[2] then
   -- Initialize the channel object.
   jester.channel = jester.Channel:new()
 
-  -- Set up initial stacks.
-  local stacks = {"active", "exit", "hangup", "sequence", "sequence_name"}
-  for _, name in ipairs(stacks) do
-    jester.reset_stack(name)
-  end
-  stacks = nil
-
   -- Add profile configuration here so it can leverage access to channel
   -- variables.
   jester.profile_name = args[1]
@@ -40,6 +33,8 @@ if args[1] and args[2] then
 
   -- Profile overrides.
   local overrides = {
+    "debug",
+    "profile_path",
     "sequence_path",
     "modules",
     "key_order",
@@ -49,6 +44,13 @@ if args[1] and args[2] then
       jester.conf[override] = jester.profile[override]
     end
   end
+
+  -- Set up initial stacks.
+  local stacks = {"active", "exit", "hangup", "sequence", "sequence_name"}
+  for _, name in ipairs(stacks) do
+    jester.reset_stack(name)
+  end
+  stacks = nil
 
   -- Load modules.
   jester.init_modules()
