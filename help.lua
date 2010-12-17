@@ -13,7 +13,7 @@ end
 function init_module_help()
   local help_file
   -- Create a map of all module help that can be called.
-  jester.help_map = {}
+  jester.help = {}
   for _, mod in ipairs(jester.conf.modules) do
     help_file = "jester.modules." .. mod .. ".help"
     if require(help_file) then
@@ -142,7 +142,7 @@ function module_help()
   local help, description
   table.sort(jester.conf.modules)
   for _, name in ipairs(jester.conf.modules) do
-    help = jester.help_map[name]
+    help = jester.help[name]
     table.insert(module_list, name .. ":")
     if help.description_short then
       description = help.description_short:wrap(79, "  ")
@@ -156,7 +156,7 @@ end
 
 function module_help_detail(module_name)
   local description, actions
-  for name_to_check, data in pairs(jester.help_map) do
+  for name_to_check, data in pairs(jester.help) do
     if name_to_check == module_name then
       if data.description_long then
         description = data.description_long:wrap(79)
@@ -168,8 +168,8 @@ function module_help_detail(module_name)
   end
   if description then
     local list = {}
-    module_data = jester.help_map[module_name]
-    action_data = jester.help_map[module_name].actions
+    module_data = jester.help[module_name]
+    action_data = jester.help[module_name].actions
     table.insert(list, description)
     if action_data then
       table.insert(list, "\nACTIONS:")
@@ -220,7 +220,7 @@ function action_help()
   local actions, description
   table.sort(jester.conf.modules)
   for _, module_name in ipairs(jester.conf.modules) do
-    actions = jester.help_map[module_name].actions
+    actions = jester.help[module_name].actions
     table.insert(action_list, "\nModule: " .. module_name)
     for _, action in ipairs(table.orderkeys(actions)) do
       table.insert(action_list, "  " .. action .. ":")
@@ -236,7 +236,7 @@ function action_help()
 end
 
 function action_help_detail(action)
-  for _, module_data in pairs(jester.help_map) do
+  for _, module_data in pairs(jester.help) do
     for action_to_check, action_data in pairs(module_data.actions) do
       if action_to_check == action then
         local list = {}
