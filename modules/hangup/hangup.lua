@@ -3,6 +3,7 @@ module(..., package.seeall)
 function hangup(action)
   -- Clean key map to prevent any key presses here.
   jester.keys = {}
+  -- Play a hangup file if specified.
   if action.play then
     session:streamFile(action.play)
   end
