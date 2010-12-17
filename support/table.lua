@@ -6,3 +6,13 @@ function table.orderkeys(t)
   table.sort(list)
   return list
 end
+
+function table.ordervalues(t)
+  local list = {}
+  for _, v in pairs(t) do
+    table.insert(list, v)
+  end
+  table.sort(list)
+  return list
+end
+
