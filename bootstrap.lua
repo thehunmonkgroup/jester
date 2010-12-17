@@ -20,6 +20,7 @@ if args[1] == "help" then
   return jester.help.get_help(args[2], args[3], args[4], args[5])
 end
 
+-- Run normally.
 if args[1] and args[2] then
 
   -- Initialize the channel object.
