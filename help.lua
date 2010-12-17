@@ -1,6 +1,7 @@
 module(..., package.seeall)
 
 require "jester.support.string"
+require "jester.support.table"
 
 local script_path, is_freeswitch = "", false
 if jester.is_freeswitch then
@@ -55,25 +56,38 @@ function get_help(...)
     local error_message = {}
     local path = script_path .. jester.conf.help_path
     local dir = lfs.dir(path)
-    local f, e
+    local file_list = {}
     for file in dir do
       if file ~= "." and file ~= ".." then
-        f, e = loadfile(path .. "/" .. file)
-        if f then
-          f()
-        else
-          table.insert(error_message, e)
-        end
+        table.insert(file_list, file)
+      end
+    end
+    -- Since help files are nested tables, we want to enforce an alphabetical
+    -- loading order so that help topics nested more deeply can be loaded
+    -- after higher topics.
+    table.sort(file_list)
+    local f, e
+    for _, file in ipairs(file_list) do
+      f, e = loadfile(path .. "/" .. file)
+      if f then
+        jester.debug_log("Loaded help file '%s'", file)
+        f()
+      else
+        table.insert(error_message, e)
       end
     end
 
     if #error_message == 0 then
       help_path = jester.help
-      for a = 1, #arguments do
-        help_path = help_path[arguments[a]]
-        if not help_path then break end
+      if #arguments > 0 then
+        for a = 1, #arguments do
+          help_path = help_path[arguments[a]]
+          if not help_path then break end
+        end
       end
-      if help_path then
+      if #arguments == 0 then
+        output = topic_help(jester.help, true)
+      elseif help_path then
         output = topic_help(help_path)
       else
         output = string.format("No help available for '%s'", arg_string)
@@ -93,17 +107,27 @@ function help_output(help)
   end
 end
 
-function topic_help(topic)
+function topic_help(topic, main)
   local output = {}
-  local description = topic.description_long or topic.description_short
+  local description
+  if main then
+    description = welcome()
+  else
+    description = topic.description_long or topic.description_short
+  end
   if description then
     table.insert(output, description:wrap(79))
   end
   local subtopics = {}
-  for sub, data in pairs(topic) do
-    if type(data) == "table" then
+  for _, sub in ipairs(table.orderkeys(topic)) do
+    if type(topic[sub]) == "table" then
       table.insert(subtopics, sub .. ":")
-      table.insert(subtopics, data.description_short:wrap(79, "  ") or "")
+      if topic[sub].description_short then
+        description = topic[sub].description_short:wrap(79, "  ")
+      else
+        description = ""
+      end
+      table.insert(subtopics, description)
     end
   end
   if #subtopics > 0 then
@@ -115,19 +139,30 @@ end
 
 function module_help()
   local module_list = {}
+  local help, description
+  table.sort(jester.conf.modules)
   for _, name in ipairs(jester.conf.modules) do
+    help = jester.help_map[name]
     table.insert(module_list, name .. ":")
-    table.insert(module_list, jester.help_map[name].description_short:wrap(79, "  ") or "")
+    if help.description_short then
+      description = help.description_short:wrap(79, "  ")
+    else
+      description = ""
+    end
+    table.insert(module_list, description)
   end
   return string.format("Run 'help module [name]' to get more help on a specific module.\n\nCurrently installed modules:\n\n%s", table.concat(module_list, "\n"))
 end
 
 function module_help_detail(module_name)
   local description, actions
-  local action_list = {}
   for name_to_check, data in pairs(jester.help_map) do
     if name_to_check == module_name then
-      description = data.description_long:wrap(79) or data.description_short:wrap(79) or ""
+      if data.description_long then
+        description = data.description_long:wrap(79)
+      elseif data.description_short then
+        description = data.description_short:wrap(79)
+      end
       break
     end
   end
@@ -135,32 +170,66 @@ function module_help_detail(module_name)
     local list = {}
     module_data = jester.help_map[module_name]
     action_data = jester.help_map[module_name].actions
-    table.insert(list, module_data.description_long:wrap(79) or module_data.description_short:wrap(79) or "")
+    table.insert(list, description)
     if action_data then
       table.insert(list, "\nACTIONS:")
-      for action, data in pairs(action_data) do
+      for _, action in ipairs(table.orderkeys(action_data)) do
         table.insert(list, "  " .. action .. ":")
-        table.insert(list, data.description_short:wrap(79, "    ") or "")
+        if action_data[action].description_short then
+          description = action_data[action].description_short:wrap(79, "    ")
+        else
+          description = ""
+        end
+        table.insert(list, description)
       end
     end
     if module_data.handlers then
-      table.insert(list, "\nHANDLERS:")
-      for handler, desc in pairs(module_data.handlers) do
-        table.insert(list,  "  " .. handler .. ":")
-        table.insert(list, desc:wrap(79, "    "))
-      end
+      list = build_handlers(module_data, list)
     end
     return table.concat(list, "\n")
   end
 end
 
+function build_handlers(module_data, list)
+  local handlers = module_data.handlers
+  table.insert(list, "\nHANDLERS:")
+  for _, handler in ipairs(table.orderkeys(handlers)) do
+    table.insert(list,  "  " .. handler .. ":")
+    table.insert(list, handlers[handler]:wrap(79, "    "))
+  end
+  return list
+end
+
+function welcome()
+  return [[Welcome to Jester help!
+
+Here you'll find extensive information on all the important areas of Jester.  Start by reviewing the topic list below for an area of interest.  The general format for accessing help is 'help [sub-topic] [sub-sub-topic] [...]', and this is how you'll see it referenced internally.
+
+The exact way help is called depends on where you're calling it from.  'help module data' would be called in the following ways depending on where/how you're accessing help:
+  From the command line:
+    cd /path/to/freeswitch/scripts
+    lua jester.lua help module data
+  From the FreeSWITCH console:
+    luarun jester.lua help module data
+  Using the jhelp script (find this in the jester/scripts directory):
+    jhelp module data]]
+end
+
 function action_help()
   local action_list = {}
+  local actions, description
+  table.sort(jester.conf.modules)
   for _, module_name in ipairs(jester.conf.modules) do
+    actions = jester.help_map[module_name].actions
     table.insert(action_list, "\nModule: " .. module_name)
-    for action, data in pairs(jester.help_map[module_name].actions) do
+    for _, action in ipairs(table.orderkeys(actions)) do
       table.insert(action_list, "  " .. action .. ":")
-      table.insert(action_list, data.description_short:wrap(79, "    ") or "")
+      if actions[action].description_short then
+        description = actions[action].description_short:wrap(79, "    ")
+      else
+        description = ""
+      end
+      table.insert(action_list, description)
     end
   end
   return string.format("Run 'help action [name]' to get more help on a specific action.\n\nCurrently installed actions:\n%s", table.concat(action_list, "\n"))
@@ -171,20 +240,25 @@ function action_help_detail(action)
     for action_to_check, action_data in pairs(module_data.actions) do
       if action_to_check == action then
         local list = {}
-        table.insert(list, action_data.description_long:wrap(79) or action_data.description_short:wrap(79) or "")
-        if action_data.params then
+        local description
+        if action_data.description_long then
+          description = action_data.description_long:wrap(79)
+        elseif action_data.description_short then
+          description = action_data.description_short:wrap(79)
+        else
+          description = ""
+        end
+        table.insert(list, description)
+        local params = action_data.params
+        if params then
           table.insert(list, "\nPARAMETERS:")
-          for param, desc in pairs(action_data.params) do
+          for _, param in ipairs(table.orderkeys(params)) do
             table.insert(list,  "  " .. param .. ":")
-            table.insert(list, desc:wrap(79, "    "))
+            table.insert(list, params[param]:wrap(79, "    "))
           end
         end
         if module_data.handlers then
-          table.insert(list, "\nHANDLERS:")
-          for handler, desc in pairs(module_data.handlers) do
-            table.insert(list,  "  " .. handler .. ":")
-            table.insert(list, desc:wrap(79, "    "))
-          end
+          list = build_handlers(module_data, list)
         end
         return table.concat(list, "\n")
       end
