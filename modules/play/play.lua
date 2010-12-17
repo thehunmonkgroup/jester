@@ -1,6 +1,7 @@
 module(..., package.seeall)
 
 function wait(action)
+  -- Don't wait if the call is hung up, or if a key was pressed.
   if action.wait and not jester.actionable_key() and jester.ready() then
     jester.wait(action.wait)
   end
@@ -12,6 +13,7 @@ end
 
 function play_file(action)
   if action.file then
+    -- A list of files was passed, join them in order.
     if type(action.file) == "table" then
       action.file = table.concat(action.file, "&")
     end
@@ -33,18 +35,23 @@ function play_valid_file(action)
     local success, file_error, filepath
     for _, file in ipairs(files) do
       if file:sub(1, 1) ~= "/" then
+        -- Look for phrases and handle them properly.
         if file:sub(1, 7) == "phrase:" then
           filepath = file
           success = true
+        -- Relative path, appends the sounds_dir value.
         else
           filepath = jester.conf.sounds_dir .. "/" .. file
         end
       else
+        -- Absolute path.
         filepath = file
       end
+      -- Check for file existence.
       if not success then
         success, file_error = lfs.attributes(filepath, "mode")
       end
+      -- Play the file if it exists.
       if success then
         jester.debug_log("Found valid file to play: %s", file)
         -- Store the name of the valid file found.
@@ -81,6 +88,7 @@ end
 function play_key_macros(action)
   local macros = action.key_announcements
   if macros then
+    -- Allow the action to override the default key order.
     local order = action.order or jester.conf.key_order
     local language = action.language or "en"
     local rep = reps(action)
