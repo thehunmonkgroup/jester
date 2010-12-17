@@ -7,16 +7,20 @@ function counter(action)
   -- Perform reset first to allow increment to be used to set the initial
   -- value of the counter.
   if action.reset then jester.clear_storage("counter", key) end
+  -- Grab the current count.
   local current_count = jester.get_storage("counter", key)
+  -- No current count, so initialize with a zero value.
   if not current_count then
     current_count = 0
     jester.set_storage("counter", key, current_count)
   end
+  -- Increment the counter if specified.
   if increment then
     current_count = current_count + increment
     jester.debug_log("Incremented counter '%s' by %d, new value %d", key, increment, current_count)
     jester.set_storage("counter", key, current_count)
   end
+  -- Perform comparisons if specified, and run sequences if there's a match.
   if compare_to then
     jester.debug_log("Comparing counter '%s' (%d) to %d", key, current_count, compare_to)
     if current_count == compare_to then
