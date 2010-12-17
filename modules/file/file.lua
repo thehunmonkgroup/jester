@@ -1,5 +1,8 @@
 module(..., package.seeall)
 
+--[[
+  Appends the freeswitch base_dir if a relative path is passed.
+]]
 function get_filepath(file)
   if file:sub(1, 1) ~= "/" then
     file = jester.conf.base_dir .. "/" .. file
@@ -58,9 +61,13 @@ function move_file(action)
     local success, file_error
     local source_file = get_filepath(action.source)
     local destination_file = get_filepath(action.destination)
+    -- Move.
     if operation == "move" then
       success, file_error = os.rename(source_file, destination_file)
+    -- Copy.
     else
+      -- There is no copy function for files in Lua, so open the original,
+      -- read it, and write the new one.
       local source, file_error = io.open(source_file, "r" .. binary)
       if source then
         local destination, file_error = io.open(destination_file, "w" .. binary)
@@ -100,6 +107,7 @@ function file_exists(action)
   if action.file then
     require "lfs"
     file = get_filepath(action.file)
+    -- If we can pull the file attributes, then the file exists.
     local success, file_error = lfs.attributes(file, "mode")
     if success then
       result = "true"
@@ -109,14 +117,17 @@ function file_exists(action)
   else
     result = ""
   end
+  -- Store the result of the check.
   jester.set_storage("file", "file_exists", result)
   if result == "false" then
     jester.debug_log("File '%s' does not exist", file)
+    -- Run false sequence if specified.
     if action.if_false then
       jester.run_sequence(action.if_false)
     end
   elseif result == "true" then
     jester.debug_log("File '%s' exists", file)
+    -- Run true sequence if specified.
     if action.if_true then
       jester.run_sequence(action.if_true)
     end
