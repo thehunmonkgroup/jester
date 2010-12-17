@@ -22,8 +22,9 @@ function add_to_stack(action)
   local stack = jester.channel.stack.navigation
   local sequence_stack = jester.channel.stack.sequence
   local p = jester.channel.stack.sequence_stack_position
+  -- Default to the currently running sequence.
   local sequence = action.sequence or (sequence_stack[p].name .. " " .. sequence_stack[p].args)
-  -- Don't add to the stack if the last sequence on the stack is the same..
+  -- Don't add to the stack if the last sequence on the stack is the same.
   if not (sequence == stack[#stack]) then
     table.insert(jester.channel.stack.navigation, sequence)
     jester.debug_log("Adding '%s' to navigation stack", sequence)
@@ -74,12 +75,14 @@ function navigation_reset(action)
   if #stack == 0 then
     jester.debug_log("Cannnot reset stack, stack is empty!")
   else
+    -- New stack starts with last sequence from old stack.
     new_sequence = table.remove(stack)
     jester.channel.stack.navigation = { new_sequence }
     jester.debug_log("Reset top of stack to sequence '%s'", new_sequence)
   end
 end
 
+-- Make sure module initialization only runs once.
 if not jester.modules.navigation.navigation.init_run then
   jester.modules.navigation.navigation.init_run = true
   init()
