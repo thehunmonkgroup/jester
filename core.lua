@@ -16,6 +16,42 @@ function init_modules()
   end
 end
 
+function init_channel(o)
+  debug_log("Creating channel table")
+  channel = {}
+  channel.stack = {}
+  channel.storage = {}
+  channel.uuid = get_variable("uuid")
+  init_stacks()
+end
+
+function init_stacks()
+  -- Set up initial stacks.
+  local stacks = {"active", "exit", "hangup", "sequence", "sequence_name"}
+  for _, name in ipairs(stacks) do
+    reset_stack(name)
+  end
+end
+
+function init_profile(profile_name)
+  require("jester.profiles." .. profile_name .. ".conf")
+  profile = profiles[profile_name].conf
+
+  -- Profile overrides.
+  local overrides = {
+    "debug",
+    "profile_path",
+    "sequence_path",
+    "modules",
+    "key_order",
+  }
+  for _, override in ipairs(overrides) do  
+    if profile[override] then
+      conf[override] = profile[override]
+    end
+  end
+end
+
 function init_storage(area)
   if channel and not channel.storage[area] then
     channel.storage[area] = {}
@@ -23,6 +59,7 @@ function init_storage(area)
 end
 
 function reset_stack(name)
+  debug_log("Reset stack '%s'", name)
   channel.stack[name] = {}
 end
 
@@ -402,18 +439,5 @@ function set_variable(call_var, value, default)
   end
   session:setVariable(call_var, value)
   debug_log(message, call_var, tostring(value))
-end
-
-function Channel:new(o)
-  debug_log("Creating new channel object")
-  local new_channel = {}
-  new_channel.stack = {}
-  new_channel.storage = {}
-  new_channel.uuid = get_variable("uuid")
-  new_channel = o or new_channel
-
-  setmetatable(new_channel, self)
-  self.__index = self
-  return new_channel
 end
 
