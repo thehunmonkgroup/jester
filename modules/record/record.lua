@@ -7,6 +7,7 @@ function record_file(action)
   local dir = action.location or "/tmp"
   local timestamp = os.time()
   local filename = action.filename
+  -- Default filename, formatted date and channel uuid.
   if not filename then
     filename = os.date("%Y-%m-%d_%H:%M:%S") .. "-" .. jester.channel.uuid .. ".wav"
   end
@@ -21,6 +22,9 @@ function record_file(action)
   local silence_secs = action.silence_secs and tonumber(action.silence_secs) or 5
 
   local record_append
+  -- If the append param was set, activate record appending on the channel.
+  -- Default filenames have the timestamp, so only set appending if a filename
+  -- was specified.
   if action.append and action.filename then
     -- Save the current state of the variable so it can be restored.
     record_append = jester.get_variable("record_append")
@@ -36,6 +40,8 @@ function record_file(action)
   end
 
   jester.debug_log("Recording file to location: %s", filepath)
+  -- Capture recording duration by getting timestamps immediately before and
+  -- after the recording.
   local startstamp = os.time()
   session:recordFile(filepath, max_length, silence_threshold, silence_secs)
   local endstamp = os.time() 
@@ -53,6 +59,5 @@ function record_file(action)
     jester.set_storage(area, "timestamp", timestamp)
     jester.set_storage(area, "duration", endstamp - startstamp)
   end
-
-  -- if jester.ready() then session:execute("sleep", "1000") end
 end
+
