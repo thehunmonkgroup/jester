@@ -140,8 +140,7 @@ end
 function module_help()
   local module_list = {}
   local help, description
-  table.sort(jester.conf.modules)
-  for _, name in ipairs(jester.conf.modules) do
+  for _, name in ipairs(table.ordervalues(jester.conf.modules)) do
     help = jester.help[name]
     table.insert(module_list, name .. ":")
     if help.description_short then
@@ -218,8 +217,7 @@ end
 function action_help()
   local action_list = {}
   local actions, description
-  table.sort(jester.conf.modules)
-  for _, module_name in ipairs(jester.conf.modules) do
+  for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
     actions = jester.help[module_name].actions
     table.insert(action_list, "\nModule: " .. module_name)
     for _, action in ipairs(table.orderkeys(actions)) do
