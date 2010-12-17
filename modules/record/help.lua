@@ -1,12 +1,12 @@
-jester.help.record = {}
-jester.help.record.description_short = [[Record sound from a channel.]]
-jester.help.record.description_long = [[This module provides actions which deal with recording sound from a channel.]]
+jester.help_map.record = {}
+jester.help_map.record.description_short = [[Record sound from a channel.]]
+jester.help_map.record.description_long = [[This module provides actions which deal with recording sound from a channel.]]
 
-jester.help.record.actions = {}
+jester.help_map.record.actions = {}
 
-jester.help.record.actions.record = {}
-jester.help.record.actions.record.description_short = [[Records sound from a channel.]]
-jester.help.record.actions.record.description_long = [[This action records sound from a channel and stores it.
+jester.help_map.record.actions.record = {}
+jester.help_map.record.actions.record.description_short = [[Records sound from a channel.]]
+jester.help_map.record.actions.record.description_long = [[This action records sound from a channel and stores it.
 
 The recording is in .wav format, and the name is a concatenation of the current datestamp and the channel's unique identifier.
 
@@ -21,7 +21,7 @@ The following variables/values related to the recording are put into Jester stor
   last_recording_duration:  
     The duration of the recording in seconds.
 ]]
-jester.help.record.actions.record.params = {
+jester.help_map.record.actions.record.params = {
   filename = [[(Optional) The name of the recorded file.  Defaults to %Y-%m-%d_%H:%M:%S-${uuid}.wav]],
   location = [[(Optional) Where to store the file.  Default is /tmp.]],
   append = [[(Optional) Append the recording to an existing file.  Requires that the 'name' parameter be set.  If the named file does not exist, then it will be created.  Default is false.]],

@@ -13,7 +13,7 @@ end
 function init_module_help()
   local help_file
   -- Create a map of all module help that can be called.
-  jester.help = {}
+  jester.help_map = {}
   for _, mod in ipairs(jester.conf.modules) do
     help_file = "jester.modules." .. mod .. ".help"
     if require(help_file) then
@@ -155,7 +155,7 @@ end
 
 function module_help_detail(module_name)
   local description, actions
-  for name_to_check, data in pairs(jester.help) do
+  for name_to_check, data in pairs(jester.help_map) do
     if name_to_check == module_name then
       if data.description_long then
         description = data.description_long:wrap(79)
@@ -167,8 +167,8 @@ function module_help_detail(module_name)
   end
   if description then
     local list = {}
-    module_data = jester.help[module_name]
-    action_data = jester.help[module_name].actions
+    module_data = jester.help_map[module_name]
+    action_data = jester.help_map[module_name].actions
     table.insert(list, description)
     if action_data then
       table.insert(list, "\nACTIONS:")
@@ -234,7 +234,7 @@ function action_help()
 end
 
 function action_help_detail(action)
-  for _, module_data in pairs(jester.help) do
+  for _, module_data in pairs(jester.help_map) do
     for action_to_check, action_data in pairs(module_data.actions) do
       if action_to_check == action then
         local list = {}

@@ -1,19 +1,19 @@
-jester.help.play = {}
-jester.help.play.description_short = [[Play sounds on a channel.]]
-jester.help.play.description_long = [[This module provides actions for playing various sounds on a channel.  The handlers for this module operate on the following actions:
+jester.help_map.play = {}
+jester.help_map.play.description_short = [[Play sounds on a channel.]]
+jester.help_map.play.description_long = [[This module provides actions for playing various sounds on a channel.  The handlers for this module operate on the following actions:
 
   play
   play_valid_file]]
-jester.help.play.handlers = {
+jester.help_map.play.handlers = {
   file = [[The default handler for the file module, operates on files on the local filesystem.]],
 }
 
-jester.help.play.actions = {}
+jester.help_map.play.actions = {}
 
-jester.help.play.actions.play = {}
-jester.help.play.actions.play.description_short = [[Play something on the channel.]]
-jester.help.play.actions.play.description_long = [[This action plays sound on the channel.]]
-jester.help.play.actions.play.params = {
+jester.help_map.play.actions.play = {}
+jester.help_map.play.actions.play.description_short = [[Play something on the channel.]]
+jester.help_map.play.actions.play.description_long = [[This action plays sound on the channel.]]
+jester.help_map.play.actions.play.params = {
   file = [[The name of the resource to play. It should be:
   1. A full file path
   2. A relative file path from the FreeSWITCH 'sounds' directory
@@ -25,10 +25,10 @@ To play several files together in a group, pass a table of names instead, eg. 'f
   keys = [[See 'help keys'.]],
 }
 
-jester.help.play.actions.play_phrase = {}
-jester.help.play.actions.play_phrase.description_short = [[Play a phrase macro.]]
-jester.help.play.actions.play_phrase.description_long = [[This action plays a FreeSWITCH phrase macro on the channel.]]
-jester.help.play.actions.play_phrase.params = {
+jester.help_map.play.actions.play_phrase = {}
+jester.help_map.play.actions.play_phrase.description_short = [[Play a phrase macro.]]
+jester.help_map.play.actions.play_phrase.description_long = [[This action plays a FreeSWITCH phrase macro on the channel.]]
+jester.help_map.play.actions.play_phrase.params = {
   phrase = [[The name of the phrase macro to play.]],
   phrase_arguments = [[(Optional) Arguments to pass to the phrase macro, if any.]],
   language = [[(Optional) Language to play the phrase in.  Defaults to the language set on the channel or the default global language.]],
@@ -37,9 +37,9 @@ jester.help.play.actions.play_phrase.params = {
   keys = [[See 'help keys'.]],
 }
 
-jester.help.play.actions.play_keys = {}
-jester.help.play.actions.play_keys.description_short = [[Play a series of key press choices on the channel.]]
-jester.help.play.actions.play_keys.description_long = [[This action allows you to map key press choices to announcements about what each key press will do, and play these announcements in a set order on the channel.
+jester.help_map.play.actions.play_keys = {}
+jester.help_map.play.actions.play_keys.description_short = [[Play a series of key press choices on the channel.]]
+jester.help_map.play.actions.play_keys.description_long = [[This action allows you to map key press choices to announcements about what each key press will do, and play these announcements in a set order on the channel.
 
 Keys are mapped both to actions, and to phrases in the FreeSWITCH phrase engine.  The phrases receive the mapped key as an argument.
 
@@ -58,7 +58,7 @@ The mapping is a standard table similar to the 'keys' table, with the value for 
   },
 
 The order that the announcements are made can be customized, if no custom order is provided, then the default order from the profile or from the global configuration is used.]]
-jester.help.play.actions.play_keys.params = {
+jester.help_map.play.actions.play_keys.params = {
   repetitions = [[How many times to repeat the key announcements.]],
   wait = [[How long to wait between repetitions, in milliseconds.]],
   order = [[A table of keys representing the order to play the announcements in.  For example, to play the announcements for the 3 key, then the 2 key, then the 1 key: order = {"3", "2", "1"}]],
@@ -66,10 +66,10 @@ jester.help.play.actions.play_keys.params = {
   keys = [[See 'help keys'.]],
 }
 
-jester.help.play.actions.play_valid_file = {}
-jester.help.play.actions.play_valid_file.description_short = [[From a list of files, play the first valid file found.]]
-jester.help.play.actions.play_valid_file.description_long = [[This action checks a list of files in order, and plays the first valid file it finds from the list.  Useful for playing a custom file, but falling back to default file.  Note that for speed, only basic file existence is checked -- the file must be readable by the FreeSWITCH user.]]
-jester.help.play.actions.play_valid_file.params = {
+jester.help_map.play.actions.play_valid_file = {}
+jester.help_map.play.actions.play_valid_file.description_short = [[From a list of files, play the first valid file found.]]
+jester.help_map.play.actions.play_valid_file.description_long = [[This action checks a list of files in order, and plays the first valid file it finds from the list.  Useful for playing a custom file, but falling back to default file.  Note that for speed, only basic file existence is checked -- the file must be readable by the FreeSWITCH user.]]
+jester.help_map.play.actions.play_valid_file.params = {
   files = [[A table of resources to check for possible playback on the channel. Values in the table should be:
   1. Full file paths
   2. Relative file paths from the FreeSWITCH 'sounds' directory

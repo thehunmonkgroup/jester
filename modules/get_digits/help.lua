@@ -1,13 +1,13 @@
-jester.help.get_digits = {}
-jester.help.get_digits.description_short = [[Collect user input from the channel.]]
-jester.help.get_digits.description_long = [[This module provides actions for collecting user input from a channel, in the form of DTMF key presses.]]
+jester.help_map.get_digits = {}
+jester.help_map.get_digits.description_short = [[Collect user input from the channel.]]
+jester.help_map.get_digits.description_long = [[This module provides actions for collecting user input from a channel, in the form of DTMF key presses.]]
 
-jester.help.get_digits.actions = {}
+jester.help_map.get_digits.actions = {}
 
-jester.help.get_digits.actions.get_digits = {}
-jester.help.get_digits.actions.get_digits.description_short = [[Collect user input from the channel.]]
-jester.help.get_digits.actions.get_digits.description_long = [[This action collects user input from a channel, in the form of DTMF key presses, and stores the collected digits in the 'get_digits' storage area.  Note that if no user input is collected, or validation fails, an empty string is saved to the storage area instead.]]
-jester.help.get_digits.actions.get_digits.params = {
+jester.help_map.get_digits.actions.get_digits = {}
+jester.help_map.get_digits.actions.get_digits.description_short = [[Collect user input from the channel.]]
+jester.help_map.get_digits.actions.get_digits.description_long = [[This action collects user input from a channel, in the form of DTMF key presses, and stores the collected digits in the 'get_digits' storage area.  Note that if no user input is collected, or validation fails, an empty string is saved to the storage area instead.]]
+jester.help_map.get_digits.actions.get_digits.params = {
   min_digits = [[The minimum number of digits to collect.  Default is 1.]],
   max_digits = [[The maximum number of digits to collect. Default is 10.]],
   max_tries = [[The maximum amount of times that validation will fail before giving up.  Default is 3.]],
