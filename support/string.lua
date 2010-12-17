@@ -5,6 +5,9 @@ function string:trim()
   return (string.gsub(self, "^%s*(.-)%s*$", "%1"))
 end
 
+--[[
+  Splits a string by a given delimter and returns a table of ordered pieces.
+]]
 function string:split(delimiter)
   local result = {}
   local from = 1
@@ -18,6 +21,11 @@ function string:split(delimiter)
   return result
 end
 
+
+--[[
+  Provides word wrapping with variable boundary, respecting existing
+  indentation, and allowing additional indentation to be added.
+]]
 function string:wrap(boundary, indent)
   local output = {}
   local index, words, leading_space, full_indent
