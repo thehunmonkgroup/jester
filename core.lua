@@ -1,7 +1,5 @@
 module("jester", package.seeall)
 
-Channel = {}
-
 function init_modules()
   local conf_file
   -- Create a lightweight map of all actions that can be called.
@@ -40,7 +38,6 @@ function init_profile(profile_name)
   -- Profile overrides.
   local overrides = {
     "debug",
-    "profile_path",
     "sequence_path",
     "modules",
     "key_order",
