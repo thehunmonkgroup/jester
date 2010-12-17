@@ -1,5 +1,7 @@
 module(..., package.seeall)
 
+jester.conf.debug = false
+
 require "jester.support.string"
 require "jester.support.table"
 

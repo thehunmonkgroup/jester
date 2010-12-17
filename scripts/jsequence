@@ -88,6 +88,7 @@ end
 -- Actions templates.
 function build_actions_output(actions)
   local output = ""
+  local output_table = {}
   local skipped_actions = {}
   local params, params_table, param_value
   local all_actions = jester.help.get_actions()
@@ -113,14 +114,15 @@ function build_actions_output(actions)
         end
       end
       -- Build the entire action as a string.
-      output = output .. "\n  {\n"
+      output = "  {\n"
       output = output .. table.concat(params_table, "\n") 
       output = output .. "\n  },"
+      table.insert(output_table, output)
     else
       table.insert(skipped_actions, "  " .. v)
     end
   end
-  return output, skipped_actions
+  return table.concat(output_table, "\n"), skipped_actions
 end
 
 function build_full_sequence()
@@ -132,7 +134,7 @@ function build_full_sequence()
   output = output .. build_storage_output(storage)
   actions = string.trim(actions)
   if actions ~= "" then
-    output = output .. "\nreturn\n{"
+    output = output .. "\nreturn\n{\n"
     actions = string.split(actions, ",")
     action_output, skipped_actions = build_actions_output(actions)
     output = output .. action_output
@@ -147,7 +149,7 @@ local output, preview
 local skipped_actions
 if #arguments > 0 then
   output, skipped_actions = build_actions_output(arguments)
-  preview = output .. "\n\n"
+  preview = output .. "\n"
 else
   output, skipped_actions = build_full_sequence()
   preview = string.format([[
