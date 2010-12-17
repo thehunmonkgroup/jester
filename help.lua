@@ -51,7 +51,7 @@ function get_help(...)
       output = string.format("No %s help available for '%s'", help_type, arg_string)
     end
   else
-    jester.help = {}
+    jester.help_map = {}
     require "lfs"
     local error_message = {}
     local path = script_path .. jester.conf.help_path
@@ -78,7 +78,7 @@ function get_help(...)
     end
 
     if #error_message == 0 then
-      help_path = jester.help
+      help_path = jester.help_map
       if #arguments > 0 then
         for a = 1, #arguments do
           help_path = help_path[arguments[a]]
@@ -86,7 +86,7 @@ function get_help(...)
         end
       end
       if #arguments == 0 then
-        output = topic_help(jester.help, true)
+        output = topic_help(jester.help_map, true)
       elseif help_path then
         output = topic_help(help_path)
       else
@@ -155,7 +155,7 @@ end
 function get_modules()
   local module_list = {}
   for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
-    module_list[module_name] = jester.help[module_name]
+    module_list[module_name] = jester.help_map[module_name]
   end
   return module_list
 end
@@ -164,7 +164,7 @@ function module_help()
   local module_list = {}
   local help, description
   for _, name in ipairs(table.ordervalues(jester.conf.modules)) do
-    help = jester.help[name]
+    help = jester.help_map[name]
     table.insert(module_list, name .. ":")
     if help.description_short then
       description = help.description_short:wrap(79, "  ")
@@ -226,7 +226,7 @@ function get_actions()
   local action_list = {}
   local actions
   for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
-    actions = jester.help[module_name].actions
+    actions = jester.help_map[module_name].actions
     for action, data in pairs(actions) do
       action_list[action] = data
     end
@@ -238,7 +238,7 @@ function action_help()
   local action_list = {}
   local actions, description
   for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
-    actions = jester.help[module_name].actions
+    actions = jester.help_map[module_name].actions
     table.insert(action_list, "\nModule: " .. module_name)
     for _, action in ipairs(table.orderkeys(actions)) do
       table.insert(action_list, "  " .. action .. ":")
