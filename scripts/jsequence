@@ -129,10 +129,12 @@ function build_full_sequence()
   local output = ""
   local skipped_actions = {}
   local action_output
+  -- Get user input for what to build.
   local actions, variables, storage = get_user_input()
   output = output .. build_variables_output(variables)
   output = output .. build_storage_output(storage)
   actions = string.trim(actions)
+  -- Build actions if present.
   if actions ~= "" then
     output = output .. "\nreturn\n{\n"
     actions = string.split(actions, ",")
@@ -147,9 +149,12 @@ arguments = {...}
 
 local output, preview
 local skipped_actions
+
+-- Arguments were passed, use them to build actions instead of full output.
 if #arguments > 0 then
   output, skipped_actions = build_actions_output(arguments)
   preview = output .. "\n"
+-- Build a full sequence.
 else
   output, skipped_actions = build_full_sequence()
   preview = string.format([[
