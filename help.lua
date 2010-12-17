@@ -32,9 +32,11 @@ function get_help(...)
   local arguments = {...}
   local arg_string = table.concat(arguments, " ")
 
+  -- Check for special topics first.
   if arguments[1] == "modules" or arguments[1] == "module" or arguments[1] == "actions" or arguments[1] == "action" then
     init_module_help()
     local help_type = "action"
+    -- Module help.
     if arguments[1] == "modules" or arguments[1] == "module" then
       help_type = "module"
       if arguments[2] then
@@ -42,6 +44,7 @@ function get_help(...)
       else
         output = module_help()
       end
+    -- Action help.
     else
       if arguments[2] then
         output =  action_help_detail(arguments[2])
@@ -49,11 +52,16 @@ function get_help(...)
         output = action_help()
       end
     end
+    -- Module and action details might return nothing if the arguments were
+    -- bad, catch that here.
     if not output then
       output = string.format("No %s help available for '%s'", help_type, arg_string)
     end
+  -- General topic help.
   else
+    -- Initialize the map.
     jester.help_map = {}
+    -- Load all general topics.
     require "lfs"
     local error_message = {}
     local path = script_path .. jester.conf.help_path
@@ -80,6 +88,8 @@ function get_help(...)
     end
 
     if #error_message == 0 then
+      -- Navigate into the help tree, and see if the requested subtopic is
+      -- available.
       help_path = jester.help_map
       if #arguments > 0 then
         for a = 1, #arguments do
@@ -87,10 +97,13 @@ function get_help(...)
           if not help_path then break end
         end
       end
+      -- No subtopics passed, start at main help.
       if #arguments == 0 then
         output = topic_help(jester.help_map, true)
+      -- Subtopic help found.
       elseif help_path then
         output = topic_help(help_path)
+      -- Help subtopic not found.
       else
         output = string.format("No help available for '%s'", arg_string)
       end
@@ -112,6 +125,7 @@ end
 function topic_help(topic, main)
   local output = {}
   local description
+  -- Main help page must be caught and generated specially.
   if main then
     description = welcome()
   else
@@ -120,6 +134,7 @@ function topic_help(topic, main)
   if description then
     table.insert(output, description:wrap(79))
   end
+  -- Grab subtopics for the topic requested.
   local subtopics = {}
   for _, sub in ipairs(table.orderkeys(topic)) do
     if type(topic[sub]) == "table" then
@@ -165,6 +180,7 @@ end
 function module_help()
   local module_list = {}
   local help, description
+  -- Build an alphabetical summary of all modules enabled in the global config.
   for _, name in ipairs(table.ordervalues(jester.conf.modules)) do
     help = jester.help_map[name]
     table.insert(module_list, name .. ":")
@@ -180,6 +196,7 @@ end
 
 function module_help_detail(module_name)
   local description, actions
+  -- Loop through all modules looking for the passed one.
   for name_to_check, data in pairs(jester.help_map) do
     if name_to_check == module_name then
       if data.description_long then
@@ -190,13 +207,16 @@ function module_help_detail(module_name)
       break
     end
   end
+  -- Found the module.
   if description then
     local list = {}
     module_data = jester.help_map[module_name]
     action_data = jester.help_map[module_name].actions
     table.insert(list, description)
+    -- Found actions for the module.
     if action_data then
       table.insert(list, "\nACTIONS:")
+      -- Build an ordered list of actions.
       for _, action in ipairs(table.orderkeys(action_data)) do
         table.insert(list, "  " .. action .. ":")
         if action_data[action].description_short then
@@ -207,6 +227,7 @@ function module_help_detail(module_name)
         table.insert(list, description)
       end
     end
+    -- Display all handlers for the module.
     if module_data.handlers then
       list = build_handlers(module_data, list)
     end
@@ -239,9 +260,11 @@ end
 function action_help()
   local action_list = {}
   local actions, description
+  -- Loop through an alphabetically ordered list of modules.
   for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
     actions = jester.help_map[module_name].actions
     table.insert(action_list, "\nModule: " .. module_name)
+    -- Build and alphabetical list of actions for the module.
     for _, action in ipairs(table.orderkeys(actions)) do
       table.insert(action_list, "  " .. action .. ":")
       if actions[action].description_short then
@@ -256,8 +279,10 @@ function action_help()
 end
 
 function action_help_detail(action)
+  -- Loop through the modules looking for the passed action.
   for _, module_data in pairs(jester.help_map) do
     for action_to_check, action_data in pairs(module_data.actions) do
+      -- Found the action.
       if action_to_check == action then
         local list = {}
         local description
@@ -269,14 +294,17 @@ function action_help_detail(action)
           description = ""
         end
         table.insert(list, description)
+        -- Look for parameters for the action.
         local params = action_data.params
         if params then
           table.insert(list, "\nPARAMETERS:")
+          -- Build an ordered list of parameters.
           for _, param in ipairs(table.orderkeys(params)) do
             table.insert(list,  "  " .. param .. ":")
             table.insert(list, params[param]:wrap(79, "    "))
           end
         end
+        -- Display available handlers for the action.
         if module_data.handlers then
           list = build_handlers(module_data, list)
         end
