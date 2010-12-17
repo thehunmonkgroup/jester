@@ -15,7 +15,11 @@
 -- Do not edit or remove this line.
 module(..., package.seeall)
 
+-- Overrides the global debug configuration for this profile only.
+debug = true
+
 -- Modules to load.
+-- Overrides the global debug configuration for this profile only.
 modules = {
   "core_actions",
   "navigation",
@@ -28,6 +32,7 @@ modules = {
   "tracker",
   "hangup",
 }
+-- Overrides the global debug configuration for this profile only.
 sequence_path = jester.conf.profile_path .. "/voicemail/sequences"
 
 voicemail_dir = jester.conf.base_dir .. "/storage/voicemail"
