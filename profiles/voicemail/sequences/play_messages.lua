@@ -15,7 +15,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "sub:play_envelope",
+    sequence = "sub:play_cid_envelope",
   },
   {
     action = "call_sequence",
