@@ -14,6 +14,6 @@ FREESWITCH_SCRIPTS_DIR="/usr/local/freeswitch/scripts"
 
 CURRENT_DIR=`pwd`
 cd $FREESWITCH_SCRIPTS_DIR
-lua jester.lua 'help' $@
+lua jester/jester.lua 'help' $@
 cd $CURRENT_DIR
 
