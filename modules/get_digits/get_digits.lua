@@ -7,6 +7,7 @@ function get_digits(action)
   local timeout = action.timeout and (action.timeout * 1000) or 3000
   local terminators = action.terminators or "#"
   local audio_files = action.audio_files or ""
+  -- A list of files was passed, concat them to play in order.
   if type(audio_files) == "table" then
     audio_files = table.concat(audio_files, "!")
   end
