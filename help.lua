@@ -137,6 +137,29 @@ function topic_help(topic, main)
   return table.concat(output, "\n\n")
 end
 
+function welcome()
+  return [[Welcome to Jester help!
+
+Here you'll find extensive information on all the important areas of Jester.  Start by reviewing the topic list below for an area of interest.  The general format for accessing help is 'help [sub-topic] [sub-sub-topic] [...]', and this is how you'll see it referenced internally.
+
+The exact way help is called depends on where you're calling it from.  'help module data' would be called in the following ways depending on where/how you're accessing help:
+  From the command line:
+    cd /path/to/freeswitch/scripts
+    lua jester.lua help module data
+  From the FreeSWITCH console:
+    luarun jester.lua help module data
+  Using the jhelp script (find this in the jester/scripts directory):
+    jhelp module data]]
+end
+
+function get_modules()
+  local module_list = {}
+  for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
+    module_list[module_name] = jester.help[module_name]
+  end
+  return module_list
+end
+
 function module_help()
   local module_list = {}
   local help, description
@@ -199,19 +222,16 @@ function build_handlers(module_data, list)
   return list
 end
 
-function welcome()
-  return [[Welcome to Jester help!
-
-Here you'll find extensive information on all the important areas of Jester.  Start by reviewing the topic list below for an area of interest.  The general format for accessing help is 'help [sub-topic] [sub-sub-topic] [...]', and this is how you'll see it referenced internally.
-
-The exact way help is called depends on where you're calling it from.  'help module data' would be called in the following ways depending on where/how you're accessing help:
-  From the command line:
-    cd /path/to/freeswitch/scripts
-    lua jester.lua help module data
-  From the FreeSWITCH console:
-    luarun jester.lua help module data
-  Using the jhelp script (find this in the jester/scripts directory):
-    jhelp module data]]
+function get_actions()
+  local action_list = {}
+  local actions
+  for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
+    actions = jester.help[module_name].actions
+    for action, data in pairs(actions) do
+      action_list[action] = data
+    end
+  end
+  return action_list
 end
 
 function action_help()
