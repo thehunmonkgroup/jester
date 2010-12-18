@@ -68,7 +68,8 @@ function get_help(...)
     local dir = lfs.dir(path)
     local file_list = {}
     for file in dir do
-      if file ~= "." and file ~= ".." then
+      -- Exclude directory references and hidden files.
+      if not string.match(file, "^%..*") then
         table.insert(file_list, file)
       end
     end
@@ -157,16 +158,7 @@ end
 function welcome()
   return [[Welcome to Jester help!
 
-Here you'll find extensive information on all the important areas of Jester.  Start by reviewing the topic list below for an area of interest.  The general format for accessing help is 'help [sub-topic] [sub-sub-topic] [...]', and this is how you'll see it referenced internally.
-
-The exact way help is called depends on where you're calling it from.  'help module data' would be called in the following ways depending on where/how you're accessing help:
-  From the command line:
-    cd /path/to/freeswitch/scripts
-    lua jester.lua help module data
-  From the FreeSWITCH console:
-    luarun jester.lua help module data
-  Using the jhelp script (find this in the jester/scripts directory):
-    jhelp module data]]
+Here you'll find extensive information on all the important areas of Jester.  Start by reviewing the topic list below for an area of interest.  The general format for accessing help is 'help [sub-topic] [sub-sub-topic] [...]', and this is how you'll see it referenced internally.]]
 end
 
 function get_modules()
