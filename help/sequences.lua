@@ -343,6 +343,12 @@ Conditional keys in the key map:
         file = "myfile",
         keys = temp_keys,
       },
-    }
+    }]]
 
-]]
+-- sequences -> phrases
+jester.help_map.sequences.phrases = {}
+jester.help_map.sequences.phrases.description_short = [[Using phrase macros.]]
+jester.help_map.sequences.phrases.description_long = [[You are encouraged to use FreeSWITCH's phrase macro functionality when designing sequences.  Doing so creates a nice logical separation between the kind of thing you want to play, and the actual process of playing the sound files.  For example, if you use only phrase macros in your sequences for system prompts, then switching languages or voices becomes trivial.
+
+All of the actions related to playback in Jester support using phrase macros, either directly, or by prefixing the macro name with 'phrase:'  See 'help module play' for most of the playback-related functionality in Jester.]]
+
