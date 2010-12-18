@@ -1,0 +1,75 @@
+Brief instructions for setting up the default 'voicemail' profile.  They
+assume you already have Jester installed correctly:
+
+1. Create a MySQL database.
+
+2. Use the included 'voicemail.sql' file to create the necessary tables in the
+   new database.
+
+   NOTE: table structure is totally subject to change in future releases,
+   you're on your own with that for now!
+
+3. Create an ODBC resource to connect to the database.  If you don't know how,
+   there's a nice tutorial here:
+
+   http://www.webaj.com/how-setup-mysql-dsn-datasbase-source-centos-myodbc-and-unixodbc-command-line.htm
+
+   For now you'll need to include your username/password in the odbc.ini file,
+   future versions will probably support passing that at connect time also.
+
+4. If necessary, edit the database configuration settings in
+   'profiles/voicemail/conf.lua
+
+5. Download the Asterisk core sounds and place them in the FreeSWITCH 'sounds'
+   directory.
+
+6. From within the Asterisk sounds directory, create a symlink from the digits
+   directory to 'time'.  If you're on a Linux/Unix system this should do it:
+
+     ln -s digits time
+
+   This step is necessary for FreeSWITCH's say engine to properly find the
+   correct Asterisk sound files.
+
+7. Edit the 'conf/lang/en/en.xml' file to point at the Asterisk sounds, and
+   the phrases.xml file found in this profile.  If your sounds are located at
+   'sounds/asterisk', then the configuration would look something like this:
+
+   <include>
+     <language name="en" sound-path="$${sounds_dir}/asterisk">
+       <X-PRE-PROCESS cmd="include" data="$${base_dir}/scripts/jester/profiles/voicemail/phrases.xml"/>
+     </language>
+   </include>
+
+8. Call Jester from the dialplan, passing the voicemail profile as the
+   first sequence argument, and the sequence to call for the second sequence
+   argument.  The current sequences depend on having a 'voicemail_context'
+   channel variable set up.  The dialplan should look something like this:
+
+    <!-- Jester voicemail setup. -->
+    <extension name="jester_voicemail_setup">
+      <condition field="destination_number" expression="^jester_voicemail_setup$" break="on-true">
+        <action application="set" data="voicemail_context=default"/>
+      </condition>
+    </extension>
+    <!-- Jester voicemail. -->
+    <extension name="jester_voicemail">
+      <condition field="destination_number" expression="^(\+1|1)?(\d{10})$" break="on-true">
+        <action application="set" data="voicemail_mailbox=$2"/>
+        <action application="execute_extension" data="jester_voicemail_setup"/>
+        <action application="answer"/>
+        <action application="sleep" data="1000"/>
+        <action application="lua" data="jester/jester.lua voicemail main_greeting"/>
+        <action application="hangup"/>
+      </condition>
+    </extension>
+    <!-- Jester voicemail administration. -->
+    <extension name="jester_voicemail_admin">
+      <condition field="destination_number" expression="^(\+1|1)?(\d{10})$" break="on-true">
+        <action application="execute_extension" data="jester_voicemail_setup"/>
+        <action application="answer"/>
+        <action application="sleep" data="1000"/>
+        <action application="lua" data="jester/jester.lua voicemail login_missing_mailbox."/>
+        <action application="hangup"/>
+      </condition>
+    </extension>
