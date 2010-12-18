@@ -292,3 +292,57 @@ To provide a phone menu, it's necessary to track where a user has been.  The nav
 
 See 'help module navigation' for more information on using the navigation stack.]]
 
+-- sequences -> tricks
+jester.help_map.sequences.tricks = {}
+jester.help_map.sequences.tricks.description_short = [[Some advanced sequence writing tricks.]]
+jester.help_map.sequences.tricks.description_long = [[Here are a few tricks that evolved as the default profile was written.  They should start to open your mind as to what else is possible to do when designing sequences.
+
+Complex conditionals:
+  If you want to use a conditional action to make a decision, but your condition is more complex than a single comparision, use native Lua conditionals to do the harder work, store the answer in a variable, and use that in the conditional:
+
+    -- Complex message count.
+    if number_of_messages > 0 and number_of_messages < 100 then
+      access = "yes"
+    else
+      access = "no"
+    end
+
+    return
+    {
+      {
+        action = "conditional",
+        value = access,
+        compare_to = "yes",
+        comparison = "equal",
+        if_true = "access_messages",
+        if_false = "mailbox_full",
+      },
+    }
+
+Conditional keys in the key map:
+  If the key map for an action depends on the state of certain variables, create a temporary key map variable containing the key map with constant key presses, use Lua conditionals to optionally add the other keys, then use the finalized key map variable as the value of the 'keys' parameter:
+
+    temp_keys = {
+      ["3"] = "advanced_options",
+      ["5"] = "repeat_message",
+      ["9"] = "save_message",
+      ["*"] = "help_exit",
+    }
+
+    if current_message ~= 1 then
+      temp_keys["4"] = "prev_message"
+    end
+    if current_message ~= last_message then
+      temp_keys["6"] = "next_message"
+    end
+
+    return
+    {
+      {
+        action = "play",
+        file = "myfile",
+        keys = temp_keys,
+      },
+    }
+
+]]
