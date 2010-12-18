@@ -283,3 +283,12 @@ To learn how to access storage areas in sequences, see 'help sequences variables
 
 To learn how to perform various operations on storage areas from a sequence, see 'help module core_actions'.]]
 
+-- sequences -> navigation
+jester.help_map.sequences.navigation = {}
+jester.help_map.sequences.navigation.description_short = [[Build IVR/phone tree functionality.]]
+jester.help_map.sequences.navigation.description_long = [[Through the navigation module, Jester provides the necessary facilities to implement phone menus in sequences.
+
+To provide a phone menu, it's necessary to track where a user has been.  The navigation stack serves this purpose.  By adding a sequence to the navigation stack, you can later return to that sequence by going 'up' the stack, or to the beginning of the phone tree by going to the 'top' of the stack.  One important thing to note is that you can't add the same sequence with the same arguments to the navigation stack in adjacent positions -- this is an internal restriction to ease the implementation of the navigation stack, and it wouldn't be sensible to do it anyways... ;)
+
+See 'help module navigation' for more information on using the navigation stack.]]
+
