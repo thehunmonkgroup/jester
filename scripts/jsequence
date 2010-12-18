@@ -37,7 +37,7 @@ function keys_table()
 end
 
 function get_user_input()
-  local actions_help = string.format([[Enter a comma separated list of actions for the sequence, in the order they should be run.  Possible actions include:
+  local actions_help = string.format([[Enter a space separated list of actions for the sequence, in the order they should be run.  Possible actions include:
 
 %s
 
@@ -45,13 +45,13 @@ Actions: ]], actions_list())
   io.write(actions_help)
   local actions = io.read("*line")
 
-  local variables_help = string.format([[Enter a comma separated list of variable names that you will use to store channel variables.
+  local variables_help = string.format([[Enter a space separated list of variable names that you will use to store channel variables.
 
 Variable names (channel): ]], actions_list())
   io.write(variables_help)
   local variables = io.read("*line")
 
-  local storage_help = string.format([[Enter a comma separated list of variable names that you will use to store data pulled from Jester storage areas.
+  local storage_help = string.format([[Enter a space separated list of variable names that you will use to store data pulled from Jester storage areas.
 
 Variable names (storage): ]], actions_list())
   io.write(storage_help)
@@ -64,7 +64,7 @@ function build_variables_output(variables)
   local output = ""
   variables = string.trim(variables)
   if variables ~= "" then
-    variables = string.split(variables, ",")
+    variables = string.split(variables, " ")
     for _, v in ipairs(variables) do
       output = output .. v .. [[ = variable("")]] .. "\n"
     end
@@ -77,7 +77,7 @@ function build_storage_output(storage)
   local output = ""
   storage = string.trim(storage)
   if storage ~= "" then
-    storage = string.split(storage, ",")
+    storage = string.split(storage, " ")
     for _, v in ipairs(storage) do
       output = output .. v .. [[ = storage("", "")]] .. "\n"
     end
@@ -137,7 +137,7 @@ function build_full_sequence()
   -- Build actions if present.
   if actions ~= "" then
     output = output .. "\nreturn\n{\n"
-    actions = string.split(actions, ",")
+    actions = string.split(actions, " ")
     action_output, skipped_actions = build_actions_output(actions)
     output = output .. action_output
     output = output .. "\n}\n"
@@ -148,12 +148,16 @@ end
 arguments = {...}
 
 local output, preview
-local skipped_actions
+local skipped_actions = {}
 
 -- Arguments were passed, use them to build actions instead of full output.
 if #arguments > 0 then
-  output, skipped_actions = build_actions_output(arguments)
-  preview = output .. "\n"
+  if arguments[1] == "keys" then
+    preview = "    keys = " .. keys_table() .. ",\n"
+  else
+    output, skipped_actions = build_actions_output(arguments)
+    preview = output .. "\n"
+  end
 -- Build a full sequence.
 else
   output, skipped_actions = build_full_sequence()
