@@ -59,7 +59,39 @@ There are three extra parameters besides the keys that can be used to control ho
   invalid_sound:
     Set this to a file or phrase to play to the user after registering the key press as invalid and stopping playback of the file.  The format of the filepath is the same as the ones accepted by the play module.
   invalid_sequence:
-    Set this to a sequence to call after registering the key press as invalid and stopping playback of the file.]]
+    Set this to a sequence to call after registering the key press as invalid and stopping playback of the file.
+
+The keys parameter can be put in one of two places:
+  As an action parameter:
+    This sets the key mapping for just the action that it's defined.  eg.
+      return
+      {
+        {
+          action = "play",
+          file = "myfile",
+          keys = {
+            ['#'] = ':break',
+          },
+        },
+      }
+      In this case, once the action is complete, the mapping is cleared.
+  As a sequence parameter:
+    This sets the key mapping for all actions in the sequence.  eg.
+      return
+      {
+        keys = {
+          ['#'] = ':break',
+        },
+        {
+          action = "play",
+          file = "myfile",
+        },
+        {
+          action = "record",
+          file = "myrecording",
+        },
+      }
+      In this case, once the sequence is complete, the mapping is cleared.  Note that individual action in the sequence can still provide their own key mappings, and they will override the sequence mapping for that action.]]
 
 -- sequences -> variables
 jester.help_map.sequences.variables = {}
