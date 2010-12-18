@@ -1,4 +1,5 @@
  - add 'cd /path/to/asterisk/sounds; ln -s digits time' to install instructions -- neccessary for say engine to find the number files.
+ - help system could use a table of contents feature.
  - the following areas still need to be built out in the comedian mail replica:
    - advanced options
    - mailbox options
