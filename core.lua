@@ -531,7 +531,7 @@ end
 --[[
   Trims whitespace from either end of a string.
 ]]
-function trim (s)
+function trim(s)
   return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end
 
