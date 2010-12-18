@@ -35,7 +35,7 @@ if args[1] and args[2] then
   jester.init_profile(args[1])
 
   -- Load modules.
-  jester.init_modules()
+  jester.init_modules(jester.conf.modules)
 
   -- Set up the global key handler.
   key_handler = jester.key_handler

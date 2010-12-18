@@ -3,11 +3,14 @@ module("jester", package.seeall)
 --[[
   Initialize the specified modules.
 ]]
-function init_modules()
+function init_modules(modules)
   local conf_file
   -- Create a lightweight map of all actions that can be called.
-  action_map = {}
-  for _, mod in ipairs(conf.modules) do
+  -- Modules and custom scripts can call this function to load
+  -- additional modules, so make sure that any existing action_map
+  -- is preserved.
+  action_map = action_map or {}
+  for _, mod in ipairs(modules) do
     conf_file = "jester.modules." .. mod .. ".conf"
     if require(conf_file) then
       debug_log("Loaded module configuration '%s'", conf_file)
