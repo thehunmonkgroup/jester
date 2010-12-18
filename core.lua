@@ -27,14 +27,12 @@ function init_channel(o)
   channel.stack = {}
   channel.storage = {}
   channel.uuid = get_variable("uuid")
-  init_stacks()
 end
 
 --[[
   Initialize the specified stacks.
 ]]
-function init_stacks()
-  local stacks = {"active", "exit", "hangup", "sequence", "sequence_name"}
+function init_stacks(stacks)
   for _, name in ipairs(stacks) do
     reset_stack(name)
   end

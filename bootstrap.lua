@@ -26,6 +26,10 @@ if args[1] and args[2] then
   -- Initialize the channel object.
   jester.init_channel()
 
+  -- Initialize sequence loop stacks.  Sequence stacks are initialized just
+  -- prior to each sequence loop run.
+  jester.init_stacks({"active", "exit", "hangup"})
+
   -- Add profile configuration here so it can leverage access to channel
   -- variables.
   jester.init_profile(args[1])
