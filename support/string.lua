@@ -8,16 +8,25 @@ end
 --[[
   Splits a string by a given delimter and returns a table of ordered pieces.
 ]]
-function string:split(delimiter)
+function string:split(delimiter, notrim)
   local result = {}
   local from = 1
+  local piece
   local delim_from, delim_to = string.find(self, delimiter, from)
   while delim_from do
-    table.insert(result, string.sub(self, from , delim_from-1):trim())
+    piece = string.sub(self, from , delim_from-1)
+    if not notrim then
+      piece = piece:trim()
+    end
+    table.insert(result, piece)
     from = delim_to + 1
     delim_from, delim_to = string.find(self, delimiter, from)
   end
-  table.insert(result, string.sub(self, from):trim())
+  piece = string.sub(self, from)
+  if not notrim then
+    piece = piece:trim()
+  end
+  table.insert(result, piece)
   return result
 end
 
@@ -31,13 +40,13 @@ function string:wrap(boundary, indent)
   local index, words, leading_space, full_indent
   local indent = indent or ""
   local buffer = indent
-  local lines = self:split("\n") 
+  local lines = self:split("\n", true)
   
   for _, line in pairs(lines) do
     if line:match("^%s*$") then
       table.insert(output, "")
     else
-      words = line:split(" ")
+      words = line:split(" ", true)
       leading_space = line:match("^(%s+)%S")
       if (#words > 0) then
         if leading_space then
