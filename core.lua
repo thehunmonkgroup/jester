@@ -393,7 +393,7 @@ function key_handler(session, input_type, data)
     else
       -- Check to see if the key map wants us to take some action on the
       -- invalid key.
-      if keys.invalid or keys.invalid_sound then
+      if keys.invalid or keys.invalid_sound or keys.invalid_sequence then
         key_pressed.invalid = key_pressed.digit
         debug_log("Key pressed: %s, invalid!", key_pressed.invalid)
         -- By default, replay the current action, but give the option
