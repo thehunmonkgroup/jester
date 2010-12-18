@@ -118,7 +118,7 @@ Sequences can access outside variables from five places:
   Channel variables:
     Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the 'variable()' function, eg. 'foo = variable("caller_id_name")' accesses the 'caller_id_name' variable from the channel.
   Jester's internal storage system:
-    Variables defined in Jester's internal storage can be accessed through the 'storage()' function, eg. 'foo = storage("mailbox_settings", "mailbox")' accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area.  See 'help storage' to learn more.
+    Variables defined in Jester's internal storage can be accessed through the 'storage()' function, eg. 'foo = storage("mailbox_settings", "mailbox")' accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area.  See 'help sequences storage' to learn more.
   Sequence arguments:
     Sequences can be called with arguments, and these can be accessed through the args() function, eg. 'foo = args(1) accesses the first argument passed to the sequence.  See 'help sequences arguments' for more information.]]
 
@@ -271,4 +271,15 @@ Passing arguments to a sequence is simple -- just follow the sequence name with 
 eg. 'mysequence value1,value2,some_other_value'
 
 See 'help sequences variables for how to access arguments in your sequences.]]
+
+-- sequences -> storage
+jester.help_map.sequences.storage = {}
+jester.help_map.sequences.storage.description_short = [[Jester's storage system.]]
+jester.help_map.sequences.storage.description_long = [[Jester provides a simple key/value storage mechanism  This allows you to store user input, load data from external sources for later use, keep track of how many times something was done, etc.
+
+The storage is diveded into 'areas'.  Each area is capable of storing key/value pairs that are independent of other storage areas.
+
+To learn how to access storage areas in sequences, see 'help sequences variables'.
+
+To learn how to perform various operations on storage areas from a sequence, see 'help module core_actions'.]]
 
