@@ -1,5 +1,8 @@
 module("jester", package.seeall)
 
+--[[
+  Initialize the specified modules.
+]]
 function init_modules()
   local conf_file
   -- Create a lightweight map of all actions that can be called.
@@ -14,6 +17,10 @@ function init_modules()
   end
 end
 
+--[[
+  Initialize the channel namespace.  This holds all the stacks and storage
+  for a Jester run.
+]]
 function init_channel(o)
   debug_log("Creating channel table")
   channel = {}
@@ -23,19 +30,26 @@ function init_channel(o)
   init_stacks()
 end
 
+--[[
+  Initialize the specified stacks.
+]]
 function init_stacks()
-  -- Set up initial stacks.
   local stacks = {"active", "exit", "hangup", "sequence", "sequence_name"}
   for _, name in ipairs(stacks) do
     reset_stack(name)
   end
 end
 
+--[[
+  Initialize the specified profile.
+]]
 function init_profile(profile_name)
+  -- Load the profile configuration, and set up the profile namespace.
   require("jester.profiles." .. profile_name .. ".conf")
   profile = profiles[profile_name].conf
 
-  -- Profile overrides.
+  -- Profile overrides -- these can optionally override settings in the global
+  -- configuration file.
   local overrides = {
     "debug",
     "sequence_path",
@@ -49,22 +63,34 @@ function init_profile(profile_name)
   end
 end
 
+--[[
+  Initialize a storage area.
+]]
 function init_storage(area)
   if channel and not channel.storage[area] then
     channel.storage[area] = {}
   end
 end
 
+--[[
+  Empties the specified stack.  Can also be used to initialize a stack.
+]]
 function reset_stack(name)
   debug_log("Reset stack '%s'", name)
   channel.stack[name] = {}
 end
 
+--[[
+  Queues the sequence to be the next one run in the current sequence loop,
+  at the current sequence stack position.
+]]
 function run_sequence(sequence)
   if ready() and sequence then
     local parsed_args, loaded_sequence, add_to_stack, remove_from_stack
     sequence = trim(sequence)
     local s_type = "Sequence"
+    -- Check for stack operators, sub goes one level deeper, up goes one
+    -- level up, top resets the stack.
     if sequence:sub(1, 4) == "sub:" then
       sequence = sequence:sub(5)
       add_to_stack = true
@@ -82,9 +108,11 @@ function run_sequence(sequence)
       s_type = "Up sequence"
     end
     local stack = channel.stack.sequence
+    -- Nothing on the current stack, add this sequence on the first stack.
     if #stack == 0 then
       add_to_stack = true
     end
+    -- Parse out the sequence name and arguments.
     local sequence_name, sequence_args = string.match(sequence, "^([%w_]+)%s+([%w_,]+)$")
     if not sequence_name then
       sequence_name = sequence
@@ -92,6 +120,7 @@ function run_sequence(sequence)
     end
     debug_log("%s called: %s, args: %s", s_type, sequence_name, sequence_args)
     parsed_args = parse_args(sequence_args)
+    -- Load the sequence.
     loaded_sequence = load_sequence(sequence_name, parsed_args)
     if loaded_sequence then
       debug_log("Loaded sequence '%s'", sequence_name)
@@ -124,7 +153,12 @@ function run_sequence(sequence)
   end
 end
 
+--[[
+  Loads the specified sequence into a protected function environment.
+]]
 function load_sequence(name, arguments)
+  -- Set up access to channel variables, storage, global and profile configs,
+  -- and sequence arguments.
   local env = {
     global = conf,
     profile = profile,
@@ -137,19 +171,26 @@ function load_sequence(name, arguments)
     variable = function (var)
       return get_variable(var, "")
     end,
+    -- Allow this function so the user can dump to see what's going on in case
+    -- of problems.
     debug_dump = debug_dump,
   }
   local sequence, err = assert(loadfile(conf.sequence_path .. "/" .. name .. ".lua"))
   if sequence then
+    -- Lock out access to the rest of the Lua environment.
     setfenv(sequence, env)
     return sequence
   end
 end
 
+--[[
+  Get the value for a key in a storage area.
+]]
 function get_storage(area, key, default)
   local value
   if channel.storage[area] and channel.storage[area][key] then
     value = channel.storage[area][key]
+  -- Fall back to a default if provided.
   elseif default then
     value = default
   end
@@ -157,14 +198,21 @@ function get_storage(area, key, default)
   return value
 end
 
+--[[
+  Set a key/value pair in a storage area.
+]]
 function set_storage(area, key, value)
   if area and key and value then
+    -- Make sure the storage area exists.
     init_storage(area)
     channel.storage[area][key] = value
     debug_log("Setting storage: area '%s', key '%s', value '%s'", area, key, value)
   end
 end
 
+--[[
+  Clear a key in a storage area, or the whole storage area.
+]]
 function clear_storage(area, key)
   if area and key then
     if channel.storage[area] then
@@ -177,6 +225,9 @@ function clear_storage(area, key)
   end
 end
 
+--[[
+  Parse sequence arguments, and return them as an ordered list.
+]]
 function parse_args(args)
   local result, from, i = {}, 1, 1
   if args ~= "" then
@@ -192,6 +243,9 @@ function parse_args(args)
   return result
 end
 
+--[[
+  Main entry point for a call to Jester.
+]]
 function main()
   run_sequence_loop("active")
   exiting = true
@@ -202,20 +256,31 @@ function main()
   end
 end
 
+--[[
+  Runs the specified sequence loop.
+]]
 function run_sequence_loop(loop_type)
   debug_log("Executing sequence loop '%s'", loop_type)
+  -- Clear the sequence stack prior to execution.
   reset_stack("sequence")
   reset_stack("sequence_name")
+  -- Loop through the registered events.
   for _, event in ipairs(channel.stack[loop_type]) do
+    -- Fire up the sequence loop.
     if event.event_type == "sequence" then 
       run_sequence(event.sequence)
       execute_sequences()
+    -- An ad hoc action was passed, call it directly.
     elseif event.event_type == "action" then
       run_action(event)
     end
   end
 end
 
+--[[
+  Main loop for executing sequences until there are no more in the current
+  loop.
+]]
 function execute_sequences()
   local action, new_action
 
@@ -259,6 +324,9 @@ function execute_sequences()
   debug_log("No more actions, exiting")
 end
 
+--[[
+  Loads the current action from the current sequence stack and position.
+]]
 function load_action()
   local stack = channel.stack.sequence
   local p = channel.stack.sequence_stack_position
@@ -267,16 +335,24 @@ function load_action()
   end
 end
 
+--[[
+  Sets the key map for the currently running action.
+]]
 function set_keys(action, sequence)
-  -- Clear any key press data from the previously run action.
+  -- Clear any key press data from the previously run action.  This prevents
+  -- false key press detections on the current action.
   key_pressed = {}
   local message
+  -- Key maps defined in the action take precedence.
   if type(action.keys) == "table" then
     keys = action.keys
     message = "Set keys for action '%s'"
+  -- Fall back to sequence-wide key map if present.
   elseif type(sequence.keys) == "table" then
     keys = sequence.keys
     message = "Set default sequence keys for action '%s'"
+  -- No key map.  Explicitely unset it here so that no action at all is taken
+  -- by the input callback function during this action.
   else
     keys = nil
     message = "No keys to set for action '%s'"
@@ -284,13 +360,20 @@ function set_keys(action, sequence)
   debug_log(message, action.action)
 end
 
+--[[
+  Global key handler for all key press events in Jester.
+]]
 function key_handler(session, input_type, data)
   if keys and input_type == "dtmf" then
     -- Make sure we get a single digit.
     key_pressed.digit = string.sub(data["digit"], 1, 1)
+    -- Pressed key is in the current key map, so it's valid.
     if keys[key_pressed.digit] then
       key_pressed.valid = key_pressed.digit
       debug_log("Key pressed: %s, valid", key_pressed.valid)
+      -- Parse the key value.  Values prefixed with @ are ad hoc actions,
+      -- values prefixed with : are playback commands to return to core
+      -- for playback control (break, seek, etc).
       local marker, command = string.match(keys[key_pressed.digit], "^([:@]?)(.+)")
       if marker == ":" then
         return command
@@ -301,7 +384,10 @@ function key_handler(session, input_type, data)
         run_sequence(command)
       end
       return "break"
+    -- Invalid key pressed.
     else
+      -- Check to see if the key map wants us to take some action on the
+      -- invalid key.
       if keys.invalid or keys.invalid_sound then
         key_pressed.invalid = key_pressed.digit
         debug_log("Key pressed: %s, invalid!", key_pressed.invalid)
@@ -312,6 +398,7 @@ function key_handler(session, input_type, data)
         else
           channel.stack.sequence[channel.stack.sequence_stack_position].replay_action = true
         end
+        -- Play an invalid sound if specified.
         if keys.invalid_sound then
           debug_log("Playing invalid sound file: %s", keys.invalid_sound)
           session:streamFile(keys.invalid_sound)
@@ -322,21 +409,31 @@ function key_handler(session, input_type, data)
   end
 end
 
+--[[
+  Runs a loaded action.
+]]
 function run_action(action)
   if ready() and action.action then
     local stack = channel.stack.sequence
     local p = channel.stack.sequence_stack_position
     local mod
+    -- Find the module that provides this action.
     if action_map[action.action] then
       mod = action_map[action.action].mod
     else
       error(string.format([[JESTER: No valid action '%s']], action.action))
     end
+    -- Load the module.  Since Lua caches loaded modules, this is only an
+    -- expensive operation the first time the module code is loaded.
     require("jester.modules." .. mod .. "." .. mod)
     debug_log("Loaded module '%s'", mod)
+    -- Load the handler for the action.
     local func = load_action_handler(action)
     action_func = modules[mod][mod][func]
     if type(action_func) == "function" then
+      -- Actions can be called directly from a module or a key press.  These
+      -- are not on the sequence stack, so check here if it's an ad hoc
+      -- action.
       if action.ad_hoc then
         debug_log("Running ad hoc action '%s'", action.action)
       else
@@ -355,6 +452,10 @@ function run_action(action)
   end
 end
 
+--[[
+  Loads the correct handler for the passed action, falling back to the default
+  handler if none is specified.
+]]
 function load_action_handler(action)
   local func
   local handlers = action_map[action.action].handlers
@@ -370,19 +471,39 @@ function load_action_handler(action)
   return func
 end
 
+--[[
+  Determines if Jester is still in a ready state.  Unlike session:ready(),
+  this ready check returns true if Jester is in either its exit or hungup
+  states as well.
+
+  Do use this if you want to loop until Jester finishes, don't use this if
+  you want to loop until the call hangs up.
+]]
 function ready()
   return session:ready() or exiting or hungup
 end
 
+--[[
+  Determines if a key was pressed that will result in some action by core.
+
+  Modules can call this function to check for valid key presses, to break
+  out of loops, etc.
+]]
 function actionable_key()
   return jester.key_pressed.valid or jester.key_pressed.invalid
 end
 
+--[[
+  Stream silence for a specified number of milliseconds.
+]]
 function wait(milliseconds)
   debug_log("Waiting %d milliseconds", milliseconds)
   session:streamFile("silence_stream://" .. milliseconds)
 end
 
+--[[
+  Log to FreeSWITCH console or stdout depending on the environment.
+]]
 function log(msg, prefix, level)
   if jester.is_freeswitch then
     prefix = prefix or "JESTER"
@@ -393,6 +514,9 @@ function log(msg, prefix, level)
   end
 end
 
+--[[
+  Conditional debug logger.
+]]
 function debug_log(msg, ...)
   if jester.conf.debug then
     log(string.format(msg, ...), "JESTER DEBUG")
