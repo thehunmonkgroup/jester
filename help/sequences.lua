@@ -233,3 +233,25 @@ It allows you to compare one value with another with various strategies, and cal
 
 See 'help action conditional' for more details.]]
 
+-- sequences -> subsequences
+jester.help_map.sequences.subsequences = {}
+jester.help_map.sequences.subsequences.description_short = [[Subroutines for sequences.]]
+jester.help_map.sequences.subsequences.description_long = [[At certain points in a sequence, it may be desirable to fire off another sequence, and when it completes have Jester return to the previously running sequence.  Subsequences allow you to accomplish this.
+
+Jester's basic logic is to run one sequence and then exit.  It will only run other sequences if you specifically tell it to.  Normally, when you call one sequence from another, the original sequence is forgotten and the new sequence is run -- ie, only one sequence at a time runs.
+
+To allow you to run more than one sequence at a time, Jester keeps a 'sequence stack'.  It runs sequences at a stack level until no more are called, then it checks to see if there's another level above it.  If so, it returns to that level and continues running the sequence at that level, and so on until finally there are no more stack levels and Jester exits.
+
+To operate on the sequence stack, you prefix your calls to a sequence with one of three commands:
+  sub:
+    This moves the sequence stack down one level, and runs the called sequence there, remembering which action the current sequence is running.  When the lower level stack finishes, the stack level is discarded, Jester moves up on level in the sequence stack, and continues with the next action in the seqeunce at that level:
+      eg. 'sub:mysubsequence' calls the 'mysubsequence' sequence in the next stack level down from the sequence where it's called.
+  up:
+    This moves the sequence stack down one level, overwrites the previously stored sequence at that level, and runs the called sequence:
+      eg. 'up:somesequence' replaces the sequence at the next level up with the 'somesequence' sequence and runs it.
+  top:
+    This completely clears the sequence stack and runs the called sequence on a fresh stack.  It's equivalent to setting the stack to the same state as when Jester is originally invoked:
+      eg. 'top:main' runs the main sequence on a completely fresh sequence stack.
+
+As a general rule, it's best not to use any actions that deal with navigation (see 'help module navigation') or responding to user key presses (see 'help sequences keys') when you are on a sequence stack level other than the top.  You can try, but most likely it will just be a confusing mess.  ;)  Subsequences are ideally designed for non-user facing actions like loading data, or making a conditional decision, etc.]]
+
