@@ -8,8 +8,11 @@
   Array/record syntax is like this:
   foo = { bar = "baz", bing = "bong" }
 
-  Variables from the main configuration may be used in values, as well as calls
-  to channel.variable("<varname>") to get channel variables.
+  Variables from the main configuration may be used in values, by accessing
+  them through the jester.conf.<varname> namespace.
+
+  Channel variables may be used in values, by accessing them through the
+  jester._get_variable("<varname>") function.
 ]]
 
 -- Do not edit or remove this line.
