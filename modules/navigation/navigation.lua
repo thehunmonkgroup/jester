@@ -46,7 +46,7 @@ function navigation_up(action)
     new_sequence = stack[#stack]
     jester.debug_log("Moving up the stack from sequence '%s' to sequence '%s'", tostring(last_sequence), new_sequence)
     show_navigation_stack(stack)
-    jester.run_sequence(new_sequence)
+    jester.queue_sequence(new_sequence)
   end
 end
 
@@ -66,7 +66,7 @@ function navigation_top(action)
     -- New stack starts with first sequence from old stack.
     jester.channel.stack.navigation = { new_sequence }
     jester.debug_log("Moving to top of stack from sequence '%s' to sequence '%s'", last_sequence, new_sequence)
-    jester.run_sequence(new_sequence)
+    jester.queue_sequence(new_sequence)
   end
 end
 

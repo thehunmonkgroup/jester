@@ -26,17 +26,17 @@ function counter(action)
     if current_count == compare_to then
       jester.debug_log("Comparison result: equal")
       if action.if_equal then
-        jester.run_sequence(action.if_equal)
+        jester.queue_sequence(action.if_equal)
       end
     elseif current_count < compare_to then
       jester.debug_log("Comparison result: less")
       if action.if_less then
-        jester.run_sequence(action.if_less)
+        jester.queue_sequence(action.if_less)
       end
     else
       jester.debug_log("Comparison result: greater")
       if action.if_greater then
-        jester.run_sequence(action.if_greater)
+        jester.queue_sequence(action.if_greater)
       end
     end
   end

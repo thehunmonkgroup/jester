@@ -82,7 +82,7 @@ end
   Queues the sequence to be the next one run in the current sequence loop,
   at the current sequence stack position.
 ]]
-function run_sequence(sequence)
+function queue_sequence(sequence)
   if ready() and sequence then
     local parsed_args, loaded_sequence, add_to_stack, remove_from_stack
     sequence = trim(sequence)
@@ -270,7 +270,7 @@ function run_sequence_loop(loop_type)
   for _, event in ipairs(channel.stack[loop_type]) do
     -- Fire up the sequence loop.
     if event.event_type == "sequence" then 
-      run_sequence(event.sequence)
+      queue_sequence(event.sequence)
       execute_sequences()
     -- An ad hoc action was passed, call it directly.
     elseif event.event_type == "action" then
@@ -383,7 +383,7 @@ function key_handler(session, input_type, data)
         local action = { action = command, ad_hoc = true }
         run_action(action)
       else
-        run_sequence(command)
+        queue_sequence(command)
       end
       return "break"
     -- Invalid key pressed.
@@ -396,7 +396,7 @@ function key_handler(session, input_type, data)
         -- By default, replay the current action, but give the option
         -- to load a custom sequence instead.
         if keys.invalid_sequence then
-          run_sequence(keys.invalid_sequence)
+          queue_sequence(keys.invalid_sequence)
         else
           channel.stack.sequence[channel.stack.sequence_stack_position].replay_action = true
         end

@@ -4,7 +4,7 @@ function none(action) end
 
 function call_sequence(action)
   if action.sequence then
-    jester.run_sequence(action.sequence)
+    jester.queue_sequence(action.sequence)
   end
 end
 
@@ -29,12 +29,12 @@ function conditional(action)
     elseif match == false then
       jester.debug_log("Comparison result: false")
       if action.if_false then
-        jester.run_sequence(action.if_false)
+        jester.queue_sequence(action.if_false)
       end
     else
       jester.debug_log("Comparison result: true")
       if action.if_true then
-        jester.run_sequence(action.if_true)
+        jester.queue_sequence(action.if_true)
       end
     end
   end

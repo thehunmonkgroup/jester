@@ -123,13 +123,13 @@ function file_exists(action)
     jester.debug_log("File '%s' does not exist", file)
     -- Run false sequence if specified.
     if action.if_false then
-      jester.run_sequence(action.if_false)
+      jester.queue_sequence(action.if_false)
     end
   elseif result == "true" then
     jester.debug_log("File '%s' exists", file)
     -- Run true sequence if specified.
     if action.if_true then
-      jester.run_sequence(action.if_true)
+      jester.queue_sequence(action.if_true)
     end
   else
     jester.debug_log("Cannot check file, no 'file' parameter defined!")
