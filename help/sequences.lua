@@ -96,14 +96,140 @@ The keys parameter can be put in one of two places:
 -- sequences -> variables
 jester.help_map.sequences.variables = {}
 jester.help_map.sequences.variables.description_short = [[How to access and use variables in sequences.]]
-jester.help_map.sequences.variables.description_long = [[Sequences can use variables from four places:
+jester.help_map.sequences.variables.description_long = [[Variables in sequences are standard Lua variable definitions:
+  name = value
+
+You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below.  Variable names can be any string of letters, digits and underscores, not beginning with a digit.
+
+To avoid namespace collisions in your sequence, the following variable names are prohibited:
+  global
+  profile
+  args
+  variable
+  storage
+  debug_dump
+
+Sequences can access outside variables from four places:
 
   Global configuration:
-    Variables defined in jester/conf.lua can be accessed through the 'global' namespace, eg. 'global.base_dir' accesses the 'base_dir' variable from the global configuration.
+    Variables defined in jester/conf.lua can be accessed through the 'global' namespace, eg. 'foo = global.base_dir' accesses the 'base_dir' variable from the global configuration.
   Profile configuration:
-    Variables defined in the running profile's conf.lua can be accessed through the 'profile' namespace, eg. 'profile.mailbox_dir' accesses the 'mailbox_dir' variable from the profile configuration.
+    Variables defined in the running profile's conf.lua can be accessed through the 'profile' namespace, eg. 'foo = profile.mailbox_dir' accesses the 'mailbox_dir' variable from the profile configuration.
   Channel variables:
-    Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the 'variable()' function, eg. 'variable("caller_id_name")' accesses the 'caller_id_name' variable from the channel.
+    Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the 'variable()' function, eg. 'foo = variable("caller_id_name")' accesses the 'caller_id_name' variable from the channel.
   Jester's internal storage system:
-    Variables defined in Jester's internal storage can be accessed through the 'storage()' function, eg. 'storage("mailbox_settings", "mailbox")' accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area.  See 'help storage' to learn more.]]
+    Variables defined in Jester's internal storage can be accessed through the 'storage()' function, eg. 'foo = storage("mailbox_settings", "mailbox")' accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area.  See 'help storage' to learn more.]]
+
+-- sequences -> format
+jester.help_map.sequences.format = {}
+jester.help_map.sequences.format.description_short = [[Learn the structure of writing a sequence.]]
+jester.help_map.sequences.format.description_long = [[At it's heart, a sequence is a Lua script.  If you are familiar with Lua syntax, then writing sequences should be quite trivial.  If you're new to Lua, check out 'help intro lua' for a primer on the basic syntax that will be used in sequences.
+
+A sequence is a list of 'actions' to take in a certain order, very similar to how commands would be executed sequentially in a dialplan extension.
+
+The most simple sequence you can write illustrates its basic format:
+
+  return
+  {
+    {
+      action = "none",
+    },
+  }
+
+This sequence calls the "none" action, which is just a passthrough.  This is a sequence (the outer curly brackets), with one action (the second set of curly braces around the 'action' parameter).  For more on how to write actions, see 'help sequences actions'
+
+Here's a slightly more complex sequence:
+
+  mailbox = variable("mailbox_number")
+  record_location = storage("custom", "where_to_record")
+
+  return
+  {
+    {
+      action = play,
+      file = "/var/voicemail/" .. mailbox_number .. "/greeting.wav",
+    },
+    {
+      action = record,
+      location = record_location .. "/messages",
+    },
+  }
+
+As you can see, sequences can contain variables.  They can also use conditional statements and concatenate strings (in fact, they can actually do everything a Lua script can do, minus accessing the standard libraries, but that is beyond the scope of this tutorial).  See 'help sequences variables' for more information on using variables in sequences, and 'help sequences tricks' for more creative sequence designs.
+
+The last example illustrates a basic design point of sequences.  You can think of everything above the 'return' statement as a scratch pad, where you can assemble the necessary variables and perform other tasks to prepare things to be used in the actual sequence -- and everything below the 'return' statement as the final sequence you give to Jester for executing.
+
+One important thing to note is that Jester re-evaluates the entire sequence before each sequence action is run.  In a practical sense this means that if you set a variable in action #1, that variable's value will be available in action #2.  This is a very useful feature!  On the down side, this also means that Jester core has to do a lot of evaluating, which could have an impact on high load systems.  For this reason it is recommended that if you're going to use any channel variables or storage items more than once in your sequence, you should define a variable for them in the top section, and use that variable when writing actions.
+
+For an easy way to generate templates for sequences, see 'help scripts jsequence'.]]
+
+
+-- sequences -> actions
+jester.help_map.sequences.actions = {}
+jester.help_map.sequences.actions.description_short = [[How to write actions, the building blocks of sequences.]]
+jester.help_map.sequences.actions.description_long = [[Actions are the mechanism for doing something in a sequence.  They are configurable templates that allow you to pass a command and command options to Jester, which are then passed on to the module providing the action for execution.  Put simply, you give the module a few simple instructions, and it handles the dirty work of accomplishing the job through the FreeSWITCH/Lua API.
+
+Each action is a Lua table within the main sequence (for more information on overall sequence design, see 'help sequences format').  The table is a series of key/value pairs (called parameters from here out) that contain the action instructions.  Here's an example of the 'play' action, which plays a sound file on the channel:
+
+  {
+    action = "play",
+    file = "/tmp/mysoundfile.wav",
+    keys = {
+      ["#"] = ":break",
+    },
+    repetitions = 2,
+    wait = 3000,
+  },
+
+An action always has at least one required parameter, 'action', which is the action to execute.  The other parameters are dependant on the action being taken, see 'help actions' for a list of all available actions, and 'help action [name]' for detailed help on a particular action, including the parameters it accepts.
+
+For an easy way to generate templates for actions, see 'help scripts jsequence'.]]
+
+-- sequences -> hangup
+jester.help_map.sequences.hangup = {}
+jester.help_map.sequences.hangup.description_short = [[How to trigger actions on hangup/exit.]]
+jester.help_map.sequences.hangup.description_long = [[Sometimes you need to make sure a sequence is run regardless if the user hangs up the call, or otherwise leaves the Jester environment.
+
+Jester accomodates this by providing two places where you can register sequences to run at a later time:
+  On hangup:
+    See 'help action hangup_sequence'
+  After the last active sequence ends:
+    See 'help action exit_sequence']]
+
+-- sequences -> debug
+jester.help_map.sequences.debug = {}
+jester.help_map.sequences.debug.description_short = [[How to debug sequences.]]
+jester.help_map.sequences.debug.description_long = [[Sometimes you'll be designing a sequence, it's either crashing Jester or not behaving as you would expect, and you can't easily figure out why.  Jester provides a few debugging utilities to aid your investigative efforts:
+
+  Turn on Jester's debug output:
+    This can be done globally by setting the 'debug' variable to true in 'jester/conf.lua', or per profile by setting the same variable in the profile.  Turning this one outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs.
+
+  Use debug_dump() in your sequence:
+    Jester exposes its core variable dumping function to all sequences.  You can place it in the top section of any sequence, give it a variable name, and it will dump the variable to the FreeSWITCH console.  For example, to debug the 'foo' variable:
+      debug_dump(foo)
+
+Syntax errors can be hard to debug.  If you have one in your sequence Jester will most assuredly crash, and you can check the FreeSWITCH console for the error message.  Usually it contains some helpful information pointing you to a line number and a suggestion what the problem might be.  The most common mistakes are:
+
+  Missing a closing curly brace on the sequence, an action, or an action parameter.
+  Missing a comma at the end of a parameter or an action.
+  Trying to concatenate something that has no value.
+  Using = in a conditional when you meant ==.]]
+
+-- sequences -> conditionals
+jester.help_map.sequences.conditional = {}
+jester.help_map.sequences.conditional.description_short = [[How to add simple decision-making to sequences.]]
+jester.help_map.sequences.conditional.description_long = [[At certain points in a sequence, you may want to take different actions based on the value of some channel variable or storage item.  Jester provides a simple mechanism to do this, the 'conditional' action.
+
+It allows you to compare one value with another with various strategies, and call a new sequence based on if the comparison is true or false.  An example conditonal would be:
+
+  {
+    action = "conditional",
+    value = number_of_messages,
+    compare_to = 0,
+    comparison = "equal",
+    if_true = "exit",
+    if_false = "play_messages",
+  },
+
+See 'help action conditional' for more details.]]
 
