@@ -109,7 +109,7 @@ To avoid namespace collisions in your sequence, the following variable names are
   storage
   debug_dump
 
-Sequences can access outside variables from four places:
+Sequences can access outside variables from five places:
 
   Global configuration:
     Variables defined in jester/conf.lua can be accessed through the 'global' namespace, eg. 'foo = global.base_dir' accesses the 'base_dir' variable from the global configuration.
@@ -118,7 +118,9 @@ Sequences can access outside variables from four places:
   Channel variables:
     Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the 'variable()' function, eg. 'foo = variable("caller_id_name")' accesses the 'caller_id_name' variable from the channel.
   Jester's internal storage system:
-    Variables defined in Jester's internal storage can be accessed through the 'storage()' function, eg. 'foo = storage("mailbox_settings", "mailbox")' accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area.  See 'help storage' to learn more.]]
+    Variables defined in Jester's internal storage can be accessed through the 'storage()' function, eg. 'foo = storage("mailbox_settings", "mailbox")' accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area.  See 'help storage' to learn more.
+  Sequence arguments:
+    Sequences can be called with arguments, and these can be accessed through the args() function, eg. 'foo = args(1) accesses the first argument passed to the sequence.  See 'help sequences arguments' for more information.]]
 
 -- sequences -> format
 jester.help_map.sequences.format = {}
@@ -254,4 +256,19 @@ To operate on the sequence stack, you prefix your calls to a sequence with one o
       eg. 'top:main' runs the main sequence on a completely fresh sequence stack.
 
 As a general rule, it's best not to use any actions that deal with navigation (see 'help module navigation') or responding to user key presses (see 'help sequences keys') when you are on a sequence stack level other than the top.  You can try, but most likely it will just be a confusing mess.  ;)  Subsequences are ideally designed for non-user facing actions like loading data, or making a conditional decision, etc.]]
+
+-- sequences -> arguments
+jester.help_map.sequences.arguments = {}
+jester.help_map.sequences.arguments.description_short = [[Passing arguments to sequences.]]
+jester.help_map.sequences.arguments.description_long = [[Any code system that wants more flexibility supports arguments, and Jester sequenes are no different.  Arguments allow you to pass data to a sequence at the time it is called, and this data can then be used by the sequence.
+
+Passing arguments to a sequence is simple -- just follow the sequence name with a space, then a comma-separated list of arguments.  In the interest of keeping the core small, Jester's argument parser is fairly simplistic, so you need to follow these rules when passing arguments:
+
+  They can contain only alphanumeric characters and underscores.
+  They must be separated by commas.
+  There can be no space in the argument list.
+
+eg. 'mysequence value1,value2,some_other_value'
+
+See 'help sequences variables for how to access arguments in your sequences.]]
 
