@@ -5,4 +5,15 @@
    - mailbox options
    - forwarding a message
    - operations after leaving a message
+ - help system needs the following areas filled out for the sequences topic:
+   - debug
+   - format
+   - tricks
+   - phrases
+   - arguments
+   - action
+   - conditional
+   - subsequence
+   - hangup
+   - navigation
 
