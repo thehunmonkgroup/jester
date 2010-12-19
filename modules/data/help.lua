@@ -11,9 +11,7 @@ jester.help_map.data.handlers.odbc = [[The default handler for the data module. 
   table:
     The table in the database to operate on.
 
-Note that in order for this handler to work properly, you'll need to have ODBC installed, the correct ODBC driver for your database type installed, and an ODBC resource set up to access your database.  If you don't know how, there's a nice tutorial here (for CentOS):
-
-  http://www.webaj.com/how-setup-mysql-dsn-datasbase-source-centos-myodbc-and-unixodbc-command-line.htm
+Note that in order for this handler to work properly, you'll need to have ODBC installed, the correct ODBC driver for your database type installed, and an ODBC resource set up to access your database.  If you don't know how, there's a nice tutorial here (for CentOS): http://bit.ly/b6d0Wm
 
 For now you'll need to include your username/password in the odbc.ini file, future versions will probably support passing that at connect time also.]]
 
