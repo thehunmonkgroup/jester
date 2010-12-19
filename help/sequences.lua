@@ -13,8 +13,8 @@ jester.help_map.sequences.keys.description_long = [[Jester provides high-level i
 To maintain the simplicity of the engine, menu-type navigation is limited to single digits.  Any action that has the 'keys' parameter supports responding to key presses.  The layout of the keys parameter is as follows:
 
 keys = {
-  ["1"] = "someothersequence",
-  ["2"] = "somesequence arg1,arg2",
+  ["1"] = "somesequence",
+  ["2"] = "someothersequence arg1,arg2",
   ["3"] = "@someaction",
   ["4"] = ":break",
   ["5"] = ":seek:+2000",
@@ -23,7 +23,7 @@ keys = {
   ["*"] = "@navigation_up",
   invalid = true,
   invalid_sound = "ivr/ivr-that_was_an_invalid_entry.wav",
-  invalid_sequence = "mysequence arg1,arg2"
+  invalid_sequence = "mysequence arg1,arg2",
 }
 
 The key itself is enclosed in square brackets and quotes.  The values for each key can be in one of three forms:
@@ -75,6 +75,7 @@ The keys parameter can be put in one of two places:
         },
       }
       In this case, once the action is complete, the mapping is cleared.
+
   As a sequence parameter:
     This sets the key mapping for all actions in the sequence.  eg.
       return
@@ -91,7 +92,7 @@ The keys parameter can be put in one of two places:
           file = "myrecording",
         },
       }
-      In this case, once the sequence is complete, the mapping is cleared.  Note that individual action in the sequence can still provide their own key mappings, and they will override the sequence mapping for that action.]]
+      In this case, once the sequence is complete, the mapping is cleared.  Note that individual actions in the sequence can still provide their own key mappings, and they will override the sequence mapping for that action.]]
 
 -- sequences -> variables
 jester.help_map.sequences.variables = {}
@@ -99,7 +100,9 @@ jester.help_map.sequences.variables.description_short = [[How to access and use 
 jester.help_map.sequences.variables.description_long = [[Variables in sequences are standard Lua variable definitions:
   name = value
 
-You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below.  Variable names can be any string of letters, digits and underscores, not beginning with a digit.
+See 'help intro lua' for more examples of defining variables.
+
+You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below.
 
 To avoid namespace collisions in your sequence, the following variable names are prohibited:
   global
@@ -169,7 +172,7 @@ For an easy way to generate templates for sequences, see 'help scripts jsequence
 -- sequences -> actions
 jester.help_map.sequences.actions = {}
 jester.help_map.sequences.actions.description_short = [[How to write actions, the building blocks of sequences.]]
-jester.help_map.sequences.actions.description_long = [[Actions are the mechanism for doing something in a sequence.  They are configurable templates that allow you to pass a command and command options to Jester, which are then passed on to the module providing the action for execution.  Put simply, you give the module a few simple instructions, and it handles the dirty work of accomplishing the job through the FreeSWITCH/Lua API.
+jester.help_map.sequences.actions.description_long = [[Actions are the mechanism for doing something in a sequence.  They are configurable templates that allow you to pass a command with options to Jester, which are then passed on to the module providing the action for execution.  Put simply, you give the module a few simple instructions, and it handles the dirty work of accomplishing the job through the FreeSWITCH/Lua API.
 
 Each action is a Lua table within the main sequence (for more information on overall sequence design, see 'help sequences format').  The table is a series of key/value pairs (called parameters from here out) that contain the action instructions.  Here's an example of the 'play' action, which plays a sound file on the channel:
 
@@ -204,7 +207,7 @@ jester.help_map.sequences.debug.description_short = [[How to debug sequences.]]
 jester.help_map.sequences.debug.description_long = [[Sometimes you'll be designing a sequence, it's either crashing Jester or not behaving as you would expect, and you can't easily figure out why.  Jester provides a few debugging utilities to aid your investigative efforts:
 
   Turn on Jester's debug output:
-    This can be done globally by setting the 'debug' variable to true in 'jester/conf.lua', or per profile by setting the same variable in the profile.  Turning this one outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs.
+    This can be done globally by setting the 'debug' variable to true in 'jester/conf.lua', or per profile by setting the same variable in the profile.  Turning this on outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs.
 
   Use debug_dump() in your sequence:
     Jester exposes its core variable dumping function to all sequences.  You can place it in the top section of any sequence, give it a variable name, and it will dump the variable to the FreeSWITCH console.  For example, to debug the 'foo' variable:
@@ -215,14 +218,14 @@ Syntax errors can be hard to debug.  If you have one in your sequence Jester wil
   Missing a closing curly brace on the sequence, an action, or an action parameter.
   Missing a comma at the end of a parameter or an action.
   Trying to concatenate something that has no value.
-  Using = in a conditional when you meant ==.]]
+  Using '=' in a conditional when you meant '=='.]]
 
 -- sequences -> conditionals
 jester.help_map.sequences.conditional = {}
 jester.help_map.sequences.conditional.description_short = [[How to add simple decision-making to sequences.]]
 jester.help_map.sequences.conditional.description_long = [[At certain points in a sequence, you may want to take different actions based on the value of some channel variable or storage item.  Jester provides a simple mechanism to do this, the 'conditional' action.
 
-It allows you to compare one value with another with various strategies, and call a new sequence based on if the comparison is true or false.  An example conditonal would be:
+It allows you to compare one value with another using various comparison strategies, and call a new sequence based on if the comparison is true or false.  An example conditonal would be:
 
   {
     action = "conditional",
@@ -249,7 +252,7 @@ To operate on the sequence stack, you prefix your calls to a sequence with one o
     This moves the sequence stack down one level, and runs the called sequence there, remembering which action the current sequence is running.  When the lower level stack finishes, the stack level is discarded, Jester moves up on level in the sequence stack, and continues with the next action in the seqeunce at that level:
       eg. 'sub:mysubsequence' calls the 'mysubsequence' sequence in the next stack level down from the sequence where it's called.
   up:
-    This moves the sequence stack down one level, overwrites the previously stored sequence at that level, and runs the called sequence:
+    This moves the sequence stack up one level, overwrites the previously stored sequence at that level, and runs the called sequence:
       eg. 'up:somesequence' replaces the sequence at the next level up with the 'somesequence' sequence and runs it.
   top:
     This completely clears the sequence stack and runs the called sequence on a fresh stack.  It's equivalent to setting the stack to the same state as when Jester is originally invoked:
@@ -275,9 +278,9 @@ See 'help sequences variables for how to access arguments in your sequences.]]
 -- sequences -> storage
 jester.help_map.sequences.storage = {}
 jester.help_map.sequences.storage.description_short = [[Jester's storage system.]]
-jester.help_map.sequences.storage.description_long = [[Jester provides a simple key/value storage mechanism  This allows you to store user input, load data from external sources for later use, keep track of how many times something was done, etc.
+jester.help_map.sequences.storage.description_long = [[Jester provides a simple key/value storage mechanism.  This allows you to store user input, load data from external sources for later use, keep track of how many times something was done, etc.
 
-The storage is diveded into 'areas'.  Each area is capable of storing key/value pairs that are independent of other storage areas.
+The storage is divided into 'areas'.  Each area stores key/value pairs that are independent of other storage areas.
 
 To learn how to access storage areas in sequences, see 'help sequences variables'.
 
@@ -288,7 +291,9 @@ jester.help_map.sequences.navigation = {}
 jester.help_map.sequences.navigation.description_short = [[Build IVR/phone tree functionality.]]
 jester.help_map.sequences.navigation.description_long = [[Through the navigation module, Jester provides the necessary facilities to implement phone menus in sequences.
 
-To provide a phone menu, it's necessary to track where a user has been.  The navigation stack serves this purpose.  By adding a sequence to the navigation stack, you can later return to that sequence by going 'up' the stack, or to the beginning of the phone tree by going to the 'top' of the stack.  One important thing to note is that you can't add the same sequence with the same arguments to the navigation stack in adjacent positions -- this is an internal restriction to ease the implementation of the navigation stack, and it wouldn't be sensible to do it anyways... ;)
+To provide a phone menu, it's necessary to track where a user has been.  The navigation stack serves this purpose.  By adding a sequence to the navigation stack, you can later return to that sequence by going 'up' the stack, or to the beginning of the phone tree by going to the 'top' of the stack.
+
+One important thing to note is that you can't add the same sequence with the same arguments to the navigation stack in adjacent positions -- this is an internal restriction to ease the implementation of the navigation stack, and it wouldn't be sensible to do it anyways... ;)
 
 See 'help module navigation' for more information on using the navigation stack.]]
 
@@ -322,6 +327,7 @@ Complex conditionals:
 Conditional keys in the key map:
   If the key map for an action depends on the state of certain variables, create a temporary key map variable containing the key map with constant key presses, use Lua conditionals to optionally add the other keys, then use the finalized key map variable as the value of the 'keys' parameter:
 
+    -- Add a key to the map conditionally.
     temp_keys = {
       ["3"] = "advanced_options",
       ["5"] = "repeat_message",

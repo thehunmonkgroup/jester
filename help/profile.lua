@@ -40,7 +40,8 @@ This does require a bit of extra configuration in some areas:
 
   Sequences:
     The global 'sequence_path' variable will need to be overridden, and instead pointed to a location inside the profile.  A common line would be:
-  sequence_path = jester.conf.profile_path .. "/[name]/sequences"
+      sequence_path = jester.conf.profile_path .. "/[name]/sequences"
+
   Phrase macros:
     These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location.  A typical configuration line for that in, for example, the 'conf/lang/en/en.xml' FreeSWITCH configuration file, would be:
       <X-PRE-PROCESS cmd="include" data="$${base_dir}/scripts/jester/profiles/[name]/phrases.xml"/>]]

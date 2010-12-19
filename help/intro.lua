@@ -11,7 +11,7 @@ jester.help_map.intro.run.description_long = [[Jester is designed to be executed
 
 Jester also has an extensive help system, which can be accessed in one of three ways:
 
-  From the shell (from the directory jester.lua resides in):
+  From the shell (from the FreeSWITCH 'scripts' directory):
     lua jester/jester.lua help [sub-topic] [sub-sub-topic] [...]
 
   From FreeSWITCH CLI:
@@ -66,6 +66,8 @@ Define a variable:
   name = "foo" -- assign the 'name' variable the string value of "foo"
   name = [[foo]] -- assign the 'name' variable the string value of "foo"
 
+  Variable names can be any string of letters, digits and underscores, not beginning with a digit
+
 Math:
   foo = foo + 1
   foo = foo - 1
@@ -109,11 +111,12 @@ Logical operators:
 
 Tables:
   The only structured data in Lua.
+  Table keys that are strings have the same restrictions as variable names (in the Jester world, anyways).
 
   foo = {} -- create an empty table.
   table1 = {10, 20, 30} -- create an ordered list.
   table2 = {
-    bar = "baz",
+    bar = "baz", -- string table keys have the same restrictions as variable names
     bang = "zoom",
   } -- create a record-style table, this is not ordered!
   value = table1[1] -- value is 10
