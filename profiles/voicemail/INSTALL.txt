@@ -9,13 +9,8 @@ assume you already have Jester installed correctly:
    NOTE: table structure is totally subject to change in future releases,
    you're on your own with that for now!
 
-3. Create an ODBC resource to connect to the database.  If you don't know how,
-   there's a nice tutorial here:
-
-   http://www.webaj.com/how-setup-mysql-dsn-datasbase-source-centos-myodbc-and-unixodbc-command-line.htm
-
-   For now you'll need to include your username/password in the odbc.ini file,
-   future versions will probably support passing that at connect time also.
+3. Create an ODBC resource to connect to the database.  See HANDLERS -> odbc at
+   'help module data' for more information.
 
 4. If necessary, edit the database configuration settings in
    'profiles/voicemail/conf.lua
