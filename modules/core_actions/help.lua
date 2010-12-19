@@ -10,18 +10,18 @@ jester.help_map.core_actions.actions.none.description_long = [[This action is ju
 
 jester.help_map.core_actions.actions.call_sequence = {}
 jester.help_map.core_actions.actions.call_sequence.description_short = [[Call a new sequence from the currently running sequence.]]
-jester.help_map.core_actions.actions.call_sequence.description_long = [[This action calls a new sequence from the currently running sequence, optionally resuming the original sequence when done.]]
+jester.help_map.core_actions.actions.call_sequence.description_long = [[This action calls a new sequence from the currently running sequence.]]
 jester.help_map.core_actions.actions.call_sequence.params = {
-  sequence = [[The new sequence to call.  By default the original sequence is not resumed when the new sequence completes.  To resume the old sequence (effectively making the new sequence a subroutine of the original), prefix the sequence with 'sub:', eg. 'sub:somesequence arg1,arg2'.]],
+  sequence = [[The new sequence to call.  By default the original sequence is not resumed when the new sequence completes.  To resume the old sequence (effectively making the new sequence a subroutine of the original), prefix the sequence with 'sub:', eg. 'sub:somesequence arg1,arg2'.  See 'help sequences subsequences' for more information.]],
 }
 
 jester.help_map.core_actions.actions.conditional = {}
 jester.help_map.core_actions.actions.conditional.description_short = [[Call a new sequence based on a simple conditional check.]]
-jester.help_map.core_actions.actions.conditional.description_long = [[This action allows simple comparison of a value against another value, and can call another sequence based on if the comparison returns true or false.  It's really only meant for fairly simple sequence logic -- for more complex logic use Lua's if/then/elseif/else/end syntax.]]
+jester.help_map.core_actions.actions.conditional.description_long = [[This action allows simple comparison of a value against another value, and can call another sequence based on if the comparison returns true or false.  It's really only meant for fairly simple sequence logic -- for more complex logic see 'help sequences tricks'.]]
 jester.help_map.core_actions.actions.conditional.params = {
   value = [[The value that you want to compare.]],
   compare_to = [[The value that you expect it to be, or for pattern matching, any valid Lua pattern (see the Lua manual for more information on Lua patterns).]],
-  comparison = [[The kind of comparison to perform.  Valid values are "equal", "not_equal", "match", "no_match".  Default is "equal".]],
+  comparison = [[(Optional) The kind of comparison to perform.  Valid values are "equal", "not_equal", "match", "no_match".  Default is "equal".]],
   if_true = [[(Optional) The sequence to call if the comparison is true.]],
   if_false = [[(Optional) The sequence to call if the comparison is false.]],
 }

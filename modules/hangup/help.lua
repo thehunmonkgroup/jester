@@ -6,9 +6,9 @@ jester.help_map.hangup.actions = {}
 
 jester.help_map.hangup.actions.hangup = {}
 jester.help_map.hangup.actions.hangup.description_short = [[Hang up a call.]]
-jester.help_map.hangup.actions.hangup.description_long = [[This action hangs up the call.  No more regular sequences or actions run after this action is called (registered hangup sequences/actions will still run).]]
+jester.help_map.hangup.actions.hangup.description_long = [[This action hangs up the call.  No more regular sequences or actions run after this action is called (registered exit/hangup sequences/actions will still run).]]
 jester.help_map.hangup.actions.hangup.params = {
-  play = [[The path to a file, or a phrase, to play before hanging up.]],
+  play = [[(Optional) The path to a file, or a phrase, to play before hanging up.]],
 }
 
 jester.help_map.hangup.actions.hangup_sequence = {}

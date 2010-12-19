@@ -8,7 +8,7 @@ jester.help_map.record.actions.record = {}
 jester.help_map.record.actions.record.description_short = [[Records sound from a channel.]]
 jester.help_map.record.actions.record.description_long = [[This action records sound from a channel and stores it.
 
-The recording is in .wav format, and the name is a concatenation of the current datestamp and the channel's unique identifier.
+The recording is in .wav format.
 
 The following variables/values related to the recording are put into Jester storage upon completion of the recording:
 
@@ -30,6 +30,6 @@ jester.help_map.record.actions.record.params = {
   silence_threshold = [[(Optional) A number indicating the threshhold for what is considered silence.  Higher numbers mean more noise will be tolerated.  Default is 20.  TODO: need to find doc on this.]],
   silence_secs = [[(Optional) The number of consecutive seconds of silence to wait before considering the recording finished.  Default is 5.]],
   storage_area = [[(Optional) If set the 'last_recording' storage values are also stored this storage area with the 'last_recording_' prefix stripped, eg. 'storage_area = "message"' would store 'name' in the 'message' storage area with the same value as 'last_recording_name'.]],
-  keys = [[See 'help keys'.]],
+  keys = [[(Optional) See 'help sequences keys'.]],
 }
 

@@ -6,7 +6,7 @@ jester.help_map.tracker.actions = {}
 
 jester.help_map.tracker.actions.counter = {}
 jester.help_map.tracker.actions.counter.description_short = [[Incremental custom variable counter.]]
-jester.help_map.tracker.actions.counter.description_long = [[This action provides a simple method to keep a count of any arbitrary value, provides access to calling sequences by comparing a number against the total in the counter.  It's useful for storing how many times you've done something, eg. on 3rd failed login attempt, hang up.  Counters are initialized with a value of zero, and placed in storage area 'counter'.]]
+jester.help_map.tracker.actions.counter.description_long = [[This action provides a simple method to keep a count of any arbitrary value, and provides access to calling sequences by comparing a number against the total in the counter.  It's useful for storing how many times you've done something, eg. on 3rd failed login attempt, hang up.  Counters are initialized with a value of zero, and placed in storage area 'counter'.]]
 jester.help_map.tracker.actions.counter.params = {
   storage_key = [[(Optional) The key in the 'counter' storage area where the counter value is stored and checked.  Default is 'counter']],
   increment = [[(Optional) Increment the counter by this amount before performing the comparison to the 'compare_to' parameter.  Negative increments are allowed.  The default is to not increment the counter.]],

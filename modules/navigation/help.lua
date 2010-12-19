@@ -8,7 +8,7 @@ jester.help_map.navigation.actions.add_to_stack = {}
 jester.help_map.navigation.actions.add_to_stack.description_short = [[Add a sequence to the navigation stack.]]
 jester.help_map.navigation.actions.add_to_stack.description_long = [[This action adds a sequence to the navigation stack.  It can be used for tracking when a channel moves deeper into a menu tree.  Adding a sequence to the stack allows for using the navigation actions to traverse back up the stack.]]
 jester.help_map.navigation.actions.add_to_stack.params = {
-  sequence = [[The sequence to add to the stack.  Defaults to the currently running sequence.]],
+  sequence = [[(Optional) The sequence to add to the stack.  Defaults to the currently running sequence.]],
 }
 
 jester.help_map.navigation.actions.navigation_up = {}
@@ -18,7 +18,7 @@ jester.help_map.navigation.actions.navigation_up.description_long = [[This actio
 This action is most often used in the 'keys' array like so:
 
   keys = {
-    ["9"] = ":navigation_up"
+    ["9"] = "@navigation_up"
   }
 
 It can however be used in a regular sequence as well.]]
@@ -34,7 +34,7 @@ jester.help_map.navigation.actions.navigation_top.description_long = [[This acti
 This action is most often used in the 'keys' array like so:
 
   keys = {
-    ["9"] = ":navigation_top"
+    ["9"] = "@navigation_top"
   }
 
 It can however be used in a regular sequence as well.]]

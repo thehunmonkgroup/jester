@@ -13,7 +13,7 @@ jester.help_map.log.actions.log.description_short = [[Log a custom message.]]
 jester.help_map.log.actions.log.description_long = [[Logs a custom message, with a custom level.]]
 jester.help_map.log.actions.log.params = {
   message = [[The message to log.]],
-  level = [[The log level of the message. This value will vary depending on the handler.]],
-  file = [[Required only for handlers that log to a file.  Provide a full path to the file.]],
+  level = [[(Optional) The log level of the message. This value will vary depending on the handler.  Default is 'info'.]],
+  file = [[(Optional) Required only for handlers that log to a file.  Provide a full path to the file.  Default is '/tmp/jester.log'.]],
 }
 

@@ -5,7 +5,7 @@ jester.help_map.play.description_long = [[This module provides actions for playi
   play
   play_valid_file]]
 jester.help_map.play.handlers = {
-  file = [[The default handler for the file module, operates on files on the local filesystem.]],
+  file = [[The default handler for the play module, operates on files on the local filesystem.]],
 }
 
 jester.help_map.play.actions = {}
@@ -20,9 +20,9 @@ jester.help_map.play.actions.play.params = {
   3. A phrase prefixed with 'phrase:', eg, 'phrase:invalid_sound'.
   
 To play several files together in a group, pass a table of names instead, eg. 'file = { "foo", "bar", "phrase:goodbye" }'.]],
-  repetitions = [[How many times to repeat the file(s).]],
-  wait = [[How long to wait between repetitions, in milliseconds.]],
-  keys = [[See 'help keys'.]],
+  repetitions = [[(Optional) How many times to repeat the file(s).  Default is 1.]],
+  wait = [[(Optional) How long to wait between repetitions, in milliseconds.  Default is no wait.]],
+  keys = [[(Optional) See 'help sequences keys'.]],
 }
 
 jester.help_map.play.actions.play_phrase = {}
@@ -32,9 +32,9 @@ jester.help_map.play.actions.play_phrase.params = {
   phrase = [[The name of the phrase macro to play.]],
   phrase_arguments = [[(Optional) Arguments to pass to the phrase macro, if any.]],
   language = [[(Optional) Language to play the phrase in.  Defaults to the language set on the channel or the default global language.]],
-  repetitions = [[How many times to repeat the phrase.]],
-  wait = [[How long to wait between repetitions, in milliseconds.]],
-  keys = [[See 'help keys'.]],
+  repetitions = [[(Optional) How many times to repeat the file(s).  Default is 1.]],
+  wait = [[(Optional) How long to wait between repetitions, in milliseconds.  Default is no wait.]],
+  keys = [[(Optional) See 'help sequences keys'.]],
 }
 
 jester.help_map.play.actions.play_keys = {}
@@ -59,11 +59,11 @@ The mapping is a standard table similar to the 'keys' table, with the value for 
 
 The order that the announcements are made can be customized, if no custom order is provided, then the default order from the profile or from the global configuration is used.]]
 jester.help_map.play.actions.play_keys.params = {
-  repetitions = [[How many times to repeat the key announcements.]],
-  wait = [[How long to wait between repetitions, in milliseconds.]],
-  order = [[A table of keys representing the order to play the announcements in.  For example, to play the announcements for the 3 key, then the 2 key, then the 1 key: order = {"3", "2", "1"}]],
   key_announcements = [[Described above.]],
-  keys = [[See 'help keys'.]],
+  order = [[(Optional) A table of keys representing the order to play the announcements in.  For example, to play the announcements for the 3 key, then the 2 key, then the 1 key: order = {"3", "2", "1"}]],
+  repetitions = [[(Optional) How many times to repeat the file(s).  Default is 1.]],
+  wait = [[(Optional) How long to wait between repetitions, in milliseconds.  Default is no wait.]],
+  keys = [[See 'help sequences keys'.]],
 }
 
 jester.help_map.play.actions.play_valid_file = {}
@@ -76,8 +76,8 @@ jester.help_map.play.actions.play_valid_file.params = {
   3. A phrase prefixed with 'phrase:', eg, 'phrase:invalid_sound' (note that this will always be considered a valid file)
   
 List the files in the order you would prefer them to be searched, eg. 'file = { "mycustomgreeting", "phrase:invalid_entry" }'.]],
-  repetitions = [[How many times to repeat the file(s).]],
-  wait = [[How long to wait between repetitions, in milliseconds.]],
-  keys = [[See 'help keys'.]],
+  repetitions = [[(Optional) How many times to repeat the file(s).  Default is 1.]],
+  wait = [[(Optional) How long to wait between repetitions, in milliseconds.  Default is no wait.]],
+  keys = [[(Optional) See 'help sequences keys'.]],
 }
 

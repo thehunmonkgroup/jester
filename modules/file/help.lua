@@ -26,8 +26,8 @@ jester.help_map.file.actions.move_file.description_long = [[This action moves a 
 jester.help_map.file.actions.move_file.params = {
   source = [[The file to move, including the path. Provide either the full path or a relative path from the FreeSWITCH base_dir global variable, eg. 'source = "/tmp/myorginalfile.wav"' or 'source = "storage/myoriginalfile.wav"'.]],
   destination = [[The new destination of the file, including the path. Provide either the full path or a relative path from the FreeSWITCH base_dir global variable, eg. 'destination = "/tmp/mynewfile.wav"' or 'destination = "storage/mynewfile.wav"'.]],
-  copy = [[To copy the file to the destination instead of moving it, set this to true, eg 'copy = true'.  Default is false.]],
-  binary = [[Boolean, only neccesary for copying files.  Set to true if the source file is binary (sound files are typically binary).  Default is false.]],
+  copy = [[(Optional) To copy the file to the destination instead of moving it, set this to true, eg 'copy = true'.  Default is false.]],
+  binary = [[(Optional) Boolean, only neccesary for copying files.  Set to true if the source file is binary (sound files are typically binary).  Default is false.]],
 }
 
 jester.help_map.file.actions.delete_file = {}
