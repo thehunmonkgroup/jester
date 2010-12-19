@@ -10,9 +10,9 @@ end
 
 function log_file(action)
   local message = action.message
-  local file = action.file
+  local file = action.file or '/tmp/jester.log'
   local level = action.level or "INFO"
-  if file and message then
+  if message then
     local destination, file_error = io.open(file, "a")
     if destination then
       message = os.date("%Y-%m-%d %H:%M:%S") .. " " .. level .. ": " .. message .. "\n"
