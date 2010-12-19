@@ -62,7 +62,10 @@ function string:wrap(boundary, indent)
             buffer = full_indent .. buffer:sub(boundary + 1)
           else
             if (word:len() > boundary) then
-              buffer = buffer .. word
+              table.insert(output, buffer)
+              table.insert(output, full_indent .. word)
+              buffer = indent
+              index = index + 1
             elseif (buffer:len() + word:len() >= boundary) then
               table.insert(output, buffer)
               buffer = full_indent
