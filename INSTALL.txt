@@ -27,11 +27,11 @@ package-based Linux distribution.  Here are the basic steps:
    directory.  In a typical installation, it would be at:
      /usr/local/freeswitch/scripts/jester
 
-4. Depending on where you install the packages from step 2, you may need to
+5. Depending on where you install the packages from step 2, you may need to
    fiddle with the LUA_PATH and LUA_CPATH settings in the lua.conf.xml file
    found in the conf/autoload_configs directory of your FreeSWITCH
    installation.
-   
+
    If you're seeing errors at the FreeSWITCH console about not being able
    load "lfs" or "socket", then this is the most likely cause.
 
@@ -39,4 +39,8 @@ package-based Linux distribution.  Here are the basic steps:
      <param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>
        or
      <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
+
+6. Jester is now installed.  If you want to additionally install the default
+   'voicemail' profile, see the INSTALL.txt located with the profile, at
+   'jester/profiles/voicemail/INSTALL.txt'.
 
