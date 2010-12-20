@@ -3,6 +3,7 @@ new_message_count = storage("messagenew", "__count")
 old_message_count = storage("messageold", "__count")
 
 current_folder = ""
+messages = ""
 if new_message_count > 0 then
   current_folder = "0"
   messages = "messagenew"
