@@ -1,4 +1,4 @@
-mailbox = storage("custom", "mailbox_number"),
+mailbox = storage("custom", "mailbox_number")
 mailbox_directory = profile.voicemail_dir .. "/" .. profile.context .. "/" .. profile.domain .. "/" .. mailbox
 
 -- Message data.
