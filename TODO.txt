@@ -7,6 +7,3 @@
    - operations after leaving a message
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
- - figure out a more flexible way to implement the "beep" sound in the record
-   action -- perhaps change the beep param to a file path, and default to
-   tone stream if none is given?
