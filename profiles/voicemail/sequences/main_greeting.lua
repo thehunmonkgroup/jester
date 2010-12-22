@@ -23,8 +23,13 @@ return
     sequence = "check_for_recorded_message",
   },
   {
+    action = "wait",
+    milliseconds = 500,
+  },
+  {
     action = "record",
     location = profile.temp_recording_dir,
+    pre_record_sound = "phrase:beep",
     keys = {
       ["#"] = ":break",
     },
