@@ -102,7 +102,7 @@ jester.help_map.sequences.variables.description_long = [[Variables in sequences 
 
 See 'help intro lua' for more examples of defining variables.
 
-You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below.
+You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below.  Note that for any new variable you create in the sequence, you should always initialize it to some value (or to an empty string) before attempting to use it.
 
 To avoid namespace collisions in your sequence, the following variable names are prohibited:
   global

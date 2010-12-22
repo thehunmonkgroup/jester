@@ -5,8 +5,6 @@
    - mailbox options
    - forwarding a message
    - operations after leaving a message
- - add to doc: always declare a default string value for custom sequence
-   variables if they will be used in a string concatenation
  - store the mailbox_number and login_type values in a named storage area and
    not the default "custom" storage area.
  - maybe rename the "custom" storage area to "default" now that multiple custom
