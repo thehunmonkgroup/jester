@@ -9,6 +9,7 @@ return
   {
     action = "set_storage",
     data = {
+      storage_area = "login_settings",
       mailbox_number = storage("get_digits", "digits"),
     },
   },

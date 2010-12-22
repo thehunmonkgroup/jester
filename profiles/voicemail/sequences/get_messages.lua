@@ -6,7 +6,7 @@ return
     config = profile.db_config_messages,
     filters = {
       context = variable("voicemail_context"),
-      mailbox = storage("default", "mailbox_number"),
+      mailbox = storage("login_settings", "mailbox_number"),
       __folder = args(1),
       __deleted = 0,
     },

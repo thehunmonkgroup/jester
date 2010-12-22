@@ -1,5 +1,5 @@
 -- Folder data.
-current_folder = storage("default", "current_folder")
+current_folder = storage("message_settings", "current_folder")
 
 return
 {

@@ -9,7 +9,7 @@ return
   },
   {
     action = "conditional",
-    value = storage("default", "login_type"),
+    value = storage("login_settings", "login_type"),
     compare_to = "have_mailbox",
     comparison = "equal",
     if_true = "mailbox_login_incorrect_have_mailbox",

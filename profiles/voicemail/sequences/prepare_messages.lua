@@ -7,6 +7,7 @@ return
   {
     action = "set_storage",
     data = {
+      storage_area = "message_settings",
       current_folder = args(1),
     },
   },
