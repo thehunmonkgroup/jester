@@ -2,7 +2,7 @@
 total_messages = storage("message", "__count")
 
 -- Folder data.
-current_folder = storage("custom", "current_folder")
+current_folder = storage("default", "current_folder")
 
 temp_keys = {
   ["2"] = "change_folders",

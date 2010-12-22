@@ -1,4 +1,4 @@
-mailbox = storage("custom", "mailbox_number")
+mailbox = storage("default", "mailbox_number")
 mailbox_directory = profile.voicemail_dir .. "/" .. profile.context .. "/" .. profile.domain .. "/" .. mailbox
 
 -- Message data.
@@ -6,7 +6,7 @@ message_number = storage("counter", "message_number")
 recording_name = storage("message", "recording_" .. message_number)
 
 -- Folder data.
-current_folder = storage("custom", "current_folder")
+current_folder = storage("default", "current_folder")
 
 return
 {

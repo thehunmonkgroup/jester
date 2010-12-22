@@ -48,7 +48,7 @@ function set_variable(action)
 end
 
 function set_storage(action)
-  local area = action.storage_area or "custom"
+  local area = action.storage_area or "default"
   local data = action.data or {}
   for k, v in pairs(data) do
     jester.set_storage(area, k, v)
@@ -56,7 +56,7 @@ function set_storage(action)
 end
 
 function copy_storage(action)
-  local area = action.storage_area or "custom"
+  local area = action.storage_area or "default"
   local copy_area = action.copy_to
   local move = action.move
   if copy_area then
@@ -76,7 +76,7 @@ function copy_storage(action)
 end
 
 function clear_storage(action)
-  local area = action.storage_area or "custom"
+  local area = action.storage_area or "default"
   local data_keys = action.data_keys
   if data_keys then
     if type(data_keys) == "table" then

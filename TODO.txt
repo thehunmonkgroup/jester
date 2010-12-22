@@ -7,8 +7,6 @@
    - operations after leaving a message
  - store the mailbox_number and login_type values in a named storage area and
    not the default "custom" storage area.
- - maybe rename the "custom" storage area to "default" now that multiple custom
-   storage areas can be defined?
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - figure out a more flexible way to implement the "beep" sound in the record

@@ -37,7 +37,7 @@ jester.help_map.core_actions.actions.set_storage = {}
 jester.help_map.core_actions.actions.set_storage.description_short = [[Set storage values in a given storage area.]]
 jester.help_map.core_actions.actions.set_storage.description_long = [[This action sets key/value pairs in the given storage area.]]
 jester.help_map.core_actions.actions.set_storage.params = {
-  storage_area = [[(Optional) The area to store the value in. Defaults to 'custom'.]],
+  storage_area = [[(Optional) The area to store the value in. Defaults to 'default'.]],
   data = [[A table of data to store in the storage area.  Keys are the storage keys, values are the storage values, eg. 'data = { foo = "bar", baz = "bang" }'.]],
 }
 
@@ -45,7 +45,7 @@ jester.help_map.core_actions.actions.copy_storage = {}
 jester.help_map.core_actions.actions.copy_storage.description_short = [[Copy storage values from one storage area to another.]]
 jester.help_map.core_actions.actions.copy_storage.description_long = [[This action performs a complete copy of all keys in a storage area, placing them in the specified new storage area.  Note that only basic data types (string, number, boolean) are copied -- all others are ignored.]]
 jester.help_map.core_actions.actions.copy_storage.params = {
-  storage_area = [[(Optional) The area to copy. Defaults to 'custom'.]],
+  storage_area = [[(Optional) The area to copy. Defaults to 'default'.]],
   copy_to = [[The storage area to copy the data to.  Note that any data already existing in this area will be removed prior to the copy.]],
   move = [[(Optional) If set to true, clears the data from the original storage area, which effectively makes the operation a move.  Default is false.]],
 }
@@ -54,7 +54,7 @@ jester.help_map.core_actions.actions.clear_storage = {}
 jester.help_map.core_actions.actions.clear_storage.description_short = [[Remove storage values from a given storage area.]]
 jester.help_map.core_actions.actions.clear_storage.description_long = [[This action removes key/value pairs from the given storage area.]]
 jester.help_map.core_actions.actions.clear_storage.params = {
-  storage_area = [[(Optional) The area to clear. Defaults to 'custom'.]],
+  storage_area = [[(Optional) The area to clear. Defaults to 'default'.]],
   data_keys = [[(Optional) A table of keys to remove from the storage area.  If this parameter is not given, then the entire storage area is cleared, use caution! Eg. 'data = { "key1","key2" }'.]],
 }
 

@@ -146,7 +146,7 @@ This sequence calls the "none" action, which is just a passthrough.  This is a s
 Here's a slightly more complex sequence:
 
   mailbox = variable("mailbox_number")
-  record_location = storage("custom", "where_to_record")
+  record_location = storage("default", "where_to_record")
 
   return
   {

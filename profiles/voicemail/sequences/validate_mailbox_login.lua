@@ -13,7 +13,7 @@ return
     config = profile.db_config_mailboxes,
     filters = {
       context = variable("voicemail_context"),
-      mailbox = storage("custom", "mailbox_number"),
+      mailbox = storage("default", "mailbox_number"),
       password = storage("get_digits", "password"),
     },
     fields = {
