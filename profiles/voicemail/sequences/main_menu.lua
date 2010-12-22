@@ -28,6 +28,7 @@ return
 {
   {
     action = "set_storage",
+    storage_area = "message_settings",
     data = {
       current_folder = current_folder,
     },

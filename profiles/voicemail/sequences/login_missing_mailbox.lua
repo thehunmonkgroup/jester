@@ -8,8 +8,8 @@ return
   },
   {
     action = "set_storage",
+    storage_area = "login_settings",
     data = {
-      storage_area = "login_settings",
       mailbox_number = storage("get_digits", "digits"),
       login_type = "missing_mailbox",
     },
