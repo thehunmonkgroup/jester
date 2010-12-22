@@ -67,3 +67,11 @@ jester.help_map.core_actions.actions.exit_sequence.params = {
   sequence = [[The sequence to execute.]],
 }
 
+jester.help_map.core_actions.actions.wait = {}
+jester.help_map.core_actions.actions.wait.description_short = [[Wait before performing the next action.]]
+jester.help_map.core_actions.actions.wait.description_long = [[This action causes Jester to wait before continuing on.  Silence is streamed on the channel during the wait period.]]
+jester.help_map.core_actions.actions.wait.params = {
+  milliseconds = [[The number of milliseconds to wait.]],
+  keys = [[(Optional) See 'help sequences keys'.]],
+}
+

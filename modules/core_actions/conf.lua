@@ -30,4 +30,8 @@ jester.action_map.exit_sequence = {
   mod = "core_actions",
   func = "register_exit_sequence",
 }
+jester.action_map.wait = {
+  mod = "core_actions",
+  func = "wait",
+}
 

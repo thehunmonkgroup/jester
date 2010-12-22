@@ -100,3 +100,10 @@ function register_exit_sequence(action)
   end
 end
 
+function wait(action)
+  local milliseconds = action.milliseconds
+  if milliseconds then
+    jester.wait(milliseconds)
+  end
+end
+
