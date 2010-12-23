@@ -1,11 +1,20 @@
+-- Coming from where?
+from = args(1)
+
 -- Mailbox settings.
-envelope = storage("mailbox_settings", "envelope")
-saycid = storage("mailbox_settings", "saycid")
+if from == "advanced_options" then
+  envelope = "yes"
+  saycid = "yes"
+else
+  envelope = storage("mailbox_settings", "envelope")
+  saycid = storage("mailbox_settings", "saycid")
+end
 
 -- Message data.
 message_number = storage("counter", "message_number")
 timestamp = storage("message", "timestamp_" .. message_number)
 caller_id_number = storage("message", "caller_id_number_" .. message_number)
+
 
 return
 {
@@ -26,5 +35,12 @@ return
       ["*"] = "help",
       ["#"] = "exit",
     },
+  },
+  {
+    action = "conditional",
+    value = from,
+    compare_to = "advanced_options",
+    comparison = "equal",
+    if_true = "top:message_options",
   },
 }
