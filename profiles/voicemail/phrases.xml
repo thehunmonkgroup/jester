@@ -92,7 +92,7 @@
     <input pattern="^(\d+)$">
       <match>
         <action function="play-file" data="vm-message.wav"/>
-        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="say" data="$1" method="pronounced" type="number"/>
       </match>
     </input>
   </macro>
@@ -162,7 +162,7 @@
     <!-- Only new messages. -->
     <input pattern="^([1-9]\d*):0$">
       <match>
-        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="say" data="$1" method="pronounced" type="number"/>
         <action function="play-file" data="vm-INBOX.wav"/> 
       </match>
     </input>
@@ -179,7 +179,7 @@
     <!-- Only old messages. -->
     <input pattern="^0:([1-9]\d*)$">
       <match>
-        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="say" data="$1" method="pronounced" type="number"/>
         <action function="play-file" data="vm-Old.wav"/> 
       </match>
     </input>
@@ -196,10 +196,10 @@
     <!-- New and old messages. -->
     <input pattern="^([1-9]\d*):([1-9]\d*)$">
       <match>
-        <action function="say" data="$1" method="pronounced" type="items"/>
+        <action function="say" data="$1" method="pronounced" type="number"/>
         <action function="play-file" data="vm-INBOX.wav"/> 
         <action function="play-file" data="vm-and.wav"/> 
-        <action function="say" data="$2" method="pronounced" type="items"/>
+        <action function="say" data="$2" method="pronounced" type="number"/>
         <action function="play-file" data="vm-Old.wav"/> 
       </match>
     </input>
@@ -299,7 +299,7 @@
     <input pattern="^(.*)$">
       <match>
         <action function="play-file" data="vm-press.wav"/>
-        <action function="say" data="0" method="pronounced" type="items"/>
+        <action function="say" data="0" method="pronounced" type="number"/>
         <action function="play-file" data="vm-for.wav"/>
         <action function="play-file" data="vm-INBOX.wav"/> 
         <action function="play-file" data="vm-messages.wav"/>
@@ -311,7 +311,7 @@
   <macro name="old_messages">
     <input pattern="^(.*)$">
       <match>
-        <action function="say" data="1" method="pronounced" type="items"/>
+        <action function="say" data="1" method="pronounced" type="number"/>
         <action function="play-file" data="vm-for.wav"/>
         <action function="play-file" data="vm-Old.wav"/> 
         <action function="play-file" data="vm-messages.wav"/>
@@ -323,7 +323,7 @@
   <macro name="work_messages">
     <input pattern="^(.*)$">
       <match>
-        <action function="say" data="2" method="pronounced" type="items"/>
+        <action function="say" data="2" method="pronounced" type="number"/>
         <action function="play-file" data="vm-for.wav"/>
         <action function="play-file" data="vm-Work.wav"/> 
         <action function="play-file" data="vm-messages.wav"/>
@@ -335,7 +335,7 @@
   <macro name="family_messages">
     <input pattern="^(.*)$">
       <match>
-        <action function="say" data="3" method="pronounced" type="items"/>
+        <action function="say" data="3" method="pronounced" type="number"/>
         <action function="play-file" data="vm-for.wav"/>
         <action function="play-file" data="vm-Family.wav"/> 
         <action function="play-file" data="vm-messages.wav"/>
@@ -347,7 +347,7 @@
   <macro name="friends_messages">
     <input pattern="^(.*)$">
       <match>
-        <action function="say" data="4" method="pronounced" type="items"/>
+        <action function="say" data="4" method="pronounced" type="number"/>
         <action function="play-file" data="vm-for.wav"/>
         <action function="play-file" data="vm-Friends.wav"/> 
         <action function="play-file" data="vm-messages.wav"/>
@@ -451,7 +451,7 @@
     <input pattern="^(\d+):(\d)$">
       <match>
         <action function="play-file" data="vm-message.wav"/> 
-        <action function="say" data="1" method="pronounced" type="items"/>
+        <action function="say" data="$1" method="pronounced" type="number"/>
         <action function="play-file" data="vm-savedto.wav"/> 
       </match>
     </input>
