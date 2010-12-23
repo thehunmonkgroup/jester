@@ -361,11 +361,7 @@
   <macro name="announce_folder">
     <!-- This is here to prevent log warnings about no matches in the
          macro -->
-    <input pattern="^(.*)$">
-      <match>
-        <action function="play-file" data="silence_stream://10"/>
-      </match>
-    </input>
+    <input pattern="^(.*)$"></input>
     <input pattern="^0$">
       <match>
         <action function="play-file" data="vm-INBOX.wav"/> 
@@ -512,6 +508,9 @@
         <action function="play-file" data="vm-tmpexists.wav"/> 
       </match>
     </input>
+    <!-- This is here to prevent log warnings about no matches in the
+         macro -->
+    <input pattern="^false$"></input>
     <input pattern="^(.*)$">
       <match>
         <action function="play-file" data="vm-options.wav"/> 
