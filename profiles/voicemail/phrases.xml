@@ -587,4 +587,40 @@
     </input>
   </macro>
 
+  <!-- Enter new password. -->
+  <macro name="enter_new_password">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-newpassword.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Re-enter new password. -->
+  <macro name="reenter_new_password">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-reenterpassword.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Password mismatch. -->
+  <macro name="password_mismatch">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-mismatch.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Password updated. -->
+  <macro name="password_updated">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-passchanged.wav"/> 
+      </match>
+    </input>
+  </macro>
+
 </include><!--This line will be ignored it's here to validate the xml and is optional -->
