@@ -11,7 +11,7 @@ return
     action = "play_valid_file",
     files =  {
       mailbox_directory .. "/temp.wav",
-      mailbox_directory .. "/greeting.wav",
+      mailbox_directory .. "/unavail.wav",
       "phrase:default_greeting",
     },
     keys = {
