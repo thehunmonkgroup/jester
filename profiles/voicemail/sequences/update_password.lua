@@ -1,0 +1,28 @@
+mailbox = variable("voicemail_mailbox")
+password = storage("get_digits", "new_password_1")
+
+return
+{
+  {
+    action = "data_update",
+    handler = "odbc",
+    config = profile.db_config_mailboxes,
+    fields = {
+      password = password,
+    },
+    filters = {
+      context = profile.context,
+      mailbox = mailbox,
+    },
+    update_type = "update",
+  },
+  {
+    action = "play_phrase",
+    phrase = "password_updated",
+  },
+  {
+    action = "call_sequence",
+    sequence = "mailbox_options",
+  },
+}
+
