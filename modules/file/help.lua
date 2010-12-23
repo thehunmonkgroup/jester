@@ -39,7 +39,9 @@ jester.help_map.file.actions.delete_file.params = {
 
 jester.help_map.file.actions.file_exists = {}
 jester.help_map.file.actions.file_exists.description_short = [[Determines if a file exists in the filesystem.]]
-jester.help_map.file.actions.file_exists.description_long = [[This action determines if a file exists on the filesystem.  This only checks for basic existence -- the file must be readable by the FreeSWITCH user.]]
+jester.help_map.file.actions.file_exists.description_long = [[This action determines if a file exists on the filesystem.  This only checks for basic existence -- the file must be readable by the FreeSWITCH user.
+
+The action will store the result of its check in the 'file' storage area, key 'file_exists': 'true' if the file exists, 'false' otherwise.]]
 jester.help_map.file.actions.file_exists.params = {
   file = [[The file to check, including the path. Provide either the full path or a relative path from the FreeSWITCH base_dir global variable, eg. 'file = "/tmp/myfile.wav"' or 'source = "storage/myfile.wav"'.]],
   if_true = [[(Optional) The sequence to call if the file exists.]],
