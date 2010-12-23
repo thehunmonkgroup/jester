@@ -12,7 +12,7 @@ return
     files =  {
       mailbox_directory .. "/temp.wav",
       mailbox_directory .. "/unavail.wav",
-      "phrase:default_greeting",
+      "phrase:default_greeting:" .. mailbox,
     },
     keys = {
       ["#"] = ":break",
