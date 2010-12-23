@@ -7,3 +7,4 @@
    - operations after leaving a message
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
+ - remove any references to actual sound files, replace with phrases
