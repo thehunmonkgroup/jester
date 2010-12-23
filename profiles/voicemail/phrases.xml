@@ -505,4 +505,69 @@
     </input>
   </macro>
 
+  <!-- Mailbox options. -->
+  <macro name="mailbox_options">
+    <input pattern="^true$">
+      <match>
+        <action function="play-file" data="vm-tmpexists.wav"/> 
+      </match>
+    </input>
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-options.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Record greeting. -->
+  <macro name="record_greeting">
+    <input pattern="^unavail$">
+      <match>
+        <action function="play-file" data="vm-rec-unv.wav"/> 
+      </match>
+    </input>
+    <input pattern="^busy$">
+      <match>
+        <action function="play-file" data="vm-rec-busy.wav"/> 
+      </match>
+    </input>
+    <input pattern="^greet$">
+      <match>
+        <action function="play-file" data="vm-rec-name.wav"/> 
+      </match>
+    </input>
+    <input pattern="^temp$">
+      <match>
+        <action function="play-file" data="vm-rec-temp.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Thank you. -->
+  <macro name="thank_you">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="auth-thankyou.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Greeting options. -->
+  <macro name="greeting_options">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-review.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Greeting saved. -->
+  <macro name="greeting_saved">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-msgsaved.wav"/> 
+      </match>
+    </input>
+  </macro>
+
 </include><!--This line will be ignored it's here to validate the xml and is optional -->
