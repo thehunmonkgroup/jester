@@ -268,6 +268,9 @@ function main()
     hungup = true
     run_sequence_loop("hangup")
   end
+  if debug then
+    debug_dump(jester, true)
+  end
 end
 
 --[[
