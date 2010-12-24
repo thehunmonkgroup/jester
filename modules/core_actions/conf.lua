@@ -34,4 +34,8 @@ jester.action_map.wait = {
   mod = "core_actions",
   func = "wait",
 }
+jester.action_map.load_profile = {
+  mod = "core_actions",
+  func = "load_profile",
+}
 

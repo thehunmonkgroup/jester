@@ -95,7 +95,7 @@ function register_exit_sequence(action)
     local event = {}
     event.event_type = "sequence"
     event.sequence = sequence
-    table.insert(jester.channel.stack.exit, event) 
+    table.insert(jester.channel.stack.exit, event)
     jester.debug_log("Registered exit sequence: %s", sequence)
   end
 end
@@ -104,6 +104,24 @@ function wait(action)
   local milliseconds = action.milliseconds
   if milliseconds then
     jester.wait(milliseconds)
+  end
+end
+
+function load_profile(action)
+  local profile = action.profile
+  local sequence = action.sequence
+  if profile then
+    -- Copy in new initial args here if a sequence is going to be called, so
+    -- profile has access to them.
+    if sequence then
+      local s_type, sequence_name, sequence_args = jester.parse_sequence(sequence)
+      jester.initial_args = jester.parse_args(sequence_args)
+    end
+    jester.init_profile(profile)
+    jester.init_modules(jester.conf.modules)
+    if sequence then
+      jester.queue_sequence(sequence)
+    end
   end
 end
 

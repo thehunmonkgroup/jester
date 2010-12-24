@@ -75,3 +75,11 @@ jester.help_map.core_actions.actions.wait.params = {
   keys = [[(Optional) See 'help sequences keys'.]],
 }
 
+jester.help_map.core_actions.actions.load_profile = {}
+jester.help_map.core_actions.actions.load_profile.description_short = [[Load a profile dynamically.]]
+jester.help_map.core_actions.actions.load_profile.description_long = [[This action allows you to load a profile dynamically from within a sequence.  This can be useful for loading a 'heavier' profile only when needed from within a 'lighter' profile.]]
+jester.help_map.core_actions.actions.load_profile.params = {
+  profile = [[The new profile to load.]],
+  sequence = [[(Optional) A sequence to execute after loading the profile.  If this is provided, any running sequences in the current loop will be discarded, and this sequence will be run from the top of a new sequence stack.]],
+}
+
