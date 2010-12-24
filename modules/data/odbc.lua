@@ -18,14 +18,19 @@ function connect(action)
 end
 
 function load_data(action)
-  if action.fields and action.filters then
+  local fields = action.fields
+  local filters = action.filters or {}
+  local multiple = action.multiple
+  local sort = action.sort
+  local sort_order = action.sort_order
+  local area = action.storage_area or "data"
+  if fields then
     local dbh, conf = connect(action)
-    local limit = action.multiple and "" or " LIMIT 1"
-    local sort = action.sort and build_sort(action) or ""
-    local sql = "SELECT " .. build_load_fields(action.fields) .. " FROM " .. conf.table .. build_where(action.filters) .. sort .. limit
+    local limit = multiple and "" or " LIMIT 1"
+    local load_sort = sort and build_sort(sort, sort_order) or ""
+    local sql = "SELECT " .. build_load_fields(fields) .. " FROM " .. conf.table .. build_where(filters) .. load_sort .. limit
     jester.debug_log("Executing query: %s", sql)
     local count, suffix = 0, ""
-    local area = action.storage_area or "data"
     -- Clean out storage area before loading in new data.
     jester.clear_storage(area)
     -- Loop through the returned rows.
@@ -33,14 +38,14 @@ function load_data(action)
       count = count + 1
       for col, val in pairs(row) do
         -- Multi-row results get a row suffix.
-        if action.multiple then
+        if multiple then
           suffix = "_" .. count
         end
         jester.set_storage(area, col .. suffix, val)
       end
     end))
     -- Multi-row results get a special count key.
-    if action.multiple then
+    if multiple then
       jester.debug_log("Query rows returned: %d", count)
       jester.set_storage(area, "__count", tonumber(count))
     end
@@ -48,23 +53,28 @@ function load_data(action)
 end
 
 function update_data(action)
-  if action.fields and action.filters then
+  local fields = action.fields
+  local filters = action.filters or {}
+  local update_type = action.update_type
+  if fields then
     local dbh, conf = connect(action)
-    local where = build_where(action.filters)
-    -- Check how many rows will be updated first.
-    local sql = "SELECT COUNT(*) AS count FROM " .. conf.table .. where 
-    local count
-    assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
+    local where = build_where(filters)
+    local count = 1
+    -- Check how many rows will be updated first, unless it's an insert.
+    if update_type ~= "insert" then
+      local sql = "SELECT COUNT(*) AS count FROM " .. conf.table .. where
+      assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
+    end
     -- Insert forced, or no rows would be updated and update is not forced,
     -- so insert.
-    if action.update_type == "insert" or (count == 0 and action.update_type ~= "update") then
-      local fields, values = build_insert(action.filters, action.fields)
-      sql = "INSERT INTO " .. conf.table .. " (" .. fields .. ") VALUES (" .. values .. ")" 
+    if update_type == "insert" or (count == 0 and update_type ~= "update") then
+      local insert_fields, values = build_insert(filters, fields)
+      sql = "INSERT INTO " .. conf.table .. " (" .. insert_fields .. ") VALUES (" .. values .. ")"
       count = 1
     -- Rows would be updated, and update is either not specified or it's
     -- forced, so update.
-    elseif count > 0 and (not action.update_type or action.update_type == "update") then
-      sql = "UPDATE " .. conf.table .. " SET " .. build_update_fields(action.fields) .. where
+    elseif count > 0 and (not update_type or update_type == "update") then
+      sql = "UPDATE " .. conf.table .. " SET " .. build_update_fields(fields) .. where
     end
     jester.debug_log("Executing query: %s", sql)
     assert(dbh:query(sql))
@@ -73,12 +83,11 @@ function update_data(action)
 end
 
 function delete_data(action)
-  if action.filters then
-    local dbh, conf = connect(action)
-    local sql = "DELETE FROM " .. conf.table .. build_where(action.filters)
-    jester.debug_log("Executing query: %s", sql)
-    assert(dbh:query(sql))
-  end
+  local filters = action.filters or {}
+  local dbh, conf = connect(action)
+  local sql = "DELETE FROM " .. conf.table .. build_where(filters)
+  jester.debug_log("Executing query: %s", sql)
+  assert(dbh:query(sql))
 end
 
 --[[
@@ -163,7 +172,11 @@ end
 ]]
 function build_where(f)
   local filters = build_expressions(f)
-  return " WHERE " .. table.concat(filters, " AND ")
+  if #filters > 0 then
+    return " WHERE " .. table.concat(filters, " AND ")
+  else
+    return ""
+  end
 end
 
 --[[
@@ -178,14 +191,13 @@ end
 --[[
   Build ORDER BY statement.
 ]]
-function build_sort(f)
-  local sort_order = f.sort_order or 'asc'
+function build_sort(sort, sort_order)
   if sort_order == "desc" or sort_order == "DESC" then
     sort_order = " DESC"
   else
     sort_order = ""
   end
-  return " ORDER BY " .. f.sort .. sort_order
+  return " ORDER BY " .. sort .. sort_order
 end
 
 --[[
