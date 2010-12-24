@@ -268,10 +268,6 @@ function main()
     hungup = true
     run_sequence_loop("hangup")
   end
-  -- Return these to a false state, as all valid processes should be complete,
-  -- and this could prevent infinite loops based on actionable_key() checks.
-  exiting = false
-  hungup = false
 end
 
 --[[
