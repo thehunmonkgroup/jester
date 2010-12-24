@@ -1,3 +1,11 @@
+greeting_keys = {
+  ["#"] = ":break",
+}
+
+if profile.check_messages then
+  greeting_keys["*"] = "check_messages"
+end
+
 return
 {
   {
@@ -11,9 +19,7 @@ return
       profile.mailbox_dir .. "/unavail.wav",
       "phrase:default_greeting:" .. profile.mailbox,
     },
-    keys = {
-      ["#"] = ":break",
-    },
+    keys = greeting_keys,
   },
   {
     action = "exit_sequence",

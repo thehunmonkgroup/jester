@@ -30,6 +30,11 @@ modules = {
   "file",
   "data",
 }
+
+-- Set this to true to allow a caller to press * to access the voicemail
+-- administration area for the mailbox.
+check_messages = true
+
 -- Overrides the global debug configuration for this profile only.
 sequence_path = jester.conf.profile_path .. "/voicemail_message/sequences"
 
