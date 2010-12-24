@@ -1,5 +1,5 @@
 mailbox = storage("login_settings", "mailbox_number")
-mailbox_directory = profile.voicemail_dir .. "/" .. profile.context .. "/" .. profile.domain .. "/" .. mailbox
+mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 
 -- Message data.
 message_number = storage("counter", "message_number")

@@ -1,3 +1,8 @@
+context = variable("voicemail_context")
+entered_mailbox = storage("login_settings", "mailbox_number")
+password = storage("get_digits", "password")
+retrieved_mailbox = storage("mailbox_settings", "mailbox")
+
 return
 {
   {
@@ -12,9 +17,9 @@ return
     handler = "odbc",
     config = profile.db_config_mailboxes,
     filters = {
-      context = variable("voicemail_context"),
-      mailbox = storage("login_settings", "mailbox_number"),
-      password = storage("get_digits", "password"),
+      context = context,
+      mailbox = entered_mailbox,
+      password = password,
     },
     fields = {
       "mailbox",
@@ -26,14 +31,14 @@ return
   },
   {
     action = "conditional",
-    value = storage("get_digits", "password"),
+    value = password,
     compare_to = "",
     comparison = "equal",
     if_true = "exit",
   },
   {
     action = "conditional",
-    value = storage("mailbox_settings", "mailbox"),
+    value = retrieved_mailbox,
     compare_to = "",
     comparison = "equal",
     if_true = "mailbox_login_incorrect",

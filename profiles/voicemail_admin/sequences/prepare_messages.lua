@@ -1,14 +1,16 @@
+folder = args(1)
+
 return
 {
   {
     action = "call_sequence",
-    sequence = "sub:get_messages " .. args(1),
+    sequence = "sub:get_messages " .. folder,
   },
   {
     action = "set_storage",
     storage_area = "message_settings",
     data = {
-      current_folder = args(1),
+      current_folder = folder,
     },
   },
   {

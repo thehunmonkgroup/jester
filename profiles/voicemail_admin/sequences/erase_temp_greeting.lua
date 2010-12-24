@@ -1,5 +1,5 @@
 mailbox = variable("voicemail_mailbox")
-mailbox_directory = profile.voicemail_dir .. "/" .. profile.context .. "/" .. profile.domain .. "/" .. mailbox
+mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 
 temp_greeting = mailbox_directory .. "/temp.wav"
 

@@ -42,7 +42,7 @@ voicemail_dir = jester.conf.base_dir .. "/storage/voicemail"
 context = jester.get_variable("voicemail_context")
 domain = jester.get_variable("domain")
 
-mailbox_dir = voicemail_dir .. "/" .. context .. "/" .. domain
+mailboxes_dir = voicemail_dir .. "/" .. context .. "/" .. domain
 
 db_config_mailboxes = {
   database_type = "mysql",

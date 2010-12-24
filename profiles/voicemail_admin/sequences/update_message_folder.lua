@@ -2,6 +2,9 @@
 message_number = storage("counter", "message_number")
 message_id = storage("message", "id_" .. message_number)
 
+folder = args(1)
+operation = args(2)
+
 return
 {
   {
@@ -9,7 +12,7 @@ return
     handler = "odbc",
     config = profile.db_config_messages,
     fields = {
-      __folder = args(1),
+      __folder = folder,
     },
     filters = {
       __id = message_id,
@@ -18,10 +21,10 @@ return
   },
   {
     action = "conditional",
-    value = args(2),
+    value = operation,
     compare_to = "save",
     comparison = "equal",
-    if_true = "message_saved " .. args(1),
+    if_true = "message_saved " .. folder,
   },
 }
 
