@@ -57,7 +57,7 @@ function init_profile(profile_name)
     "modules",
     "key_order",
   }
-  for _, override in ipairs(overrides) do  
+  for _, override in ipairs(overrides) do
     if profile[override] then
       conf[override] = profile[override]
     end
@@ -87,40 +87,28 @@ end
 ]]
 function queue_sequence(sequence)
   if ready() and sequence then
-    local parsed_args, loaded_sequence, add_to_stack, remove_from_stack
-    sequence = trim(sequence)
-    local s_type = "Sequence"
+    local loaded_sequence, add_to_stack, remove_from_stack
+    -- Parse out the sequence name and arguments.
+    local s_type, sequence_name, sequence_args = parse_sequence(sequence)
+    debug_log("%s called: %s, args: %s", s_type, sequence_name, sequence_args)
+    local parsed_args = parse_args(sequence_args)
     -- Check for stack operators, sub goes one level deeper, up goes one
     -- level up, top resets the stack.
-    if sequence:sub(1, 4) == "sub:" then
-      sequence = sequence:sub(5)
+    if s_type == "subsequence" then
       add_to_stack = true
-      s_type = "Subsequence"
-    elseif sequence:sub(1, 4) == "top:" then
-      sequence = sequence:sub(5)
+    elseif s_type == "top_sequence" then
       -- Emptying the stack here will trigger putting the sequence on the top
       -- of a fresh stack.
       reset_stack("sequence")
       reset_stack("sequence_name")
-      s_type = "Top sequence"
-    elseif sequence:sub(1, 3) == "up:" then
-      sequence = sequence:sub(4)
+    elseif s_type == "up_sequence" then
       remove_from_stack = true
-      s_type = "Up sequence"
     end
     local stack = channel.stack.sequence
     -- Nothing on the current stack, add this sequence on the first stack.
     if #stack == 0 then
       add_to_stack = true
     end
-    -- Parse out the sequence name and arguments.
-    local sequence_name, sequence_args = string.match(sequence, "^([%w_]+)%s+([%w_,]+)$")
-    if not sequence_name then
-      sequence_name = sequence
-      sequence_args = ""
-    end
-    debug_log("%s called: %s, args: %s", s_type, sequence_name, sequence_args)
-    parsed_args = parse_args(sequence_args)
     -- Load the sequence.
     loaded_sequence = load_sequence(sequence_name, parsed_args)
     if loaded_sequence then
@@ -227,6 +215,31 @@ function clear_storage(area, key)
 end
 
 --[[
+  Parse sequence, return the sequence name and sequence args.
+]]
+function parse_sequence(sequence)
+  sequence = trim(sequence)
+  local s_type = "sequence"
+  -- Check for stack operators.
+  if sequence:sub(1, 4) == "sub:" then
+    sequence = sequence:sub(5)
+    s_type = "subsequence"
+  elseif sequence:sub(1, 4) == "top:" then
+    sequence = sequence:sub(5)
+    s_type = "top_sequence"
+  elseif sequence:sub(1, 3) == "up:" then
+    sequence = sequence:sub(4)
+    s_type = "up_sequence"
+  end
+  local sequence_name, sequence_args = string.match(sequence, "^([%w_]+)%s+([%w_,]+)$")
+  if not sequence_name then
+    sequence_name = sequence
+    sequence_args = ""
+  end
+  return s_type, sequence_name, sequence_args
+end
+
+--[[
   Parse sequence arguments, and return them as an ordered list.
 ]]
 function parse_args(args)
@@ -272,7 +285,7 @@ function run_sequence_loop(loop_type)
   -- Loop through the registered events.
   for _, event in ipairs(channel.stack[loop_type]) do
     -- Fire up the sequence loop.
-    if event.event_type == "sequence" then 
+    if event.event_type == "sequence" then
       queue_sequence(event.sequence)
       execute_sequences()
     -- An ad hoc action was passed, call it directly.
@@ -299,7 +312,7 @@ function execute_sequences()
     -- The action that just ran may have loaded a new sequence, so reload
     -- the current action and compare them.
     new_action = load_action()
-    if action == new_action then 
+    if action == new_action then
       -- Same action that was originally called, move to the next action in
       -- the sequence unless a replay has been requested.
       if channel.stack.sequence[channel.stack.sequence_stack_position].replay_action then
