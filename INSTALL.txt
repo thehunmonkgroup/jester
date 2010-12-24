@@ -41,6 +41,6 @@ package-based Linux distribution.  Here are the basic steps:
      <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
 
 6. Jester is now installed.  If you want to additionally install the default
-   'voicemail' profile, see the INSTALL.txt located with the profile, at
-   'jester/profiles/voicemail/INSTALL.txt'.
+   profiles, see the INSTALL.voicemail.txt located at
+   'jester/profiles/INSTALL.voicemail.txt'.
 

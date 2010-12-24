@@ -36,10 +36,9 @@ modules = {
   "hangup",
 }
 -- Overrides the global debug configuration for this profile only.
-sequence_path = jester.conf.profile_path .. "/voicemail/sequences"
+sequence_path = jester.conf.profile_path .. "/voicemail_admin/sequences"
 
 voicemail_dir = jester.conf.base_dir .. "/storage/voicemail"
-temp_recording_dir = "/tmp"
 context = jester.get_variable("voicemail_context")
 domain = jester.get_variable("domain")
 

@@ -1,18 +1,15 @@
-mailbox = variable("voicemail_mailbox")
-mailbox_directory = profile.voicemail_dir .. "/" .. profile.context .. "/" .. profile.domain .. "/" .. mailbox
-
 return
 {
   {
     action = "create_directory",
-    directory = mailbox_directory,
+    directory = profile.mailbox_dir,
   },
   {
     action = "play_valid_file",
     files =  {
-      mailbox_directory .. "/temp.wav",
-      mailbox_directory .. "/unavail.wav",
-      "phrase:default_greeting:" .. mailbox,
+      profile.mailbox_dir .. "/temp.wav",
+      profile.mailbox_dir .. "/unavail.wav",
+      "phrase:default_greeting:" .. profile.mailbox,
     },
     keys = {
       ["#"] = ":break",
@@ -35,9 +32,8 @@ return
     },
   },
   {
-    action = "play_phrase",
-    phrase = "silence",
-    phrase_arguments = 3000,
+    action = "wait",
+    milliseconds = 1000,
   },
   {
     action = "play_phrase",
