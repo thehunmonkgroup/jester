@@ -12,29 +12,27 @@ function conditional(action)
   local value = action.value
   local compare_to = action.compare_to
   local operator = action.comparison or "equal"
+  local if_true = action.if_true
+  local if_false = action.if_false
   if value and compare_to then
     jester.debug_log("Comparing '%s' to '%s' using comparison method '%s'", tostring(value), tostring(compare_to), operator)
     local match
     if operator == "equal" then
       match = value == compare_to
-    elseif operator == "not_equal" then
-      match = value ~= compare_to
     elseif operator == "match" then
       match = string.match(value, compare_to) or false
-    elseif operator == "no_match" then
-      match = not string.match(value, compare_to)
     end
     if match == nil then
       jester.debug_log("Invalid comparison operator")
     elseif match == false then
       jester.debug_log("Comparison result: false")
-      if action.if_false then
-        jester.queue_sequence(action.if_false)
+      if if_false then
+        jester.queue_sequence(if_false)
       end
     else
       jester.debug_log("Comparison result: true")
-      if action.if_true then
-        jester.queue_sequence(action.if_true)
+      if if_true then
+        jester.queue_sequence(if_true)
       end
     end
   end
