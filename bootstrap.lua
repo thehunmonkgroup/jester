@@ -46,6 +46,9 @@ if args[1] and args[2] then
   key_handler = jester.key_handler
   session:setInputCallback("key_handler")
 
+  -- Turn off autohangup.
+  session:setAutoHangup(false)
+
   -- Load initial sequence.
   local event = {
     event_type = "sequence",
