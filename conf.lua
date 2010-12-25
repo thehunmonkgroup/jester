@@ -40,5 +40,6 @@ modules = {
   "data",
   "tracker",
   "hangup",
+  "dialplan_tools",
 }
 
