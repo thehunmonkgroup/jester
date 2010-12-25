@@ -44,7 +44,14 @@ mailbox = jester.initial_args[1]
 context = jester.initial_args[2] or "default"
 domain = jester.get_variable("domain")
 
-mailbox_dir = voicemail_dir .. "/" .. context .. "/" .. domain .. "/" .. mailbox
+mailboxes_dir = voicemail_dir .. "/" .. context .. "/" .. domain
+mailbox_dir = mailboxes_dir .. "/" .. mailbox
+
+db_config_mailboxes = {
+  database_type = "mysql",
+  database = "jester",
+  table = "voicemail",
+}
 
 db_config_messages = {
   database_type = "mysql",
