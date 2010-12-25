@@ -30,10 +30,8 @@ if args[1] and args[2] then
   -- prior to each sequence loop run.
   jester.init_stacks({"active", "exit", "hangup"})
 
-  -- Save the initial arguments if they exist.
-  if args[3] then
-    jester.initial_args = jester.parse_args(args[3])
-  end
+  -- Save the initial arguments.
+  jester.initial_args = args[3] and jester.parse_args(args[3]) or {}
 
   -- Add profile configuration here so it can leverage access to channel
   -- variables.
