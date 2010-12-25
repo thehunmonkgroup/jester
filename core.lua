@@ -322,8 +322,7 @@ function execute_sequences()
       else
         channel.stack.sequence[channel.stack.sequence_stack_position].position = channel.stack.sequence[channel.stack.sequence_stack_position].position + 1
       end
-      -- Reload the sequence file, so variables will be refreshed.
-      channel.stack.sequence[channel.stack.sequence_stack_position].sequence = channel.stack.sequence[channel.stack.sequence_stack_position].file()
+      refresh_current_sequence()
       action = load_action()
     else
       -- A new sequence was loaded, make it's first action the active action.
@@ -337,10 +336,18 @@ function execute_sequences()
       table.remove(channel.stack.sequence_name)
       channel.stack.sequence_stack_position = #channel.stack.sequence
       debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(channel.stack.sequence_name, " | "))
+      refresh_current_sequence()
       action = load_action()
     end
   end
   debug_log("No more actions, exiting")
+end
+
+--[[
+  Reloads the current sequence file, refreshing all variables.
+]]
+function refresh_current_sequence()
+  channel.stack.sequence[channel.stack.sequence_stack_position].sequence = channel.stack.sequence[channel.stack.sequence_stack_position].file()
 end
 
 --[[
