@@ -289,7 +289,9 @@ function run_sequence_loop(loop_type)
       execute_sequences()
     -- An ad hoc action was passed, call it directly.
     elseif event.event_type == "action" then
-      run_action(event)
+      -- These are always ad hoc actions, so automatically mark them as such.
+      event.action.ad_hoc = true
+      run_action(event.action)
     end
   end
 end
