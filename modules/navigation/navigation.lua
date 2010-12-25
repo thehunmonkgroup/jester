@@ -7,11 +7,13 @@ function init()
   -- Register clearing the stack on hangup.
   local event = {}
   event.event_type = "action"
-  event.action = "navigation_clear"
-  event.ad_hoc = true
+  event.action = {
+    action = "navigation_clear",
+    ad_hoc = true,
+  }
   -- We want this to be cleared before any user hangup sequences/actions are
   -- run, so force it into first position.
-  table.insert(jester.channel.stack.exit, 1, event) 
+  table.insert(jester.channel.stack.exit, 1, event)
 end
 
 function show_navigation_stack(stack)
