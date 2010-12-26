@@ -9,14 +9,17 @@
   foo = { bar = "baz", bing = "bong" }
 
   Variables from the main configuration may be used in values, by accessing
-  them through the jester.conf.<varname> namespace.
+  them through the global.<varname> namespace.
 
   Channel variables may be used in values, by accessing them through the
-  jester._get_variable("<varname>") function.
-]]
+  variable("<varname>") function.
 
--- Do not edit or remove this line.
-module(..., package.seeall)
+  Storage variables may be used in values, by accessing them through the
+  storage("<varname>") function.
+
+  Initial arguments may be used in values, by accessing them through the
+  args(<argnum>) function.
+]]
 
 -- Overrides the global debug configuration for this profile only.
 debug = true
@@ -36,11 +39,11 @@ modules = {
   "hangup",
 }
 -- Overrides the global debug configuration for this profile only.
-sequence_path = jester.conf.profile_path .. "/voicemail_admin/sequences"
+sequence_path = global.profile_path .. "/voicemail_admin/sequences"
 
-voicemail_dir = jester.conf.base_dir .. "/storage/voicemail"
-context = jester.get_variable("voicemail_context")
-domain = jester.get_variable("domain")
+voicemail_dir = global.base_dir .. "/storage/voicemail"
+context = variable("voicemail_context")
+domain = variable("domain")
 
 mailboxes_dir = voicemail_dir .. "/" .. context .. "/" .. domain
 

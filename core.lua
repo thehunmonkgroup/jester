@@ -45,9 +45,26 @@ end
   Initialize the specified profile.
 ]]
 function init_profile(profile_name)
-  -- Load the profile configuration, and set up the profile namespace.
-  require("jester.profiles." .. profile_name .. ".conf")
-  profile = profiles[profile_name].conf
+
+-- Set up access to channel variables, storage, global configs, and initial
+-- arguments.
+  profile = {
+    global = conf,
+    args = function(i)
+      return jester.initial_args[tonumber(i)] or ""
+    end,
+    storage = protected_get_storage,
+    variable = protected_get_variable,
+    -- Allow this function so the user can dump to see what's going on in case
+    -- of problems.
+    debug_dump = debug_dump,
+  }
+  local loaded_profile, err = assert(loadfile(conf.profile_path .. "/" .. profile_name .. "/conf.lua"))
+  if loaded_profile then
+    -- Lock out access to the rest of the Lua environment.
+    setfenv(loaded_profile, profile)
+    loaded_profile()
+  end
 
   -- Profile overrides -- these can optionally override settings in the global
   -- configuration file.
@@ -154,12 +171,8 @@ function load_sequence(name, arguments)
     args = function(i)
       return arguments[tonumber(i)] or ""
     end,
-    storage = function (area, key)
-      return get_storage(area, key, "")
-    end,
-    variable = function (var)
-      return get_variable(var, "")
-    end,
+    storage = protected_get_storage,
+    variable = protected_get_variable,
     -- Allow this function so the user can dump to see what's going on in case
     -- of problems.
     debug_dump = debug_dump,
@@ -170,6 +183,14 @@ function load_sequence(name, arguments)
     setfenv(sequence, env)
     return sequence
   end
+end
+
+function protected_get_storage(area, key)
+  return get_storage(area, key, "")
+end
+
+function protected_get_variable(var)
+  return get_variable(var, "")
 end
 
 --[[
