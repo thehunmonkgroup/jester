@@ -1,10 +1,16 @@
- - add 'cd /path/to/asterisk/sounds; ln -s digits time' to install instructions -- neccessary for say engine to find the number files.
  - help system could use a table of contents feature.
  - the following areas still need to be built out in the comedian mail replica:
    - advanced options
-   - mailbox options
+     - reply
+     - callback
+     - make call
+     - leave message
    - forwarding a message
    - operations after leaving a message
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - remove any references to actual sound files, replace with phrases
+ - load profiles in the same kind of restricted environment as sequences?
+ - comment voicemail profile sequences
+ - move configurable items from sequences into profile variables
+ - group messages
