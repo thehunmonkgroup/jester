@@ -41,7 +41,7 @@ function string:wrap(boundary, indent)
   local indent = indent or ""
   local buffer = indent
   local lines = self:split("\n", true)
-  
+
   for _, line in pairs(lines) do
     if line:match("^%s*$") then
       table.insert(output, "")
@@ -87,5 +87,18 @@ function string:wrap(boundary, indent)
     end
   end
   return table.concat(output, "\n")
+end
+
+--[[
+  Replaces tokens in a string with their token values.
+]]
+function string:token_replace(tokens)
+  local substitutions
+  local total = 0
+  for token, replacement in pairs(tokens) do
+    self, substitutions = self:gsub(":" .. token, replacement)
+    total = total + substitutions
+  end
+  return self, total
 end
 
