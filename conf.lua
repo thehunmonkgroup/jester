@@ -41,5 +41,7 @@ modules = {
   "tracker",
   "hangup",
   "dialplan_tools",
+  "format",
+  "email",
 }
 
