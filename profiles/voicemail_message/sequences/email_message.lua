@@ -4,7 +4,7 @@ caller_id_number = variable("caller_id_number")
 recording_name = storage("record", "last_recording_name")
 timestamp = storage("record", "last_recording_timestamp")
 email = storage("mailbox_settings_message", "email")
-timzone = storage("mailbox_settings_message", "timezone")
+timezone = storage("mailbox_settings_message", "timezone")
 formatted_date = storage("format", "formatted_date")
 
 return
