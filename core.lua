@@ -51,7 +51,9 @@ function init_profile(profile_name)
   profile = {
     global = conf,
     args = function(i)
-      return jester.initial_args[tonumber(i)] or ""
+      local arg = jester.initial_args[tonumber(i)] or ""
+      debug_log("Got profile arg(%d): '%s'", i, arg)
+      return arg
     end,
     storage = protected_get_storage,
     variable = protected_get_variable,
@@ -169,7 +171,9 @@ function load_sequence(name, arguments)
     global = conf,
     profile = profile,
     args = function(i)
-      return arguments[tonumber(i)] or ""
+      local arg = arguments[tonumber(i)] or ""
+      debug_log("Got sequence arg(%d): '%s'", i, arg)
+      return arg
     end,
     storage = protected_get_storage,
     variable = protected_get_variable,
