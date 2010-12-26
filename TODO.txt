@@ -10,7 +10,6 @@
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - remove any references to actual sound files, replace with phrases
- - load profiles in the same kind of restricted environment as sequences?
  - comment voicemail profile sequences
  - move configurable items from sequences into profile variables
  - group messages
