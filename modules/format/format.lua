@@ -45,7 +45,7 @@ end
 ]]
 function format_date(action)
   local timestamp = action.timestamp and tostring(action.timestamp)
-  local timezone = action.timezone or "UTC"
+  local timezone = action.timezone or "Etc/UTC"
   local format = action.format or "%Y-%m-%d %H:%M:%S"
   local key = action.storage_key or "date"
   if timestamp then

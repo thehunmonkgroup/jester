@@ -18,7 +18,7 @@ jester.help_map.format.actions.format_date.description_short = [[Formats a Unix 
 jester.help_map.format.actions.format_date.description_long = [[This action formats a Unix timestamp to a date string.  The format string is configurable, and timezones are supported.  The formatted result is placed in the 'format' storage area.]]
 jester.help_map.format.actions.format_date.params = {
   timestamp = [[The Unix timestamp to format.]],
-  timezone = [[(Optional) The timezone to use to calculate the time.  This should be a string as found in /usr/share/zoneinfo, eg. 'America/New_York'.  Default is 'UTC'.]],
+  timezone = [[(Optional) The timezone to use to calculate the time.  This should be a string as found in /usr/share/zoneinfo, eg. 'America/New_York'.  Default is 'Etc/UTC'.]],
   format = [[(Optional) The format string to use.  Should be a string in the form taken by strftime.  Default is '%Y-%m-%d %H:%M:%S'.]],
   storage_key = [[(Optional) The key to store the formatted result under in the 'format' storage area.  Default is 'date'.]],
 }
