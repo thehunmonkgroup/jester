@@ -29,6 +29,8 @@ modules = {
   "record",
   "file",
   "data",
+  "email",
+  "format",
 }
 
 -- Set this to true to allow a caller to press * to access the voicemail
