@@ -15,6 +15,7 @@ return
       "mailbox",
       "email",
       "email_messages",
+      "timezone",
     },
     storage_area = "mailbox_settings_message",
   },
