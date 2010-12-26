@@ -12,22 +12,22 @@ return
     value = loaded_mailbox,
     compare_to = "",
     comparison = "equal",
-    if_true = "cleanup_temp_recording"
+    if_true = "cleanup_temp_recording",
   },
   {
     action = "conditional",
     value = email_messages,
     compare_to = "no",
     comparison = "equal",
-    if_false = "sub:email_message"
+    if_false = "sub:email_message " .. profile.mailbox,
   },
   {
     action = "conditional",
     value = email_messages,
     compare_to = "email_only",
     comparison = "equal",
-    if_true = "cleanup_temp_recording"
-    if_false = "sub:save_message " .. profile.mailbox .. "," .. profile.context
+    if_true = "cleanup_temp_recording",
+    if_false = "sub:save_message " .. profile.mailbox .. "," .. profile.context,
   },
 }
 
