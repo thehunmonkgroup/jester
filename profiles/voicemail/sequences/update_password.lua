@@ -1,4 +1,4 @@
-mailbox = variable("voicemail_mailbox")
+mailbox = storage("login_settings", "mailbox_number")
 password = storage("get_digits", "new_password_1")
 
 return

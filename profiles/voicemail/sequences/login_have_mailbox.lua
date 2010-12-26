@@ -1,3 +1,5 @@
+mailbox = args(1)
+
 return
 {
   {
@@ -7,7 +9,7 @@ return
     action = "set_storage",
     storage_area = "login_settings",
     data = {
-      mailbox_number = variable("voicemail_mailbox"),
+      mailbox_number = mailbox,
       login_type = "have_mailbox",
     },
   },

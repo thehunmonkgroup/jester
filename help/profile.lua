@@ -53,4 +53,4 @@ jester.help_map.profiles.default.description_long = [[The included default 'voic
 
 It is intended to be an exact replica of the original, a showcase of the power and flexibility of the Jester system, and a template to use as a starting place for learning and building other workflows.
 
-Everything needed to set up the profile is included in the profile directory.  Check out the INSTALL.voicemail.txt there for more details.]]
+Everything needed to set up the profile is included in the profile directory.  Check out the INSTALL.txt there for more details.]]

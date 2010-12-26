@@ -1,4 +1,4 @@
-context = variable("voicemail_context")
+context = storage("login_settings", "voicemail_context")
 entered_mailbox = storage("login_settings", "mailbox_number")
 password = storage("get_digits", "password")
 retrieved_mailbox = storage("mailbox_settings", "mailbox")
@@ -26,6 +26,7 @@ return
       "saycid",
       "envelope",
       "email",
+      "timezone",
     },
     storage_area = "mailbox_settings",
   },

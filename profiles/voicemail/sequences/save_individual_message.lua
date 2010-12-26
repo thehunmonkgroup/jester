@@ -27,7 +27,7 @@ return
     compare_to = "email_only",
     comparison = "equal",
     if_true = "cleanup_temp_recording",
-    if_false = "sub:save_message " .. profile.mailbox .. "," .. profile.context,
+    if_false = "sub:save_recorded_message " .. profile.mailbox .. "," .. profile.context,
   },
 }
 

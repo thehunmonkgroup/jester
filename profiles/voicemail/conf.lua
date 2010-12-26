@@ -28,31 +28,59 @@ debug = true
 -- Overrides the global debug configuration for this profile only.
 modules = {
   "core_actions",
-  "navigation",
   "play",
-  "get_digits",
   "record",
   "file",
-  "log",
   "data",
+  "email",
+  "format",
+  "navigation",
+  "get_digits",
+  "log",
   "tracker",
   "hangup",
 }
--- Overrides the global debug configuration for this profile only.
-sequence_path = global.profile_path .. "/voicemail_admin/sequences"
 
+-- Overrides the global debug configuration for this profile only.
+sequence_path = global.profile_path .. "/voicemail/sequences"
+
+-- Main directory that stores voicemail messages.
 voicemail_dir = global.base_dir .. "/storage/voicemail"
-context = variable("voicemail_context")
+
+-- The directory where recordings are stored temporarily while recording.
+temp_recording_dir = "/tmp"
+
+-- Mailbox being accessed.
+mailbox = args(1)
+
+-- Context the mailbox is in -- defaults to "default".
+if args(2) == "" then
+  context = "default"
+else
+  context = args(2)
+end
+
+-- The domain that the messages are stored under.
 domain = variable("domain")
 
+-- The directory containing the mailboxes for this context/domain.
 mailboxes_dir = voicemail_dir .. "/" .. context .. "/" .. domain
 
+-- The mailbox directory being accessed.
+mailbox_dir = mailboxes_dir .. "/" .. mailbox
+
+-- Set this to true to allow a caller to press * to access the voicemail
+-- administration area for the mailbox.
+check_messages = true
+
+-- ODBC configuration for the table that stores mailbox configurations.
 db_config_mailboxes = {
   database_type = "mysql",
   database = "jester",
   table = "voicemail",
 }
 
+-- ODBC configuration for the table that stores messages.
 db_config_messages = {
   database_type = "mysql",
   database = "jester",

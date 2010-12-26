@@ -33,7 +33,7 @@ assume you already have Jester installed correctly:
 
    <include>
      <language name="en" sound-path="$${sounds_dir}/asterisk">
-       <X-PRE-PROCESS cmd="include" data="$${base_dir}/scripts/jester/profiles/voicemail_phrases.xml"/>
+       <X-PRE-PROCESS cmd="include" data="$${base_dir}/scripts/jester/profiles/voicemail/phrases.xml"/>
      </language>
    </include>
 
@@ -42,28 +42,32 @@ assume you already have Jester installed correctly:
    argument.  The current sequences depend on having a 'voicemail_context'
    channel variable set up.  The dialplan should look something like this:
 
-    <!-- Jester voicemail setup. -->
-    <extension name="jester_voicemail_setup">
-      <condition field="destination_number" expression="^jester_voicemail_setup$" break="on-true">
-        <action application="set" data="voicemail_context=default"/>
-      </condition>
-    </extension>
     <!-- Jester voicemail. -->
     <extension name="jester_voicemail">
       <condition field="destination_number" expression="^(\d+)$" break="on-true">
         <action application="answer"/>
         <action application="sleep" data="1000"/>
-        <action application="lua" data="jester/jester.lua voicemail_message main_greeting $1"/>
+        <!--
+          The arguments to the main_greeting sequence should be:
+          <mailbox>[,domain]
+          Domain defaults to "default" if not provided.
+        -->
+        <action application="lua" data="jester/jester.lua voicemail main_greeting $1"/>
         <action application="hangup"/>
       </condition>
     </extension>
     <!-- Jester voicemail administration. -->
     <extension name="jester_voicemail_admin">
-      <condition field="destination_number" expression="^(\+1|1)?(\d{10})$" break="on-true">
-        <action application="execute_extension" data="jester_voicemail_setup"/>
+      <condition field="destination_number" expression="^(\+1|1)?(\d+)$" break="on-true">
         <action application="answer"/>
         <action application="sleep" data="1000"/>
-        <action application="lua" data="jester/jester.lua voicemail_admin login_missing_mailbox."/>
+        <!--
+          The arguments to the login sequence should be:
+          [mailbox][,domain]
+          Domain defaults to "default" if not provided.
+          You can do ',somedomain' to provide a custom domain with no mailbox
+        -->
+        <action application="lua" data="jester/jester.lua voicemail login $2"/>
         <action application="hangup"/>
       </condition>
     </extension>

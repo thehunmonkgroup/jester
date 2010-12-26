@@ -1,4 +1,4 @@
-mailbox = variable("voicemail_mailbox")
+mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 
 temp_greeting = mailbox_directory .. "/temp.wav"
