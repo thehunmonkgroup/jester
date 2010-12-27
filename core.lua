@@ -46,8 +46,9 @@ end
 ]]
 function init_profile(profile_name)
 
--- Set up access to channel variables, storage, global configs, and initial
--- arguments.
+  debug_log("Loading profile '%s'", profile_name)
+  -- Set up access to channel variables, storage, global configs, and initial
+  -- arguments.
   profile = {
     global = conf,
     args = function(i)
