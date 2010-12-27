@@ -357,12 +357,18 @@ function execute_sequences()
     -- No more actions in current sequence, but there are more sequences on
     -- stack, pop the finished one and load the previously running sequence.
     if not action and #channel.stack.sequence > 1 then
-      local subsequence = table.remove(channel.stack.sequence)
-      table.remove(channel.stack.sequence_name)
-      channel.stack.sequence_stack_position = #channel.stack.sequence
-      debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(channel.stack.sequence_name, " | "))
-      refresh_current_sequence()
-      action = load_action()
+      local subsequence
+      -- The previous stack position may have already finished running its
+      -- actions, so keep popping the stack and checking for a valid action
+      -- until we find one.
+      while ready() and not action and #channel.stack.sequence > 1 do
+        subsequence = table.remove(channel.stack.sequence)
+        table.remove(channel.stack.sequence_name)
+        channel.stack.sequence_stack_position = #channel.stack.sequence
+        debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(channel.stack.sequence_name, " | "))
+        refresh_current_sequence()
+        action = load_action()
+      end
     end
   end
   debug_log("No more actions, exiting")
