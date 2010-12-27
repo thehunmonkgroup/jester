@@ -11,12 +11,12 @@ jester.help_map.intro.run.description_long = [[Jester is designed to be executed
 
 Jester also has an extensive help system, which can be accessed in one of three ways:
 
-  From the shell (from the FreeSWITCH 'scripts' directory):
+  From the shell (run from the FreeSWITCH 'scripts' directory):
     lua jester/jester.lua help [sub-topic] [sub-sub-topic] [...]
 
   From FreeSWITCH CLI:
-    luarun jester/jester.lua help [sub-topic] [sub-sub-topic] [...]
-  
+    lua jester/jester.lua help [sub-topic] [sub-sub-topic] [...]
+
   From the jhelp script:
     jhelp [sub-topic] [sub-sub-topic] [...]
 

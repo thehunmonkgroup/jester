@@ -117,7 +117,7 @@ end
 
 function help_output(help)
   if jester.is_freeswitch then
-    freeswitch.consoleLog("info", "\n" .. tostring(help) .. "\n")
+    stream:write("\n" .. tostring(help) .. "\n")
   else
     print("\n" .. help .. "\n")
   end

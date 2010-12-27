@@ -13,12 +13,15 @@ jester.help_map.scripts.jhelp.description_long = [[jhelp is a small script that 
 
 You can instead type:
   jhelp [sub-topic] [sub-sub-topic]
-  
+
 To install:
 
   1. Set the FREESWITCH_SCRIPTS_DIR variable to the full path of your FreeSWITCH 'scripts' directory (where the jester directory is located).  In a typical installation this would be '/usr/local/freeswitch/scripts' which is the default setting.
 
   2. Move (or better yet, symlink) this script somewhere into your $PATH (~/bin, /usr/local/bin, etc.)
+
+  3. You can also add a command alias to emulate the jhelp script from the FreeSWITCH console.  To do so, open a console, and enter the following:
+       alias stickyadd jhelp lua jester/jester.lua help
 
 This script should work on most Linux/Unix systems, but not on Windows, sorry!]]
 
@@ -28,7 +31,7 @@ jester.help_map.scripts.jsequence.description_short = [[Easily generate properly
 jester.help_map.scripts.jsequence.description_long = [[jsequence removes the major headache of getting initial sequence templates laid out.  Probably the most frustrating part of building sequences is dealing with syntax errors due to improper formatting, and this script eliminates many of those issues.
 
 When called with no arguments, it brings up a dialog asking a few simple questions which it uses to generate the template.  Alternatively, it can be called with a variable number of arguments, each the name of an action, and it will output just the structure for the passed actions, which can then be copied or piped into an existing sequence.  Or, when called with just the argument 'keys', it will output the template for the rather complex 'keys' parameter.
-  
+
 To install:
 
   1. Follow the instructions in the main Jester INSTALL.txt for properly setting your LUA_PATH environment variable.

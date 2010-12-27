@@ -56,6 +56,6 @@ if args[1] and args[2] then
 
   jester.bootstrapped = true
 else
-  error("JESTER: missing arguments in call to jester.lua. Run 'luarun jester.lua help' from the FreeSWITCH console for more help", 2)
+  error("JESTER: missing arguments in call to jester.lua. Run 'lua jester/jester.lua help' from the FreeSWITCH console for more help", 2)
 end
 

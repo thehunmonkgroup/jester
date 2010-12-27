@@ -15,6 +15,6 @@ where/how you're accessing help:
     cd /path/to/freeswitch/scripts
     lua jester/jester.lua help scripts jhelp
   From the FreeSWITCH console:
-    luarun jester/jester.lua help scripts jhelp
+    lua jester/jester.lua help scripts jhelp
   Using the jhelp script (find this in the jester/scripts directory):
     jhelp scripts jhelp
