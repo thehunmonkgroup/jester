@@ -33,7 +33,7 @@ CREATE TABLE voicemail (
   attachfmt char(10) NOT NULL default 'wav49',
   serveremail char(80) NOT NULL default '',
   language char(20) NOT NULL default 'en',
-  timezone char(50) NOT NULL default 'UTC',
+  timezone char(50) NOT NULL default 'Etc/UTC',
   message_lifetime int(11) NOT NULL default '-1',
   nextaftercmd char(4) NOT NULL default 'yes',
   hidefromdir char(4) NOT NULL default 'yes',
