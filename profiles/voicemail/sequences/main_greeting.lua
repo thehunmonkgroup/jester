@@ -6,6 +6,10 @@ if profile.check_messages then
   greeting_keys["*"] = "login " .. profile.mailbox .. "," .. profile.context
 end
 
+if profile.operator_extension then
+  greeting_keys["0"] = "transfer_to_operator"
+end
+
 return
 {
   {
@@ -26,23 +30,8 @@ return
     sequence = "check_for_recorded_message",
   },
   {
-    action = "wait",
-    milliseconds = 500,
-  },
-  {
-    action = "record",
-    location = profile.temp_recording_dir,
-    pre_record_sound = "phrase:beep",
-    keys = {
-      ["#"] = ":break",
-    },
-  },
-  {
-    action = "wait",
-    milliseconds = 1000,
-  },
-  {
-    action = "play_phrase",
-    phrase = "goodbye",
+    action = "call_sequence",
+    sequence = "record_message",
   },
 }
+
