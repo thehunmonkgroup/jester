@@ -39,6 +39,7 @@ modules = {
   "log",
   "tracker",
   "hangup",
+  "dialplan_tools",
 }
 
 -- Overrides the global debug configuration for this profile only.
@@ -72,6 +73,15 @@ mailbox_dir = mailboxes_dir .. "/" .. mailbox
 -- Set this to true to allow a caller to press * to access the voicemail
 -- administration area for the mailbox.
 check_messages = true
+
+-- Set this to true to allow a caller to press # to review their message after
+-- recording it, or false to disable.
+review_messages = true
+
+-- Name of the extension to transfer to when a key is press to reach the
+-- operator (must be in the same context).
+-- Set this to false to disable the operator extension.
+operator_extension = "operator"
 
 -- ODBC configuration for the table that stores mailbox configurations.
 db_config_mailboxes = {
