@@ -5,7 +5,7 @@ return
 {
   {
     action = "call_sequence",
-    sequence = "sub:load_mailbox_settings " .. profile.mailbox .. "," .. profile.context,
+    sequence = "sub:load_mailbox_settings " .. profile.mailbox .. "," .. profile.context .. ",mailbox_settings_message",
   },
   {
     action = "conditional",

@@ -1,7 +1,6 @@
-context = storage("login_settings", "voicemail_context")
-entered_mailbox = storage("login_settings", "mailbox_number")
-password = storage("get_digits", "password")
-retrieved_mailbox = storage("mailbox_settings", "mailbox")
+mailbox = storage("login_settings", "mailbox_number")
+password = storage("mailbox_settings", "password")
+entered_password = storage("get_digits", "password")
 
 return
 {
@@ -13,40 +12,23 @@ return
     storage_key = "password",
   },
   {
-    action = "data_load",
-    handler = "odbc",
-    config = profile.db_config_mailboxes,
-    filters = {
-      context = context,
-      mailbox = entered_mailbox,
-      password = password,
-    },
-    fields = {
-      "mailbox",
-      "saycid",
-      "envelope",
-      "email",
-      "timezone",
-    },
-    storage_area = "mailbox_settings",
+    action = "call_sequence",
+    sequence = "sub:load_mailbox_settings " .. mailbox .. "," .. profile.context .. ",mailbox_settings",
   },
   {
     action = "conditional",
-    value = password,
+    value = entered_password,
     compare_to = "",
     comparison = "equal",
     if_true = "exit",
   },
   {
     action = "conditional",
-    value = retrieved_mailbox,
-    compare_to = "",
+    value = password,
+    compare_to = entered_password,
     comparison = "equal",
-    if_true = "mailbox_login_incorrect",
-  },
-  {
-    action = "call_sequence",
-    sequence = "load_new_old_messages",
+    if_true = "load_new_old_messages",
+    if_false = "mailbox_login_incorrect",
   },
 }
 

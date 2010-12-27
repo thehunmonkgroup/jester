@@ -1,5 +1,6 @@
 mailbox = args(1)
 context = args(2)
+storage_area = args(3)
 
 return
 {
@@ -13,11 +14,14 @@ return
     },
     fields = {
       "mailbox",
+      "password",
       "email",
       "email_messages",
       "timezone",
+      "saycid",
+      "envelope",
     },
-    storage_area = "mailbox_settings_message",
+    storage_area = storage_area,
   },
 }
 

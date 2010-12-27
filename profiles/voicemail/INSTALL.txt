@@ -62,6 +62,11 @@ assume you already have Jester installed correctly:
         <action application="answer"/>
         <action application="sleep" data="1000"/>
         <!--
+          Setting this value to anything other than an empty string will allow
+          the user to log in without password validation.
+        -->
+        <!-- <action application="set" data="voicemail_login_without_password=true"/> -->
+        <!--
           The arguments to the login sequence should be:
           [mailbox][,domain]
           Domain defaults to "default" if not provided.
