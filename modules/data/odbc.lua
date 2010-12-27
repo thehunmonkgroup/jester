@@ -44,6 +44,7 @@ function load_data(action)
         jester.set_storage(area, col .. suffix, val)
       end
     end))
+    dbh:release()
     -- Multi-row results get a special count key.
     if multiple then
       jester.debug_log("Query rows returned: %d", count)
@@ -78,6 +79,7 @@ function update_data(action)
     end
     jester.debug_log("Executing query: %s", sql)
     assert(dbh:query(sql))
+    dbh:release()
     jester.debug_log("Rows updated: %d", count)
   end
 end
@@ -88,6 +90,7 @@ function delete_data(action)
   local sql = "DELETE FROM " .. conf.table .. build_where(filters)
   jester.debug_log("Executing query: %s", sql)
   assert(dbh:query(sql))
+  dbh:release()
 end
 
 --[[
