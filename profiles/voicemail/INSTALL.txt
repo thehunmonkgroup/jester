@@ -49,8 +49,10 @@ assume you already have Jester installed correctly:
         <action application="sleep" data="1000"/>
         <!--
           The arguments to the main_greeting sequence should be:
-          <mailbox>[,domain]
+          <mailbox>[,domain][,group]
           Domain defaults to "default" if not provided.
+          If the optional 'group' argument is included, the message will be
+          sent to all members of the defined message group.
         -->
         <action application="lua" data="jester/jester.lua voicemail main_greeting $1"/>
         <action application="hangup"/>
