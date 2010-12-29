@@ -267,11 +267,11 @@ jester.help_map.sequences.arguments.description_long = [[Any code system that wa
 
 Passing arguments to a sequence is simple -- just follow the sequence name with a space, then a comma-separated list of arguments.  In the interest of keeping the core small, Jester's argument parser is fairly simplistic, so you need to follow these rules when passing arguments:
 
-  They can contain only alphanumeric characters and underscores.
-  They must be separated by commas.
+  The arguments themselves can contain no commas.
+  The arguments must be separated by commas.
   There can be no space in the argument list.
 
-eg. 'mysequence value1,value2,some_other_value'
+eg. 'mysequence value1,value2,some_other_value,1.2.3.4'
 
 See 'help sequences variables for how to access arguments in your sequences.]]
 
