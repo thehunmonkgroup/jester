@@ -59,3 +59,14 @@ CREATE TABLE voicemail (
   KEY mailbox_context (mailbox,context)
 );
 
+--
+-- Table structure for table groups
+--
+CREATE TABLE message_groups (
+  group_name varchar(30) NOT NULL default '',
+  mailbox varchar(255) NOT NULL default '',
+  context varchar(255) NOT NULL default '',
+  domain varchar(255) NOT NULL default '',
+  PRIMARY KEY (group_name,mailbox,context,domain)
+);
+

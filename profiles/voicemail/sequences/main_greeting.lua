@@ -13,10 +13,6 @@ end
 return
 {
   {
-    action = "create_directory",
-    directory = profile.mailbox_dir,
-  },
-  {
     action = "play_valid_file",
     files =  {
       profile.mailbox_dir .. "/temp.wav",

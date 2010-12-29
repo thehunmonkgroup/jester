@@ -1,5 +1,3 @@
-group = ""
-
 return
 {
   {
@@ -9,11 +7,11 @@ return
   },
   {
     action = "conditional",
-    value = group,
+    value = profile.voicemail_group,
     compare_to = "",
     comparison = "equal",
     if_true = "save_individual_message",
-    if_false = "save_group_message " .. group,
+    if_false = "load_voicemail_group " .. profile.voicemail_group,
   },
 }
 

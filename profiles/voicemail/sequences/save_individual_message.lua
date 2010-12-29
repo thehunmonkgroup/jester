@@ -15,6 +15,10 @@ return
     if_true = "cleanup_temp_recording",
   },
   {
+    action = "create_directory",
+    directory = profile.mailbox_dir,
+  },
+  {
     action = "conditional",
     value = email_messages,
     compare_to = "no",
@@ -27,7 +31,7 @@ return
     compare_to = "email_only",
     comparison = "equal",
     if_true = "cleanup_temp_recording",
-    if_false = "sub:save_recorded_message " .. profile.mailbox .. "," .. profile.context,
+    if_false = "sub:save_recorded_message " .. profile.mailbox .. "," .. profile.context .. "," .. profile.domain,
   },
 }
 

@@ -61,6 +61,9 @@ else
   context = args(2)
 end
 
+-- Voicemail group (if provided).
+voicemail_group = args(3)
+
 -- The domain that the messages are stored under.
 domain = variable("domain")
 
@@ -95,5 +98,12 @@ db_config_messages = {
   database_type = "mysql",
   database = "jester",
   table = "messages",
+}
+
+-- ODBC configuration for the table that stores messages.
+db_config_voicemail_groups = {
+  database_type = "mysql",
+  database = "jester",
+  table = "message_groups",
 }
 
