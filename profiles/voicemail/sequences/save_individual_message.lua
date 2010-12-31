@@ -1,5 +1,6 @@
 loaded_mailbox = storage("mailbox_settings_message", "mailbox")
 email_messages = storage("mailbox_settings_message", "email_messages")
+mailbox_provisioned = storage("mailbox_settings_message", "mailbox_provisioned")
 
 return
 {
@@ -15,8 +16,11 @@ return
     if_true = "cleanup_temp_recording",
   },
   {
-    action = "create_directory",
-    directory = profile.mailbox_dir,
+    action = "conditional",
+    value = mailbox_provisioned,
+    compare_to = "no",
+    comparison = "equal",
+    if_true = "sub:provision_mailbox " .. profile.mailbox .. "," .. profile.domain,
   },
   {
     action = "conditional",

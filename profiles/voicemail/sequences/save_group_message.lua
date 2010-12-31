@@ -6,6 +6,7 @@ domain = storage("voicemail_group", "domain_" .. row_count)
 mailbox_dir = profile.voicemail_dir .. "/" .. domain .. "/" .. mailbox
 loaded_mailbox = storage("mailbox_settings_message", "mailbox")
 email_messages = storage("mailbox_settings_message", "email_messages")
+mailbox_provisioned = storage("mailbox_settings_message", "mailbox_provisioned")
 
 return
 {
@@ -28,8 +29,11 @@ return
     if_true = "save_group_message",
   },
   {
-    action = "create_directory",
-    directory = mailbox_dir,
+    action = "conditional",
+    value = mailbox_provisioned,
+    compare_to = "no",
+    comparison = "equal",
+    if_true = "sub:provision_mailbox " .. mailbox .. "," .. domain,
   },
   {
     action = "conditional",

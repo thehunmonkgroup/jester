@@ -17,6 +17,7 @@ return
       "password",
       "email",
       "email_messages",
+      "mailbox_provisioned",
       "timezone",
       "saycid",
       "envelope",
