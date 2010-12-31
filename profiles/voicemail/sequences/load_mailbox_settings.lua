@@ -1,5 +1,5 @@
 mailbox = args(1)
-context = args(2)
+domain = args(2)
 storage_area = args(3)
 
 return
@@ -10,7 +10,7 @@ return
     config = profile.db_config_mailboxes,
     filters = {
       mailbox = mailbox,
-      context = context,
+      domain = domain,
     },
     fields = {
       "mailbox",

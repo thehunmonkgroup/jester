@@ -46,7 +46,9 @@ modules = {
 sequence_path = global.profile_path .. "/voicemail/sequences"
 
 -- Main directory that stores voicemail messages.
-voicemail_dir = global.base_dir .. "/storage/voicemail"
+-- NOTE: This directory must already be created and writable by the FreeSWITCH
+-- user.
+voicemail_dir = global.base_dir .. "/storage/voicemail/default"
 
 -- The directory where recordings are stored temporarily while recording.
 temp_recording_dir = "/tmp"
@@ -54,21 +56,18 @@ temp_recording_dir = "/tmp"
 -- Mailbox being accessed.
 mailbox = args(1)
 
--- Context the mailbox is in -- defaults to "default".
-if args(2) == "" then
-  context = "default"
-else
-  context = args(2)
+-- Domain the mailbox is in -- defaults to the domain variable of the current
+-- channel.
+domain = args(2)
+if domain == "" then
+  domain = variable("domain")
 end
 
 -- Voicemail group (if provided).
 voicemail_group = args(3)
 
--- The domain that the messages are stored under.
-domain = variable("domain")
-
--- The directory containing the mailboxes for this context/domain.
-mailboxes_dir = voicemail_dir .. "/" .. context .. "/" .. domain
+-- The directory containing the mailboxes for the domain.
+mailboxes_dir = voicemail_dir .. "/" .. domain
 
 -- The mailbox directory being accessed.
 mailbox_dir = mailboxes_dir .. "/" .. mailbox

@@ -39,10 +39,9 @@ assume you already have Jester installed correctly:
 
 8. Call Jester from the dialplan, passing the voicemail profile as the
    first sequence argument, and the sequence to call for the second sequence
-   argument.  The current sequences depend on having a 'voicemail_context'
-   channel variable set up.  The dialplan should look something like this:
+   argument.  The dialplan should look something like this:
 
-    <!-- Jester voicemail. -->
+    <!-- Leave a message. -->
     <extension name="jester_voicemail">
       <condition field="destination_number" expression="^(\d+)$" break="on-true">
         <action application="answer"/>
@@ -50,15 +49,15 @@ assume you already have Jester installed correctly:
         <!--
           The arguments to the main_greeting sequence should be:
           <mailbox>[,domain][,group]
-          Domain defaults to "default" if not provided.
-          If the optional 'group' argument is included, the message will be
-          sent to all members of the defined message group.
+          Domain defaults to the value of the 'domain' channel varaible if not
+          provided.  If the optional 'group' argument is included, the message
+          will be sent to all members of the defined message group.
         -->
         <action application="lua" data="jester/jester.lua voicemail main_greeting $1"/>
         <action application="hangup"/>
       </condition>
     </extension>
-    <!-- Jester voicemail administration. -->
+    <!-- Check messages. -->
     <extension name="jester_voicemail_admin">
       <condition field="destination_number" expression="^(\+1|1)?(\d+)$" break="on-true">
         <action application="answer"/>
@@ -71,8 +70,9 @@ assume you already have Jester installed correctly:
         <!--
           The arguments to the login sequence should be:
           [mailbox][,domain]
-          Domain defaults to "default" if not provided.
-          You can do ',somedomain' to provide a custom domain with no mailbox
+          Domain defaults to the value of the 'domain' channel varaible if not
+          provided.  You can do ',somedomain' to provide a custom domain with
+          no mailbox.
         -->
         <action application="lua" data="jester/jester.lua voicemail login $2"/>
         <action application="hangup"/>

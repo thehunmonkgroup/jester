@@ -13,7 +13,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "sub:load_mailbox_settings " .. mailbox .. "," .. profile.context .. ",mailbox_settings",
+    sequence = "sub:load_mailbox_settings " .. mailbox .. "," .. profile.domain .. ",mailbox_settings",
   },
   {
     action = "conditional",

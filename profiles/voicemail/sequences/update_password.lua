@@ -11,7 +11,7 @@ return
       password = password,
     },
     filters = {
-      context = profile.context,
+      domain = profile.domain,
       mailbox = mailbox,
     },
     update_type = "update",

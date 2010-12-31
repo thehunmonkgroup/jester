@@ -11,7 +11,6 @@ return
     },
     fields = {
       "mailbox",
-      "context",
       "domain",
     },
     storage_area = "voicemail_group",

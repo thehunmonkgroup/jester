@@ -5,7 +5,7 @@ return
 {
   {
     action = "call_sequence",
-    sequence = "sub:load_mailbox_settings " .. profile.mailbox .. "," .. profile.context .. ",mailbox_settings_message",
+    sequence = "sub:load_mailbox_settings " .. profile.mailbox .. "," .. profile.domain .. ",mailbox_settings_message",
   },
   {
     action = "conditional",
@@ -31,7 +31,7 @@ return
     compare_to = "email_only",
     comparison = "equal",
     if_true = "cleanup_temp_recording",
-    if_false = "sub:save_recorded_message " .. profile.mailbox .. "," .. profile.context .. "," .. profile.domain,
+    if_false = "sub:save_recorded_message " .. profile.mailbox .. "," .. profile.domain,
   },
 }
 

@@ -1,13 +1,12 @@
 recording_name = storage("record", "last_recording_name")
 mailbox = args(1)
-context = args(2)
-domain = args(3)
-operation = args(4)
+domain = args(2)
+operation = args(3)
 
 file_operation = {
   action = "move_file",
   source = profile.temp_recording_dir .. "/" .. recording_name,
-  destination = profile.voicemail_dir .. "/" .. context .. "/" .. domain .. "/" .. mailbox .. "/" .. recording_name,
+  destination = profile.voicemail_dir .. "/" .. domain .. "/" .. mailbox .. "/" .. recording_name,
 }
 
 if operation == "copy" then
@@ -22,7 +21,7 @@ return
     handler = "odbc",
     config = profile.db_config_messages,
     fields = {
-      context = context,
+      domain = domain,
       mailbox = mailbox,
       -- Inbox folder is 0, all new messages go there.
       __folder = 0,

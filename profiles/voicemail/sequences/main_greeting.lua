@@ -3,7 +3,7 @@ greeting_keys = {
 }
 
 if profile.check_messages then
-  greeting_keys["*"] = "login " .. profile.mailbox .. "," .. profile.context
+  greeting_keys["*"] = "login " .. profile.mailbox .. "," .. profile.domain
 end
 
 if profile.operator_extension then

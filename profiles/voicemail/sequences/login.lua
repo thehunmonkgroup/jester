@@ -6,7 +6,7 @@ return
     action = "set_storage",
     storage_area = "login_settings",
     data = {
-      voicemail_context = profile.context,
+      voicemail_domain = profile.domain,
     },
   },
   {

@@ -5,7 +5,7 @@ return
     handler = "odbc",
     config = profile.db_config_messages,
     filters = {
-      context = storage("login_settings", "voicemail_context"),
+      domain = storage("login_settings", "voicemail_domain"),
       mailbox = storage("login_settings", "mailbox_number"),
       __folder = args(1),
       __deleted = 0,
