@@ -1,19 +1,29 @@
 --
+-- Table structure for table message_groups
+CREATE TABLE message_groups (
+  group_name varchar(30) NOT NULL default '',
+  domain varchar(255) NOT NULL default '',
+  mailbox varchar(255) NOT NULL default '',
+  PRIMARY KEY  (group_name,domain,mailbox)
+);
+
+--
 -- Table structure for table messages
 --
 CREATE TABLE messages (
   id int(11) NOT NULL auto_increment,
-  context varchar(80) NOT NULL default '',
+  domain varchar(80) NOT NULL default '',
   mailbox varchar(80) NOT NULL default '0',
   folder tinyint(2) NOT NULL default '1',
   caller_id_number varchar(40) NOT NULL default '',
   caller_id_name varchar(80) NOT NULL default '',
+  caller_domain varchar(80) NOT NULL default '',
   timestamp bigint(11) NOT NULL default '0',
   duration int(11) NOT NULL default '0',
   deleted tinyint(1) NOT NULL default '0',
   recording text,
-  PRIMARY KEY  (id),
-  KEY mailbox (mailbox),
+  PRIMARY KEY (id),
+  KEY domain_mailbox (domain, mailbox),
   KEY deleted (deleted)
 );
 
@@ -23,14 +33,14 @@ CREATE TABLE messages (
 CREATE TABLE voicemail (
   uniqueid int(11) NOT NULL auto_increment,
   customer_id char(80) NOT NULL default '',
-  context char(80) NOT NULL default 'default',
+  domain char(80) NOT NULL default '',
   mailbox char(80) NOT NULL default '',
   password char(80) NOT NULL default '',
   fullname char(80) NOT NULL default '',
   email char(255) NOT NULL default '',
-  pager char(80) NOT NULL default '',
   email_messages char(20) NOT NULL default 'no',
   attachfmt char(10) NOT NULL default 'wav49',
+  mailbox_provisioned char(3) NOT NULL default 'no',
   serveremail char(80) NOT NULL default '',
   language char(20) NOT NULL default 'en',
   timezone char(50) NOT NULL default 'Etc/UTC',
@@ -56,17 +66,6 @@ CREATE TABLE voicemail (
   imappassword varchar(80) NOT NULL default '',
   stamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (uniqueid),
-  KEY mailbox_context (mailbox,context)
-);
-
---
--- Table structure for table groups
---
-CREATE TABLE message_groups (
-  group_name varchar(30) NOT NULL default '',
-  mailbox varchar(255) NOT NULL default '',
-  context varchar(255) NOT NULL default '',
-  domain varchar(255) NOT NULL default '',
-  PRIMARY KEY (group_name,mailbox,context,domain)
+  UNIQUE KEY domain_mailbox (domain,mailbox)
 );
 
