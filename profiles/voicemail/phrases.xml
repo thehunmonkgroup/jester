@@ -715,4 +715,32 @@
     </input>
   </macro>
 
+  <!-- Forward message main menu. -->
+  <macro name="forward_message_choose_method">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-forward.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Collect extension. -->
+  <macro name="extension">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-extension.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Forward options. -->
+  <macro name="forward_options">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-forwardoptions.wav"/> 
+        <action function="play-file" data="vm-starmain.wav"/>
+      </match>
+    </input>
+  </macro>
+
 </include><!--This line will be ignored it's here to validate the xml and is optional -->
