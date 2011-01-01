@@ -1,3 +1,11 @@
+record_keys = {
+  ["#"] = ":break",
+}
+
+if profile.operator_extension then
+  record_keys["0"] = "operator_transfer_prepare"
+end
+
 return
 {
   {
@@ -8,13 +16,12 @@ return
     action = "record",
     location = profile.temp_recording_dir,
     pre_record_sound = "phrase:beep",
-    keys = {
-      ["#"] = ":break",
-    },
+    keys = record_keys,
   },
   {
     action = "play_phrase",
     phrase = "thank_you",
+    keys = record_keys,
   },
   {
     action = "call_sequence",

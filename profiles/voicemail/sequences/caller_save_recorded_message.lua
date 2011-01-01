@@ -1,3 +1,5 @@
+next_sequence = args(1)
+
 return
 {
   {
@@ -14,7 +16,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "exit",
+    sequence = next_sequence,
   },
 }
 

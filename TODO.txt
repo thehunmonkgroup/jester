@@ -13,4 +13,3 @@
  - look into various core caching strategies to improve performance
  - three events fired, 'mailbox updated', 'message left', 'messages checked'.
  - restructure/index database tables
- - fix workflow for outdialing to operator after leaving a message

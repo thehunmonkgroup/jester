@@ -2,8 +2,8 @@
 return
 {
   {
-    action = "call_sequence",
-    sequence = "sub:cleanup_temp_recording",
+    action = "play_phrase",
+    phrase = "transfer_announcement",
   },
   {
     action = "transfer",

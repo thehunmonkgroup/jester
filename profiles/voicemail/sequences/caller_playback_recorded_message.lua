@@ -1,5 +1,5 @@
 temp_keys = {
-  ["1"] = "caller_save_recorded_message",
+  ["1"] = "caller_save_recorded_message exit",
   ["2"] = "caller_playback_recorded_message",
   ["3"] = "caller_rerecord_message",
 }

@@ -1,11 +1,11 @@
 temp_keys = {
-  ["1"] = "caller_save_recorded_message",
+  ["1"] = "caller_save_recorded_message exit",
   ["2"] = "caller_playback_recorded_message",
   ["3"] = "caller_rerecord_message",
 }
 
 if profile.operator_extension then
-  temp_keys["0"] = "transfer_to_operator"
+  temp_keys["0"] = "operator_transfer_prepare"
 end
 
 return
