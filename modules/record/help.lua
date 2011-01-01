@@ -12,13 +12,13 @@ The recording is in .wav format.
 
 The following variables/values related to the recording are put into Jester storage upon completion of the recording:
 
-  last_recording_name:  
+  last_recording_name:
     The name of the recording.
-  last_recording_path:  
+  last_recording_path:
     A full path to the recording.
-  last_recording_timestamp:  
+  last_recording_timestamp:
     The timestamp of the recording (when it began).
-  last_recording_duration:  
+  last_recording_duration:
     The duration of the recording in seconds.
 ]]
 jester.help_map.record.actions.record.params = {
@@ -32,5 +32,14 @@ jester.help_map.record.actions.record.params = {
   silence_secs = [[(Optional) The number of consecutive seconds of silence to wait before considering the recording finished.  Default is 5.]],
   storage_area = [[(Optional) If set the 'last_recording' storage values are also stored this storage area with the 'last_recording_' prefix stripped, eg. 'storage_area = "message"' would store 'name' in the 'message' storage area with the same value as 'last_recording_name'.]],
   keys = [[(Optional) See 'help sequences keys'.]],
+}
+
+jester.help_map.record.actions.record_merge = {}
+jester.help_map.record.actions.record_merge.description_short = [[Merges two recordings.]]
+jester.help_map.record.actions.record_merge.description_long = [[This action merges two recorded files into one.  The merge file may be appended or prepended to the base file.]]
+jester.help_map.record.actions.record_merge.params = {
+  base_file = [[Full path to the base file for the merge.  The will be the file that remains after the merge.]],
+  merge_file = [[Full path to the merge file for the merge.  This file will not longer exist after the merge.]],
+  merge_type = [[(Optional) The type of merge to perform, valid values are 'append' and 'prepend'.  Default is 'append'.]],
 }
 

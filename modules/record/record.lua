@@ -51,7 +51,7 @@ function record_file(action)
   -- after the recording.
   local startstamp = os.time()
   session:recordFile(filepath, max_length, silence_threshold, silence_secs)
-  local endstamp = os.time() 
+  local endstamp = os.time()
 
   if append then
     -- Restore the record_append variable.
@@ -65,6 +65,35 @@ function record_file(action)
     jester.set_storage(area, "path", filepath)
     jester.set_storage(area, "timestamp", timestamp)
     jester.set_storage(area, "duration", endstamp - startstamp)
+  end
+end
+
+function record_file_merge(action)
+  local base_file = action.base_file
+  local merge_file = action.merge_file
+  local merge_type = action.merge_type or "append"
+  local success, file_error
+  if base_file and merge_file then
+    require "lfs"
+    -- If we can pull the file attributes, then the file exists.
+    success, file_error = lfs.attributes(base_file, "mode")
+    if success then
+      success, file_error = lfs.attributes(merge_file, "mode")
+      if success then
+        if merge_type == "prepend" then
+          session:insertFile(base_file, merge_file, 0)
+          os.remove(merge_file)
+        else
+          session:insertFile(merge_file, base_file, 0)
+          os.rename(merge_file, base_file)
+        end
+        jester.debug_log("Merged file '%s' with '%s'", base_file, merge_file)
+      else
+        jester.debug_log("Merge file '%s' does not exist!: %s", merge_file, file_error)
+      end
+    else
+      jester.debug_log("Base file '%s' does not exist!: %s", base_file, file_error)
+    end
   end
 end
 
