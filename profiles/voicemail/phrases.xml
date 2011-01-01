@@ -683,11 +683,24 @@
   </macro>
 
   <!-- Call outside number. -->
-  <macro name="call_outside_number">
+  <macro name="collect_outside_number">
     <input pattern="^(.*)$">
       <match>
         <action function="play-file" data="vm-enter-num-to-call.wav"/> 
         <action function="play-file" data="vm-then-pound.wav"/> 
+        <action function="play-file" data="vm-star-cancel.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Callback. -->
+  <macro name="callback">
+    <input pattern="^(\d+)$">
+      <match>
+        <action function="play-file" data="vm-num-i-have.wav"/> 
+        <action function="say" data="$1" method="iterated" type="number"/>
+        <action function="play-file" data="vm-tocallnum.wav"/> 
+        <action function="play-file" data="vm-calldiffnum.wav"/> 
         <action function="play-file" data="vm-star-cancel.wav"/> 
       </match>
     </input>
