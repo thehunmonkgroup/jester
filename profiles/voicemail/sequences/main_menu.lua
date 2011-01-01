@@ -14,7 +14,6 @@ end
 
 temp_keys = {
   ["2"] = "change_folders",
-  ["3"] = "advanced_options",
   ["0"] = "mailbox_options",
   ["*"] = "help skip_folder_announcement",
   ["#"] = "exit",
@@ -22,6 +21,10 @@ temp_keys = {
 
 if current_folder ~= "" then
   temp_keys["1"] = "play_messages"
+end
+
+if profile.operator_extension ~= "" then
+  temp_keys["3"] = "main_menu_advanced_options"
 end
 
 return
