@@ -107,6 +107,9 @@ end
 ]]
 function queue_sequence(sequence)
   if ready() and sequence then
+    if debug then
+      table.insert(channel.stack.executed_sequences, #channel.stack.executed_sequences + 1 .. ": " .. sequence)
+    end
     local loaded_sequence, add_to_stack, remove_from_stack
     -- Parse out the sequence name and arguments.
     local s_type, sequence_name, sequence_args = parse_sequence(sequence)
@@ -287,6 +290,9 @@ end
   Main entry point for a call to Jester.
 ]]
 function main()
+  if debug then
+    init_stacks({"executed_sequences"})
+  end
   run_sequence_loop("active")
   exiting = true
   run_sequence_loop("exit")
@@ -296,6 +302,7 @@ function main()
   end
   if debug then
     debug_dump(jester, true)
+    debug_log("EXECUTED SEQUENCES:\n%s", table.concat(channel.stack.executed_sequences, "\n"))
   end
 end
 
