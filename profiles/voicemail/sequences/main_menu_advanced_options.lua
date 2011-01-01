@@ -1,5 +1,5 @@
 temp_keys = {
-  ["4"] = "call_outside_number help",
+  ["4"] = "call_outside_number help,collect",
   ["*"] = "help",
 }
 

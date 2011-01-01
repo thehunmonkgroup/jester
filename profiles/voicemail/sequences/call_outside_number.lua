@@ -1,16 +1,15 @@
 cancel_sequence = args(1)
+collect_outside_number = args(2)
 outside_number = storage("get_digits", "call_outside_number")
 
 return
 {
   {
-    action = "get_digits",
-    min_digits = 1,
-    max_digits = 20,
-    audio_files = "phrase:call_outside_number",
-    bad_input = "",
-    digits_regex = "\\d+|\\*",
-    storage_key = "call_outside_number",
+    action = "conditional",
+    value = collect_outside_number,
+    compare_to = "collect",
+    comparison = "equal",
+    if_true = "sub:collect_outside_number",
   },
   {
     action = "conditional",
