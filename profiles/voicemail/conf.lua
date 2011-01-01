@@ -85,6 +85,10 @@ review_messages = true
 -- Set this to false to disable the operator extension.
 operator_extension = "operator"
 
+-- Name of the extension to transfer to when a request to dial an outside
+-- number is made.
+call_outside_number_extension = "call_outside_number"
+
 -- ODBC configuration for the table that stores mailbox configurations.
 db_config_mailboxes = {
   database_type = "mysql",

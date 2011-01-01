@@ -4,7 +4,7 @@ temp_keys = {
   ["1"] = "send_reply",
   ["2"] = "callback",
   ["3"] = "play_cid_envelope advanced_options",
-  ["4"] = "place_outside_call",
+  ["4"] = "call_outside_number message_options",
   ["*"] = "message_options",
 }
 
