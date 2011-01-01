@@ -28,7 +28,7 @@ return
       ["5"] = "top:repeat_message",
       ["6"] = "top:next_message",
       ["7"] = "top:delete_undelete_message",
-      ["8"] = "top:forward_message",
+      ["8"] = "top:forward_message_menu",
       ["9"] = "top:save_message",
       ["*"] = "help",
       ["#"] = "exit",

@@ -6,7 +6,9 @@ duration = storage("message", "duration_" .. message_number)
 caller_id_name = storage("message", "caller_id_name_" .. message_number)
 caller_id_number = storage("message", "caller_id_number_" .. message_number)
 caller_domain = storage("message", "caller_domain_" .. message_number)
+prepend_recording_name = storage("record", "last_recording_name")
 temp_recording = profile.temp_recording_dir .. "/" .. recording_name
+prepend_recording = profile.temp_recording_dir .. "/" .. prepend_recording_name
 
 mailbox = storage("get_digits", "extension")
 
@@ -18,7 +20,25 @@ return
     destination = temp_recording,
     copy = true,
   },
-  -- Fake the last recording info here so the standard message saving
+  {
+    action = "wait",
+    milliseconds = 500,
+  },
+  {
+    action = "record",
+    location = profile.temp_recording_dir,
+    pre_record_sound = "phrase:beep",
+    keys = {
+      ["#"] = ":break",
+    },
+  },
+  {
+    action = "record_merge",
+    base_file = temp_recording,
+    merge_file = prepend_recording,
+    merge_type = "prepend",
+  },
+  -- Fake the last recording name here so the standard message saving
   -- sequences can be used.
   {
     action = "set_storage",

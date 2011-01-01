@@ -1,0 +1,19 @@
+return
+{
+  {
+    action = "play_phrase",
+    phrase = "forward_message_choose_method",
+    keys = {
+      ["1"] = "collect_extension forward_message_prepend_menu,forward_message_menu",
+      ["2"] = "invalid_mailbox",
+      ["*"] = "message_options",
+    },
+    repetitions = 3,
+    wait = 3000,
+  },
+  {
+    action = "call_sequence",
+    sequence = "exit"
+  },
+}
+
