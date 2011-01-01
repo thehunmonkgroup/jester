@@ -1,9 +1,6 @@
  - help system could use a table of contents feature.
  - the following areas still need to be built out in the comedian mail replica:
-   - advanced options
-     - reply
-     - callback
-   - forwarding a message
+   - reply in advanced options
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - remove any references to actual sound files, replace with phrases
