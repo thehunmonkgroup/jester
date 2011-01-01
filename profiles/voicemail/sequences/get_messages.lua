@@ -14,6 +14,7 @@ return
       "__id",
       "caller_id_number",
       "caller_id_name",
+      "caller_domain",
       "__timestamp",
       "__duration",
       "__deleted",
