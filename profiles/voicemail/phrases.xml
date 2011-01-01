@@ -682,4 +682,24 @@
     </input>
   </macro>
 
+  <!-- Call outside number. -->
+  <macro name="call_outside_number">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-enter-num-to-call.wav"/> 
+        <action function="play-file" data="vm-then-pound.wav"/> 
+        <action function="play-file" data="vm-star-cancel.wav"/> 
+      </match>
+    </input>
+  </macro>
+
+  <!-- Transfer announcement. -->
+  <macro name="please_wait_while_connecting">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-dialout.wav"/> 
+      </match>
+    </input>
+  </macro>
+
 </include><!--This line will be ignored it's here to validate the xml and is optional -->
