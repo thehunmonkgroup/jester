@@ -47,6 +47,13 @@ assume you already have Jester installed correctly:
         <action application="answer"/>
         <action application="sleep" data="1000"/>
         <!--
+          If the call is coming from another domain, you can set this variable
+          to store the caller's domain with the message -- this can be useful
+          for message replies across domains.  If this is not set, the caller
+          is assumed to be in the same domain as the voicemail.
+        -->
+        <!-- <action application="set" data="voicemail_caller_domain=example.com"/> -->
+        <!--
           The arguments to the main_greeting sequence should be:
           <mailbox>[,domain][,group]
           Domain defaults to the value of the 'domain' channel varaible if not

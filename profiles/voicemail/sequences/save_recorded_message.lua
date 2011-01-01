@@ -27,6 +27,7 @@ return
       __folder = 0,
       caller_id_number = variable("caller_id_number"),
       caller_id_name = variable("caller_id_name"),
+      caller_domain = profile.caller_domain,
       __timestamp = storage("record", "last_recording_timestamp"),
       __duration = storage("record", "last_recording_duration"),
       recording = recording_name,

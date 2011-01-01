@@ -63,6 +63,15 @@ if domain == "" then
   domain = variable("domain")
 end
 
+-- To specify the caller is from another domain, set the channel variable
+-- 'voicemail_caller_domain' to the domain before calling Jester.  Otherwise
+-- the caller is assumed to be calling from the same domain that the voicemail
+-- is in.
+caller_domain = variable("voicemail_caller_domain")
+if caller_domain == "" then
+  caller_domain = domain
+end
+
 -- Voicemail group (if provided).
 voicemail_group = args(3)
 
