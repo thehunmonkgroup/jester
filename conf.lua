@@ -1,8 +1,18 @@
 module(..., package.seeall)
 
--- Enable this setting to get debuggging messages.
+-- Enable this setting to turn on debuggging.
 -- This value can be overridden per profile.
 debug = true
+
+-- These settings control what debugging information is output.
+debug_output = {
+  -- Ongoing progress.
+  log = true,
+  -- These are output right before Jester exits.
+  jester_object = true,
+  executed_sequences = true,
+  run_actions = true,
+}
 
 -- This file can be loaded from the shell, so only build session-based
 -- settings if we have a session.

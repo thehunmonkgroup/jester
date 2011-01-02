@@ -291,7 +291,7 @@ end
 ]]
 function main()
   if debug then
-    init_stacks({"executed_sequences"})
+    init_stacks({"run_actions", "executed_sequences"})
   end
   run_sequence_loop("active")
   exiting = true
@@ -301,8 +301,15 @@ function main()
     run_sequence_loop("hangup")
   end
   if debug then
-    debug_dump(jester, true)
-    debug_log("EXECUTED SEQUENCES:\n%s", table.concat(channel.stack.executed_sequences, "\n"))
+    if conf.debug_output.jester_object then
+      debug_dump(jester, true)
+    end
+    if conf.debug_output.executed_sequences then
+      debug_log("EXECUTED SEQUENCES:\n%s", table.concat(channel.stack.executed_sequences, "\n"))
+    end
+    if conf.debug_output.run_actions then
+      debug_log("RUN ACTIONS:\n%s", table.concat(channel.stack.run_actions, "\n"))
+    end
   end
 end
 
@@ -338,11 +345,18 @@ function execute_sequences()
 
   -- For the initial call, pre-load the first action.
   action = load_action()
+  local clock = os.clock()
 
   -- Main loop.  This runs until there are no more sequences to run, or the
   -- caller hangs up.
   while ready() and action do
     run_action(action)
+    if debug then
+      local new_clock = os.clock()
+      table.insert(channel.stack.run_actions, #channel.stack.run_actions + 1 .. ": " .. action.action .. ": " .. new_clock - clock)
+      clock = new_clock
+    end
+
     -- The action that just ran may have loaded a new sequence, so reload
     -- the current action and compare them.
     new_action = load_action()
@@ -583,7 +597,7 @@ end
   Conditional debug logger.
 ]]
 function debug_log(msg, ...)
-  if jester.conf.debug then
+  if conf.debug and conf.debug_output.log then
     log(string.format(msg, ...), "JESTER DEBUG")
   end
 end
