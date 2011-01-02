@@ -53,6 +53,22 @@ function load_data(action)
   end
 end
 
+function load_data_count(action)
+  local count_field = action.count_field
+  local filters = action.filters or {}
+  local key = action.storage_key or "count"
+  if count_field then
+    local dbh, conf = connect(action)
+    local sql = "SELECT COUNT(" .. count_field .. ") AS count FROM " .. conf.table .. build_where(filters)
+    jester.debug_log("Executing query: %s", sql)
+    local count
+    -- Loop through the returned rows.
+    assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
+    dbh:release()
+    jester.set_storage("data", key, count)
+  end
+end
+
 function update_data(action)
   local fields = action.fields
   local filters = action.filters or {}
