@@ -1,7 +1,7 @@
 -- TODO: probably want to do some conditional logic up here to determine which
 -- advanced options should be available based on the VM settings.
 temp_keys = {
-  ["1"] = "send_reply",
+  ["1"] = "send_reply_check",
   ["2"] = "callback",
   ["3"] = "play_cid_envelope advanced_options",
   ["4"] = "call_outside_number message_options,collect",
