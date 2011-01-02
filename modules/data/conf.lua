@@ -26,4 +26,11 @@ jester.action_map.data_delete = {
     default = "delete_data_odbc",
   }
 }
+jester.action_map.data_query = {
+  mod = "data",
+  handlers = {
+    odbc = "query_data_odbc",
+    default = "query_data_odbc",
+  }
+}
 

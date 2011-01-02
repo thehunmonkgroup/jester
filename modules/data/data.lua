@@ -22,3 +22,8 @@ function delete_data_odbc(action)
   data.odbc.delete_data(action)
 end
 
+function query_data_odbc(action)
+  require("jester.modules.data.odbc")
+  data.odbc.query_data(action)
+end
+

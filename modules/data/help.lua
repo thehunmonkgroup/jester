@@ -64,3 +64,19 @@ jester.help_map.data.actions.data_delete.params = {
   config = [[A table of information to pass which describes where to find the data.  Check handlers to see the fields for this table.]],
   filters = [[(Optional) A table of filters to apply when loading the data.  This restricts what is loaded to the filtered values.  Filters are cumulative (AND logic).  The key is the name of the filter, and the value is the value to filter on.  Filter values are interpreted as strings by default -- if a filter value is a number, prefix the filter key with double underscores.  eg. 'filters = { context = "default", __mailbox = 1234 }  WARNING: if you exclude this field, all rows will be deleted!]],
 }
+
+jester.help_map.data.actions.data_query = {}
+jester.help_map.data.actions.data_query.description_short = [[Executes a custom query against a data source.]]
+jester.help_map.data.actions.data_query.description_long = [[Allows running custom queries on outside data sources.  Row data can be optionally loaded into a storage area.
+
+This action should only be used if regular data actions will not suffice -- its use is discouraged as it may not be portable across handlers/databases.  If table joins are needed, it is suggested you handle that at the database layer (eg, by creating a view in MySQL).
+
+Important note: core handlers for the data_query action clear all data from the specified storage area before they load new data into it -- if you need something preserved across mulitple loads, put it in a different storage area!]]
+jester.help_map.data.actions.data_query.params = {
+  config = [[A table of information to pass which describes where to find the data.  Check handlers to see the fields for this table.]],
+  query = [[The custom query to execute.  Tokens are replaced prior to running the query.]],
+  tokens = [[(Optional) A table of token replacements to apply, key = token name, value = token replacement, eg. 'tokens = {foo = "bar"}' would replace the token ':foo' with 'bar'.  Note that for security reasons, all token values will be run through an escaping function prior to token replacement if appropriate/available.]],
+  return_fields = [[(Optional) If set to true, field data from the query will be returned to the specified storage area, and the number of returned rows will be placed in the '__count' key.  Default is false.]],
+  storage_area = [[(Optional) The storage area to store the data in after loading.  Defaults to 'data'.  Eg. Setting 'storage_area = "mailbox_settings"' would store the data in the 'mailbox_settings' storage area.]],
+}
+

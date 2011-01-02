@@ -109,6 +109,45 @@ function delete_data(action)
   dbh:release()
 end
 
+function query_data(action)
+  local query = action.query
+  local return_fields = action.return_fields
+  local area = action.storage_area or "data"
+  local tokens = action.tokens
+  local dbh, conf = connect(action)
+  local sql
+
+  -- Token replacements.
+  if tokens then
+    require "jester.support.string"
+    for k,v in pairs(tokens) do
+      tokens[k] = escape(v)
+    end
+    sql = string.token_replace(query, tokens)
+  else
+    sql = query
+  end
+  jester.debug_log("Executing query: %s", sql)
+  if return_fields then
+    local count = 0
+    -- Clean out storage area before loading in new data.
+    jester.clear_storage(area)
+    -- Loop through the returned rows.
+    assert(dbh:query(sql, function(row)
+      count = count + 1
+      for col, val in pairs(row) do
+        jester.set_storage(area, col .. "_" .. count, val)
+      end
+    end))
+    dbh:release()
+    jester.debug_log("Query rows returned: %d", count)
+    jester.set_storage(area, "__count", tonumber(count))
+  else
+    assert(dbh:query(sql))
+  end
+  dbh:release()
+end
+
 --[[
   Figure out the field type based on how the field is formatted -- fields
   prefixed with double underscores are treated as integers, and have the
