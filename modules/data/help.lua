@@ -73,7 +73,7 @@ This action should only be used if regular data actions will not suffice -- its 
 
 Important note: core handlers for the data_query action clear all data from the specified storage area before they load new data into it -- if you need something preserved across mulitple loads, put it in a different storage area!]]
 jester.help_map.data.actions.data_query.params = {
-  config = [[A table of information to pass which describes where to find the data.  Check handlers to see the fields for this table.]],
+  config = [[A table of information to pass which describes where to find the data.  Check handlers to see the fields for this table.  Note that for this action, any table information is provided by the query parameter.]],
   query = [[The custom query to execute.  Tokens are replaced prior to running the query.]],
   tokens = [[(Optional) A table of token replacements to apply, key = token name, value = token replacement, eg. 'tokens = {foo = "bar"}' would replace the token ':foo' with 'bar'.  Note that for security reasons, all token values will be run through an escaping function prior to token replacement if appropriate/available.]],
   return_fields = [[(Optional) If set to true, field data from the query will be returned to the specified storage area, and the number of returned rows will be placed in the '__count' key.  Default is false.]],
