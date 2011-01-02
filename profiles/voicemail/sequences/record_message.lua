@@ -1,8 +1,10 @@
+operator = args(1)
+
 record_keys = {
   ["#"] = ":break",
 }
 
-if profile.operator_extension then
+if operator == "operator" then
   record_keys["0"] = "operator_transfer_prepare"
 end
 
@@ -25,7 +27,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "review_message",
+    sequence = "review_message " .. operator,
   },
 }
 

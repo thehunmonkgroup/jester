@@ -2,8 +2,10 @@ greeting_keys = {
   ["#"] = ":break",
 }
 
+operator_on_record = ""
 if profile.operator_extension then
   greeting_keys["0"] = "transfer_to_operator"
+  operator_on_record = "operator"
 end
 
 return
@@ -19,7 +21,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "record_message",
+    sequence = "record_message " .. operator_on_record,
   },
 }
 

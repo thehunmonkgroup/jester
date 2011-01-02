@@ -4,8 +4,10 @@ temp_keys = {
   ["3"] = "caller_rerecord_message",
 }
 
+operator_on_review = ""
 if profile.operator_extension then
   temp_keys["0"] = "transfer_to_operator"
+  operator_on_review = "operator"
 end
 
 return
@@ -17,7 +19,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "review_message",
+    sequence = "review_message " .. operator_on_review,
   },
 }
 
