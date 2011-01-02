@@ -40,6 +40,7 @@ modules = {
   "tracker",
   "hangup",
   "dialplan_tools",
+  "event",
 }
 
 -- Overrides the global debug configuration for this profile only.
