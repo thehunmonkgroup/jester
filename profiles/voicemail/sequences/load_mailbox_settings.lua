@@ -14,6 +14,7 @@ return
     },
     fields = {
       "mailbox",
+      "domain",
       "password",
       "email",
       "email_messages",
