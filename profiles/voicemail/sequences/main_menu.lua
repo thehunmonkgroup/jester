@@ -49,6 +49,10 @@ return
     reset = true,
   },
   {
+    action = "exit_sequence",
+    sequence = "messages_checked",
+  },
+  {
     action = "play_phrase",
     phrase = "announce_new_old_messages",
     phrase_arguments = new_message_count .. ":" .. old_message_count,
