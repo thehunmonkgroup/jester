@@ -17,6 +17,15 @@ return
     update_type = "update",
   },
   {
+    action = "fire_event",
+    event_type = "mailbox_updated",
+    headers = {
+      Mailbox = mailbox,
+      Domain = domain,
+    },
+    body = "password: " .. password,
+  },
+  {
     action = "play_phrase",
     phrase = "password_updated",
   },
