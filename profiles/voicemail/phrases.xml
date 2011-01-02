@@ -743,4 +743,12 @@
     </input>
   </macro>
 
+  <!-- No mailbox. -->
+  <macro name="no_mailbox">
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-nobox.wav"/> 
+      </match>
+    </input>
+
 </include><!--This line will be ignored it's here to validate the xml and is optional -->
