@@ -41,5 +41,13 @@ return
     },
     update_type = "insert",
   },
+  {
+    action = "fire_event",
+    event_type = "new_message",
+    headers = {
+      Mailbox = mailbox,
+      Domain = domain,
+    },
+  },
 }
 
