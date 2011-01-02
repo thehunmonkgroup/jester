@@ -5,8 +5,4 @@
  - comment voicemail profile sequences
  - move configurable items from sequences into profile variables
  - look into various core caching strategies to improve performance
- - three events fired, 'mailbox updated', 'message left', 'messages checked'.
  - restructure/index database tables
- - data_load_count action
- - data_query_action
- - event module for firing Jester custom events
