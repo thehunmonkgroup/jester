@@ -1,7 +1,6 @@
  - help system could use a table of contents feature.
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
- - remove any references to actual sound files, replace with phrases
  - comment voicemail profile sequences
  - move configurable items from sequences into profile variables
  - look into various core caching strategies to improve performance
