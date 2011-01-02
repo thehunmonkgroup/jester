@@ -1,11 +1,11 @@
-mailbox = args(1)
-domain = args(2)
-operation = args(3)
+operation = args(1)
 
 -- Message data.
-recording_name = storage("record", "last_recording_name")
-timestamp = storage("record", "last_recording_timestamp")
-duration = storage("record", "last_recording_duration")
+mailbox = storage("message_info", "mailbox")
+domain = storage("message_info", "domain")
+recording_name = storage("message_info", "recording_name")
+timestamp = storage("message_info", "timestamp")
+duration = storage("message_info", "duration")
 caller_id_number = storage("message_info", "caller_id_number")
 caller_id_name = storage("message_info", "caller_id_name")
 caller_domain = storage("message_info", "caller_domain")

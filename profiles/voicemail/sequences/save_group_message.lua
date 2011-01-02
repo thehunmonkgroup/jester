@@ -36,18 +36,26 @@ return
     if_true = "sub:provision_mailbox " .. mailbox .. "," .. domain,
   },
   {
+    action = "set_storage",
+    storage_area = "message_info",
+    data = {
+      mailbox = mailbox,
+      domain = domain,
+    },
+  },
+  {
     action = "conditional",
     value = email_messages,
     compare_to = "no",
     comparison = "equal",
-    if_false = "sub:email_message " .. mailbox,
+    if_false = "sub:email_message",
   },
   {
     action = "conditional",
     value = email_messages,
     compare_to = "email_only",
     comparison = "equal",
-    if_false = "sub:save_recorded_message " .. mailbox .. "," .. domain .. ",copy",
+    if_false = "sub:save_recorded_message copy",
   },
   {
     action = "call_sequence",

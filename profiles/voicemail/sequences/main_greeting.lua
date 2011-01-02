@@ -23,7 +23,7 @@ return
   },
   {
     action = "exit_sequence",
-    sequence = "check_for_recorded_message",
+    sequence = "main_greeting_prepare_message",
   },
   {
     action = "call_sequence",
