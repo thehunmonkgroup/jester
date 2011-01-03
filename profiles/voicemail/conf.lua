@@ -136,6 +136,8 @@ CallerID name: :caller_id_name]]
 email_from_address = "noreply@" .. domain
 email_server = "localhost"
 email_port = 25
+-- Format timestamps to this format string -- tokens are same as strftime.
+email_date_format = "%Y-%m-%d %H:%M:%S"
 
 --[[
   Other settings.
