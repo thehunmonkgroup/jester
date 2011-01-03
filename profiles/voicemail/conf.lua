@@ -21,11 +21,49 @@
   args(<argnum>) function.
 ]]
 
+--[[
+  Everything in this section should not be edited unless you know what you are
+  doing!
+]]
+
 -- Overrides the global debug configuration for this profile only.
 debug = true
 
+-- Mailbox being accessed.
+mailbox = args(1)
+
+-- Domain the mailbox is in -- defaults to the domain variable of the current
+-- channel.
+domain = args(2)
+if domain == "" then
+  domain = variable("domain")
+end
+
+-- To specify the caller is from another domain, set the channel variable
+-- 'voicemail_caller_domain' to the domain before calling Jester.  Otherwise
+-- the caller is assumed to be calling from the same domain that the voicemail
+-- is in.
+caller_domain = variable("voicemail_caller_domain")
+if caller_domain == "" then
+  caller_domain = domain
+end
+
+-- Voicemail group (if provided).
+voicemail_group = args(3)
+
+-- Main directory that stores voicemail messages.
+-- NOTE: This directory must already be created and writable by the FreeSWITCH
+-- user.
+voicemail_dir = global.base_dir .. "/storage/voicemail/default"
+
+-- The directory containing the mailboxes for the domain.
+mailboxes_dir = voicemail_dir .. "/" .. domain
+
+-- The mailbox directory being accessed.
+mailbox_dir = mailboxes_dir .. "/" .. mailbox
+
 -- Modules to load.
--- Overrides the global debug configuration for this profile only.
+-- Overrides the global module configuration for this profile only.
 modules = {
   "core_actions",
   "play",
@@ -43,17 +81,16 @@ modules = {
   "event",
 }
 
+-- Overrides the global sequence path for this profile only.
+sequence_path = global.profile_path .. "/voicemail/sequences"
+
+--[[
+  The sections below can be customized safely.
+]]
+
 --[[
   Directory paths.
 ]]
-
--- Overrides the global debug configuration for this profile only.
-sequence_path = global.profile_path .. "/voicemail/sequences"
-
--- Main directory that stores voicemail messages.
--- NOTE: This directory must already be created and writable by the FreeSWITCH
--- user.
-voicemail_dir = global.base_dir .. "/storage/voicemail/default"
 
 -- The directory where recordings are stored temporarily while recording.
 temp_recording_dir = "/tmp"
@@ -80,6 +117,25 @@ menu_replay_wait = 3000
 
 -- Number of times to play a menu before giving up if no user response.
 menu_repetitions = 3
+
+--[[
+  Message email options.
+  The following token replacements are available:
+    :mailbox - Mailbox where the message is being left.
+    :datetime - Formatted date/time when the message was left.
+    :caller_id_number
+    :caller_id_name
+]]
+
+email_subject = "New voicemail message for :mailbox"
+email_message = [[
+Mailbox number: :mailbox
+Date/time: :datetime
+CallerID number: :caller_id_number
+CallerID name: :caller_id_name]]
+email_from_address = "noreply@" .. domain
+email_server = "localhost"
+email_port = 25
 
 --[[
   Other settings.
@@ -117,37 +173,4 @@ db_config_voicemail_groups = {
   database = "jester",
   table = "message_groups",
 }
-
---[[
-  Everything below this line should not be edited unless you know what you are
-  doing!
-]]
-
--- Mailbox being accessed.
-mailbox = args(1)
-
--- Domain the mailbox is in -- defaults to the domain variable of the current
--- channel.
-domain = args(2)
-if domain == "" then
-  domain = variable("domain")
-end
-
--- To specify the caller is from another domain, set the channel variable
--- 'voicemail_caller_domain' to the domain before calling Jester.  Otherwise
--- the caller is assumed to be calling from the same domain that the voicemail
--- is in.
-caller_domain = variable("voicemail_caller_domain")
-if caller_domain == "" then
-  caller_domain = domain
-end
-
--- Voicemail group (if provided).
-voicemail_group = args(3)
-
--- The directory containing the mailboxes for the domain.
-mailboxes_dir = voicemail_dir .. "/" .. domain
-
--- The mailbox directory being accessed.
-mailbox_dir = mailboxes_dir .. "/" .. mailbox
 
