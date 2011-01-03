@@ -1,13 +1,17 @@
+greeting = args(1)
+
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
-
-greeting = args(1)
+mailbox_provisioned = storage("mailbox_settings", "mailbox_provisioned")
 
 return
 {
   {
-    action = "create_directory",
-    directory = mailbox_directory,
+    action = "conditional",
+    value = mailbox_provisioned,
+    compare_to = "no",
+    comparison = "equal",
+    if_true = "sub:provision_mailbox " .. mailbox .. "," .. profile.domain,
   },
   {
     action = "play_phrase",
@@ -35,3 +39,4 @@ return
     sequence = "record_greeting_thank_you " .. greeting,
   },
 }
+
