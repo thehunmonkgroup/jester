@@ -400,7 +400,10 @@ end
   Reloads the current sequence file, refreshing all variables.
 ]]
 function refresh_current_sequence()
-  channel.stack.sequence[channel.stack.sequence_stack_position].sequence = channel.stack.sequence[channel.stack.sequence_stack_position].file()
+  -- Only refresh if there's a valid action to be run.
+  if load_action() then
+    channel.stack.sequence[channel.stack.sequence_stack_position].sequence = channel.stack.sequence[channel.stack.sequence_stack_position].file()
+  end
 end
 
 --[[
