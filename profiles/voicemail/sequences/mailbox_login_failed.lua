@@ -1,3 +1,7 @@
+--[[
+  Login failed, notify user and hang up.
+]]
+
 return
 {
   {
@@ -5,11 +9,8 @@ return
     phrase = "login_incorrect",
   },
   {
-    action = "play_phrase",
-    phrase = "goodbye",
-  },
-  {
-    action = "hangup",
+    action = "call_sequence",
+    phrase = "exit",
   },
 }
 
