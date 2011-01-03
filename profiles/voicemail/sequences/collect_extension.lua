@@ -7,11 +7,12 @@ return
 {
   {
     action = "get_digits",
-    min_digits = 3,
-    max_digits = 20,
+    min_digits = profile.mailbox_min_digits,
+    max_digits = profile.mailbox_max_digits,
     audio_files = "phrase:extension",
     bad_input = "",
     storage_key = "extension",
+    timeout = profile.user_input_timeout,
   },
   {
     action = "call_sequence",

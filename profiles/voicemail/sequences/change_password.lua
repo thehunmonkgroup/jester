@@ -5,17 +5,21 @@ return
 {
   {
     action = "get_digits",
-    min_digits = 4,
+    min_digits = profile.password_min_digits,
+    max_digits = profile.password_max_digits,
     audio_files = "phrase:enter_new_password",
     bad_input = "",
     storage_key = "new_password_1",
+    timeout = profile.user_input_timeout,
   },
   {
     action = "get_digits",
-    min_digits = 4,
+    min_digits = profile.password_min_digits,
+    max_digits = profile.password_max_digits,
     audio_files = "phrase:reenter_new_password",
     bad_input = "",
     storage_key = "new_password_2",
+    timeout = profile.user_input_timeout,
   },
   {
     action = "conditional",

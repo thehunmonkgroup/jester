@@ -156,6 +156,25 @@ email_templates.notification.message = "From: :caller_id_number"
 email_templates.notification.allow_attachments = false
 
 --[[
+  User input.
+]]
+
+-- How many seconds to wait for user input.
+user_input_timeout = 3
+
+-- The minimum number of digits in a valid mailbox extension.
+mailbox_min_digits = 4
+
+-- The maximum number of digits in a valid mailbox extension.
+mailbox_max_digits = 10
+
+-- The minimum number of digits in a valid password.
+password_min_digits = 4
+
+-- The maximum number of digits in a valid password.
+password_max_digits = 10
+
+--[[
   Other settings.
 ]]
 

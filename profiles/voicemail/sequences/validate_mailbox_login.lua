@@ -6,10 +6,12 @@ return
 {
   {
     action = "get_digits",
-    min_digits = 4,
+    min_digits = profile.password_min_digits,
+    max_digits = profile.password_max_digits,
     audio_files = "phrase:get_password",
     bad_input = "",
     storage_key = "password",
+    timeout = profile.user_input_timeout,
   },
   {
     action = "call_sequence",

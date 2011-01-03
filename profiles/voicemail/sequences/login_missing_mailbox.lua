@@ -4,9 +4,11 @@ return
 {
   {
     action = "get_digits",
-    min_digits = 4,
+    min_digits = profile.mailbox_min_digits,
+    max_digits = profile.mailbox_max_digits,
     audio_files = "phrase:get_mailbox_number",
     bad_input = "",
+    timeout = profile.user_input_timeout,
   },
   {
     action = "set_storage",
