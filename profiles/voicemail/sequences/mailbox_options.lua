@@ -11,8 +11,8 @@ return
     action = "play_phrase",
     phrase = "mailbox_options",
     phrase_arguments = storage("file", "file_exists"),
-    repetitions = 3,
-    wait = 3000,
+    repetitions = profile.menu_repititions,
+    wait = profile.menu_replay_wait,
     keys = {
       ["1"] = "record_greeting unavail",
       ["2"] = "record_greeting busy",

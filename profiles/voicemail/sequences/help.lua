@@ -38,8 +38,8 @@ return
     action = "play_phrase",
     phrase = "help",
     phrase_arguments = total_messages .. ":" .. current_folder,
-    repetitions = 3,
-    wait = 3000,
+    repetitions = profile.menu_repititions,
+    wait = profile.menu_replay_wait,
   },
 }
 

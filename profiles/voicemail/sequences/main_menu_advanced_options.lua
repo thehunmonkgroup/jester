@@ -10,8 +10,8 @@ return
     phrase = "advanced_options_list",
     phrase_arguments = "N:N:N:Y:N",
     keys = temp_keys,
-    repetitions = 3,
-    wait = 3000,
+    repetitions = profile.menu_repititions,
+    wait = profile.menu_replay_wait,
   },
   {
     action = "call_sequence",
