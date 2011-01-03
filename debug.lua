@@ -1,6 +1,10 @@
+--[[
+  Dumps values to console, with recursive option for tables.
+]]
 function debug_dump(var, recursive, prefix)
   local key, value
   prefix = prefix or ""
+  -- Make sure we still want to dump.
   if not jester.is_freeswitch or jester.ready() then
     if type(var) == "table" then
       for k, v in pairs(var) do
@@ -17,6 +21,7 @@ function debug_dump(var, recursive, prefix)
         -- Exclude possibly infinitely recursive keys.
         if k ~= "_M" and k ~= "__index" then
           jester.log(string.format([[%s%s, value: %s]], prefix, key, value), "JESTER VAR DUMP")
+          -- Tables get optional recursive treatment.
           if recursive and type(v) == "table" then
             debug_dump(v, recursive, prefix .. "[" .. key .. "]")
           end

@@ -193,10 +193,17 @@ function load_sequence(name, arguments)
   end
 end
 
+--[[
+  Get the value for a key in a storage area, with an empty string as the
+  default.
+]]
 function protected_get_storage(area, key)
   return get_storage(area, key, "")
 end
 
+--[[
+  Get the value for a channel variable, with an empty string as the default.
+]]
 function protected_get_variable(var)
   return get_variable(var, "")
 end
@@ -293,11 +300,14 @@ function main()
   if debug then
     init_stacks({"run_actions", "executed_sequences"})
   end
+  -- Sequences run during an active call.
   run_sequence_loop("active")
   exiting = true
+  -- Sequences run that were registered for the exit loop.
   run_sequence_loop("exit")
   if session and not session:ready() then
     hungup = true
+    -- Sequences run that were registered for the hangup loop.
     run_sequence_loop("hangup")
   end
   if debug then
@@ -541,13 +551,16 @@ end
 function load_action_handler(action)
   local func
   local handlers = action_map[action.action].handlers
+  -- Does the action have handlers?
   if handlers then
+    -- Look for a declared handler, fall back to default.
     if action.handler and handlers[action.handler] then
       func = handlers[action.handler]
     else
       func = handlers.default
     end
   else
+    -- Use the function instead.
     func = action_map[action.action].func
   end
   return func

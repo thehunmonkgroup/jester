@@ -12,6 +12,9 @@ if jester.is_freeswitch then
   script_path = base_dir .. "/scripts/"
 end
 
+--[[
+  Initialize the help system.
+]]
 function init_module_help()
   local help_file
   -- Create a map of all module help that can be called.
@@ -26,6 +29,9 @@ function init_module_help()
   end
 end
 
+--[[
+  Get help for the passed subtopics.
+]]
 function get_help(...)
   local output = ""
   local help_path, output
@@ -115,6 +121,9 @@ function get_help(...)
   help_output(output)
 end
 
+--[[
+  Output help to the appropriate location.
+]]
 function help_output(help)
   if jester.is_freeswitch then
     stream:write("\n" .. tostring(help) .. "\n")
@@ -123,6 +132,9 @@ function help_output(help)
   end
 end
 
+--[[
+  Build topical help.
+]]
 function topic_help(topic, main)
   local output = {}
   local description
@@ -155,12 +167,18 @@ function topic_help(topic, main)
   return table.concat(output, "\n\n")
 end
 
+--[[
+  Main help page text.
+]]
 function welcome()
   return [[Welcome to Jester help!
 
 Here you'll find extensive information on all the important areas of Jester.  Start by reviewing the topic list below for an area of interest.  The general format for accessing help is 'help [sub-topic] [sub-sub-topic] [...]', and this is how you'll see it referenced internally.]]
 end
 
+--[[
+  Get a list of all modules in the help system.
+]]
 function get_modules()
   local module_list = {}
   for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
@@ -169,6 +187,9 @@ function get_modules()
   return module_list
 end
 
+--[[
+  Build summary help for all modules.
+]]
 function module_help()
   local module_list = {}
   local help, description
@@ -186,6 +207,9 @@ function module_help()
   return string.format("Run 'help module [name]' to get more help on a specific module.\n\nCurrently installed modules:\n\n%s", table.concat(module_list, "\n"))
 end
 
+--[[
+  Build detailed help for a module.
+]]
 function module_help_detail(module_name)
   local description, actions
   -- Loop through all modules looking for the passed one.
@@ -227,6 +251,9 @@ function module_help_detail(module_name)
   end
 end
 
+--[[
+  Build handler help.
+]]
 function build_handlers(module_data, list)
   local handlers = module_data.handlers
   table.insert(list, "\nHANDLERS:")
@@ -237,6 +264,9 @@ function build_handlers(module_data, list)
   return list
 end
 
+--[[
+  Get a list of all actions in the help system.
+]]
 function get_actions()
   local action_list = {}
   local actions
@@ -249,6 +279,9 @@ function get_actions()
   return action_list
 end
 
+--[[
+  Build summary help for all actions.
+]]
 function action_help()
   local action_list = {}
   local actions, description
@@ -270,6 +303,9 @@ function action_help()
   return string.format("Run 'help action [name]' to get more help on a specific action.\n\nCurrently installed actions:\n%s", table.concat(action_list, "\n"))
 end
 
+--[[
+  Build detailed help for an action.
+]]
 function action_help_detail(action)
   -- Loop through the modules looking for the passed action.
   for _, module_data in pairs(jester.help_map) do

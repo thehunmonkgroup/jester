@@ -1,3 +1,10 @@
+--[[
+  This is the global configuration file for Jester.
+
+  Probably not a good idea to change any of these settings unless you know
+  what you're doing.
+]]
+
 module(..., package.seeall)
 
 -- Enable this setting to turn on debuggging.
