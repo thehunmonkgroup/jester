@@ -1,5 +1,8 @@
 module(..., package.seeall)
 
+--[[
+  Wait a specified time.
+]]
 function wait(action)
   -- Don't wait if the call is hung up, or if a key was pressed.
   if action.wait and not jester.actionable_key() and jester.ready() then
@@ -7,10 +10,16 @@ function wait(action)
   end
 end
 
+--[[
+  Calculate the number of repetitions.
+]]
 function reps(action)
   return action.repetitions and tonumber(action.repetitions) or 1
 end
 
+--[[
+  Play one or more files.
+]]
 function play_file(action)
   if action.file then
     -- A list of files was passed, join them in order.
@@ -28,6 +37,9 @@ function play_file(action)
   end
 end
 
+--[[
+  Play the first valid file in a list of files.
+]]
 function play_valid_file(action)
   local files = action.files
   if type(files) == "table" then
@@ -67,6 +79,9 @@ function play_valid_file(action)
   jester.set_storage("play", "valid_file_played", "")
 end
 
+--[[
+  Play a phrase macro.
+]]
 function play_phrase_macro(action)
   if action.phrase then
     local phrase_arguments = action.phrase_arguments or ""
@@ -85,6 +100,9 @@ function play_phrase_macro(action)
   end
 end
 
+--[[
+  Play a series of phrase macros that are mapped to keys.
+]]
 function play_key_macros(action)
   local macros = action.key_announcements
   if macros then

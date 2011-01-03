@@ -2,6 +2,9 @@ module(..., package.seeall)
 
 local data = jester.modules.data
 
+--[[
+  ODBC action handlers.
+]]
 function load_data_odbc(action)
   require("jester.modules.data.odbc")
   data.odbc.load_data(action)

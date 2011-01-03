@@ -1,5 +1,8 @@
 module(..., package.seeall)
 
+--[[
+  Gets digit input from the user.
+]]
 function get_digits(action)
   local min_digits = action.min_digits or 1
   local max_digits = action.max_digits or 10

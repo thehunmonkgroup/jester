@@ -2,6 +2,9 @@ module(..., package.seeall)
 
 local escape
 
+--[[
+  Connect to a database.
+]]
 function connect(action)
   local dbh
   local conf = action.config
@@ -17,6 +20,9 @@ function connect(action)
   end
 end
 
+--[[
+  Load data from a database into storage.
+]]
 function load_data(action)
   local fields = action.fields
   local filters = action.filters or {}
@@ -27,7 +33,9 @@ function load_data(action)
   if fields then
     local dbh, conf = connect(action)
     local limit = multiple and "" or " LIMIT 1"
+    -- Optional sort.
     local load_sort = sort and build_sort(sort, sort_order) or ""
+    -- Build the query.
     local sql = "SELECT " .. build_load_fields(fields) .. " FROM " .. conf.table .. build_where(filters) .. load_sort .. limit
     jester.debug_log("Executing query: %s", sql)
     local count, suffix = 0, ""
@@ -53,12 +61,16 @@ function load_data(action)
   end
 end
 
+--[[
+  Load data row counts from a database into storage.
+]]
 function load_data_count(action)
   local count_field = action.count_field
   local filters = action.filters or {}
   local key = action.storage_key or "count"
   if count_field then
     local dbh, conf = connect(action)
+    -- Build the query.
     local sql = "SELECT COUNT(" .. count_field .. ") AS count FROM " .. conf.table .. build_where(filters)
     jester.debug_log("Executing query: %s", sql)
     local count
@@ -69,6 +81,9 @@ function load_data_count(action)
   end
 end
 
+--[[
+  Update data in a database.
+]]
 function update_data(action)
   local fields = action.fields
   local filters = action.filters or {}
@@ -100,6 +115,9 @@ function update_data(action)
   end
 end
 
+--[[
+  Delete data from a database.
+]]
 function delete_data(action)
   local filters = action.filters or {}
   local dbh, conf = connect(action)
@@ -109,6 +127,9 @@ function delete_data(action)
   dbh:release()
 end
 
+--[[
+  Execute custom queries on a database, optionally returning data.
+]]
 function query_data(action)
   local query = action.query
   local return_fields = action.return_fields

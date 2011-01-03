@@ -1,13 +1,22 @@
 module(..., package.seeall)
 
+--[[
+  Dummy action.
+]]
 function none(action) end
 
+--[[
+  Call a sequence.
+]]
 function call_sequence(action)
   if action.sequence then
     jester.queue_sequence(action.sequence)
   end
 end
 
+--[[
+  Compare two values, and optionally call sequences if they match or not.
+]]
 function conditional(action)
   local value = action.value
   local compare_to = action.compare_to
@@ -38,6 +47,9 @@ function conditional(action)
   end
 end
 
+--[[
+  Set channel variables.
+]]
 function set_variable(action)
   local data = action.data or {}
   for k, v in pairs(data) do
@@ -45,6 +57,9 @@ function set_variable(action)
   end
 end
 
+--[[
+  Set storage variables.
+]]
 function set_storage(action)
   local area = action.storage_area or "default"
   local data = action.data or {}
@@ -53,6 +68,9 @@ function set_storage(action)
   end
 end
 
+--[[
+  Copy storage from one area to another.
+]]
 function copy_storage(action)
   local area = action.storage_area or "default"
   local copy_area = action.copy_to
@@ -73,6 +91,9 @@ function copy_storage(action)
   end
 end
 
+--[[
+  Clear a storage key or storage area.
+]]
 function clear_storage(action)
   local area = action.storage_area or "default"
   local data_keys = action.data_keys
@@ -87,6 +108,9 @@ function clear_storage(action)
   end
 end
 
+--[[
+  Register a sequence to run in the exit sequence loop.
+]]
 function register_exit_sequence(action)
   local sequence = action.sequence
   if sequence then
@@ -98,6 +122,9 @@ function register_exit_sequence(action)
   end
 end
 
+--[[
+  Wait for a specified amount of time.
+]]
 function wait(action)
   local milliseconds = action.milliseconds
   if milliseconds then
@@ -105,6 +132,9 @@ function wait(action)
   end
 end
 
+--[[
+  Load another profile.
+]]
 function load_profile(action)
   local profile = action.profile
   local sequence = action.sequence

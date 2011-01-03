@@ -1,5 +1,8 @@
 module(..., package.seeall)
 
+--[[
+  Initialize the navigation module.
+]]
 function init()
   -- Initialize navigation stack.
   jester.reset_stack("navigation")
@@ -16,10 +19,16 @@ function init()
   table.insert(jester.channel.stack.exit, 1, event)
 end
 
+--[[
+  Log the current navigation stack.
+]]
 function show_navigation_stack(stack)
   jester.debug_log("Current navigation stack: %s", table.concat(stack, " | "))
 end
 
+--[[
+  Add a sequence to the navigation stack.
+]]
 function add_to_stack(action)
   local stack = jester.channel.stack.navigation
   local sequence_stack = jester.channel.stack.sequence
@@ -34,6 +43,9 @@ function add_to_stack(action)
   end
 end
 
+--[[
+  Go up the navigation stack one level.
+]]
 function navigation_up(action)
   local stack = jester.channel.stack.navigation
   if #stack == 0 then
@@ -52,11 +64,17 @@ function navigation_up(action)
   end
 end
 
+--[[
+  Clear the navigation stack.
+]]
 function navigation_clear(action)
   jester.channel.stack.navigation = {}
   jester.debug_log("Navigation stack cleared.")
 end
 
+--[[
+  Go to the top of the navigation stack.
+]]
 function navigation_top(action)
   local stack = jester.channel.stack.navigation
   if #stack == 0 then
@@ -72,6 +90,9 @@ function navigation_top(action)
   end
 end
 
+--[[
+  Set the last item on the navigation stack as the new top.
+]]
 function navigation_reset(action)
   local stack = jester.channel.stack.navigation
   if #stack == 0 then

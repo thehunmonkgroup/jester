@@ -68,6 +68,9 @@ function record_file(action)
   end
 end
 
+--[[
+  Merge two recorded files.
+]]
 function record_file_merge(action)
   local base_file = action.base_file
   local merge_file = action.merge_file
@@ -82,8 +85,12 @@ function record_file_merge(action)
       if success then
         if merge_type == "prepend" then
           session:insertFile(base_file, merge_file, 0)
+          -- Clean up the merge file.
           os.remove(merge_file)
         else
+          -- Appending is just prepending in reverse order.  Moving the merge
+          -- file to the base file cleans up the extra file and puts the
+          -- correct file as the base file in one step.
           session:insertFile(merge_file, base_file, 0)
           os.rename(merge_file, base_file)
         end

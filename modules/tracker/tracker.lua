@@ -1,5 +1,9 @@
 module(..., package.seeall)
 
+--[[
+  Incremental counter that compares the value of the counter against another
+  value, and optionally run sequences based on the comparison.
+]]
 function counter(action)
   local key = action.storage_key or "counter"
   local increment = action.increment and tonumber(action.increment) or nil

@@ -4,22 +4,28 @@ module(..., package.seeall)
   Appends the freeswitch base_dir if a relative path is passed.
 ]]
 function get_filepath(file)
+  -- Look for leading slash to indicate full path.
   if file:sub(1, 1) ~= "/" then
     file = jester.conf.base_dir .. "/" .. file
   end
   return file
 end
 
+--[[
+  Create a directory.
+]]
 function create_directory(action)
   local directory = action.directory
   if directory then
     local success, file_error
     require "lfs"
     local path = get_filepath(directory)
+    -- Look for existing directory.
     success, file_error = lfs.attributes(path, "mode")
     if success then
       jester.debug_log("Directory '%s' already exists, skipping creation.", path)
     else
+      -- Create new directory.
       success, file_error = lfs.mkdir(path)
       if success then
         jester.debug_log("Created directory '%s'", path)
@@ -32,14 +38,19 @@ function create_directory(action)
   end
 end
 
+--[[
+  Remove a directory.
+]]
 function remove_directory(action)
   local directory = action.directory
   if directory then
     local success, file_error
     require "lfs"
     local path = get_filepath(directory)
+    -- Look for existing directory.
     success, file_error = lfs.attributes(path, "mode")
     if success then
+      -- Remove directory.
       success, file_error = lfs.rmdir(path)
       if success then
         jester.debug_log("Deleted directory '%s'", path)
@@ -54,6 +65,9 @@ function remove_directory(action)
   end
 end
 
+--[[
+  Move or copy a file.
+]]
 function move_file(action)
   local operation = action.copy and "copy" or "move"
   local binary = action.binary and "b" or ""
@@ -88,6 +102,9 @@ function move_file(action)
   end
 end
 
+--[[
+  Delete a file.
+]]
 function delete_file(action)
   if action.file then
     local file = get_filepath(action.file)
@@ -102,6 +119,9 @@ function delete_file(action)
   end
 end
 
+--[[
+  Check for file existence.
+]]
 function file_exists(action)
   local result, file
   if action.file then
