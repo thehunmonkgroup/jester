@@ -43,6 +43,10 @@ modules = {
   "event",
 }
 
+--[[
+  Directory paths.
+]]
+
 -- Overrides the global debug configuration for this profile only.
 sequence_path = global.profile_path .. "/voicemail/sequences"
 
@@ -53,6 +57,71 @@ voicemail_dir = global.base_dir .. "/storage/voicemail/default"
 
 -- The directory where recordings are stored temporarily while recording.
 temp_recording_dir = "/tmp"
+
+--[[
+  Custom extensions.
+]]
+
+-- Name of the extension to transfer to when a key is press to reach the
+-- operator (must be in the same context).
+-- Set this to false to disable the operator extension.
+operator_extension = "operator"
+
+-- Name of the extension to transfer to when a request to dial an outside
+-- number is made.
+call_outside_number_extension = "call_outside_number"
+
+--[[
+  Menu options.
+]]
+
+-- Number of milliseconds to wait before replaying a menu.
+menu_replay_wait = 3000
+
+-- Number of times to play a menu before giving up if no user response.
+menu_repetitions = 3
+
+--[[
+  Other settings.
+]]
+
+-- Set this to true to allow a caller to press * to access the voicemail
+-- administration area for the mailbox.
+check_messages = true
+
+-- Set this to true to allow a caller to press # to review their message after
+-- recording it, or false to disable.
+review_messages = true
+
+--[[
+  ODBC database table configurations.
+]]
+
+-- Table that stores mailbox configurations.
+db_config_mailboxes = {
+  database_type = "mysql",
+  database = "jester",
+  table = "voicemail",
+}
+
+-- Table that stores messages.
+db_config_messages = {
+  database_type = "mysql",
+  database = "jester",
+  table = "messages",
+}
+
+-- Table that stores messages.
+db_config_voicemail_groups = {
+  database_type = "mysql",
+  database = "jester",
+  table = "message_groups",
+}
+
+--[[
+  Everything below this line should not be edited unless you know what you are
+  doing!
+]]
 
 -- Mailbox being accessed.
 mailbox = args(1)
@@ -81,42 +150,4 @@ mailboxes_dir = voicemail_dir .. "/" .. domain
 
 -- The mailbox directory being accessed.
 mailbox_dir = mailboxes_dir .. "/" .. mailbox
-
--- Set this to true to allow a caller to press * to access the voicemail
--- administration area for the mailbox.
-check_messages = true
-
--- Set this to true to allow a caller to press # to review their message after
--- recording it, or false to disable.
-review_messages = true
-
--- Name of the extension to transfer to when a key is press to reach the
--- operator (must be in the same context).
--- Set this to false to disable the operator extension.
-operator_extension = "operator"
-
--- Name of the extension to transfer to when a request to dial an outside
--- number is made.
-call_outside_number_extension = "call_outside_number"
-
--- ODBC configuration for the table that stores mailbox configurations.
-db_config_mailboxes = {
-  database_type = "mysql",
-  database = "jester",
-  table = "voicemail",
-}
-
--- ODBC configuration for the table that stores messages.
-db_config_messages = {
-  database_type = "mysql",
-  database = "jester",
-  table = "messages",
-}
-
--- ODBC configuration for the table that stores messages.
-db_config_voicemail_groups = {
-  database_type = "mysql",
-  database = "jester",
-  table = "message_groups",
-}
 
