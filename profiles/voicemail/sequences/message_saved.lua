@@ -1,4 +1,5 @@
--- Message data.
+folder = args(1)
+
 message_number = storage("counter", "message_number")
 
 return
@@ -6,7 +7,7 @@ return
   {
     action = "play_phrase",
     phrase = "message_saved",
-    phrase_arguments = message_number .. ":" .. args(1),
+    phrase_arguments = message_number .. ":" .. folder,
     keys = {
       ["2"] = "change_folders",
       ["3"] = "advanced_options",

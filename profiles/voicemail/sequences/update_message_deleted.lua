@@ -1,3 +1,5 @@
+deleted = args(1)
+
 -- Message data.
 message_number = storage("counter", "message_number")
 message_id = storage("message", "id_" .. message_number)
@@ -9,7 +11,7 @@ return
     handler = "odbc",
     config = profile.db_config_messages,
     fields = {
-      __deleted = args(1),
+      __deleted = deleted,
     },
     filters = {
       __id = message_id,

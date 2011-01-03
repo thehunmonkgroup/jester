@@ -1,3 +1,5 @@
+login_type = storage("login_settings", "login_type")
+
 return
 {
   {
@@ -9,7 +11,7 @@ return
   },
   {
     action = "conditional",
-    value = storage("login_settings", "login_type"),
+    value = login_type,
     compare_to = "have_mailbox",
     comparison = "equal",
     if_true = "mailbox_login_incorrect_have_mailbox",

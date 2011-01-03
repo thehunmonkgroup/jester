@@ -1,3 +1,6 @@
+password_1 = storage("get_digits", "new_password_1")
+password_2 = storage("get_digits", "new_password_2")
+
 return
 {
   {
@@ -16,8 +19,8 @@ return
   },
   {
     action = "conditional",
-    value = storage("get_digits", "new_password_1"),
-    compare_to = storage("get_digits", "new_password_2"),
+    value = password_1,
+    compare_to = password_2,
     comparison = "equal",
     if_true = "update_password",
   },

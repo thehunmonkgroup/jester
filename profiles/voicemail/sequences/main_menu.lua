@@ -12,7 +12,7 @@ elseif old_message_count > 0 then
   messages = "messageold"
 end
 
-temp_keys = {
+main_menu_keys = {
   ["2"] = "change_folders",
   ["0"] = "mailbox_options",
   ["*"] = "help skip_folder_announcement",
@@ -20,11 +20,11 @@ temp_keys = {
 }
 
 if current_folder ~= "" then
-  temp_keys["1"] = "play_messages"
+  main_menu_keys["1"] = "play_messages"
 end
 
 if profile.operator_extension ~= "" then
-  temp_keys["3"] = "main_menu_advanced_options"
+  main_menu_keys["3"] = "main_menu_advanced_options"
 end
 
 return
@@ -56,7 +56,7 @@ return
     action = "play_phrase",
     phrase = "announce_new_old_messages",
     phrase_arguments = new_message_count .. ":" .. old_message_count,
-    keys = temp_keys,
+    keys = main_menu_keys,
   },
   {
     action = "call_sequence",

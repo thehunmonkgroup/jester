@@ -1,3 +1,8 @@
+folder = args(1)
+message_type = args(2)
+
+mailbox = storage("login_settings", "mailbox_number")
+
 return
 {
   {
@@ -5,9 +10,9 @@ return
     handler = "odbc",
     config = profile.db_config_messages,
     filters = {
-      domain = storage("login_settings", "voicemail_domain"),
-      mailbox = storage("login_settings", "mailbox_number"),
-      __folder = args(1),
+      mailbox = mailbox,
+      domain = profile.domain,
+      __folder = folder,
       __deleted = 0,
     },
     fields = {
@@ -20,7 +25,7 @@ return
       "__deleted",
       "recording",
     },
-    storage_area = "message" .. args(2),
+    storage_area = "message" .. message_type,
     multiple = true,
     sort = "id",
   },

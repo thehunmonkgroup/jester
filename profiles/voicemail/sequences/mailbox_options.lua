@@ -1,5 +1,6 @@
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
+file_exists = storage("file", "file_exists")
 
 return
 {
@@ -10,7 +11,7 @@ return
   {
     action = "play_phrase",
     phrase = "mailbox_options",
-    phrase_arguments = storage("file", "file_exists"),
+    phrase_arguments = file_exists,
     repetitions = profile.menu_repititions,
     wait = profile.menu_replay_wait,
     keys = {

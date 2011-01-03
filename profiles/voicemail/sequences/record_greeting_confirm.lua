@@ -1,7 +1,7 @@
+greeting = args(1)
+
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
-
-greeting = args(1)
 
 return
 {

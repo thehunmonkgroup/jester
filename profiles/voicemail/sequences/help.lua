@@ -4,7 +4,7 @@ total_messages = storage("message", "__count")
 -- Folder data.
 current_folder = storage("message_settings", "current_folder")
 
-temp_keys = {
+help_keys = {
   ["2"] = "change_folders",
   ["3"] = "advanced_options",
   ["0"] = "mailbox_options",
@@ -15,7 +15,7 @@ temp_keys = {
 -- total_messages may still be empty here, and Lua will complain about
 -- comparing a string to a number, so guard against it.
 if total_messages ~= "" and total_messages > 0 then
-  temp_keys["1"] = "play_messages"
+  help_keys["1"] = "play_messages"
 end
 
 -- Overide option for not playing the folder announcement -- used when first
@@ -28,7 +28,7 @@ end
 
 return
 {
-  keys = temp_keys,
+  keys = help_keys,
   {
     action = "play_phrase",
     phrase = "announce_folder",

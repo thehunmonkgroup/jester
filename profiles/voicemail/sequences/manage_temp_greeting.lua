@@ -1,5 +1,6 @@
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
+file_exists = storage("file", "file_exists")
 
 return
 {
@@ -9,7 +10,7 @@ return
   },
   {
     action = "conditional",
-    value = storage("file", "file_exists"),
+    value = file_exists,
     compare_to = "false",
     comparison = "equal",
     if_true = "record_greeting temp",

@@ -1,3 +1,5 @@
+mailbox = storage("get_digits", "digits")
+
 return
 {
   {
@@ -10,7 +12,7 @@ return
     action = "set_storage",
     storage_area = "login_settings",
     data = {
-      mailbox_number = storage("get_digits", "digits"),
+      mailbox_number = mailbox,
     },
   },
   {

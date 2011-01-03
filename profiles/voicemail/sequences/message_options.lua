@@ -1,7 +1,7 @@
 -- Message data.
 message_number = storage("counter", "message_number")
-total_messages = storage("message", "__count")
 deleted = storage("message", "deleted_" .. message_number)
+total_messages = storage("message", "__count")
 prev_message = ""
 next_message = ""
 delete_undelete_message = "delete"
