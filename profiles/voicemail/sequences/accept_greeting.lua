@@ -1,3 +1,7 @@
+--[[
+  Accept a recorded greeting.
+]]
+
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 

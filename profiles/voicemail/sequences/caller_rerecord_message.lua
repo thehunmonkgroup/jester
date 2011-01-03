@@ -1,7 +1,13 @@
+--[[
+  Set up for re-recording a message.
+]]
+
 greeting_keys = {
   ["#"] = ":break",
 }
 
+-- If an operator extension is allowed on record, then add that to the menu
+-- options, and pass that data along to the record sequence.
 operator_on_record = ""
 if profile.operator_extension then
   greeting_keys["0"] = "transfer_to_operator"
@@ -10,6 +16,8 @@ end
 
 return
 {
+  -- Get rid of the old recording first so it's not saved if the caller hangs
+  -- up here.
   {
     action = "call_sequence",
     sequence = "sub:cleanup_temp_recording",

@@ -1,3 +1,7 @@
+--[[
+  Collect an outside number to dial from the user.
+]]
+
 return
 {
   {
@@ -6,6 +10,10 @@ return
     max_digits = 20,
     audio_files = "phrase:collect_outside_number",
     bad_input = "",
+    -- * is for cancelling the collection.  Unfortunately, there's no way in
+    -- Lua to escape the timeout and collect the escape key, so if a person
+    -- presses *, they'll have to wait for the timeout before the cancel
+    -- sequence is called.
     digits_regex = "\\d+|\\*",
     storage_key = "call_outside_number",
     timeout = profile.user_input_timeout,

@@ -1,3 +1,7 @@
+--[[
+  Play advanced message options to the caller.
+]]
+
 -- TODO: probably want to do some conditional logic up here to determine which
 -- advanced options should be available based on the VM settings.
 option_keys = {

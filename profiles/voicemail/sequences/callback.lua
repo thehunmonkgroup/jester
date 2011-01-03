@@ -1,3 +1,7 @@
+--[[
+  Menu for getting the method of collecting the outside number to call.
+]]
+
 -- Message data.
 message_number = storage("counter", "message_number")
 caller_id_number = storage("message", "caller_id_number_" .. message_number)

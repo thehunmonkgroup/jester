@@ -1,3 +1,7 @@
+--[[
+  Play back the recorded message, and offer a menu of message actions.
+]]
+
 recording_name = storage("record", "last_recording_name")
 
 playback_keys = {
@@ -6,6 +10,8 @@ playback_keys = {
   ["3"] = "caller_rerecord_message",
 }
 
+-- If there's an available operator extension, then include it in the options
+-- and pass that data along to the review sequence.
 operator_on_review = ""
 if profile.operator_extension then
   playback_keys["0"] = "transfer_to_operator"

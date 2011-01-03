@@ -1,3 +1,7 @@
+--[[
+  Email a message.
+]]
+
 -- Message data.
 mailbox = storage("message_info", "mailbox")
 recording_name = storage("message_info", "recording_name")
@@ -24,6 +28,8 @@ return
   },
   {
     action = "email",
+    -- Attachments may or may not be allowed by the template used for the
+    -- message, but always include it so it's available.
     attachments = {
       {
         filetype = "audio/x-wav",

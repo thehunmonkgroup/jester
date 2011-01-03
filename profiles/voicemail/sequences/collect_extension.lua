@@ -1,6 +1,14 @@
+--[[
+  Collect and extension from the user, validate that it's a valid extension,
+  then pass to the appropriate next sequence.
+]]
+
+-- Options for next sequence to call.
 valid_extension_sequence = args(1)
 invalid_extension_sequence = args(2)
+-- Collected extension.
 extension = storage("get_digits", "extension")
+-- Result of the mailbox load.
 loaded_mailbox = storage("mailbox_settings_message", "mailbox")
 
 return

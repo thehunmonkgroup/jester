@@ -1,3 +1,8 @@
+--[[
+  Collect a new password twice, validate they match, and call the update
+  sequence as appropriate.
+]]
+
 password_1 = storage("get_digits", "new_password_1")
 password_2 = storage("get_digits", "new_password_2")
 

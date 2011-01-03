@@ -1,8 +1,13 @@
+--[[
+  Menu for changing to another folder.
+]]
+
 -- Folder data.
 current_folder = storage("message_settings", "current_folder")
 
 return
 {
+  -- Place key map in the sequence space, since all actions use the same map.
   keys = {
     ["0"] = "set_current_folder 0",
     ["1"] = "set_current_folder 1",

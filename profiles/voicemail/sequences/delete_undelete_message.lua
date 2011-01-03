@@ -1,3 +1,7 @@
+--[[
+  Handle deleting and undeleting messages.
+]]
+
 -- Message data.
 message_number = storage("counter", "message_number")
 deleted_key = "deleted_" .. message_number

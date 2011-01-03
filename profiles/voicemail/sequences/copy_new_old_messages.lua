@@ -1,9 +1,14 @@
+--[[
+  Copy loaded new or old message data to the message storage area.
+  We already have the message data loaded, and it saves another hit to the
+  expensive data_load action.
+]]
+
+-- Which set of message data to copy.
 storage_area = args(1)
 
 return
 {
-  -- We already have the message data loaded, so just copy it where we need,
-  -- saves another hit to the data_load action.
   {
     action = "copy_storage",
     storage_area = storage_area,
