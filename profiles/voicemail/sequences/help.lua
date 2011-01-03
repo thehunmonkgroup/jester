@@ -1,3 +1,10 @@
+--[[
+  Play main help options to the user.
+]]
+
+-- Option to skip the folder announcement, eg. "new messages".
+skip_folder_announcement = args(1)
+
 -- Message data.
 total_messages = storage("message", "__count")
 
@@ -20,7 +27,7 @@ end
 
 -- Overide option for not playing the folder announcement -- used when first
 -- logging in to smooth the workflow.
-if total_messages == "" or args(1) == "skip_folder_announcement" then
+if total_messages == "" or skip_folder_announcement == "skip_folder_announcement" then
   announcement = "skip"
 else
   announcement = current_folder
