@@ -37,3 +37,4 @@ To install:
   1. Follow the instructions in the main Jester INSTALL.txt for properly setting your LUA_PATH environment variable.
 
   2. Move (or better yet, symlink) this script somewhere into your $PATH (~/bin, /usr/local/bin, etc.)]]
+

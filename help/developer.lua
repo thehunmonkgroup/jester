@@ -41,3 +41,4 @@ Jester keeps track of a lot of things in stacks, at the following namespaces:
   channel.stack.active
   channel.stack.exit
   channel.stack.hangup]]
+
