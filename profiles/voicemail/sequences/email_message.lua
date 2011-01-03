@@ -7,6 +7,7 @@ caller_id_name = storage("message_info", "caller_id_name")
 
 -- Mailbox settings.
 email = storage("mailbox_settings_message", "email")
+email_template = storage("mailbox_settings_message", "email_template")
 timezone = storage("mailbox_settings_message", "timezone")
 
 -- Formatted date.
@@ -30,10 +31,9 @@ return
         filepath = profile.temp_recording_dir .. "/" .. recording_name,
       }
     },
-    subject = profile.email_subject,
-    message = profile.email_message,
     from = profile.email_from_address,
     to = email,
+    template = email_template,
     server = profile.email_server,
     port = profile.email_port,
     tokens = {

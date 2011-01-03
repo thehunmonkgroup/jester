@@ -38,6 +38,7 @@ CREATE TABLE voicemail (
   password char(80) NOT NULL default '',
   fullname char(80) NOT NULL default '',
   email char(255) NOT NULL default '',
+  email_template varchar(255) NOT NULL default '',
   email_messages char(20) NOT NULL default 'no',
   attachfmt char(10) NOT NULL default 'wav49',
   mailbox_provisioned char(3) NOT NULL default 'no',

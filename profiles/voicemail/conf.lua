@@ -125,19 +125,35 @@ menu_repetitions = 3
     :datetime - Formatted date/time when the message was left.
     :caller_id_number
     :caller_id_name
+
+  See 'help action email' for more information on sending emails.
 ]]
 
-email_subject = "New voicemail message for :mailbox"
-email_message = [[
+-- Format timestamps to this format string -- tokens are same as strftime.
+email_date_format = "%Y-%m-%d %H:%M:%S"
+
+-- Server settings.
+email_from_address = "noreply@" .. variable("hostname")
+email_server = "localhost"
+email_port = 25
+
+-- Templates.
+email_templates = {}
+
+-- Default template, for message delivery.
+email_templates.default = {}
+email_templates.default.subject = "New voicemail message for :mailbox"
+email_templates.default.message = [[
 Mailbox number: :mailbox
 Date/time: :datetime
 CallerID number: :caller_id_number
 CallerID name: :caller_id_name]]
-email_from_address = "noreply@" .. domain
-email_server = "localhost"
-email_port = 25
--- Format timestamps to this format string -- tokens are same as strftime.
-email_date_format = "%Y-%m-%d %H:%M:%S"
+
+-- Notification template, for message notification.
+email_templates.notification = {}
+email_templates.notification.subject = "New voicemail message for :mailbox"
+email_templates.notification.message = "From: :caller_id_number"
+email_templates.notification.allow_attachments = false
 
 --[[
   Other settings.

@@ -17,6 +17,7 @@ return
       "domain",
       "password",
       "email",
+      "email_template",
       "email_messages",
       "mailbox_provisioned",
       "timezone",
