@@ -4,3 +4,5 @@
  - comment voicemail profile sequences
  - look into various core caching strategies to improve performance
  - restructure/index database tables
+ - profile-level config option for timeout on collecting user digits
+ - profile-level config option for min/max number of digits in an extension
