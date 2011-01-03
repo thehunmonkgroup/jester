@@ -2,6 +2,5 @@
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - comment voicemail profile sequences
- - move configurable items from sequences into profile variables
  - look into various core caching strategies to improve performance
  - restructure/index database tables
