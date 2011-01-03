@@ -12,7 +12,7 @@ return
     value = retrieved_mailbox,
     compare_to = "",
     comparison = "equal",
-    if_true = "invalid_mailbox",
+    if_true = "invalid_extension exit",
     if_false = "load_new_old_messages",
   },
 }

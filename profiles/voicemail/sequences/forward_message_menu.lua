@@ -1,3 +1,7 @@
+--[[
+  Play a menu of options for collecting the forwarding number.
+]]
+
 return
 {
   {
@@ -5,7 +9,9 @@ return
     phrase = "forward_message_choose_method",
     keys = {
       ["1"] = "collect_extension forward_message_prepend_menu,forward_message_menu",
-      ["2"] = "invalid_mailbox",
+      -- TODO: Option 2 is for choosing the number from the voicemail
+      -- directory, which still needs to be built.
+      ["2"] = "invalid_extension message_options",
       ["*"] = "message_options",
     },
     repetitions = profile.menu_repititions,
