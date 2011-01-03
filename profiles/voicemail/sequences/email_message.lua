@@ -19,6 +19,7 @@ return
     storage_key = "formatted_date",
     timestamp = timestamp,
     timezone = timezone,
+    format = profile.email_date_format,
   },
   {
     action = "email",
@@ -29,13 +30,12 @@ return
         filepath = profile.temp_recording_dir .. "/" .. recording_name,
       }
     },
-    message = [[
-Mailbox number: :mailbox
-Date/time: :datetime
-CallerID number: :caller_id_number
-CallerID name: :caller_id_name]],
-    subject = "New voicemail message for :mailbox",
+    subject = profile.email_subject,
+    message = profile.email_message,
+    from = profile.email_from_address,
     to = email,
+    server = profile.email_server,
+    port = profile.email_port,
     tokens = {
       mailbox = mailbox,
       datetime = formatted_date,
