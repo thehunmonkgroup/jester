@@ -1,14 +1,12 @@
+--[[
+  Play message and all message-related annoucements for a message.
+]]
+
 -- Message data.
 message_count = storage("message", "__count")
 
 return
 {
-  {
-    action = "counter",
-    storage_key = "message_number",
-    compare_to = message_count,
-    if_greater = "no_more_messages exit",
-  },
   {
     action = "call_sequence",
     sequence = "sub:play_message_number",
