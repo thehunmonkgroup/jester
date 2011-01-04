@@ -575,10 +575,10 @@ end
   you want to loop until the call hangs up.
 ]]
 function ready()
-  -- Socket is always ready.
-  if jester.is_socket then
+  -- No session means running from socket or luarun, always ready.
+  if not session then
     return true
-  elseif session then
+  else
     return session:ready() or exiting or hungup
   end
 end

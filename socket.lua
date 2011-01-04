@@ -98,7 +98,6 @@ end
 
 -- This is always true on a socket connection.
 jester.is_freeswitch = true
-jester.is_socket = true
 jester.socket_connect()
 
 if jester.sock and jester.sock:connected() then
