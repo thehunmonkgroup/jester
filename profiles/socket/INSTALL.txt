@@ -1,0 +1,10 @@
+This is an experimental profile to provide some basic non-realtime operations
+on voicemail data via Jester's socket listener.
+
+Currently the only sequence in the profile is 'clean_deleted_messages', which
+removes all database entries and recordings for messages that have been marked
+as deleted.  It takes no arguments.
+
+See the code notes at the top of jester/socket.lua for more information on
+using this profile via the socket listener.
+
