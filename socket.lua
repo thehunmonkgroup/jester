@@ -27,6 +27,12 @@
     Optional.  Arguments to pass to the sequence, in the same form that normal
     sequence arguments are passed.
 
+  To exit the listener, you can send this event:
+
+    sendevent CUSTOM
+    Event-Subclass: jester::socket
+    Jester-Socket-Exit: yes
+
   WARNING: there is no session object available with this approach, so be
   careful not to use actions that need a session (play, record, get_digits,
   etc.) or the listener will crash!  The sequences should be more along the
