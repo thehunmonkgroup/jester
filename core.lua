@@ -1,6 +1,66 @@
 module("jester", package.seeall)
 
 --[[
+  Initial setup for running Jester.
+]]
+function bootstrap(args)
+
+  -- Check to see if we're calling the script from within FreeSWITCH.
+  if freeswitch and freeswitch.consoleLog then is_freeswitch = true end
+
+  -- Check for help query.
+  if args[1] == "help" then
+    require "jester.help"
+    return help.get_help(args[2], args[3], args[4], args[5])
+  end
+
+  -- Run normally.
+  if args[1] and args[2] then
+
+    -- Initialize the channel object.
+    init_channel()
+
+    -- Initialize sequence loop stacks.  Sequence stacks are initialized just
+    -- prior to each sequence loop run.
+    init_stacks({"active", "exit", "hangup"})
+
+    -- Save the initial arguments.
+    initial_args = args[3] and parse_args(args[3]) or {}
+
+    -- Add profile configuration here so it can leverage access to channel
+    -- variables.
+    init_profile(args[1])
+
+    -- Load modules.
+    init_modules(conf.modules)
+
+    -- Handle some session-based setup if we have a session.
+    if session then
+      channel.uuid = get_variable("uuid")
+
+      -- Set up the global key handler.
+      _G.key_handler = key_handler
+      session:setInputCallback("key_handler")
+
+      -- Turn off autohangup.
+      session:setAutoHangup(false)
+    end
+
+    -- Load initial sequence.
+    local event = {
+      event_type = "sequence",
+      sequence = args[2] .. " " .. (args[3] or ""),
+    }
+    table.insert(channel.stack.active, event)
+
+    bootstrapped = true
+  else
+    error("JESTER: missing arguments in call to jester.lua. Run 'lua jester/jester.lua help' from the FreeSWITCH console for more help", 2)
+  end
+
+end
+
+--[[
   Initialize the specified modules.
 ]]
 function init_modules(modules)
@@ -29,7 +89,6 @@ function init_channel(o)
   channel = {}
   channel.stack = {}
   channel.storage = {}
-  channel.uuid = get_variable("uuid")
 end
 
 --[[
