@@ -48,18 +48,18 @@ key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
 -- the profile.
 modules = {
   "core_actions",
+  "data",
+  "dialplan_tools",
+  "email",
+  "event",
+  "file",
+  "format",
+  "get_digits",
+  "hangup",
+  "log",
   "navigation",
   "play",
-  "get_digits",
   "record",
-  "file",
-  "log",
-  "data",
   "tracker",
-  "hangup",
-  "dialplan_tools",
-  "event",
-  "format",
-  "email",
 }
 

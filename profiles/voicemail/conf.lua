@@ -66,19 +66,19 @@ mailbox_dir = mailboxes_dir .. "/" .. mailbox
 -- Overrides the global module configuration for this profile only.
 modules = {
   "core_actions",
+  "data",
+  "dialplan_tools",
+  "email",
+  "event",
+  "file",
+  "format",
+  "get_digits",
+  "hangup",
+  "log",
+  "navigation",
   "play",
   "record",
-  "file",
-  "data",
-  "email",
-  "format",
-  "navigation",
-  "get_digits",
-  "log",
   "tracker",
-  "hangup",
-  "dialplan_tools",
-  "event",
 }
 
 -- Overrides the global sequence path for this profile only.
