@@ -21,11 +21,12 @@ debug_output = {
   run_actions = false,
 }
 
--- This file can be loaded from the shell, so only build session-based
--- settings if we have a session.
-if session then
-  base_dir = jester.get_variable("base_dir")
-  sounds_dir = jester.get_variable("sounds_dir")
+-- This file can be loaded from the shell, so only build these settings if we
+-- have access to the API.
+if freeswitch then
+  local api = freeswitch.API()
+  base_dir = api:executeString("global_getvar base_dir")
+  sounds_dir = api:executeString("global_getvar sounds_dir")
   jester_dir = base_dir .. "/scripts/jester"
   -- This value can be overridden per profile.
   sequence_path = jester_dir .. "/sequences"
