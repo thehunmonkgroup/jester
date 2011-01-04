@@ -3,22 +3,22 @@
   sequence.
 ]]
 
-voicemail_group = args(1)
+message_group = args(1)
 
 return
 {
   {
     action = "data_load",
     handler = "odbc",
-    config = profile.db_config_voicemail_groups,
+    config = profile.db_config_message_groups,
     filters = {
-      group_name = voicemail_group,
+      group_name = message_group,
     },
     fields = {
       "mailbox",
       "domain",
     },
-    storage_area = "voicemail_group",
+    storage_area = "message_group",
     multiple = true,
   },
   {

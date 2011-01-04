@@ -49,7 +49,7 @@ if caller_domain == "" then
 end
 
 -- Voicemail group (if provided).
-voicemail_group = args(3)
+message_group = args(3)
 
 -- Main directory that stores voicemail messages.
 -- NOTE: This directory must already be created and writable by the FreeSWITCH
@@ -205,7 +205,7 @@ db_config_messages = {
 }
 
 -- Table that stores messages.
-db_config_voicemail_groups = {
+db_config_message_groups = {
   database_type = "mysql",
   database = "jester",
   table = "message_groups",

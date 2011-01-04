@@ -3,12 +3,12 @@
 ]]
 
 -- Total number of users in the message group.
-total_mailboxes = storage("voicemail_group", "__count")
+total_mailboxes = storage("message_group", "__count")
 -- Which mailbox in the group we're currently on.
-row_count = storage("counter", "voicemail_group_row")
+row_count = storage("counter", "message_group_row")
 -- Mailbox info for the current mailbox.
-mailbox = storage("voicemail_group", "mailbox_" .. row_count)
-domain = storage("voicemail_group", "domain_" .. row_count)
+mailbox = storage("message_group", "mailbox_" .. row_count)
+domain = storage("message_group", "domain_" .. row_count)
 mailbox_dir = profile.voicemail_dir .. "/" .. domain .. "/" .. mailbox
 
 -- Result of the attempt to load the mailbox.
@@ -25,7 +25,7 @@ return
   {
     action = "counter",
     increment = 1,
-    storage_key = "voicemail_group_row",
+    storage_key = "message_group_row",
     compare_to = total_mailboxes,
     if_greater = "cleanup_temp_recording",
   },
