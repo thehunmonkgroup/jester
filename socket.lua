@@ -45,14 +45,6 @@ function jester.bootstrap_socket(profile, sequence, sequence_args)
   jester.channel.stack = {}
   jester.channel.storage = {}
 
-  -- Set up basic directory paths, these are not supplied by the global config
-  -- file because no session exists.
-  jester.conf.base_dir = jester.socket_base_dir
-  jester.conf.jester_dir = jester.conf.base_dir .. "/scripts/jester"
-  -- This value can be overridden per profile.
-  jester.conf.sequence_path = jester.conf.jester_dir .. "/sequences"
-  jester.conf.profile_path = jester.conf.jester_dir .. "/profiles"
-
   -- Initialize sequence loop stacks.  Sequence stacks are initialized just
   -- prior to each sequence loop run.
   jester.init_stacks({"active", "exit", "hangup"})
@@ -105,9 +97,6 @@ if jester.sock and jester.sock:connected() then
   -- Subscribe only to Jester socket events.
   jester.sock:events("plain", "CUSTOM jester::socket")
   jester.continue_socket = true
-  -- Store the base directory for later use.
-  local base_dir_event = jester.sock:api("global_getvar base_dir")
-  jester.socket_base_dir = base_dir_event:getBody()
   while jester.sock and jester.sock:connected() and jester.continue_socket do
     local event = jester.sock:recvEvent()
     -- Provide a way to turn exit the listener.
