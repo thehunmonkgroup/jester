@@ -102,3 +102,16 @@ assume you already have Jester installed correctly:
         </condition>
       </extension>
     </extension>
+
+9. The voicemail profile fires three types of events:
+     new_message:
+       Fired when a new message is stored in a mailbox.
+     mailbox_updated:
+       Fired when the user updates mailbox settings (currently only password
+       updates).
+     messages_checked:
+       Fired after a user checks their messages.
+
+   You can register for these events as follows:
+     event plain CUSTOM jester::new_message jester::mailbox_updated jester::messages_checked
+
