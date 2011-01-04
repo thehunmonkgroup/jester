@@ -1,3 +1,8 @@
+--[[
+  Announce an invalid extension, and send to the next appropriate sequence.
+]]
+
+-- Next sequence to call.
 next_sequence = args(1)
 
 return

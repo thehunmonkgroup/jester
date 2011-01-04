@@ -1,5 +1,10 @@
+--[[
+  Load mailbox settings for the specified mailbox.
+]]
+
 mailbox = args(1)
 domain = args(2)
+-- The storage area to save the settings to.
 storage_area = args(3)
 
 return

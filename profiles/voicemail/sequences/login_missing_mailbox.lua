@@ -1,3 +1,8 @@
+--[[
+  Login workflow when a mailbox is not provided.
+]]
+
+-- The user entered mailbox.
 mailbox = storage("get_digits", "digits")
 
 return

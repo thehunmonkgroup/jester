@@ -1,9 +1,17 @@
+--[[
+  Play mailbox options menu to the user.
+]]
+
+-- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
+-- Result of the check for the temporary greeting.
 file_exists = storage("file", "file_exists")
 
 return
 {
+  -- Check for the existence of a temporary greeting -- this result is passed
+  -- into the phrase for announcing mailbox options.
   {
     action = "file_exists",
     file = mailbox_directory .. "/temp.wav",

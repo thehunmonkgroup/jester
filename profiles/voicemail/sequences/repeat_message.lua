@@ -1,3 +1,7 @@
+--[[
+  Play a message again.
+]]
+
 return
 {
   {

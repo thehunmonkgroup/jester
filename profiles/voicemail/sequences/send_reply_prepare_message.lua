@@ -1,3 +1,7 @@
+--[[
+  Prepare a message reply for saving.
+]]
+
 -- Message data.
 mailbox = storage("send_reply_info", "mailbox")
 domain = storage("send_reply_info", "domain")

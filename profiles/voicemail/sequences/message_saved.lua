@@ -1,5 +1,10 @@
-folder = args(1)
+--[[
+  Play a message saved announcement.
+]]
 
+-- The folder the new message was saved to.
+folder = args(1)
+-- The message number that's being saved.
 message_number = storage("counter", "message_number")
 
 return

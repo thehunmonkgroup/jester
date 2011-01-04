@@ -1,7 +1,13 @@
+--[[
+  Incorrect login workflow when the mailbox is not provided.
+]]
+
+-- User's mailbox number input.
 mailbox = storage("get_digits", "digits")
 
 return
 {
+  -- Ask for the mailbox again.
   {
     action = "get_digits",
     min_digits = profile.mailbox_min_digits,

@@ -1,3 +1,8 @@
+--[[
+  Prepares a recorded message from the main greeting for saving.
+]]
+
+-- Message data.
 caller_id_number = variable("caller_id_number")
 caller_id_name = variable("caller_id_name")
 timestamp = storage("record", "last_recording_timestamp")

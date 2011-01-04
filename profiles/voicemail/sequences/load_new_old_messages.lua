@@ -1,7 +1,13 @@
+--[[
+  Initial load of new and old messages, then send to main menu.
+]]
+
 timezone = storage("mailbox_settings", "timezone")
 
 return
 {
+  -- Set the timezone channel variable to the mailbox's timezone, so the say
+  -- applications will say date/time correctly.
   {
     action = "set_variable",
     data = {

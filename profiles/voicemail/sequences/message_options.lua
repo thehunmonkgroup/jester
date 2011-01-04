@@ -1,3 +1,7 @@
+--[[
+  Play message options to the user.
+]]
+
 -- Message data.
 message_number = storage("counter", "message_number")
 deleted = storage("message", "deleted_" .. message_number)
@@ -6,6 +10,7 @@ prev_message = ""
 next_message = ""
 delete_undelete_message = "delete"
 
+-- Build the initial options announcements.
 announcements = {
   ["3"] = "advanced_options",
   ["5"] = "repeat_message",
@@ -17,16 +22,20 @@ announcements = {
   -- both announcements -- so we just announce the * key.
 }
 
-
+-- More than one message exists, so we might need prev/next announcements.
 if total_messages > 1 then
+  -- Not on the first message, so we need a prev announcement.
   if message_number > 1 then
     announcements["4"] = "prev_message"
   end
+  -- Not on the last message, so we need a next announcement.
   if message_number < total_messages then
     announcements["6"] = "next_message"
   end
 end
 
+-- If the message is already marked deleted, then change the annoucement option
+-- to undelete.
 if deleted == "1" then
   announcements["7"] = "undelete_message"
 end

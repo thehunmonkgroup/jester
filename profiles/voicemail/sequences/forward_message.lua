@@ -1,3 +1,9 @@
+--[[
+  Set up a message for forwarding, optionally recording a custom message to
+  prepend to it.
+]]
+
+-- Whether to prepend a message or not.
 prepend_message = args(1)
 
 -- Message data.
@@ -9,16 +15,19 @@ caller_id_name = storage("message", "caller_id_name_" .. message_number)
 caller_id_number = storage("message", "caller_id_number_" .. message_number)
 caller_domain = storage("message", "caller_domain_" .. message_number)
 
+-- The extension to forward to.
 mailbox = storage("get_digits", "extension")
 
 return
 {
+  -- Copy the message to the temp recording area.
   {
     action = "move_file",
     source = profile.mailbox_dir .. "/" .. recording_name,
     destination = profile.temp_recording_dir .. "/" .. recording_name,
     copy = true,
   },
+  -- Call the prepend sequence if necessary.
   {
     action = "conditional",
     value = prepend_message,
@@ -35,6 +44,7 @@ return
       last_recording_name = recording_name,
     },
   },
+  -- Set up the message info for saving.
   {
     action = "set_storage",
     storage_area = "message_info",
@@ -49,6 +59,7 @@ return
       duration = duration,
     },
   },
+  -- The standard message saving sequences can be used to save the message.
   {
     action = "call_sequence",
     sequence = "sub:save_individual_message"

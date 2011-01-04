@@ -1,3 +1,8 @@
+--[[
+  Update the deletion state of a message.
+]]
+
+-- The deleted state to update to.
 deleted = args(1)
 
 -- Message data.

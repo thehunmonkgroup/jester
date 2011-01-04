@@ -1,3 +1,8 @@
+--[[
+  Play 'no more messages', and direct to the appropriate next sequence.
+]]
+
+-- The next sequence to call.
 next_sequence = args(1)
 
 return

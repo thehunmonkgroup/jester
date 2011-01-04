@@ -1,3 +1,8 @@
+--[[
+  Play a message.
+]]
+
+-- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 
@@ -10,6 +15,7 @@ current_folder = storage("message_settings", "current_folder")
 
 return
 {
+  -- New messages get automatically moved to old messages.
   {
     action = "conditional",
     value = current_folder,

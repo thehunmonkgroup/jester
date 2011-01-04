@@ -1,4 +1,10 @@
+--[[
+  Update the folder a message lives in.
+]]
+
+-- The folder value to update the message to.
 folder = args(1)
+-- Is this an explicit save or an auto-save?
 operation = args(2)
 
 -- Message data.
@@ -20,6 +26,7 @@ return
     },
     update_type = "update",
   },
+  -- If it's an explicit save, call the message saved sequence.
   {
     action = "conditional",
     value = operation,

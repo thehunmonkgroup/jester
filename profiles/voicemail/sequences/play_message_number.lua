@@ -1,10 +1,17 @@
+--[[
+  Play the message number.
+]]
+
 -- Message data.
 message_number = storage("counter", "message_number")
 message_count = storage("message", "__count")
 
+-- Use last if there's only one total message.
 if message_count == 1 then
   location = "last"
 else
+  -- Check if we're on the first or last message in the folder, and use first
+  -- and last announcements if necessary, otherwise use the message number.
   if message_number == 1 then
     location = "first"
   elseif message_number == message_count then

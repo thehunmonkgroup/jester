@@ -1,5 +1,10 @@
+--[[
+  Play options to the user for saving a message to a folder.
+]]
+
 return
 {
+  -- Place key map in the main sequence since it's used for all actions.
   keys = {
     ["0"] = "update_message_folder 0,save",
     ["1"] = "update_message_folder 1,save",

@@ -1,5 +1,12 @@
+--[[
+  Play a menu allowing the caller to accept, listen to, or re-record a
+  greeting.
+]]
+
+-- The name of the recorded greeting.
 greeting = args(1)
 
+-- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 

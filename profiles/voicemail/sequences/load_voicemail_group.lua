@@ -1,3 +1,8 @@
+--[[
+  Load mailbox information for a message group, then direct to the group save
+  sequence.
+]]
+
 voicemail_group = args(1)
 
 return

@@ -1,5 +1,10 @@
+--[[
+  Login workflow when a mailbox is provided, and no password is required.
+]]
+
 mailbox = storage("login_settings", "mailbox_number")
-retrieved_mailbox = storage("mailbox_settings", "mailbox")
+-- Result of the attempt to load the mailbox.
+loaded_mailbox = storage("mailbox_settings", "mailbox")
 
 return
 {
@@ -9,7 +14,7 @@ return
   },
   {
     action = "conditional",
-    value = retrieved_mailbox,
+    value = loaded_mailbox,
     compare_to = "",
     comparison = "equal",
     if_true = "invalid_extension exit",

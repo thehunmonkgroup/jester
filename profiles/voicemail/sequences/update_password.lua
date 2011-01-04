@@ -1,4 +1,10 @@
+--[[
+  Update the password for a mailbox.
+]]
+
+-- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
+-- The updated password.
 password = storage("get_digits", "new_password_1")
 
 return
@@ -16,6 +22,7 @@ return
     },
     update_type = "update",
   },
+  -- Fire a 'mailbox_updated' event, passing the new password.
   {
     action = "fire_event",
     event_type = "mailbox_updated",

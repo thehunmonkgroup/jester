@@ -1,3 +1,7 @@
+--[[
+  Play a message deleted/undeleted announcement.
+]]
+
 -- Message data.
 message_number = storage("counter", "message_number")
 deleted = storage("message", "deleted_" .. message_number)

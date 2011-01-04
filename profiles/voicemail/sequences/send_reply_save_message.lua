@@ -1,6 +1,10 @@
+--[[
+  Clean up and redirect after saving a message reply.
+]]
+
 return
 {
-  -- Explicitely clear this so the manual message saving sequence can always
+  -- Explicitly clear this so the manual message saving sequence can always
   -- accurately know if a reply is being saved or not.
   {
     action = "clear_storage",

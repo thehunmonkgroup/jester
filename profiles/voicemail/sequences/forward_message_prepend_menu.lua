@@ -1,3 +1,7 @@
+--[[
+  Play a menu of options for prepending a message to a forward message.
+]]
+
 return
 {
   {

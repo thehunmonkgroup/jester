@@ -1,3 +1,7 @@
+--[[
+  Play advanced options menu for the main menu.
+]]
+
 return
 {
   {
@@ -5,6 +9,7 @@ return
     phrase = "advanced_options_list",
     phrase_arguments = "N:N:N:Y:N",
     keys = {
+      -- Outdial.
       ["4"] = "call_outside_number help,collect",
       ["*"] = "help",
     },

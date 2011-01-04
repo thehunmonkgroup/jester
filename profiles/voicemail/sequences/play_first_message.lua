@@ -1,3 +1,7 @@
+--[[
+  Set to the first message in the folder, and redirect to play messages.
+]]
+
 return
 {
   {

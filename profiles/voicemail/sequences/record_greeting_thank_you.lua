@@ -1,3 +1,8 @@
+--[[
+  Thanks the user for recording a greeting.
+]]
+
+-- The name of the recorded greeting.
 greeting = args(1)
 
 return

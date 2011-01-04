@@ -1,4 +1,10 @@
+--[[
+  Load all messages from the specified folder into the specified storage area.
+]]
+
+-- The numeric folder identifier found in the database.
 folder = args(1)
+-- Special type suffix for initial load of new/old messages, empty otherwise.
 message_type = args(2)
 
 mailbox = storage("login_settings", "mailbox_number")

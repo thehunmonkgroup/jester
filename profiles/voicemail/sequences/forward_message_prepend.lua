@@ -1,3 +1,7 @@
+--[[
+  Record and prepend a custom message to a forward message.
+]]
+
 -- Message data.
 message_number = storage("counter", "message_number")
 recording_name = storage("message", "recording_" .. message_number)

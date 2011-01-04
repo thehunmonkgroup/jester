@@ -1,10 +1,16 @@
--- Coming from where?
+--[[
+  Play caller ID/envelope information.
+]]
+
+-- Coming from where?  Could be either prior to playing the message, or from
+-- the advanced menu options.
 from = args(1)
 
--- Mailbox settings.
+-- Always play both if we're coming from the advanced options.
 if from == "advanced_options" then
   envelope = "yes"
   saycid = "yes"
+-- Otherwise, only play the information according to the mailbox settings.
 else
   envelope = storage("mailbox_settings", "envelope")
   saycid = storage("mailbox_settings", "saycid")
@@ -44,3 +50,4 @@ return
     if_true = "top:message_options",
   },
 }
+

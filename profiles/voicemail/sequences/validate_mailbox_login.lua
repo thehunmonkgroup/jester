@@ -1,9 +1,16 @@
+--[[
+  Validate a login attempt to a mailbox.
+]]
+
+-- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
 password = storage("mailbox_settings", "password")
+-- The user entered password.
 entered_password = storage("get_digits", "password")
 
 return
 {
+  -- Get a password from the user.
   {
     action = "get_digits",
     min_digits = profile.password_min_digits,
@@ -13,10 +20,12 @@ return
     storage_key = "password",
     timeout = profile.user_input_timeout,
   },
+  -- Load the mailbox for the user.
   {
     action = "call_sequence",
     sequence = "sub:load_mailbox_settings " .. mailbox .. "," .. profile.domain .. ",mailbox_settings",
   },
+  -- No entered password is a fail.
   {
     action = "conditional",
     value = entered_password,
@@ -24,6 +33,7 @@ return
     comparison = "equal",
     if_true = "exit",
   },
+  -- Check for password match, and redirect as appropriate.
   {
     action = "conditional",
     value = password,

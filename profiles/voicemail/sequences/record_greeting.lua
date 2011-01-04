@@ -1,11 +1,18 @@
+--[[
+  Record a greeting.
+]]
+
+-- The greeting name to record.
 greeting = args(1)
 
+-- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
 mailbox_directory = profile.mailboxes_dir .. "/" .. mailbox
 mailbox_provisioned = storage("mailbox_settings", "mailbox_provisioned")
 
 return
 {
+  -- Provision the mailbox if it's not provisioned yet.
   {
     action = "conditional",
     value = mailbox_provisioned,
@@ -25,6 +32,7 @@ return
     action = "wait",
     milliseconds = 500,
   },
+  -- Record to a temporary file.
   {
     action = "record",
     location = mailbox_directory,
