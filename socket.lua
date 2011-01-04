@@ -4,10 +4,10 @@
 
   To start listener, set it as a startup script in
   conf/autoload_configs/lua.conf.xml:
-    <param name="startup-script" value="jester/socket.lua"/>
+    <param name="startup-script" value="jester/socket.lua [server] [port] [password]"/>
 
   Or via luarun:
-    luarun jester/socket.lua
+    luarun jester/socket.lua [server] [port] [password]
 
   It listens for CUSTOM events of subclass 'jester::socket'.
 
@@ -38,37 +38,6 @@ require "jester.conf"
 require "jester.debug"
 require "ESL"
 
-function jester.bootstrap_socket(profile, sequence, sequence_args)
-
-  -- Fake a channel here so stacks and storage will work.
-  jester.channel = {}
-  jester.channel.stack = {}
-  jester.channel.storage = {}
-
-  -- Initialize sequence loop stacks.  Sequence stacks are initialized just
-  -- prior to each sequence loop run.
-  jester.init_stacks({"active", "exit", "hangup"})
-
-  -- Save the initial arguments.
-  jester.initial_args = sequence_args and jester.parse_args(sequence_args) or {}
-
-  -- Add profile configuration here so it can leverage access to channel
-  -- variables.
-  jester.init_profile(profile)
-
-  -- Load modules.
-  jester.init_modules(jester.conf.modules)
-
-  -- Load initial sequence.
-  local event = {
-    event_type = "sequence",
-    sequence = sequence .. " " .. (sequence_args or ""),
-  }
-  table.insert(jester.channel.stack.active, event)
-
-  jester.bootstrapped = true
-end
-
 --[[
   Logs socket information to the FreeSWITCH console.
 ]]
@@ -81,14 +50,15 @@ end
 ]]
 function jester.socket_connect()
   -- Login information for the event socket.
-  local host = "localhost"
-  local port = "8021"
-  local password = "Tomato34"
+  local host = argv[1] or "localhost"
+  local port = argv[2] or "8021"
+  local password = argv[3] or "ClueCon"
   jester.sock = assert(ESL.ESLconnection(host, port, password))
 end
 
 
--- This is always true on a socket connection.
+-- This is always true on a socket connection, setting it here allows early
+-- logging.
 jester.is_freeswitch = true
 jester.socket_connect()
 
@@ -108,8 +78,15 @@ if jester.sock and jester.sock:connected() then
       if sequence then
         local profile = event:getHeader("Jester-Profile") or "socket"
         local sequence_args = event:getHeader("Jester-Sequence-Args") or ""
-        jester.socket_log(string.format([["received event: profile '%s', sequence '%s']], profile, sequence .. " " .. sequence_args))
-        jester.bootstrap_socket(profile, sequence, sequence_args)
+        local args = {
+          profile,
+          sequence,
+        }
+        if sequence_args then
+          table.insert(args, sequence_args)
+        end
+        jester.socket_log(string.format([[received Jester event: %s]], table.concat(args, " ")))
+        jester.bootstrap(args)
         if jester.bootstrapped then
           -- Main loop.
           jester.main()
@@ -118,5 +95,8 @@ if jester.sock and jester.sock:connected() then
     end
   end
   jester.socket_log("disconnecting")
+  if jester.sock and jester.sock:connected() then
+    jester.sock:disconnect()
+  end
 end
 
