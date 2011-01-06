@@ -4,6 +4,21 @@
 
 -- Is the operator extension enabled?
 operator = args(1)
+no_review_next_sequence = "message_options"
+
+-- Message review option for the mailbox.
+review_messages = storage("mailbox_settings", "review_messages")
+-- Empty value means this is an outside caller reviewing their message -- use
+-- the profile default value, and force the user to exit if they are not
+-- allowed to review.
+if review_messages == "" then
+  if profile.review_messages then
+    review_messages = "yes"
+  else
+    review_messages = "no"
+  end
+  no_review_next_sequence = "exit"
+end
 
 -- Set up the initial review keys.
 review_keys = {
@@ -22,10 +37,10 @@ return
   -- If message review isn't enabled, then exit the call.
   {
     action = "conditional",
-    value = profile.review_messages,
-    compare_to = true,
+    value = review_messages,
+    compare_to = "no",
     comparison = "equal",
-    if_false = "exit",
+    if_true = no_review_next_sequence,
   },
   {
     action = "play_phrase",
