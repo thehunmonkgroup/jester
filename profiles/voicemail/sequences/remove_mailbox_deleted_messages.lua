@@ -11,7 +11,7 @@ return
   {
     action = "data_load",
     handler = "odbc",
-    config = profile.db_config_messages,
+    config = profile.db_config_message,
     fields = {
       "recording",
     },
@@ -27,7 +27,7 @@ return
   {
     action = "data_delete",
     handler = "odbc",
-    config = profile.db_config_messages,
+    config = profile.db_config_message,
     filters = {
       mailbox = mailbox,
       domain = domain,

@@ -12,7 +12,7 @@ return
   {
     action = "data_load",
     handler = "odbc",
-    config = profile.db_config_mailboxes,
+    config = profile.db_config_mailbox,
     filters = {
       mailbox = mailbox,
       domain = domain,
@@ -25,9 +25,9 @@ return
       "email_template",
       "email_messages",
       "mailbox_provisioned",
-      "timezone",
-      "saycid",
-      "envelope",
+      "default_timezone",
+      "play_caller_id",
+      "play_envelope",
     },
     storage_area = storage_area,
   },

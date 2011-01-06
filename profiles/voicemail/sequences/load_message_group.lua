@@ -10,7 +10,7 @@ return
   {
     action = "data_load",
     handler = "odbc",
-    config = profile.db_config_message_groups,
+    config = profile.db_config_message_group,
     filters = {
       group_name = message_group,
     },

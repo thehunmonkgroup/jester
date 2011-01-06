@@ -12,7 +12,7 @@ return
   {
     action = "data_update",
     handler = "odbc",
-    config = profile.db_config_mailboxes,
+    config = profile.db_config_mailbox,
     fields = {
       password = password,
     },

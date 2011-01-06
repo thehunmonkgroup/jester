@@ -8,7 +8,7 @@ return
   {
     action = "data_load",
     handler = "odbc",
-    config = profile.db_config_messages,
+    config = profile.db_config_message,
     fields = {
       "mailbox",
       "domain",
@@ -24,7 +24,7 @@ return
   {
     action = "data_delete",
     handler = "odbc",
-    config = profile.db_config_messages,
+    config = profile.db_config_message,
     filters = {
       __deleted = 1,
     },

@@ -12,7 +12,7 @@ caller_id_name = storage("message_info", "caller_id_name")
 -- Mailbox settings.
 email = storage("mailbox_settings_message", "email")
 email_template = storage("mailbox_settings_message", "email_template")
-timezone = storage("mailbox_settings_message", "timezone")
+timezone = storage("mailbox_settings_message", "default_timezone")
 
 -- Formatted date.
 formatted_date = storage("format", "formatted_date")

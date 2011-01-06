@@ -31,7 +31,7 @@ return
   {
     action = "data_update",
     handler = "odbc",
-    config = profile.db_config_messages,
+    config = profile.db_config_message,
     fields = {
       domain = domain,
       mailbox = mailbox,

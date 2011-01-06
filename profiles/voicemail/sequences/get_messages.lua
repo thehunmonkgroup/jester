@@ -14,7 +14,7 @@ return
   {
     action = "data_load",
     handler = "odbc",
-    config = profile.db_config_messages,
+    config = profile.db_config_message,
     filters = {
       mailbox = mailbox,
       domain = profile.domain,

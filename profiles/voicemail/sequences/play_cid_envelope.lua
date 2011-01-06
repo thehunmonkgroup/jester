@@ -8,12 +8,12 @@ from = args(1)
 
 -- Always play both if we're coming from the advanced options.
 if from == "advanced_options" then
-  envelope = "yes"
-  saycid = "yes"
+  play_envelope = "yes"
+  play_caller_id = "yes"
 -- Otherwise, only play the information according to the mailbox settings.
 else
-  envelope = storage("mailbox_settings", "envelope")
-  saycid = storage("mailbox_settings", "saycid")
+  play_envelope = storage("mailbox_settings", "play_envelope")
+  play_caller_id = storage("mailbox_settings", "play_caller_id")
 end
 
 -- Message data.
@@ -27,7 +27,7 @@ return
   {
     action = "play_phrase",
     phrase = "cid_envelope",
-    phrase_arguments = envelope .. ":" .. timestamp .. ":" .. saycid .. ":" .. caller_id_number,
+    phrase_arguments = play_envelope .. ":" .. timestamp .. ":" .. play_caller_id .. ":" .. caller_id_number,
     keys = {
       ["1"] = "top:play_message",
       ["2"] = "top:change_folders",

@@ -1,16 +1,40 @@
 --
--- Table structure for table message_groups
-CREATE TABLE message_groups (
-  group_name varchar(30) NOT NULL default '',
-  domain varchar(255) NOT NULL default '',
-  mailbox varchar(255) NOT NULL default '',
-  PRIMARY KEY  (group_name,domain,mailbox)
-);
+-- Mailbox settings.
+--
+CREATE TABLE mailbox (
+  domain char(80) NOT NULL DEFAULT '',
+  mailbox char(80) NOT NULL DEFAULT '',
+  `password` char(80) NOT NULL DEFAULT '',
+  customer_id char(80) NOT NULL DEFAULT '',
+  full_name char(80) NOT NULL DEFAULT '',
+  mailbox_provisioned char(3) NOT NULL DEFAULT 'no',
+  message_lifetime int(11) NOT NULL DEFAULT '-1',
+  max_messages int(5) NOT NULL DEFAULT '100',
+  default_language char(20) NOT NULL DEFAULT 'en',
+  default_timezone char(50) NOT NULL DEFAULT 'Etc/UTC',
+  email char(255) NOT NULL DEFAULT '',
+  email_template char(255) NOT NULL DEFAULT '',
+  email_messages char(20) NOT NULL DEFAULT 'no',
+  play_caller_id char(3) NOT NULL DEFAULT 'no',
+  play_envelope char(3) NOT NULL DEFAULT 'no',
+  review_messages char(3) NOT NULL DEFAULT 'yes',
+  next_after_command char(3) NOT NULL DEFAULT 'yes',
+  directory_entry char(3) NOT NULL DEFAULT 'yes',
+  temp_greeting_warn char(3) NOT NULL DEFAULT 'no',
+  force_name char(3) NOT NULL DEFAULT 'no',
+  force_greetings char(3) NOT NULL DEFAULT 'no',
+  operator_extension char(80) NOT NULL DEFAULT '',
+  callback_extension char(80) NOT NULL DEFAULT '',
+  dialout_extension char(80) NOT NULL DEFAULT '',
+  exit_extension char(80) NOT NULL DEFAULT '',
+  stamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (domain,mailbox)
+) DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table messages
+-- Voicemail messages.
 --
-CREATE TABLE messages (
+CREATE TABLE message (
   id int(11) NOT NULL auto_increment,
   domain varchar(80) NOT NULL default '',
   mailbox varchar(80) NOT NULL default '0',
@@ -28,45 +52,12 @@ CREATE TABLE messages (
 );
 
 --
--- Table structure for table voicemail
+-- Voicemail message groups.
 --
-CREATE TABLE voicemail (
-  uniqueid int(11) NOT NULL auto_increment,
-  customer_id char(80) NOT NULL default '',
-  domain char(80) NOT NULL default '',
-  mailbox char(80) NOT NULL default '',
-  password char(80) NOT NULL default '',
-  fullname char(80) NOT NULL default '',
-  email char(255) NOT NULL default '',
-  email_template varchar(255) NOT NULL default '',
-  email_messages char(20) NOT NULL default 'no',
-  attachfmt char(10) NOT NULL default 'wav49',
-  mailbox_provisioned char(3) NOT NULL default 'no',
-  serveremail char(80) NOT NULL default '',
-  language char(20) NOT NULL default 'en',
-  timezone char(50) NOT NULL default 'Etc/UTC',
-  message_lifetime int(11) NOT NULL default '-1',
-  nextaftercmd char(4) NOT NULL default 'yes',
-  hidefromdir char(4) NOT NULL default 'yes',
-  saycid char(3) NOT NULL default 'no',
-  sendvoicemail char(3) NOT NULL default 'no',
-  review char(3) NOT NULL default 'no',
-  tempgreetwarn char(3) NOT NULL default 'no',
-  operator char(3) NOT NULL default 'no',
-  envelope char(3) NOT NULL default 'no',
-  sayduration char(3) NOT NULL default 'no',
-  saydurationm int(3) NOT NULL default '1',
-  forcename char(3) NOT NULL default 'no',
-  forcegreetings char(3) NOT NULL default 'no',
-  callback char(80) NOT NULL default '',
-  dialout char(80) NOT NULL default '',
-  exitcontext char(80) NOT NULL default '',
-  maxmsg int(5) NOT NULL default '100',
-  volgain decimal(5,2) NOT NULL default '0.00',
-  imapuser varchar(80) NOT NULL default '',
-  imappassword varchar(80) NOT NULL default '',
-  stamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (uniqueid),
-  UNIQUE KEY domain_mailbox (domain,mailbox)
+CREATE TABLE message_group (
+  group_name varchar(30) NOT NULL default '',
+  domain varchar(255) NOT NULL default '',
+  mailbox varchar(255) NOT NULL default '',
+  PRIMARY KEY  (group_name, domain, mailbox)
 );
 

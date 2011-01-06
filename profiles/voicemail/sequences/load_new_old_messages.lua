@@ -2,7 +2,7 @@
   Initial load of new and old messages, then send to main menu.
 ]]
 
-timezone = storage("mailbox_settings", "timezone")
+timezone = storage("mailbox_settings", "default_timezone")
 
 return
 {

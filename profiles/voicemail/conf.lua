@@ -196,23 +196,23 @@ auto_delete_messages = true
 ]]
 
 -- Table that stores mailbox configurations.
-db_config_mailboxes = {
+db_config_mailbox = {
   database_type = "mysql",
   database = "jester",
-  table = "voicemail",
+  table = "mailbox",
 }
 
 -- Table that stores messages.
-db_config_messages = {
+db_config_message = {
   database_type = "mysql",
   database = "jester",
-  table = "messages",
+  table = "message",
 }
 
 -- Table that stores messages.
-db_config_message_groups = {
+db_config_message_group = {
   database_type = "mysql",
   database = "jester",
-  table = "message_groups",
+  table = "message_group",
 }
 
