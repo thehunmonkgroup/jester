@@ -175,6 +175,24 @@ password_min_digits = 4
 password_max_digits = 10
 
 --[[
+  Recordings.
+]]
+
+-- The maximum length, in seconds, of a recorded greeting.
+max_greeting_length = 180
+
+-- The maximum length, in seconds, of a recorded message.
+max_message_length = 300
+
+-- Number of consecutive seconds of silence before automatically ending a
+-- recording.
+recording_silence_end = 5
+
+-- The threshold of sound below which is considered silence.  Only adjust
+-- this for problems with auto ending recordings.
+recording_silence_threshold = 20
+
+--[[
   Other settings.
 ]]
 

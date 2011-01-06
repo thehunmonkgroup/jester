@@ -38,6 +38,9 @@ return
     location = mailbox_directory,
     filename = greeting .. ".tmp.wav",
     pre_record_sound = "phrase:beep",
+    max_length = profile.max_greeting_length,
+    silence_secs = profile.recording_silence_end,
+    silence_threshold = profile.recording_silence_threshold,
     keys = {
       ["#"] = ":break",
     },

@@ -3,10 +3,6 @@
    action in the record module?
  - look into various core caching strategies to improve performance
  - profile-wide settings to add
-   - maximumm length of recorded message
-   - maximumm length of recorded greeting
-   - number of seconds of silence before ending recording
-   - 'silence threshold' for recordings
    - maximum number of login attempts
  - user-wide settings to add
    - next_after_command (need to figure out which commands this responds to)
