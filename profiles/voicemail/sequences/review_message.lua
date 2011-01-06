@@ -4,20 +4,17 @@
 
 -- Is the operator extension enabled?
 operator = args(1)
-no_review_next_sequence = "message_options"
+no_review_next_sequence = "exit"
 
 -- Message review option for the mailbox.
 review_messages = storage("mailbox_settings", "review_messages")
--- Empty value means this is an outside caller reviewing their message -- use
--- the profile default value, and force the user to exit if they are not
--- allowed to review.
-if review_messages == "" then
-  if profile.review_messages then
-    review_messages = "yes"
-  else
-    review_messages = "no"
-  end
-  no_review_next_sequence = "exit"
+
+-- This will always be empty unless a person is replying to a message.
+is_reply = storage("send_reply_info", "mailbox")
+-- If it's a reply, then send user back to the message options instead of
+-- hanging up on them.
+if is_reply ~= "" then
+  no_review_next_sequence = "message_options"
 end
 
 -- Set up the initial review keys.

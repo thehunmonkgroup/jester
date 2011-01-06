@@ -8,7 +8,6 @@
    - callback_extension
    - dialout_extension
    - exit_extension
-   - review_messages
    - default_language
    - temp_greeting_warn
 

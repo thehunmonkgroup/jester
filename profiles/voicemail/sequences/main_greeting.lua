@@ -37,6 +37,12 @@ return
     action = "exit_sequence",
     sequence = "main_greeting_prepare_message",
   },
+  -- Load the mailbox settings, we'll need these for some of the message
+  -- options.
+  {
+    action = "call_sequence",
+    sequence = "sub:load_mailbox_settings " .. profile.mailbox .. "," .. profile.domain .. ",mailbox_settings",
+  },
   {
     action = "call_sequence",
     sequence = "record_message " .. operator_on_record,

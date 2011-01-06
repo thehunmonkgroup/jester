@@ -203,12 +203,6 @@ recording_silence_threshold = 20
 -- administration area for the mailbox.
 check_messages = true
 
--- Set this to true to allow a caller to press # to review their message after
--- recording it, or false to disable.
--- Note that the setting for reviewing messages when inside voicemail
--- administration is a separate, per mailbox setting.
-review_messages = true
-
 -- Set this to true to automatically remove deleted messages from a mailbox
 -- after messages have been checked.  Otherwise, messages are only marked as
 -- deleted, and will need to be removed be another means.
