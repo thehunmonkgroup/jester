@@ -2,7 +2,6 @@
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - look into various core caching strategies to improve performance
- - restructure/index database tables
  - profile-wide settings to add
    - maximumm length of recorded message
    - maximumm length of recorded greeting
