@@ -15,7 +15,7 @@ return
   {
     action = "play_phrase",
     phrase = "greeting_options",
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
     keys = {
      ["1"] = "accept_greeting " .. greeting,

@@ -35,7 +35,7 @@ return
       "4",
       "#",
     },
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

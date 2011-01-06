@@ -13,7 +13,7 @@ return
       ["4"] = "call_outside_number help,collect",
       ["*"] = "help",
     },
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

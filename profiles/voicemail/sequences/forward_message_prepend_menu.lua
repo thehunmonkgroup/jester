@@ -12,7 +12,7 @@ return
       ["2"] = "forward_message",
       ["*"] = "message_options",
     },
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

@@ -14,7 +14,7 @@ return
       ["2"] = "invalid_extension message_options",
       ["*"] = "message_options",
     },
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

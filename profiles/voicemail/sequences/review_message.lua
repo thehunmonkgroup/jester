@@ -46,7 +46,7 @@ return
     action = "play_phrase",
     phrase = "greeting_options",
     keys = review_keys,
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

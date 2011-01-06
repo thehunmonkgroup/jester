@@ -19,7 +19,7 @@ return
     phrase = "advanced_options_list",
     phrase_arguments = "Y:Y:Y:Y:N",
     keys = option_keys,
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

@@ -17,7 +17,7 @@ return
       ["2"] = "call_outside_number message_options,collect",
       ["*"] = "message_options",
     },
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
   },
   {

@@ -20,7 +20,7 @@ return
     action = "play_phrase",
     phrase = "mailbox_options",
     phrase_arguments = file_exists,
-    repetitions = profile.menu_repititions,
+    repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
     keys = {
       ["1"] = "record_greeting unavail",
