@@ -3,6 +3,7 @@
 ]]
 
 timezone = storage("mailbox_settings", "default_timezone")
+default_language = storage("mailbox_settings", "default_language")
 
 return
 {
@@ -12,6 +13,7 @@ return
     action = "set_variable",
     data = {
       timezone = timezone,
+      default_language = default_language,
     },
   },
   {
