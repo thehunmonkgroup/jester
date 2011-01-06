@@ -2,9 +2,7 @@
  - figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  - look into various core caching strategies to improve performance
- - profile-wide settings to add
-   - maximum number of login attempts
- - user-wide settings to add
+ - user settings to add
    - next_after_command (need to figure out which commands this responds to)
    - operator_extension
    - callback_extension
