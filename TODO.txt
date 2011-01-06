@@ -3,8 +3,6 @@
    action in the record module?
  - look into various core caching strategies to improve performance
  - restructure/index database tables
- - voicemail_group -> message_group
- - register cleanup of deleted messages in exit loop.
  - profile-wide settings to add
    - maximumm length of recorded message
    - maximumm length of recorded greeting

@@ -66,6 +66,11 @@ return
     action = "exit_sequence",
     sequence = "messages_checked",
   },
+  -- Register an exit sequence for automatically removing deleted messages.
+  {
+    action = "exit_sequence",
+    sequence = "auto_delete_messages",
+  },
   -- Announce new/old messages.
   {
     action = "play_phrase",
