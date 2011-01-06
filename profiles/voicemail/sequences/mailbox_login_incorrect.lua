@@ -13,7 +13,7 @@ return
     action = "counter",
     storage_key = "failed_login_counter",
     increment = 1,
-    compare_to = 3,
+    compare_to = profile.max_login_attempts,
     if_equal = "mailbox_login_failed",
   },
   -- Redirect to the appropriate incorrect login workflow based on the login

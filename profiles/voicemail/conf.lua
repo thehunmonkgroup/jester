@@ -174,6 +174,9 @@ password_min_digits = 4
 -- The maximum number of digits in a valid password.
 password_max_digits = 10
 
+-- Maximum number of login attempts before disconnecting the user.
+max_login_attempts = 3
+
 --[[
   Recordings.
 ]]
