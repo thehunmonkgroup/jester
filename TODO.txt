@@ -8,17 +8,13 @@
    - number of seconds of silence before ending recording
    - 'silence threshold' for recordings
    - maximum number of login attempts
-   - email server 'from' name
-   - go to next message after a command? (need to figure out which commands
-     this responds to)
-   - exit extension
-   - language
-   - warning when temp greeting exists
  - user-wide settings to add
-   - server email address?
-   - operator outdial
-   - callback
-   - dialout
-   - exit extension
-   - language
+   - next_after_command (need to figure out which commands this responds to)
+   - operator_extension
+   - callback_extension
+   - dialout_extension
+   - exit_extension
+   - review_messages
+   - default_language
+   - temp_greeting_warn
 
