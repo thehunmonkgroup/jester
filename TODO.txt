@@ -4,5 +4,4 @@
  - look into various core caching strategies to improve performance
  - user settings to add
    - next_after_command (need to figure out which commands this responds to)
-   - temp_greeting_warn
 
