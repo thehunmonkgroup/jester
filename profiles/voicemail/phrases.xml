@@ -251,12 +251,27 @@
     </input>
   </macro>
 
-  <!-- Greeting to play when the user has no custom greeting. -->
+  <!-- Greeting to play when the user has no custom greetings. -->
   <macro name="default_greeting">
     <input pattern="^(\d+)$">
       <match>
         <action function="play-file" data="vm-theperson.wav"/>
         <action function="say" data="$1" method="iterated" type="number"/>
+        <action function="play-file" data="vm-isunavail.wav"/>
+      </match>
+    </input>
+    <input pattern="^(.*)$">
+      <match>
+        <action function="play-file" data="vm-intro.wav"/>
+      </match>
+    </input>
+  </macro>
+
+  <!-- Greeting to play when the user has only a name greeting. -->
+  <macro name="default_greeting_name">
+    <input pattern="^(.+)$">
+      <match>
+        <action function="play-file" data="$1"/>
         <action function="play-file" data="vm-isunavail.wav"/>
       </match>
     </input>

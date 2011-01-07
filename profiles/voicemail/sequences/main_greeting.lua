@@ -3,6 +3,16 @@
 ]]
 
 operator_extension = storage("mailbox_settings", "operator_extension")
+-- Result of the check for the name greeting.
+greet_exists = storage("file", "file_exists")
+greet = profile.mailbox_dir .. "/greet.wav"
+
+-- Build the default name greeting based on if the name greeting exists or
+-- not.
+default_greet = "phrase:default_greeting_name:" .. greet
+if greet_exists == "false" then
+  default_greet = "phrase:default_greeting:" .. profile.mailbox
+end
 
 -- Set up the available key presses for the caller based on the profile
 -- configuration.
@@ -28,6 +38,12 @@ return
     action = "call_sequence",
     sequence = "sub:load_mailbox_settings " .. profile.mailbox .. "," .. profile.domain .. ",mailbox_settings",
   },
+  -- Check for existence of the name greeting, which might be used in the
+  -- default greeting below.
+  {
+    action = "file_exists",
+    file = greet,
+  },
   -- This action will play the first valid file it finds.  It checks, in order:
   -- temporary greeting, unavailable greeting, default greeting.
   {
@@ -35,7 +51,7 @@ return
     files =  {
       profile.mailbox_dir .. "/temp.wav",
       profile.mailbox_dir .. "/unavail.wav",
-      "phrase:default_greeting:" .. profile.mailbox,
+      default_greet,
     },
     keys = greeting_keys,
   },
