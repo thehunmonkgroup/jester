@@ -28,7 +28,7 @@ return
   },
   {
     action = "call_sequence",
-    sequence = "message_options",
+    sequence = "post_command",
   },
 }
 
