@@ -91,27 +91,27 @@ function update_data(action)
   if fields then
     local dbh, conf = connect(action)
     local where = build_where(filters)
-    local count = 1
-    -- Check how many rows will be updated first, unless it's an insert.
-    if update_type ~= "insert" then
-      local sql = "SELECT COUNT(*) AS count FROM " .. conf.table .. where
-      assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
+    local count = 0
+    local message
+    -- No type specified, or update forced, so try an update first.
+    if not update_type or update_type == "update" then
+      sql = "UPDATE " .. conf.table .. " SET " .. build_update_fields(fields) .. where
+      jester.debug_log("Executing query: %s", sql)
+      assert(dbh:query(sql))
+      message = "updated"
+      count = dbh:affected_rows()
     end
-    -- Insert forced, or no rows would be updated and update is not forced,
-    -- so insert.
+    -- Insert forced, or no rows updated and update is not forced, so insert.
     if update_type == "insert" or (count == 0 and update_type ~= "update") then
       local insert_fields, values = build_insert(filters, fields)
       sql = "INSERT INTO " .. conf.table .. " (" .. insert_fields .. ") VALUES (" .. values .. ")"
+      jester.debug_log("Executing query: %s", sql)
+      assert(dbh:query(sql))
+      message = "inserted"
       count = 1
-    -- Rows would be updated, and update is either not specified or it's
-    -- forced, so update.
-    elseif count > 0 and (not update_type or update_type == "update") then
-      sql = "UPDATE " .. conf.table .. " SET " .. build_update_fields(fields) .. where
     end
-    jester.debug_log("Executing query: %s", sql)
-    assert(dbh:query(sql))
     dbh:release()
-    jester.debug_log("Rows updated: %d", count)
+    jester.debug_log("Rows %s: %d", message, count)
   end
 end
 
