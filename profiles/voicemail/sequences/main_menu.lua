@@ -2,6 +2,8 @@
   Play the main menu to the caller.
 ]]
 
+operator_extension = storage("mailbox_settings", "operator_extension")
+
 -- Message data.
 new_message_count = storage("messagenew", "__count")
 old_message_count = storage("messageold", "__count")
@@ -32,7 +34,7 @@ end
 
 -- Operator outdial is enabled, so provide access to the advanced options from
 -- the main menu.
-if profile.operator_extension ~= "" then
+if operator_extension ~= "" then
   main_menu_keys["3"] = "main_menu_advanced_options"
 end
 

@@ -2,6 +2,8 @@
   Set up for re-recording a message.
 ]]
 
+operator_extension = storage("mailbox_settings", "operator_extension")
+
 greeting_keys = {
   ["#"] = ":break",
 }
@@ -9,7 +11,7 @@ greeting_keys = {
 -- If an operator extension is allowed on record, then add that to the menu
 -- options, and pass that data along to the record sequence.
 operator_on_record = ""
-if profile.operator_extension then
+if operator_extension ~= "" then
   greeting_keys["0"] = "transfer_to_operator"
   operator_on_record = "operator"
 end

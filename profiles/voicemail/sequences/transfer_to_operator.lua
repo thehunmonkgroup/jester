@@ -2,6 +2,8 @@
   Transfer to the operator extension.
 ]]
 
+operator_extension = storage("mailbox_settings", "operator_extension")
+
 return
 {
   {
@@ -10,6 +12,6 @@ return
   },
   {
     action = "transfer",
-    extension = profile.operator_extension,
+    extension = operator_extension,
   },
 }

@@ -99,11 +99,6 @@ temp_recording_dir = "/tmp"
   Custom extensions.
 ]]
 
--- Name of the extension to transfer to when a key is press to reach the
--- operator (must be in the same context).
--- Set this to false to disable the operator extension.
-operator_extension = "operator"
-
 -- Name of the extension to transfer to when a request to dial an outside
 -- number is made.
 call_outside_number_extension = "call_outside_number"
