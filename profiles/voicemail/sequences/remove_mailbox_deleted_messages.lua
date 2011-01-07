@@ -5,6 +5,9 @@
 mailbox = args(1)
 domain = args(2)
 
+-- Are there any messages to remove?
+messages_to_remove = storage("message_files_to_remove", "__count")
+
 return
 {
   -- Load file information for all message files that are to be removed.
@@ -22,6 +25,14 @@ return
     },
     multiple = true,
     storage_area = "message_files_to_remove",
+  },
+  -- See if there are any messages to remove.
+  {
+    action = "conditional",
+    value = messages_to_remove,
+    compare_to = 0,
+    comparison = "equal",
+    if_true = "none",
   },
   -- Delete the database rows for deleted messages.
   {
