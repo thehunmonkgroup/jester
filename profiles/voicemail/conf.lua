@@ -96,14 +96,6 @@ sequence_path = global.profile_path .. "/voicemail/sequences"
 temp_recording_dir = "/tmp"
 
 --[[
-  Custom extensions.
-]]
-
--- Name of the extension to transfer to when a request to dial an outside
--- number is made.
-call_outside_number_extension = "call_outside_number"
-
---[[
   Menu options.
 ]]
 

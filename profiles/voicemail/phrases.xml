@@ -682,8 +682,8 @@
     </input>
   </macro>
 
-  <!-- Call outside number. -->
-  <macro name="collect_outside_number">
+  <!-- Collect outdial number. -->
+  <macro name="collect_outdial_number">
     <input pattern="^(.*)$">
       <match>
         <action function="play-file" data="vm-enter-num-to-call.wav"/> 

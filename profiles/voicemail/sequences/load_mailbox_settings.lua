@@ -36,7 +36,7 @@ return
       "temp_greeting_warn",
       "operator_extension",
       "callback_extension",
-      "dialout_extension",
+      "outdial_extension",
       "exit_extension",
     },
     storage_area = storage_area,

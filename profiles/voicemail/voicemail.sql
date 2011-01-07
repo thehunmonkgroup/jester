@@ -25,7 +25,7 @@ CREATE TABLE mailbox (
   force_greetings char(3) NOT NULL DEFAULT 'no',
   operator_extension char(80) NOT NULL DEFAULT '',
   callback_extension char(80) NOT NULL DEFAULT '',
-  dialout_extension char(80) NOT NULL DEFAULT '',
+  outdial_extension char(80) NOT NULL DEFAULT '',
   exit_extension char(80) NOT NULL DEFAULT '',
   stamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (domain,mailbox)

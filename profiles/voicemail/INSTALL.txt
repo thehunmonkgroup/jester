@@ -84,23 +84,49 @@ assume you already have Jester installed correctly:
         <action application="lua" data="jester/jester.lua voicemail login $2"/>
         <action application="hangup"/>
       </condition>
-      <!-- Operator extension. -->
-      <extension name="operator">
-        <condition field="destination_number" expression="^operator$" break="on-true">
-          <!-- Do stuff here to handle dialing the operator. -->
-        </condition>
-      </extension>
-      <!-- Call outside number extension -->
-      <extension name="call_outside_number">
-        <condition field="destination_number" expression="^call_outside_number$" break="on-true">
-          <!--
-            Do stuff here to handle dialing an outside line.  The number
-            to call is stored in the channel variable
-            'voicemail_call_outside_number'.
-          -->
-          <action application="say" data="en number iterated ${voicemail_call_outside_number}"/>
-        </condition>
-      </extension>
+    </extension>
+    <!--
+      Operator extension.
+      The 'operator_extension' setting for a mailbox looks for an extension
+      in the current context that matches the setting's value, and transfers
+      to it.  Leave empty to disable operator outdial.
+    -->
+    <extension name="operator">
+      <condition field="destination_number" expression="^operator$" break="on-true">
+        <!-- Do stuff here to handle dialing the operator. -->
+      </condition>
+    </extension>
+    <!--
+      Outdial extension.
+      The 'outdial_extension' setting for a mailbox looks for an extension
+      in the current context that matches the setting's value, and transfers
+      to it.  Leave empty to disable outdial.
+    -->
+    <extension name="outdial">
+      <condition field="destination_number" expression="^outdial$" break="on-true">
+        <!--
+          Do stuff here to handle dialing an outside line.  The number
+          to call is stored in the channel variable
+          'voicemail_outdial_number'.
+        -->
+        <action application="say" data="en number iterated ${voicemail_outdial_number}"/>
+      </condition>
+    </extension>
+    <!--
+      Callback extension.
+      The 'callback_extension' setting for a mailbox looks for an extension
+      in the current context that matches the setting's value, and transfers
+      to it.  Leave empty to disable calling back the caller.
+    -->
+    <extension name="callback">
+      <condition field="destination_number" expression="^callback$" break="on-true">
+        <!--
+          Do stuff here to handle dialing a callback number.  The number
+          to call is stored in the channel variable
+          'voicemail_outdial_number'.
+        -->
+        <action application="say" data="en number iterated ${voicemail_outdial_number}"/>
+      </condition>
     </extension>
 
 9. The voicemail profile fires three types of events:

@@ -2,6 +2,8 @@
   Play advanced options menu for the main menu.
 ]]
 
+outdial_extension = storage("mailbox_settings", "outdial_extension")
+
 return
 {
   {
@@ -10,7 +12,7 @@ return
     phrase_arguments = "N:N:N:Y:N",
     keys = {
       -- Outdial.
-      ["4"] = "call_outside_number help,collect",
+      ["4"] = "outdial " .. outdial_extension .. ",help,collect",
       ["*"] = "help",
     },
     repetitions = profile.menu_repetitions,
