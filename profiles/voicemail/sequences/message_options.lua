@@ -55,7 +55,7 @@ return
       ["8"] = "top:forward_message_menu",
       ["9"] = "top:save_message",
       ["*"] = "top:help",
-      ["#"] = "top:exit",
+      ["#"] = "top:exit exit_extension",
     },
     order = {
       "4",

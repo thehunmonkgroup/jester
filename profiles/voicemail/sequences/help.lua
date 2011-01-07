@@ -16,7 +16,7 @@ help_keys = {
   ["3"] = "advanced_options",
   ["0"] = "mailbox_options",
   ["*"] = "help",
-  ["#"] = "exit",
+  ["#"] = "exit exit_extension",
 }
 
 -- total_messages may still be empty here, and Lua will complain about
@@ -47,6 +47,10 @@ return
     phrase_arguments = total_messages .. ":" .. current_folder,
     repetitions = profile.menu_repetitions,
     wait = profile.menu_replay_wait,
+  },
+  {
+    action = "call_sequence",
+    sequence = "exit",
   },
 }
 

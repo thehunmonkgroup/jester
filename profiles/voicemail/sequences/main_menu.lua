@@ -24,7 +24,7 @@ main_menu_keys = {
   ["2"] = "change_folders",
   ["0"] = "mailbox_options",
   ["*"] = "help skip_folder_announcement",
-  ["#"] = "exit",
+  ["#"] = "exit exit_extension",
 }
 
 -- New or old messages exist, so provide a play option.
