@@ -54,6 +54,7 @@ return
       ["7"] = "top:delete_undelete_message",
       ["8"] = "top:forward_message_menu",
       ["9"] = "top:save_message",
+      ["0"] = "mailbox_options",
       ["*"] = "top:help",
       ["#"] = "top:exit exit_extension",
     },
