@@ -5,7 +5,11 @@ jester.conf.debug = false
 require "jester.support.string"
 require "jester.support.table"
 
-local script_path, is_freeswitch = "", false
+-- lua-filesystem 1.5 seems to have a bug that prevents using relative paths to
+-- open a directory.  Since the CLI version already assumes it's being run
+-- from the FreeSWITCH 'scripts' directory, provide a default script path
+-- that will work with 1.4.2 and higher.
+local script_path = "./"
 if jester.is_freeswitch then
   local api = freeswitch.API()
   local base_dir = api:executeString("global_getvar base_dir")
