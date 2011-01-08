@@ -1,10 +1,11 @@
 Brief instructions for setting up the default 'voicemail' profile.  They
 assume you already have Jester installed correctly:
 
-1. Create a MySQL database.
+1. Create a  database.
 
 2. Use the included 'voicemail.sql' file to create the necessary tables in the
-   new database.
+   new database.  Currently only MySQL tables are provided, patches welcome
+   for other databases.
 
    NOTE: table structure is totally subject to change in future releases,
    you're on your own with that for now!
@@ -13,8 +14,7 @@ assume you already have Jester installed correctly:
    'help module data' for more information.
 
 4. If necessary, edit the database configuration settings in
-   'profiles/voicemail_admin/conf.lua' and
-   'profiles/voicemail_message/conf.lua'
+   'profiles/voicemail/conf.lua'
 
 5. Download the Asterisk core sounds and place them in the FreeSWITCH 'sounds'
    directory.
@@ -37,12 +37,14 @@ assume you already have Jester installed correctly:
      </language>
    </include>
 
-8. Call Jester from the dialplan, passing the voicemail profile as the
-   first sequence argument, and the sequence to call for the second sequence
-   argument.  The dialplan should look something like this:
+8. Call Jester from the dialplan, passing the voicemail profile as the first
+   argument, the sequence to call as the second argument, and optional
+   arguments for the sequence as the third argument --see 'help intro run'
+   and 'help sequences arguments' for more information.  The dialplan
+   should look something like this:
 
     <!-- Leave a message. -->
-    <extension name="jester_voicemail">
+    <extension name="voicemail">
       <condition field="destination_number" expression="^(\d+)$" break="on-true">
         <action application="answer"/>
         <action application="sleep" data="1000"/>
@@ -65,8 +67,8 @@ assume you already have Jester installed correctly:
       </condition>
     </extension>
     <!-- Check messages. -->
-    <extension name="jester_voicemail_admin">
-      <condition field="destination_number" expression="^(\+1|1)?(\d+)$" break="on-true">
+    <extension name="check_messages">
+      <condition field="destination_number" expression="^(\d+)$" break="on-true">
         <action application="answer"/>
         <action application="sleep" data="1000"/>
         <!--
@@ -81,7 +83,7 @@ assume you already have Jester installed correctly:
           provided.  You can do ',somedomain' to provide a custom domain with
           no mailbox.
         -->
-        <action application="lua" data="jester/jester.lua voicemail login $2"/>
+        <action application="lua" data="jester/jester.lua voicemail login $1,somedomain"/>
         <action application="hangup"/>
       </condition>
     </extension>
@@ -126,6 +128,21 @@ assume you already have Jester installed correctly:
           'voicemail_outdial_number'.
         -->
         <action application="say" data="en number iterated ${voicemail_outdial_number}"/>
+      </condition>
+    </extension>
+    <!--
+      Exit extension.
+      The 'exit_extension' setting for a mailbox looks for an extension
+      in the current context that matches the setting's value, and transfers
+      to it.  Leave empty to disable exiting voicemail to another part of the
+      dialplan.
+    -->
+    <extension name="exit_voicemail">
+      <condition field="destination_number" expression="^exit_voicemail$" break="on-true">
+        <!--
+          Do stuff here to handle the call.  All channel variables from the
+          Jester session will still be available.
+        -->
       </condition>
     </extension>
 
