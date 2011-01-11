@@ -42,7 +42,7 @@ jester.help_map.data.actions.data_load_count.params = {
   count_field = [[The field to use for counting.]],
   config = [[A table of information to pass which describes where to find the data.  Check handlers to see the fields for this table.]],
   filters = [[(Optional) A table of filters to apply when loading the data count.  This restricts what results are counted to the filtered values.  Filters are cumulative (AND logic).  The key is the name of the filter, and the value is the value to filter on.  Filter values are interpreted as strings by default -- if a filter value is a number, prefix the filter key with double underscores.  eg. 'filters = { context = "default", __mailbox = 1234 }  WARNING: if you exclude this field, all rows will be counted!]],
-  storage_key = [[(Optional) The key to store the collected digits under in the 'data' storage area.  Default is 'count'.]],
+  storage_key = [[(Optional) The key to store the count under in the 'data' storage area.  Default is 'count'.]],
 }
 
 
