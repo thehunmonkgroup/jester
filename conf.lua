@@ -61,6 +61,7 @@ modules = {
   "navigation",
   "play",
   "record",
+  "system",
   "tracker",
 }
 
