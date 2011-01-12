@@ -195,6 +195,13 @@ check_messages = true
 -- deleted, and will need to be removed be another means.
 auto_delete_messages = true
 
+-- How to announce a message when the folder contains only one message.
+-- Valid values are:
+--   "first" - announces "first message"
+--   "last"  - announces "last message"
+--   "1"     - announces "message one"
+single_message_announcement = "last"
+
 --[[
   ODBC database table configurations.
 ]]

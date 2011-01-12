@@ -6,9 +6,9 @@
 message_number = storage("counter", "message_number")
 message_count = storage("message", "__count")
 
--- Use last if there's only one total message.
+-- Use the profile setting if there's only one total message.
 if message_count == 1 then
-  location = "last"
+  location = profile.single_message_announcement
 else
   -- Check if we're on the first or last message in the folder, and use first
   -- and last announcements if necessary, otherwise use the message number.
