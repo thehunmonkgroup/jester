@@ -137,7 +137,7 @@ function init_profile(profile_name)
     "key_order",
   }
   for _, override in ipairs(overrides) do
-    if profile[override] then
+    if profile[override] ~= nil then
       conf[override] = profile[override]
     end
   end
@@ -166,7 +166,7 @@ end
 ]]
 function queue_sequence(sequence)
   if ready() and sequence then
-    if debug then
+    if conf.debug then
       table.insert(channel.stack.executed_sequences, #channel.stack.executed_sequences + 1 .. ": " .. sequence)
     end
     local loaded_sequence, add_to_stack, remove_from_stack
@@ -356,7 +356,7 @@ end
   Main entry point for a call to Jester.
 ]]
 function main()
-  if debug then
+  if conf.debug then
     init_stacks({"run_actions", "executed_sequences"})
   end
   -- Sequences run during an active call.
@@ -369,7 +369,7 @@ function main()
     -- Sequences run that were registered for the hangup loop.
     run_sequence_loop("hangup")
   end
-  if debug then
+  if conf.debug then
     if conf.debug_output.jester_object then
       debug_dump(jester, true)
     end
@@ -420,7 +420,7 @@ function execute_sequences()
   -- caller hangs up.
   while ready() and action do
     run_action(action)
-    if debug then
+    if conf.debug then
       local new_clock = os.clock()
       table.insert(channel.stack.run_actions, #channel.stack.run_actions + 1 .. ": " .. action.action .. ": " .. new_clock - clock)
       clock = new_clock
