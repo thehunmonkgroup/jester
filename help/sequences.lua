@@ -209,6 +209,8 @@ jester.help_map.sequences.debug.description_long = [[Sometimes you'll be designi
   Turn on Jester's debug output:
     This can be done globally by setting the 'debug' variable to true in 'jester/conf.lua', or per profile by setting the same variable in the profile.  Turning this on outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs.
 
+  You can further control what debugging information is output by changing the values (not the keys) in the 'debug_output' table in 'jester/conf.lua' -- true turns on debugging output for that area, false turns it off.
+
   Use debug_dump() in your sequence:
     Jester exposes its core variable dumping function to all sequences.  You can place it in the top section of any sequence, give it a variable name, and it will dump the variable to the FreeSWITCH console.  For example, to debug the 'foo' variable:
       debug_dump(foo)
