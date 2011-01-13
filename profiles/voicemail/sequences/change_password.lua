@@ -6,6 +6,9 @@
 password_1 = storage("get_digits", "new_password_1")
 password_2 = storage("get_digits", "new_password_2")
 
+-- Have we set up this mailbox yet?
+mailbox_setup_complete = storage("mailbox_settings", "mailbox_setup_complete")
+
 return
 {
   {
@@ -37,9 +40,14 @@ return
     action = "play_phrase",
     phrase = "password_mismatch",
   },
+  -- If we're still in mailbox setup and we've made it this far, then re-try.
   {
-    action = "call_sequence",
-    sequence = "mailbox_options",
+    action = "conditional",
+    value = mailbox_setup_complete,
+    compare_to = "yes",
+    comparison = "equal",
+    if_true = "mailbox_options",
+    if_false = "change_password",
   },
 }
 

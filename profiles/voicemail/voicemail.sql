@@ -7,6 +7,7 @@ CREATE TABLE mailbox (
   `password` char(80) NOT NULL DEFAULT '',
   customer_id char(80) NOT NULL DEFAULT '',
   full_name char(80) NOT NULL DEFAULT '',
+  mailbox_setup_complete char(3) NOT NULL DEFAULT 'no',
   mailbox_provisioned char(3) NOT NULL DEFAULT 'no',
   message_lifetime int(11) NOT NULL DEFAULT '-1',
   max_messages int(5) NOT NULL DEFAULT '100',

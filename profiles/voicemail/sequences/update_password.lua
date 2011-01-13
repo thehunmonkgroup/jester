@@ -7,6 +7,9 @@ mailbox = storage("login_settings", "mailbox_number")
 -- The updated password.
 password = storage("get_digits", "new_password_1")
 
+-- Have we set up this mailbox yet?
+mailbox_setup_complete = storage("mailbox_settings", "mailbox_setup_complete")
+
 return
 {
   {
@@ -37,8 +40,11 @@ return
     phrase = "password_updated",
   },
   {
-    action = "call_sequence",
-    sequence = "mailbox_options",
+    action = "conditional",
+    value = mailbox_setup_complete,
+    compare_to = "no",
+    comparison = "equal",
+    if_false = "mailbox_options",
   },
 }
 

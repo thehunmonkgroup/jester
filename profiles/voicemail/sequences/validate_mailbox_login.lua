@@ -8,6 +8,9 @@ password = storage("mailbox_settings", "password")
 -- The user entered password.
 entered_password = storage("get_digits", "password")
 
+-- Have we set up this mailbox yet?
+mailbox_setup_complete = storage("mailbox_settings", "mailbox_setup_complete")
+
 return
 {
   -- Get a password from the user.
@@ -33,14 +36,22 @@ return
     comparison = "equal",
     if_true = "exit",
   },
-  -- Check for password match, and redirect as appropriate.
+  -- Check for password match, fail if incorrect.
   {
     action = "conditional",
     value = password,
     compare_to = entered_password,
     comparison = "equal",
-    if_true = "load_new_old_messages",
     if_false = "mailbox_login_incorrect",
+  },
+  -- Check for new user condition and redirect as appropriate.
+  {
+    action = "conditional",
+    value = mailbox_setup_complete,
+    compare_to = "yes",
+    comparison = "equal",
+    if_true = "load_new_old_messages",
+    if_false = "new_user_walkthrough",
   },
 }
 

@@ -23,6 +23,7 @@ return
       "mailbox",
       "domain",
       "password",
+      "mailbox_setup_complete",
       "mailbox_provisioned",
       "default_language",
       "default_timezone",
