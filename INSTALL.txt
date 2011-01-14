@@ -2,8 +2,8 @@ Jester is relatively easy to install, especially if you have a modern
 package-based Linux distribution.  Here are the basic steps:
 
 SYSTEM REQUIREMENTS:
- - FreeSWITCH installation using code from after Jan. 7th, 2011
- - Jester checkout from after Jan. 7th, 2011
+ - Most recent Jester code
+ - FreeSWITCH 1.0.7 or later
  - Lua 5.1 or later.
  - LuaFilesystem 1.4.2 or later
  - For data module support:
