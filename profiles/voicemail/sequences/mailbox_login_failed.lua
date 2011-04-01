@@ -10,7 +10,7 @@ return
   },
   {
     action = "call_sequence",
-    phrase = "exit",
+    sequence = "exit",
   },
 }
 
