@@ -37,6 +37,7 @@ function bootstrap(args)
     -- Handle some session-based setup if we have a session.
     if session then
       channel.uuid = get_variable("uuid")
+      set_storage("channel", "uuid", channel.uuid)
 
       -- Set up the global key handler.
       _G.key_handler = key_handler
