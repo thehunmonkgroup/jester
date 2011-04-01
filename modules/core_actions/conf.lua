@@ -38,4 +38,8 @@ jester.action_map.load_profile = {
   mod = "core_actions",
   func = "load_profile",
 }
+jester.action_map.api_command = {
+  mod = "core_actions",
+  func = "api_command",
+}
 

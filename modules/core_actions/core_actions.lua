@@ -153,3 +153,20 @@ function load_profile(action)
   end
 end
 
+--[[
+  Execute a FreeSWITCH API command.
+]]
+function api_command(action)
+  local command = action.command
+  local key = action.storage_key or "result"
+  if command then
+    jester.debug_log("Executing API command: %s", command)
+    local api = freeswitch.API()
+    local result = api:executeString(command)
+    -- Remove final carriage return from result.
+    result = string.sub(result, 1, -2)
+    jester.debug_log("Command result: %s", result)
+    jester.set_storage("api_command", key, result)
+  end
+end
+

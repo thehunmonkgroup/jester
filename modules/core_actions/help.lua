@@ -83,3 +83,11 @@ jester.help_map.core_actions.actions.load_profile.params = {
   sequence = [[(Optional) A sequence to execute after loading the profile.  If this is provided, any running sequences in the current loop will be discarded, and this sequence will be run from the top of a new sequence stack.]],
 }
 
+jester.help_map.core_actions.actions.api_command = {}
+jester.help_map.core_actions.actions.api_command.description_short = [[Execute a FreeSWITCH API command.]]
+jester.help_map.core_actions.actions.api_command.description_long = [[This action allows you to execute a FreeSWITCH API command, as if from the console command line.  The command result is stored in the specified key.]]
+jester.help_map.core_actions.actions.api_command.params = {
+  command = [[The command to execute.]],
+  storage_key = [[(Optional) The key to store the command result under in the 'api_command' storage area.  Default is 'result'.]],
+}
+
