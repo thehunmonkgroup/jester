@@ -10,6 +10,7 @@ jester.help_map.get_digits.actions.get_digits.description_long = [[This action c
 jester.help_map.get_digits.actions.get_digits.params = {
   min_digits = [[(Optional) The minimum number of digits to collect.  Default is 1.]],
   max_digits = [[(Optional) The maximum number of digits to collect. Default is 10.]],
+  exact_match = [[(Optional) If set, the entered digits must be an exact match to the value of this parameter.  Setting this overrides the min_digits, max_digits, and digits_regex parameters.]],
   max_tries = [[(Optional) The maximum amount of times that validation will fail before giving up.  Default is 3.]],
   timeout = [[(Optional) Number of seconds to wait for max_digits before trying to validate.  Default is 3.]],
   terminators = [[(Optional) A string of keys that the user can use to end the collection before the timeout.  Multiple values keys can be used, eg. '*' or '*#'.  To accept no terminators, pass an empty string.  Default is '#'.]],

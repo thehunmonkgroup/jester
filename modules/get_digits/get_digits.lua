@@ -16,7 +16,16 @@ function get_digits(action)
   end
   local bad_input = action.bad_input or "ivr/ivr-that_was_an_invalid_entry.wav"
   local digits_regex = action.digits_regex or "\\d+"
+  local exact_match = action.exact_match
   local key = action.storage_key or "digits"
+  -- Since exact match was passed, we can use it's length to set min and max
+  -- digits, and save the user any timeout wait.
+  if exact_match then
+    local digit_length = string.len(exact_match)
+    min_digits = digit_length
+    max_digits = digit_length
+    digits_regex = "^" .. exact_match .. "$"
+  end
   local digits = session:playAndGetDigits(min_digits, max_digits, max_tries, timeout, terminators, audio_files, bad_input, digits_regex)
   jester.debug_log("Got digits: %s", digits)
   jester.set_storage("get_digits", key, digits)
