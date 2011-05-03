@@ -2,6 +2,8 @@
   Validate a login attempt to a mailbox.
 ]]
 
+uuid = storage("channel", "uuid")
+
 -- Mailbox info.
 mailbox = storage("login_settings", "mailbox_number")
 password = storage("mailbox_settings", "password")
@@ -13,20 +15,26 @@ mailbox_setup_complete = storage("mailbox_settings", "mailbox_setup_complete")
 
 return
 {
-  -- Get a password from the user.
-  {
-    action = "get_digits",
-    min_digits = profile.password_min_digits,
-    max_digits = profile.password_max_digits,
-    audio_files = "phrase:get_password",
-    bad_input = "",
-    storage_key = "password",
-    timeout = profile.user_input_timeout,
-  },
   -- Load the mailbox for the user.
   {
     action = "call_sequence",
     sequence = "sub:load_mailbox_settings " .. mailbox .. "," .. profile.domain .. ",mailbox_settings",
+  },
+  -- Clear the DTMF queue before collecting the password, in case a stray
+  -- terminator key was pressed when entering the mailbox number.
+  {
+    action = "api_command",
+    command = "uuid_flush_dtmf " .. uuid,
+  },
+  -- Get a password from the user.  Use the correct password to set the
+  -- max_digit parameter -- smoothes user experience.
+  {
+    action = "get_digits",
+    audio_files = "phrase:get_password",
+    bad_input = "",
+    max_digits = ":" .. password,
+    storage_key = "password",
+    timeout = profile.user_input_timeout,
   },
   -- No entered password is a fail.
   {

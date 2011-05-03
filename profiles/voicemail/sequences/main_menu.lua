@@ -2,6 +2,8 @@
   Play the main menu to the caller.
 ]]
 
+uuid = storage("channel", "uuid")
+
 operator_extension = storage("mailbox_settings", "operator_extension")
 
 -- Message data.
@@ -27,7 +29,6 @@ main_menu_keys = {
   ["6"] = "next_message",
   ["0"] = "mailbox_options",
   ["*"] = "help skip_folder_announcement",
-  ["#"] = "exit exit_extension",
 }
 
 -- New or old messages exist, so provide a play option.
@@ -82,6 +83,12 @@ return
     phrase = "announce_new_old_messages",
     phrase_arguments = new_message_count .. ":" .. old_message_count,
     keys = main_menu_keys,
+  },
+  -- Clear the DTMF queue, in case a stray terminator key was pressed for
+  -- password validation.
+  {
+    action = "api_command",
+    command = "uuid_flush_dtmf " .. uuid,
   },
   -- Send the user to help.
   {
