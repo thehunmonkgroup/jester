@@ -20,7 +20,7 @@ function speech_to_text_from_file_google(action)
     success, file_error = lfs.attributes(filepath, "mode")
     if success then
       flac_file = os.tmpname() .. ".flac"
-      command = string.format("sox %s --rate 8k %s", filepath, flac_file)
+      command = string.format("flac --compression-level-0 --sample-rate=8000 -o %s %s", flac_file, filepath)
       result = os.execute(command)
 
       if result == 0 then
@@ -55,14 +55,14 @@ function speech_to_text_from_file_google(action)
             end
           end
         else
-          jester.debug("ERROR: Request to Google API server failed: %s", status_description)
+          jester.debug_log("ERROR: Request to Google API server failed: %s", status_description)
           jester.set_storage(area, "status", 1)
         end
       else
-        jester.debug("ERROR: Unable to convert file %s to FLAC format via sox", filepath)
+        jester.debug_log("ERROR: Unable to convert file %s to FLAC format via flac executable", filepath)
       end
     else
-      jester.debug("ERROR: File %s does not exist", filepath)
+      jester.debug_log("ERROR: File %s does not exist", filepath)
     end
   end
 end

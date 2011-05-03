@@ -19,7 +19,7 @@ Translations are stored in the specified storage area with the following keys, w
 
 A 'status' key is also place in the storage area, indicating the result of the translation.  A value of 0 indicates the translation was successful.
 
-This action requires that sox is installed and executable by FreeSWITCH.]]
+This action requires that flac is installed and executable by FreeSWITCH.]]
 jester.help_map.speech_to_text.actions.speech_to_text_from_file.params = {
   filepath = [[The full path to the file to translate.]],
   storage_area = [[(Optional) The storage area to store the response in.  Defaults to 'speech_to_text'.]],
