@@ -62,6 +62,7 @@ modules = {
   "play",
   "record",
   "service",
+  "speech_to_text",
   "system",
   "tracker",
 }
