@@ -60,7 +60,10 @@ Note to Windows users:
        or
      <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
 
-6. Jester is now installed.  If you want to additionally install the default
-   profiles, see the INSTALL.txt located at
+6. If your FreeSWITCH 'scripts' directory is in a non-standard location, edit
+   the value of the 'jester_dir' variable in jester/conf.lua appropriately.
+
+7. Jester is now installed.  If you want to additionally install the default
+   profile, see the INSTALL.txt located at
    'jester/profiles/voicemail/INSTALL.txt'.
 
