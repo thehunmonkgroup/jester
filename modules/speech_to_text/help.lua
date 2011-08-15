@@ -2,7 +2,7 @@ jester.help_map.speech_to_text = {}
 jester.help_map.speech_to_text.description_short = [[Speech to text translation.  WARNING: experimental.]]
 jester.help_map.speech_to_text.description_long = [[This module provides speech to text translation.  WARNING: totally experimental, no guarantees it will work!
 
-The module requires the Lua JSON package, more details at http://luaforge.net/projects/json]]
+The module requires the Lua lua-cjson package, more details at http://luarocks.org/repositories/rocks]]
 jester.help_map.speech_to_text.handlers = {
   google = [[Uses Google's Speech to Text service.]],
 }
