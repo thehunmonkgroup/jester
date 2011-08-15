@@ -27,7 +27,9 @@ if freeswitch then
   local api = freeswitch.API()
   base_dir = api:executeString("global_getvar base_dir")
   sounds_dir = api:executeString("global_getvar sounds_dir")
-  jester_dir = base_dir .. "/scripts/jester"
+  -- Override this if scripts are hosted in a non-standard location.
+  scripts_dir = base_dir .. "/scripts"
+  jester_dir = scripts_dir .. "/jester"
   -- This value can be overridden per profile.
   sequence_path = jester_dir .. "/sequences"
   profile_path = jester_dir .. "/profiles"
