@@ -4,7 +4,7 @@ local io = require("io")
 local http = require("socket.http")
 local ltn12 = require("ltn12")
 require "jester.support.file"
-require("json.json")
+require("cjson")
 
 --[[
   Speech to text using Google's API.
@@ -44,7 +44,7 @@ function speech_to_text_from_file_google(action)
 
         if status_code == 200 then
           response_string = table.concat(response)
-          data = json.decode(response_string)
+          data = cjson.decode(response_string)
 
           jester.set_storage(area, "status", data.status or 1)
 

@@ -5,15 +5,11 @@ jester.conf.debug = false
 require "jester.support.string"
 require "jester.support.table"
 
--- lua-filesystem 1.5 seems to have a bug that prevents using relative paths to
--- open a directory.  Since the CLI version already assumes it's being run
--- from the FreeSWITCH 'scripts' directory, provide a default script path
--- that will work with 1.4.2 and higher.
+-- The CLI version assumes it's being run from the FreeSWITCH scripts
+-- directory, but when run from FreeSWITCH the full path must be specified.
 local script_path = "./"
 if jester.is_freeswitch then
-  local api = freeswitch.API()
-  local base_dir = api:executeString("global_getvar base_dir")
-  script_path = base_dir .. "/scripts/"
+  script_path = jester.conf.scripts_dir .. "/"
 end
 
 --[[
@@ -75,9 +71,8 @@ function get_help(...)
     require "lfs"
     local error_message = {}
     local path = script_path .. jester.conf.help_path
-    local dir = lfs.dir(path)
     local file_list = {}
-    for file in dir do
+    for file in lfs.dir(path) do
       -- Exclude directory references and hidden files.
       if not string.match(file, "^%..*") then
         table.insert(file_list, file)
