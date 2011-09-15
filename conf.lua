@@ -51,6 +51,7 @@ key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
 -- the profile.
 modules = {
   "core_actions",
+  "couchdb",
   "data",
   "dialplan_tools",
   "email",
