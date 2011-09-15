@@ -291,7 +291,7 @@ function set_storage(area, key, value)
     -- Make sure the storage area exists.
     init_storage(area)
     channel.storage[area][key] = value
-    debug_log("Setting storage: area '%s', key '%s', value '%s'", area, key, value)
+    debug_log("Setting storage: area '%s', key '%s', value '%s'", area, key, tostring(value))
   end
 end
 
