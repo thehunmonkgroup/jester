@@ -20,6 +20,7 @@ function record_file(action)
     filename = os.date("%Y-%m-%d_%H:%M:%S") .. "-" .. jester.channel.uuid .. ".wav"
   end
   local filepath = dir .. "/" .. filename
+  jester.clear_storage("record")
   jester.set_storage("record", "last_recording_name", filename)
   jester.set_storage("record", "last_recording_path", filepath)
   jester.set_storage("record", "last_recording_timestamp", timestamp)
@@ -50,7 +51,7 @@ function record_file(action)
   -- Capture recording duration by getting timestamps immediately before and
   -- after the recording.
   local startstamp = os.time()
-  session:recordFile(filepath, max_length, silence_threshold, silence_secs)
+  local recorded = session:recordFile(filepath, max_length, silence_threshold, silence_secs)
   local endstamp = os.time()
 
   if append then
@@ -58,13 +59,15 @@ function record_file(action)
     jester.set_variable("record_append", record_append)
   end
 
-  jester.set_storage("record", "last_recording_duration", endstamp - startstamp)
-  -- Store the recording settings in a custom set of keys if given.
-  if area then
-    jester.set_storage(area, "name", filename)
-    jester.set_storage(area, "path", filepath)
-    jester.set_storage(area, "timestamp", timestamp)
-    jester.set_storage(area, "duration", endstamp - startstamp)
+  if recorded then
+    jester.set_storage("record", "last_recording_duration", endstamp - startstamp)
+    -- Store the recording settings in a custom set of keys if given.
+    if area then
+      jester.set_storage(area, "name", filename)
+      jester.set_storage(area, "path", filepath)
+      jester.set_storage(area, "timestamp", timestamp)
+      jester.set_storage(area, "duration", endstamp - startstamp)
+    end
   end
 end
 
