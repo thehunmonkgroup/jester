@@ -18,8 +18,8 @@ jester.help_map.play.actions.play.params = {
   1. A full file path
   2. A relative file path from the FreeSWITCH 'sounds' directory
   3. A phrase prefixed with 'phrase:', eg, 'phrase:invalid_sound'.
-  
-To play several files together in a group, pass a table of names instead, eg. 'file = { "foo", "bar", "phrase:goodbye" }'.]],
+
+To play several files together in a group, pass a table of names instead, eg. 'file = { "/tmp/foo.wav", "bar.wav", "phrase:goodbye" }'. Internally, Jester uses an ampersand (&) as the default delimiter for playback of mulitple files; to override this, set the 'playback_delimiter' variable in either the global or profile configuration file.]],
   repetitions = [[(Optional) How many times to repeat the file(s).  Default is 1.]],
   wait = [[(Optional) How long to wait between repetitions, in milliseconds.  Default is no wait.]],
   keys = [[(Optional) See 'help sequences keys'.]],
@@ -74,7 +74,7 @@ jester.help_map.play.actions.play_valid_file.params = {
   1. Full file paths
   2. Relative file paths from the FreeSWITCH 'sounds' directory
   3. A phrase prefixed with 'phrase:', eg, 'phrase:invalid_sound' (note that this will always be considered a valid file)
-  
+
 List the files in the order you would prefer them to be searched, eg. 'file = { "mycustomgreeting", "phrase:invalid_entry" }'.]],
   repetitions = [[(Optional) How many times to repeat the file(s).  Default is 1.]],
   wait = [[(Optional) How long to wait between repetitions, in milliseconds.  Default is no wait.]],

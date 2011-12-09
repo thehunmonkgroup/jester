@@ -24,7 +24,11 @@ function play_file(action)
   if action.file then
     -- A list of files was passed, join them in order.
     if type(action.file) == "table" then
-      action.file = table.concat(action.file, "&")
+      local delimiter = jester.conf.playback_delimiter or "&"
+      -- Ensure this channel variable is properly set, or playback of multiple
+      -- files will not work.
+      jester.set_variable("playback_delimiter", delimiter)
+      action.file = table.concat(action.file, delimiter)
     end
     local rep = reps(action)
     for i = 1, rep do
