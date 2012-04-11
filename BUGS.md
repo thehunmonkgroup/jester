@@ -1,3 +1,4 @@
+## Known bugs
  * Navigation stack probably doesn't work properly in inside any subsequences
  * DTMF in the global key handler is not queued --  keys that are pressed
    during actions that have no keys param are simply discarded.
