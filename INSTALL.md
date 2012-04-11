@@ -22,19 +22,17 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 2. Install the LuaFileSystem and LuaSocket packages (also probably available
    in your packaging system, they're in the EPEL repository for
    RHEL/CentOS/Fedora, and in the Debian repos as well.  
-     eg. ```yum install lua-filesystem lua-socket```
-
+     eg. ```yum install lua-filesystem lua-socket```  
    If you can't find these in a package, you can use the LuaRocks system
    (http://luarocks.org), or install from source:  
-     http://keplerproject.github.com/luafilesystem  
-     http://w3.impa.br/~diego/software/luasocket
+   * http://keplerproject.github.com/luafilesystem  
+   * http://w3.impa.br/~diego/software/luasocket
 
 3. Set your LUA_PATH environment variable to include the FreeSWITCH 'scripts'
    directory.  This is for easy access when you are logged in at the command
    line.  For the bash shell, in a typical installation, it would look like
    this:  
-     ```export LUA_PATH=";;/usr/local/freeswitch/scripts/?.lua"```
-
+     ```export LUA_PATH=";;/usr/local/freeswitch/scripts/?.lua"```  
    The two semicolons at the beginning of the path are not a typo!  Lua
    interprets those as 'include my default paths too'.
 
@@ -45,11 +43,9 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 5. Depending on where you install the packages from step 2, you may need to
    fiddle with the LUA_PATH and LUA_CPATH settings in the lua.conf.xml file
    found in the ```conf/autoload_configs``` directory of your FreeSWITCH
-   installation.
-
+   installation.  
    If you're seeing errors at the FreeSWITCH console about not being able
-   load "lfs" or "socket", then this is the most likely cause.
-
+   load "lfs" or "socket", then this is the most likely cause.  
    For example, the configuration for LUA_CPATH should be somewhat like this:  
      ```<param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>```  
        or  
