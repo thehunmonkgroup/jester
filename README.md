@@ -12,7 +12,7 @@ Jester is written to be small, simple, and extensible. The core code is less tha
 ## Comedian mail replica
 Jester's default profile is a replica of Asterisk's Comedian Mail system. Those transitioning from Asterisk to FreeSWITCH with concerns about the differences between the two voicemail systems can leverage this to provide a seamless transition to their end users.
 
-## Help
+## Documentation
 
 Jester comes with an extensive help system, available from both the command line and within the FreeSWITCH console, which should make it easy for new users and developers to get up to speed.
 
@@ -34,6 +34,10 @@ Once you've installed Jester, the next best step is to read the help.  The exact
    ```
    jhelp scripts jhelp
    ```
+
+## Support
+
+The issue tracker for this project is provided to file bug reports, feature requests, and project tasks -- support requests are not accepted via the issue tracker. For all support related issues, including configuration, usage, and training, consider hiring a competent consultant.
 
 ## Other stuff
 See **LICENSE.txt** to view the license for this software.
