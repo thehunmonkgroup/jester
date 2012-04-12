@@ -37,7 +37,7 @@ Once you've installed Jester, the next best step is to read the help.  The exact
 
 ## Support
 
-The issue tracker for this project is provided to file bug reports, feature requests, and project tasks -- support requests are not accepted via the issue tracker. For all support related issues, including configuration, usage, and training, consider hiring a competent consultant.
+The issue tracker for this project is provided to file bug reports, feature requests, and project tasks -- support requests are not accepted via the issue tracker. For all support-related issues, including configuration, usage, and training, consider hiring a competent consultant.
 
 ## Other stuff
 See **LICENSE.txt** to view the license for this software.
