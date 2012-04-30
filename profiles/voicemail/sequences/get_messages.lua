@@ -33,7 +33,7 @@ return
     },
     storage_area = "message" .. message_type,
     multiple = true,
-    sort = "id",
+    sort = "timestamp",
   },
 }
 

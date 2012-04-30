@@ -49,6 +49,7 @@ CREATE TABLE message (
   recording text,
   PRIMARY KEY (id),
   KEY domain_mailbox (domain, mailbox),
+  KEY timestamp (timestamp),
   KEY deleted (deleted)
 );
 
