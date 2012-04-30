@@ -21,7 +21,7 @@ jester.help_map.core_actions.actions.conditional.description_long = [[This actio
 jester.help_map.core_actions.actions.conditional.params = {
   value = [[The value that you want to compare.]],
   compare_to = [[The value that you expect it to be, or for pattern matching, any valid Lua pattern (see the Lua manual for more information on Lua patterns).]],
-  comparison = [[(Optional) The kind of comparison to perform.  Valid values are "equal" and "match".  Default is "equal".]],
+  comparison = [[(Optional) The kind of comparison to perform.  Valid values are "equal", "match", "greater_than", and "less_than".  Default is "equal".]],
   if_true = [[(Optional) The sequence to call if the comparison is true.]],
   if_false = [[(Optional) The sequence to call if the comparison is false.]],
 }

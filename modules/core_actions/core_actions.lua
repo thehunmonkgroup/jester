@@ -30,6 +30,10 @@ function conditional(action)
       match = value == compare_to
     elseif operator == "match" then
       match = string.match(value, compare_to) or false
+    elseif operator == "greater_than" then
+      match = value > compare_to
+    elseif operator == "less_than" then
+      match = value < compare_to
     end
     if match == nil then
       jester.debug_log("Invalid comparison operator")
