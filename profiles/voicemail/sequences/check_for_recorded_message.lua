@@ -7,6 +7,15 @@ recording_name = storage("record", "last_recording_name")
 
 return
 {
+  -- Make sure we have a recording name set, otherwise we're just checking to see
+  -- if our temp_recording_dir exists (which it probably does).
+  {
+    action = "conditional",
+    value = recording_name,
+    compare_to = "",
+    comparison = "equal",
+    if_true = "none",
+  },
   {
     action = "file_exists",
     file = profile.temp_recording_dir .. "/" .. recording_name,
