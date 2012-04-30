@@ -4,7 +4,7 @@
 
 uuid = storage("channel", "uuid")
 
-operator_extension = storage("mailbox_settings", "operator_extension")
+outdial_extension = storage("mailbox_settings", "outdial_extension")
 
 -- Message data.
 new_message_count = storage("messagenew", "__count")
@@ -36,9 +36,9 @@ if current_folder ~= "" then
   main_menu_keys["1"] = "play_messages"
 end
 
--- Operator outdial is enabled, so provide access to the advanced options from
+-- Outdial is enabled, so provide access to the advanced options from
 -- the main menu.
-if operator_extension ~= "" then
+if outdial_extension ~= "" then
   main_menu_keys["3"] = "main_menu_advanced_options"
 end
 
