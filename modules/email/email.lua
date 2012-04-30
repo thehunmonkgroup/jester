@@ -53,6 +53,7 @@ function send_email_socket(action)
       end
 
       if t then
+        headers.To = headers.To or v
         recipient = "<" .. v .. ">"
         subject = t.subject
         message = t.message or ""
