@@ -18,7 +18,7 @@ help_keys = {
   ["5"] = "repeat_message",
   ["6"] = "next_message",
   ["0"] = "mailbox_options",
-  ["*"] = "help",
+  ["*"] = "help " .. skip_folder_announcement,
   ["#"] = "exit exit_extension",
 }
 
