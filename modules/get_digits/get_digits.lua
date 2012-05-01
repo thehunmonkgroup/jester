@@ -43,3 +43,7 @@ function set_digit_length(digit_length)
   return digit_length
 end
 
+function flush_digits()
+  session:flushDigits()
+  jester.debug_log("Flushing Digits")
+end

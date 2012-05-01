@@ -19,3 +19,7 @@ jester.help_map.get_digits.actions.get_digits.params = {
   storage_key = [[(Optional) The key to store the collected digits under in the 'get_digits' storage area.  Default is 'digits'.]],
 }
 
+jester.help_map.get_digits.actions.flush_digits = {}
+jester.help_map.get_digits.actions.flush_digits.description_short = [[Flush DTMF in the session.]]
+jester.help_map.get_digits.actions.flush_digits.description_long = [[This action flushes any pending DTMF in the session.]]
+
