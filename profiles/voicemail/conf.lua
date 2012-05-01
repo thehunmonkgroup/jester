@@ -182,6 +182,10 @@ recording_silence_end = 5
 -- this for problems with auto ending recordings.
 recording_silence_threshold = 20
 
+-- The minimum length of a recorded file, in bytes. For a normal .wav file,
+-- 16000 bytes is about one second.
+minimum_recorded_file_size = 8000
+
 --[[
   Other settings.
 ]]
