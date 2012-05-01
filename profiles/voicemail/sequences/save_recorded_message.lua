@@ -15,6 +15,9 @@ caller_id_number = storage("message_info", "caller_id_number")
 caller_id_name = storage("message_info", "caller_id_name")
 caller_domain = storage("message_info", "caller_domain")
 
+-- Get our message count for use in new_message event.
+message_count = storage("data", "message_new_count")
+
 -- Set up the file move action, specifying copying if necessary.
 file_operation = {
   action = "move_file",
@@ -46,6 +49,10 @@ return
     },
     update_type = "insert",
   },
+  {
+    action = "call_sequence",
+    sequence = "sub:get_message_count " .. domain .. "," .. mailbox .. ",0,new",
+  },
   -- Fire an event indicating a new message was received.
   {
     action = "fire_event",
@@ -53,6 +60,7 @@ return
     headers = {
       Mailbox = mailbox,
       Domain = domain,
+      ["New-Message-Count"] = message_count,
     },
   },
 }
