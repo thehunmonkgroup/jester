@@ -1,7 +1,7 @@
 jester.help_map.file = {}
 jester.help_map.file.description_short = [[Simple file operations.]]
 jester.help_map.file.description_long = [[This module provides actions to handle simple filesystem operations.]]
-jester.help_map.file.handlers = {} 
+jester.help_map.file.handlers = {}
 jester.help_map.file.handlers.filesystem = [[The default handler for the file module.  This handles file operations on the local filesystem.]]
 
 jester.help_map.file.actions = {}
@@ -48,3 +48,9 @@ jester.help_map.file.actions.file_exists.params = {
   if_false = [[(Optional) The sequence to call if the file does not exist.]],
 }
 
+jester.help_map.file.actions.file_size = {}
+jester.help_map.file.actions.file_size.description_short = [[Checks a file's size.]]
+jester.help_map.file.actions.file_size.description_long = [[This action checks the size of a file. The result is stored in the 'file' storage area, key 'size']]
+jester.help_map.file.actions.file_size.params = {
+  file = [[The file to check, including the path. Provide either the full path or a relative path from the FreeSWITCH base_dir global variable, eg. 'file = "/tmp/myfile.wav"' or 'source = "storage/myfile.wav"'.]],
+}

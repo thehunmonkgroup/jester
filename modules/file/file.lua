@@ -156,3 +156,16 @@ function file_exists(action)
   end
 end
 
+--[[
+  Returns a file's size.
+]]
+function file_size(action)
+  local file, size
+  if action.file then
+    require "lfs"
+    file = get_filepath(action.file)
+    size = lfs.attributes(file, "size")
+  end
+  -- Store the result of the check.
+  jester.set_storage("file", "size", size)
+end

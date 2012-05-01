@@ -33,4 +33,11 @@ jester.action_map.file_exists = {
     default = "file_exists",
   }
 }
+jester.action_map.file_size = {
+  mod = "file",
+  handlers = {
+    filesystem = "file_size",
+    default = "file_size",
+  }
+}
 
