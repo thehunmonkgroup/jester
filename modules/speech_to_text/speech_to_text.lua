@@ -52,6 +52,7 @@ function speech_to_text_from_file_google(action)
 
         if status_code == 200 then
           local response_string = table.concat(response)
+          jester.debug_log("Google API server response: %s", response_string)
           local data = cjson.decode(response_string)
 
           jester.set_storage(area, "status", data.status or 1)
