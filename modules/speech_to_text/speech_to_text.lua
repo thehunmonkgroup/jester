@@ -4,7 +4,7 @@ local io = require("io")
 local http = require("socket.http")
 local ltn12 = require("ltn12")
 require "jester.support.file"
-require("cjson")
+local cjson = require("cjson")
 
 --[[
   Speech to text using Google's API.
@@ -17,15 +17,23 @@ function speech_to_text_from_file_google(action)
 
   if filepath then
     -- Verify file exists.
-    success, file_error = lfs.attributes(filepath, "mode")
+    local success, file_error = lfs.attributes(filepath, "mode")
     if success then
-      flac_file = os.tmpname() .. ".flac"
-      command = string.format("flac --compression-level-0 --sample-rate=8000 -o %s %s", flac_file, filepath)
-      result = os.execute(command)
+      local flac_file = os.tmpname()
+      local command = string.format("flac -f --compression-level-0 --sample-rate=8000 -o %s %s", flac_file, filepath)
+      local result = os.execute(command)
+      jester.debug_log("Flac return code: %s", result)
 
-      if result == 0 then
-        file = io.open(flac_file, "rb")
-        filesize = (filesize(file))
+      -- TODO: This call is sometimes returning -1, which is the C system()
+      -- call error code for a failure, even though the file is converted
+      -- successfully. This only seems to happen when flac is called from
+      -- within FreeSWITCH, calling the exact same command from the shell
+      -- returns 0, no idea why. Since flac error codes are always greater
+      -- than 0, this is at least a workable approach to make things function
+      -- until the real problem is uncovered.
+      if result < 1 then
+        local file = io.open(flac_file, "rb")
+        local filesize = (filesize(file))
 
         local response = {}
 
@@ -43,8 +51,8 @@ function speech_to_text_from_file_google(action)
         os.remove(flac_file)
 
         if status_code == 200 then
-          response_string = table.concat(response)
-          data = cjson.decode(response_string)
+          local response_string = table.concat(response)
+          local data = cjson.decode(response_string)
 
           jester.set_storage(area, "status", data.status or 1)
 
