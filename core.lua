@@ -327,7 +327,7 @@ function parse_sequence(sequence)
     sequence = sequence:sub(4)
     s_type = "up_sequence"
   end
-  local sequence_name, sequence_args = string.match(sequence, "^([%w_]+)%s+(%S+)$")
+  local sequence_name, sequence_args = string.match(sequence, "^([%w_/]+)%s+(%S+)$")
   if not sequence_name then
     sequence_name = sequence
     sequence_args = ""
