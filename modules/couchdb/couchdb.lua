@@ -25,6 +25,23 @@ end
 --[[
   CouchDB action handlers.
 ]]
+
+function retrieve(action)
+  local path = action.path
+  local params = action.query_parameters
+  local storage_area = action.storage_area or "couchdb_retrieve"
+  jester.clear_storage(storage_area)
+  local doc = doc_handler(action)
+  if doc then
+    local resp, code = doc:retrieve(path, params)
+    if code == http_code_ok then
+      jester.debug_log("Path '%s' retrieved from database: %s", path, action.database)
+      jester.set_storage(storage_area, "data", resp)
+    end
+  end
+end
+
+
 function retrieve_document(action)
   local id = action.document_id
   local params = action.query_parameters

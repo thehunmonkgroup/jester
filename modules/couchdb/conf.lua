@@ -1,3 +1,8 @@
+jester.action_map.couchdb_retrieve = {
+  mod = "couchdb",
+  func = "retrieve",
+}
+
 jester.action_map.couchdb_retrieve_document = {
   mod = "couchdb",
   func = "retrieve_document",

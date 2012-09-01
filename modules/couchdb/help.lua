@@ -12,6 +12,17 @@ If things aren't working, be sure to check the log file, as configured in luchia
 
 jester.help_map.couchdb.actions = {}
 
+jester.help_map.couchdb.actions.couchdb_retrieve = {}
+jester.help_map.couchdb.actions.couchdb_retrieve.description_short = [[Retrieve general data.]]
+jester.help_map.couchdb.actions.couchdb_retrieve.description_long = [[General retrieval function, this can be used to fetch data from any valid path, such as for views, etc.]]
+jester.help_map.couchdb.actions.couchdb_retrieve.params = {
+  server = [[(Optional) Table of server connection parameters.]],
+  database = [[Database to connect to.]],
+  path = [[The path to retrieve. This should not include the database, eg. "_design/foo/_view/bar".]],
+  query_parameters = [[(Optional) A table of query parameters to pass to the server, eg. '{revs = "true"}']],
+  storage_area = [[(Optional) The storage area to store the data in after loading.  Defaults to 'couchdb_retrieve'. This will contain a 'data' key on success with a table representing the data.]],
+}
+
 jester.help_map.couchdb.actions.couchdb_retrieve_document = {}
 jester.help_map.couchdb.actions.couchdb_retrieve_document.description_short = [[Retrieve a document.]]
 jester.help_map.couchdb.actions.couchdb_retrieve_document.params = {
