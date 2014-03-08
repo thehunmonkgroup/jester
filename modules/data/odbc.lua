@@ -13,7 +13,7 @@ function connect(action)
     -- Based on the database type, set up the escape sequence for
     -- string input.
     set_escape(conf.database_type)
-    dbh = assert(freeswitch.Dbh(conf.database))
+    dbh = assert(freeswitch.Dbh("odbc://" .. conf.database))
     return dbh, conf
   else
     error("Database connection misconfigured")
