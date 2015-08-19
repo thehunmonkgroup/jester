@@ -5,7 +5,7 @@
 Although I still fully intend to upgrade Jester to Lua 5.2, I have not been
 able to do so yet. As of this writing, it only works with Lua 5.1, and some
 older versions of the dependencies. Using LuaRocks, the following will set
-up a working dependencies for Lua 5.1:
+up working dependencies for Lua 5.1:
 
 ```
 luarocks install luasocket 2.0.2-5
@@ -13,7 +13,9 @@ luarocks install luafilesystem 1.5.0-3
 ```
 
 The newer versions of FreeSWITCH allow you to use a system-installed Lua,
-which should allow a workaround until this software is upgraded.
+which should allow a workaround until this software is upgraded. Run
+the FreeSWITCH configure command with the <code>--enable-system-lua</code>
+argument.
 
 If you'd like to help me with the Lua 5.2 upgrade (either with a patch or
 funding/sponsorship), please file an issue!
