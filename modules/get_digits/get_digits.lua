@@ -27,9 +27,12 @@ function get_digits(action)
   local bad_input = action.bad_input or "ivr/ivr-that_was_an_invalid_entry.wav"
   local digits_regex = action.digits_regex or "\\d+"
   local key = action.storage_key or "digits"
+  local terminator_used_key = action.storage_terminator_key or "terminator_used"
   local digits = session:playAndGetDigits(min_digits, max_digits, max_tries, timeout, terminators, audio_files, bad_input, digits_regex)
-  jester.debug_log("Got digits: %s", digits)
+  local terminator_used = session:getVariable("read_terminator_used") or ""
+  jester.debug_log("Got digits: [%s] Terminator [%s]", digits, terminator_used)
   jester.set_storage("get_digits", key, digits)
+  jester.set_storage("get_digits", terminator_used_key, terminator_used)
 end
 
 --[[

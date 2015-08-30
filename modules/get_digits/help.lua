@@ -17,6 +17,7 @@ jester.help_map.get_digits.actions.get_digits.params = {
   bad_input = [[(Optional) An audio file to play to the user when input validation fails.  Default is 'ivr/ivr-that_was_an_invalid_entry.wav'.]],
   digits_regex = [[(Optional) A regular expression to use for validating the user input.  If the user input does not match the expression, then validation fails.  The regex is in the same form as the regular expressions used in the FreeSWITCH dialplan.  Default is '\\d+', which matches one or more digits.  Note: If you need to match the * key in the regex, you will have to escape it twice, as in '\\d+|\\*'.]],
   storage_key = [[(Optional) The key to store the collected digits under in the 'get_digits' storage area.  Default is 'digits'.]],
+  storage_terminator_key = [[(Optional) The key to store which terminator was used in the 'get_digits' storage area.  Default is 'terminator_used'.]],
 }
 
 jester.help_map.get_digits.actions.flush_digits = {}
