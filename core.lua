@@ -1,70 +1,59 @@
-module("jester", package.seeall)
+local _M = {}
 
 --[[
   Initial setup for running Jester.
 ]]
-function bootstrap(args)
+function _M.bootstrap(config, profile, sequence, sequence_args)
+
+  _M.conf = config
 
   -- Check to see if we're calling the script from within FreeSWITCH.
-  if freeswitch and freeswitch.consoleLog then is_freeswitch = true end
+  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
 
-  -- Check for help query.
-  if args[1] == "help" then
-    require "jester.help"
-    return help.get_help(args[2], args[3], args[4], args[5])
+  -- Initialize the channel object.
+  _M.init_channel()
+
+  -- Initialize sequence loop stacks.  Sequence stacks are initialized just
+  -- prior to each sequence loop run.
+  _M.init_stacks({"active", "exit", "hangup"})
+
+  -- Save the initial arguments.
+  _M.initial_args = sequence_args and _M.parse_args(sequence_args) or {}
+
+  -- Add profile configuration here so it can leverage access to channel
+  -- variables.
+  _M.init_profile(profile)
+
+  -- Load modules.
+  _M.init_modules(_M.conf.modules)
+
+  -- Handle some session-based setup if we have a session.
+  if session then
+    channel.uuid = _M.get_variable("uuid")
+    _M.set_storage("channel", "uuid", channel.uuid)
+
+    -- Set up the global key handler.
+    _G.key_handler = _M.key_handler
+    session:setInputCallback("key_handler")
+
+    -- Turn off autohangup.
+    session:setAutoHangup(false)
   end
 
-  -- Run normally.
-  if args[1] and args[2] then
-
-    -- Initialize the channel object.
-    init_channel()
-
-    -- Initialize sequence loop stacks.  Sequence stacks are initialized just
-    -- prior to each sequence loop run.
-    init_stacks({"active", "exit", "hangup"})
-
-    -- Save the initial arguments.
-    initial_args = args[3] and parse_args(args[3]) or {}
-
-    -- Add profile configuration here so it can leverage access to channel
-    -- variables.
-    init_profile(args[1])
-
-    -- Load modules.
-    init_modules(conf.modules)
-
-    -- Handle some session-based setup if we have a session.
-    if session then
-      channel.uuid = get_variable("uuid")
-      set_storage("channel", "uuid", channel.uuid)
-
-      -- Set up the global key handler.
-      _G.key_handler = key_handler
-      session:setInputCallback("key_handler")
-
-      -- Turn off autohangup.
-      session:setAutoHangup(false)
-    end
-
-    -- Load initial sequence.
-    local event = {
-      event_type = "sequence",
-      sequence = args[2] .. " " .. (args[3] or ""),
-    }
-    table.insert(channel.stack.active, event)
-
-    bootstrapped = true
-  else
-    error("JESTER: missing arguments in call to jester.lua. Run 'lua jester/jester.lua help' from the FreeSWITCH console for more help", 2)
-  end
+  -- Load initial sequence.
+  local event = {
+    event_type = "sequence",
+    sequence = sequence .. " " .. (sequence_args or ""),
+  }
+  table.insert(channel.stack.active, event)
 
 end
 
 --[[
   Initialize the specified modules.
 ]]
-function init_modules(modules)
+function _M.init_modules(modules)
+  local config
   local conf_file
   -- Create a lightweight map of all actions that can be called.
   -- Modules and custom scripts can call this function to load
@@ -73,10 +62,15 @@ function init_modules(modules)
   action_map = action_map or {}
   for _, mod in ipairs(modules) do
     conf_file = "jester.modules." .. mod .. ".conf"
-    if require(conf_file) then
-      debug_log("Loaded module configuration '%s'", conf_file)
+    config = require(conf_file)
+    if config then
+      config.action_map = config.action_map or {}
+      for action, data in pairs(config.action_map) do
+        action_map[action] = data
+      end
+      _M.debug_log("Loaded module configuration '%s'", conf_file)
     else
-      debug_log("Failed loading module configuration '%s'!", conf_file)
+      _M.debug_log("Failed loading module configuration '%s'!", conf_file)
     end
   end
 end
@@ -85,8 +79,8 @@ end
   Initialize the channel namespace.  This holds all the stacks and storage
   for a Jester run.
 ]]
-function init_channel(o)
-  debug_log("Creating channel table")
+function _M.init_channel()
+  _M.debug_log("Creating channel table")
   channel = {}
   channel.stack = {}
   channel.storage = {}
@@ -95,37 +89,40 @@ end
 --[[
   Initialize the specified stacks.
 ]]
-function init_stacks(stacks)
+function _M.init_stacks(stacks)
   for _, name in ipairs(stacks) do
-    reset_stack(name)
+    _M.reset_stack(name)
   end
 end
 
 --[[
   Initialize the specified profile.
 ]]
-function init_profile(profile_name)
+function _M.init_profile(profile_name)
 
-  debug_log("Loading profile '%s'", profile_name)
+  _M.debug_log("Loading profile '%s'", profile_name)
   -- Set up access to channel variables, storage, global configs, and initial
   -- arguments.
-  profile = {
-    global = conf,
+  _M.profile = {
+    global = _M.conf,
     args = function(i)
-      local arg = jester.initial_args[tonumber(i)] or ""
-      debug_log("Got profile arg(%d): '%s'", i, arg)
+      local arg = _M.initial_args[tonumber(i)] or ""
+      _M.debug_log("Got profile arg(%d): '%s'", i, arg)
       return arg
     end,
-    storage = protected_get_storage,
-    variable = protected_get_variable,
+    storage = _M.protected_get_storage,
+    variable = _M.protected_get_variable,
     -- Allow this function so the user can dump to see what's going on in case
     -- of problems.
-    debug_dump = debug_dump,
+    debug_dump = _M.debug_dump,
   }
-  local loaded_profile, err = assert(loadfile(conf.profile_path .. "/" .. profile_name .. "/conf.lua"))
+  local filepath = _M.conf.profile_path .. "/" .. profile_name .. "/conf.lua"
+  -- Compat with 5.1, as the extra args to loadfile are ignored.
+  local loaded_profile, err = assert(loadfile(filepath, "bt", _M.profile))
   if loaded_profile then
-    -- Lock out access to the rest of the Lua environment.
-    setfenv(loaded_profile, profile)
+    if _VERSION == "Lua 5.1" then
+      setfenv(loaded_profile, _M.profile)
+    end
     loaded_profile()
   end
 
@@ -138,8 +135,9 @@ function init_profile(profile_name)
     "key_order",
   }
   for _, override in ipairs(overrides) do
-    if profile[override] ~= nil then
-      conf[override] = profile[override]
+    if _M.profile[override] ~= nil then
+      _M.debug_log("Overriding global config '%s' in profile '%s'", override, profile_name)
+      _M.conf[override] = _M.profile[override]
     end
   end
 end
@@ -147,7 +145,7 @@ end
 --[[
   Initialize a storage area.
 ]]
-function init_storage(area)
+function _M.init_storage(area)
   if channel and not channel.storage[area] then
     channel.storage[area] = {}
   end
@@ -156,8 +154,8 @@ end
 --[[
   Empties the specified stack.  Can also be used to initialize a stack.
 ]]
-function reset_stack(name)
-  debug_log("Reset stack '%s'", name)
+function _M.reset_stack(name)
+  _M.debug_log("Reset stack '%s'", name)
   channel.stack[name] = {}
 end
 
@@ -165,16 +163,16 @@ end
   Queues the sequence to be the next one run in the current sequence loop,
   at the current sequence stack position.
 ]]
-function queue_sequence(sequence)
-  if ready() and sequence then
-    if conf.debug then
+function _M.queue_sequence(sequence)
+  if _M.ready() and sequence then
+    if _M.conf.debug then
       table.insert(channel.stack.executed_sequences, #channel.stack.executed_sequences + 1 .. ": " .. sequence)
     end
     local loaded_sequence, add_to_stack, remove_from_stack
     -- Parse out the sequence name and arguments.
-    local s_type, sequence_name, sequence_args = parse_sequence(sequence)
-    debug_log("%s called: %s, args: %s", s_type, sequence_name, sequence_args)
-    local parsed_args = parse_args(sequence_args)
+    local s_type, sequence_name, sequence_args = _M.parse_sequence(sequence)
+    _M.debug_log("%s called: %s, args: %s", s_type, sequence_name, sequence_args)
+    local parsed_args = _M.parse_args(sequence_args)
     -- Check for stack operators, sub goes one level deeper, up goes one
     -- level up, top resets the stack.
     if s_type == "subsequence" then
@@ -182,8 +180,8 @@ function queue_sequence(sequence)
     elseif s_type == "top_sequence" then
       -- Emptying the stack here will trigger putting the sequence on the top
       -- of a fresh stack.
-      reset_stack("sequence")
-      reset_stack("sequence_name")
+      _M.reset_stack("sequence")
+      _M.reset_stack("sequence_name")
     elseif s_type == "up_sequence" then
       remove_from_stack = true
     end
@@ -193,9 +191,9 @@ function queue_sequence(sequence)
       add_to_stack = true
     end
     -- Load the sequence.
-    loaded_sequence = load_sequence(sequence_name, parsed_args)
+    loaded_sequence = _M.load_sequence(sequence_name, parsed_args)
     if loaded_sequence then
-      debug_log("Loaded sequence '%s'", sequence_name)
+      _M.debug_log("Loaded sequence '%s'", sequence_name)
       if add_to_stack then
         -- Increment the action position of the currently running sequence, as
         -- if/when it resumes it's already run the action it was running when
@@ -208,7 +206,7 @@ function queue_sequence(sequence)
         table.remove(channel.stack.sequence)
         table.remove(channel.stack.sequence_name)
       end
-      debug_log("Current sequence stack: %s", table.concat(channel.stack.sequence_name, " | "))
+      _M.debug_log("Current sequence stack: %s", table.concat(channel.stack.sequence_name, " | "))
       channel.stack.sequence_stack_position = #stack
       local p = channel.stack.sequence_stack_position
       -- There might be data in here from before, so reset it.
@@ -220,7 +218,7 @@ function queue_sequence(sequence)
       channel.stack.sequence[p].parsed_args = parsed_args
       channel.stack.sequence[p].position = 1
     else
-      debug_log("Failed loading sequence '%s'!", sequence_name)
+      _M.debug_log("Failed loading sequence '%s'!", sequence_name)
     end
   end
 end
@@ -228,27 +226,29 @@ end
 --[[
   Loads the specified sequence into a protected function environment.
 ]]
-function load_sequence(name, arguments)
+function _M.load_sequence(name, arguments)
   -- Set up access to channel variables, storage, global and profile configs,
   -- and sequence arguments.
-  local env = {
-    global = conf,
-    profile = profile,
-    args = function(i)
-      local arg = arguments[tonumber(i)] or ""
-      debug_log("Got sequence arg(%d): '%s'", i, arg)
-      return arg
-    end,
-    storage = protected_get_storage,
-    variable = protected_get_variable,
-    -- Allow this function so the user can dump to see what's going on in case
-    -- of problems.
-    debug_dump = debug_dump,
-  }
-  local sequence, err = assert(loadfile(conf.sequence_path .. "/" .. name .. ".lua"))
+  local env = _ENV or _G
+  env.global = _M.conf
+  env.profile = _M.profile
+  env.args = function(i)
+    local arg = arguments[tonumber(i)] or ""
+    _M.debug_log("Got sequence arg(%d): '%s'", i, arg)
+    return arg
+  end
+  env.storage = _M.protected_get_storage
+  env.variable = _M.protected_get_variable
+  -- Allow this function so the user can dump to see what's going on in case
+  -- of problems.
+  env.debug_dump = _M.debug_dump
+  local filepath = _M.conf.sequence_path .. "/" .. name .. ".lua"
+  -- Compat with 5.1, as the extra args to loadfile are ignored.
+  local sequence, err = assert(loadfile(filepath, "bt", env))
   if sequence then
-    -- Lock out access to the rest of the Lua environment.
-    setfenv(sequence, env)
+    if _VERSION == "Lua 5.1" then
+      setfenv(sequence, env)
+    end
     return sequence
   end
 end
@@ -257,21 +257,21 @@ end
   Get the value for a key in a storage area, with an empty string as the
   default.
 ]]
-function protected_get_storage(area, key)
-  return get_storage(area, key, "")
+function _M.protected_get_storage(area, key)
+  return _M.get_storage(area, key, "")
 end
 
 --[[
   Get the value for a channel variable, with an empty string as the default.
 ]]
-function protected_get_variable(var)
-  return get_variable(var, "")
+function _M.protected_get_variable(var)
+  return _M.get_variable(var, "")
 end
 
 --[[
   Get the value for a key in a storage area.
 ]]
-function get_storage(area, key, default)
+function _M.get_storage(area, key, default)
   local value
   if channel.storage[area] and channel.storage[area][key] then
     value = channel.storage[area][key]
@@ -279,42 +279,42 @@ function get_storage(area, key, default)
   elseif default then
     value = default
   end
-  debug_log("Getting storage: area '%s', key '%s', value '%s'", area, key, tostring(value))
+  _M.debug_log("Getting storage: area '%s', key '%s', value '%s'", area, key, tostring(value))
   return value
 end
 
 --[[
   Set a key/value pair in a storage area.
 ]]
-function set_storage(area, key, value)
+function _M.set_storage(area, key, value)
   if area and key and value then
     -- Make sure the storage area exists.
-    init_storage(area)
+    _M.init_storage(area)
     channel.storage[area][key] = value
-    debug_log("Setting storage: area '%s', key '%s', value '%s'", area, key, tostring(value))
+    _M.debug_log("Setting storage: area '%s', key '%s', value '%s'", area, key, tostring(value))
   end
 end
 
 --[[
   Clear a key in a storage area, or the whole storage area.
 ]]
-function clear_storage(area, key)
+function _M.clear_storage(area, key)
   if area and key then
     if channel.storage[area] then
       channel.storage[area][key] = nil
-      debug_log("Cleared storage: area '%s', key '%s'", area, key)
+      _M.debug_log("Cleared storage: area '%s', key '%s'", area, key)
     end
   elseif area then
     channel.storage[area] = nil
-    debug_log("Cleared storage: area '%s'", area)
+    _M.debug_log("Cleared storage: area '%s'", area)
   end
 end
 
 --[[
   Parse sequence, return the sequence name and sequence args.
 ]]
-function parse_sequence(sequence)
-  sequence = trim(sequence)
+function _M.parse_sequence(sequence)
+  sequence = _M.trim(sequence)
   local s_type = "sequence"
   -- Check for stack operators.
   if sequence:sub(1, 4) == "sub:" then
@@ -338,7 +338,7 @@ end
 --[[
   Parse sequence arguments, and return them as an ordered list.
 ]]
-function parse_args(args)
+function _M.parse_args(args)
   local result, from, i = {}, 1, 1
   if args ~= "" then
     local delim_from, delim_to = string.find(args, ",", from)
@@ -356,29 +356,29 @@ end
 --[[
   Main entry point for a call to Jester.
 ]]
-function main()
-  if conf.debug then
-    init_stacks({"run_actions", "executed_sequences"})
+function _M.main()
+  if _M.conf.debug then
+    _M.init_stacks({"run_actions", "executed_sequences"})
   end
   -- Sequences run during an active call.
-  run_sequence_loop("active")
+  _M.run_sequence_loop("active")
   exiting = true
   -- Sequences run that were registered for the exit loop.
-  run_sequence_loop("exit")
+  _M.run_sequence_loop("exit")
   if session and not session:ready() then
     hungup = true
     -- Sequences run that were registered for the hangup loop.
-    run_sequence_loop("hangup")
+    _M.run_sequence_loop("hangup")
   end
-  if conf.debug then
-    if conf.debug_output.jester_object then
-      debug_dump(jester, true)
+  if _M.conf.debug then
+    if _M.conf.debug_output.jester_object then
+      _M.debug_dump(jester, true)
     end
-    if conf.debug_output.executed_sequences then
-      debug_log("EXECUTED SEQUENCES:\n%s", table.concat(channel.stack.executed_sequences, "\n"))
+    if _M.conf.debug_output.executed_sequences then
+      _M.debug_log("EXECUTED SEQUENCES:\n%s", table.concat(channel.stack.executed_sequences, "\n"))
     end
-    if conf.debug_output.run_actions then
-      debug_log("RUN ACTIONS:\n%s", table.concat(channel.stack.run_actions, "\n"))
+    if _M.conf.debug_output.run_actions then
+      _M.debug_log("RUN ACTIONS:\n%s", table.concat(channel.stack.run_actions, "\n"))
     end
   end
 end
@@ -386,22 +386,22 @@ end
 --[[
   Runs the specified sequence loop.
 ]]
-function run_sequence_loop(loop_type)
-  debug_log("Executing sequence loop '%s'", loop_type)
+function _M.run_sequence_loop(loop_type)
+  _M.debug_log("Executing sequence loop '%s'", loop_type)
   -- Clear the sequence stack prior to execution.
-  reset_stack("sequence")
-  reset_stack("sequence_name")
+  _M.reset_stack("sequence")
+  _M.reset_stack("sequence_name")
   -- Loop through the registered events.
   for _, event in ipairs(channel.stack[loop_type]) do
     -- Fire up the sequence loop.
     if event.event_type == "sequence" then
-      queue_sequence(event.sequence)
-      execute_sequences()
+      _M.queue_sequence(event.sequence)
+      _M.execute_sequences()
     -- An ad hoc action was passed, call it directly.
     elseif event.event_type == "action" then
       -- These are always ad hoc actions, so automatically mark them as such.
       event.action.ad_hoc = true
-      run_action(event.action)
+      _M.run_action(event.action)
     end
   end
 end
@@ -410,18 +410,18 @@ end
   Main loop for executing sequences until there are no more in the current
   loop.
 ]]
-function execute_sequences()
+function _M.execute_sequences()
   local action, new_action
 
   -- For the initial call, pre-load the first action.
-  action = load_action()
+  action = _M.load_action()
   local clock = os.clock()
 
   -- Main loop.  This runs until there are no more sequences to run, or the
   -- caller hangs up.
-  while ready() and action do
-    run_action(action)
-    if conf.debug then
+  while _M.ready() and action do
+    _M.run_action(action)
+    if _M.conf.debug then
       local new_clock = os.clock()
       table.insert(channel.stack.run_actions, #channel.stack.run_actions + 1 .. ": " .. action.action .. ": " .. new_clock - clock)
       clock = new_clock
@@ -429,22 +429,22 @@ function execute_sequences()
 
     -- The action that just ran may have loaded a new sequence, so reload
     -- the current action and compare them.
-    new_action = load_action()
+    new_action = _M.load_action()
     if action == new_action then
       -- Same action that was originally called, move to the next action in
       -- the sequence unless a replay has been requested.
       if channel.stack.sequence[channel.stack.sequence_stack_position].replay_action then
-        debug_log("Action replay requested")
+        _M.debug_log("Action replay requested")
         channel.stack.sequence[channel.stack.sequence_stack_position].replay_action = nil
       else
         channel.stack.sequence[channel.stack.sequence_stack_position].position = channel.stack.sequence[channel.stack.sequence_stack_position].position + 1
       end
-      refresh_current_sequence()
-      action = load_action()
+      _M.refresh_current_sequence()
+      action = _M.load_action()
     else
       -- A new sequence was loaded, make it's first action the active action.
-      action = load_action()
-      debug_log("Action loaded a new sequence")
+      action = _M.load_action()
+      _M.debug_log("Action loaded a new sequence")
     end
     -- No more actions in current sequence, but there are more sequences on
     -- stack, pop the finished one and load the previously running sequence.
@@ -453,25 +453,25 @@ function execute_sequences()
       -- The previous stack position may have already finished running its
       -- actions, so keep popping the stack and checking for a valid action
       -- until we find one.
-      while ready() and not action and #channel.stack.sequence > 1 do
+      while _M.ready() and not action and #channel.stack.sequence > 1 do
         subsequence = table.remove(channel.stack.sequence)
         table.remove(channel.stack.sequence_name)
         channel.stack.sequence_stack_position = #channel.stack.sequence
-        debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(channel.stack.sequence_name, " | "))
-        refresh_current_sequence()
-        action = load_action()
+        _M.debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(channel.stack.sequence_name, " | "))
+        _M.refresh_current_sequence()
+        action = _M.load_action()
       end
     end
   end
-  debug_log("No more actions, exiting")
+  _M.debug_log("No more actions, exiting")
 end
 
 --[[
   Reloads the current sequence file, refreshing all variables.
 ]]
-function refresh_current_sequence()
+function _M.refresh_current_sequence()
   -- Only refresh if there's a valid action to be run.
-  if load_action() then
+  if _M.load_action() then
     channel.stack.sequence[channel.stack.sequence_stack_position].sequence = channel.stack.sequence[channel.stack.sequence_stack_position].file()
   end
 end
@@ -479,7 +479,7 @@ end
 --[[
   Loads the current action from the current sequence stack and position.
 ]]
-function load_action()
+function _M.load_action()
   local stack = channel.stack.sequence
   local p = channel.stack.sequence_stack_position
   if stack[p] then
@@ -490,7 +490,7 @@ end
 --[[
   Sets the key map for the currently running action.
 ]]
-function set_keys(action, sequence)
+function _M.set_keys(action, sequence)
   -- Clear any key press data from the previously run action.  This prevents
   -- false key press detections on the current action.
   key_pressed = {}
@@ -509,20 +509,20 @@ function set_keys(action, sequence)
     keys = nil
     message = "No keys to set for action '%s'"
   end
-  debug_log(message, action.action)
+  _M.debug_log(message, action.action)
 end
 
 --[[
   Global key handler for all key press events in Jester.
 ]]
-function key_handler(session, input_type, data)
+function _M.key_handler(session, input_type, data)
   if keys and input_type == "dtmf" then
     -- Make sure we get a single digit.
     key_pressed.digit = string.sub(data["digit"], 1, 1)
     -- Pressed key is in the current key map, so it's valid.
     if keys[key_pressed.digit] then
       key_pressed.valid = key_pressed.digit
-      debug_log("Key pressed: %s, valid", key_pressed.valid)
+      _M.debug_log("Key pressed: %s, valid", key_pressed.valid)
       -- Parse the key value.  Values prefixed with @ are ad hoc actions,
       -- values prefixed with : are playback commands to return to core
       -- for playback control (break, seek, etc).
@@ -531,9 +531,9 @@ function key_handler(session, input_type, data)
         return command
       elseif marker == "@" then
         local action = { action = command, ad_hoc = true }
-        run_action(action)
+        _M.run_action(action)
       else
-        queue_sequence(command)
+        _M.queue_sequence(command)
       end
       return "break"
     -- Invalid key pressed.
@@ -542,17 +542,17 @@ function key_handler(session, input_type, data)
       -- invalid key.
       if keys.invalid or keys.invalid_sound or keys.invalid_sequence then
         key_pressed.invalid = key_pressed.digit
-        debug_log("Key pressed: %s, invalid!", key_pressed.invalid)
+        _M.debug_log("Key pressed: %s, invalid!", key_pressed.invalid)
         -- By default, replay the current action, but give the option
         -- to load a custom sequence instead.
         if keys.invalid_sequence then
-          queue_sequence(keys.invalid_sequence)
+          _M.queue_sequence(keys.invalid_sequence)
         else
           channel.stack.sequence[channel.stack.sequence_stack_position].replay_action = true
         end
         -- Play an invalid sound if specified.
         if keys.invalid_sound then
-          debug_log("Playing invalid sound file: %s", keys.invalid_sound)
+          _M.debug_log("Playing invalid sound file: %s", keys.invalid_sound)
           session:streamFile(keys.invalid_sound)
         end
         return "break"
@@ -564,43 +564,43 @@ end
 --[[
   Runs a loaded action.
 ]]
-function run_action(action)
-  if ready() and action.action then
+function _M.run_action(action)
+  if _M.ready() and action.action then
     local stack = channel.stack.sequence
     local p = channel.stack.sequence_stack_position
-    local mod
+    local mod_name
     -- Find the module that provides this action.
     if action_map[action.action] then
-      mod = action_map[action.action].mod
+      mod_name = action_map[action.action].mod
     else
       error(string.format([[JESTER: No valid action '%s']], action.action))
     end
     -- Load the module.  Since Lua caches loaded modules, this is only an
     -- expensive operation the first time the module code is loaded.
-    require("jester.modules." .. mod .. "." .. mod)
-    debug_log("Loaded module '%s'", mod)
+    local mod = require("jester.modules." .. mod_name .. "." .. mod_name)
+    _M.debug_log("Loaded module '%s'", mod_name)
     -- Load the handler for the action.
-    local func = load_action_handler(action)
-    action_func = modules[mod][mod][func]
+    local func = _M.load_action_handler(action)
+    action_func = mod[func]
     if type(action_func) == "function" then
       -- Actions can be called directly from a module or a key press.  These
       -- are not on the sequence stack, so check here if it's an ad hoc
       -- action.
       if action.ad_hoc then
-        debug_log("Running ad hoc action '%s'", action.action)
+        _M.debug_log("Running ad hoc action '%s'", action.action)
       else
-        debug_log("Running action %d (%s) from sequence '%s', function '%s'", stack[p].position, action.action, stack[p].name, func)
+        _M.debug_log("Running action %d (%s) from sequence '%s', function '%s'", stack[p].position, action.action, stack[p].name, func)
       end
       -- Set up key presses for this action -- ad hoc actions don't have key
       -- presses, and may be run when no valid sequence stack is present, so
       -- specifically check for that here to prevent it.
-      if not action.ad_hoc then set_keys(action, stack[p].sequence) end
+      if not action.ad_hoc then _M.set_keys(action, stack[p].sequence) end
       action_func(action)
     else
-      debug_log("Error executing action function '%s', does not exist!", func)
+      _M.debug_log("Error executing action function '%s', does not exist!", func)
     end
   elseif not action.action then
-    debug_log("No valid action parameter, skipping")
+    _M.debug_log("No valid action parameter, skipping")
   end
 end
 
@@ -608,7 +608,7 @@ end
   Loads the correct handler for the passed action, falling back to the default
   handler if none is specified.
 ]]
-function load_action_handler(action)
+function _M.load_action_handler(action)
   local func
   local handlers = action_map[action.action].handlers
   -- Does the action have handlers?
@@ -634,7 +634,7 @@ end
   Do use this if you want to loop until Jester finishes, don't use this if
   you want to loop until the call hangs up.
 ]]
-function ready()
+function _M.ready()
   -- No session means running from socket or luarun, always ready.
   if not session then
     return true
@@ -649,23 +649,23 @@ end
   Modules can call this function to check for valid key presses, to break
   out of loops, etc.
 ]]
-function actionable_key()
-  return jester.key_pressed.valid or jester.key_pressed.invalid
+function _M.actionable_key()
+  return _M.key_pressed.valid or _M.key_pressed.invalid
 end
 
 --[[
   Stream silence for a specified number of milliseconds.
 ]]
-function wait(milliseconds)
-  debug_log("Waiting %d milliseconds", milliseconds)
+function _M.wait(milliseconds)
+  _M.debug_log("Waiting %d milliseconds", milliseconds)
   session:streamFile("silence_stream://" .. milliseconds)
 end
 
 --[[
   Log to FreeSWITCH console or stdout depending on the environment.
 ]]
-function log(msg, prefix, level)
-  if jester.is_freeswitch then
+function _M.log(msg, prefix, level)
+  if _M.is_freeswitch then
     prefix = prefix or "JESTER"
     level = level or "info"
     freeswitch.consoleLog(level, prefix .. ": " .. tostring(msg) .. "\n")
@@ -677,31 +677,31 @@ end
 --[[
   Conditional debug logger.
 ]]
-function debug_log(msg, ...)
-  if conf.debug and conf.debug_output.log then
-    log(string.format(msg, ...), "JESTER DEBUG")
+function _M.debug_log(msg, ...)
+  if _M.conf.debug and _M.conf.debug_output.log then
+    _M.log(string.format(msg, ...), "JESTER DEBUG")
   end
 end
 
 --[[
   Trims whitespace from either end of a string.
 ]]
-function trim(s)
+function _M.trim(s)
   return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end
 
 --[[
   Wrapper to grab session variables.
 ]]
-function get_variable(call_var, default)
+function _M.get_variable(call_var, default)
   local value = session:getVariable(call_var)
   if value then
-    debug_log("Got value %s: %s", call_var, tostring(value))
+    _M.debug_log("Got value %s: %s", call_var, tostring(value))
   elseif default then
     value = default
-    debug_log("Variable %s returned default: %s", call_var, tostring(default))
+    _M.debug_log("Variable %s returned default: %s", call_var, tostring(default))
   else
-    debug_log("Variable %s: not set", call_var)
+    _M.debug_log("Variable %s: not set", call_var)
   end
 
   return value
@@ -710,7 +710,7 @@ end
 --[[
   Wrapper to set session variables.
 ]]
-function set_variable(call_var, value, default)
+function _M.set_variable(call_var, value, default)
   local message
   if value then
     message = "Set value %s: %s"
@@ -719,6 +719,40 @@ function set_variable(call_var, value, default)
     message = "Set value %s to default: %s"
   end
   session:setVariable(call_var, value)
-  debug_log(message, call_var, tostring(value))
+  _M.debug_log(message, call_var, tostring(value))
 end
 
+--[[
+  Dumps values to console, with recursive option for tables.
+]]
+function _M.debug_dump(var, recursive, prefix)
+  local key, value
+  prefix = prefix or ""
+  if type(var) == "table" then
+    for k, v in pairs(var) do
+      if type(v) == "string" or type(v) == "number" or type(v) == "boolean" then
+        value = tostring(v)
+      else
+        value = type(v)
+      end
+      if type(k) == "string" or type(k) == "number" or type(k) == "boolean" then
+        key = tostring(k)
+      else
+        key = type(k)
+      end
+      -- Exclude possibly infinitely recursive keys.
+      if k ~= "_M" and k ~= "__index" then
+        _M.log(string.format([[%s%s, value: %s]], prefix, key, value), "JESTER VAR DUMP")
+        -- Tables get optional recursive treatment.
+        if recursive and type(v) == "table" then
+          _M.debug_dump(v, recursive, prefix .. "[" .. key .. "]")
+        end
+      end
+    end
+  elseif type(var) == "string" or type(var) == "number" or type(var) == "boolean" then
+    _M.log(string.format([[value: %s]], tostring(var)), "JESTER VAR DUMP")
+  else
+    _M.log(string.format([[value: %s]], type(var)), "JESTER VAR DUMP")
+  end
+end
+return _M

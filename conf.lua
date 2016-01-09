@@ -4,15 +4,14 @@
   Probably not a good idea to change any of these settings unless you know
   what you're doing.
 ]]
-
-module(..., package.seeall)
+local conf = {}
 
 -- Enable this setting to turn on debuggging.
 -- This value can be overridden per profile.
-debug = true
+conf.debug = true
 
 -- These settings control what debugging information is output.
-debug_output = {
+conf.debug_output = {
   -- Ongoing progress.
   log = true,
   -- These are output right before Jester exits.
@@ -25,22 +24,22 @@ debug_output = {
 -- have access to the API.
 if freeswitch then
   local api = freeswitch.API()
-  base_dir = api:executeString("global_getvar base_dir")
-  sounds_dir = api:executeString("global_getvar sounds_dir")
+  conf.base_dir = api:executeString("global_getvar base_dir")
+  conf.sounds_dir = api:executeString("global_getvar sounds_dir")
   -- Override this if scripts are hosted in a non-standard location.
-  scripts_dir = base_dir .. "/scripts"
-  jester_dir = scripts_dir .. "/jester"
+  conf.scripts_dir = conf.base_dir .. "/scripts"
+  conf.jester_dir = conf.scripts_dir .. "/jester"
   -- This value can be overridden per profile.
-  sequence_path = jester_dir .. "/sequences"
-  profile_path = jester_dir .. "/profiles"
+  conf.sequence_path = conf.jester_dir .. "/sequences"
+  conf.profile_path = conf.jester_dir .. "/profiles"
 end
 
-help_path = "jester/help"
+conf.help_path = "jester/help"
 
 -- The order that keys are played in for announcements.
 -- This value can be overridden per profile.
 -- This value can be overridden in actions.
-key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
+conf.key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
 
 -- The modules to load.
 -- This value can be overridden per profile.
@@ -49,7 +48,7 @@ key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
 -- configuration is to include all modules here, and override the setting
 -- in each profile listing only the modules that need to be loaded for
 -- the profile.
-modules = {
+conf.modules = {
   "core_actions",
   "couchdb",
   "data",
@@ -70,3 +69,4 @@ modules = {
   "tracker",
 }
 
+return conf

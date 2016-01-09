@@ -1,6 +1,6 @@
-module(..., package.seeall)
-
-jester.conf.debug = false
+local core = require "jester.core"
+local conf = require "jester.conf"
+conf.debug = false
 
 require "jester.support.string"
 require "jester.support.table"
@@ -8,8 +8,8 @@ require "jester.support.table"
 -- The CLI version assumes it's being run from the FreeSWITCH scripts
 -- directory, but when run from FreeSWITCH the full path must be specified.
 local script_path = "./"
-if jester.is_freeswitch then
-  script_path = jester.conf.scripts_dir .. "/"
+if core.is_freeswitch then
+  script_path = conf.scripts_dir .. "/"
 end
 
 --[[
@@ -17,14 +17,15 @@ end
 ]]
 function init_module_help()
   local help_file
+  jester = jester or {}
   -- Create a map of all module help that can be called.
   jester.help_map = {}
-  for _, mod in ipairs(jester.conf.modules) do
+  for _, mod in ipairs(conf.modules) do
     help_file = "jester.modules." .. mod .. ".help"
     if require(help_file) then
-      jester.debug_log("Loaded module help '%s'", help_file)
+      core.debug_log("Loaded module help '%s'", help_file)
     else
-      jester.debug_log("Failed loading module help '%s'!", help_file)
+      core.debug_log("Failed loading module help '%s'!", help_file)
     end
   end
 end
@@ -70,7 +71,7 @@ function get_help(...)
     -- Load all general topics.
     require "lfs"
     local error_message = {}
-    local path = script_path .. jester.conf.help_path
+    local path = script_path .. conf.help_path
     local file_list = {}
     for file in lfs.dir(path) do
       -- Exclude directory references and hidden files.
@@ -86,7 +87,7 @@ function get_help(...)
     for _, file in ipairs(file_list) do
       f, e = loadfile(path .. "/" .. file)
       if f then
-        jester.debug_log("Loaded help file '%s'", file)
+        core.debug_log("Loaded help file '%s'", file)
         f()
       else
         table.insert(error_message, e)
@@ -124,7 +125,7 @@ end
   Output help to the appropriate location.
 ]]
 function help_output(help)
-  if jester.is_freeswitch then
+  if core.is_freeswitch then
     stream:write("\n" .. tostring(help) .. "\n")
   else
     print("\n" .. help .. "\n")
@@ -180,7 +181,7 @@ end
 ]]
 function get_modules()
   local module_list = {}
-  for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
+  for _, module_name in ipairs(table.ordervalues(conf.modules)) do
     module_list[module_name] = jester.help_map[module_name]
   end
   return module_list
@@ -193,7 +194,7 @@ function module_help()
   local module_list = {}
   local help, description
   -- Build an alphabetical summary of all modules enabled in the global config.
-  for _, name in ipairs(table.ordervalues(jester.conf.modules)) do
+  for _, name in ipairs(table.ordervalues(conf.modules)) do
     help = jester.help_map[name]
     table.insert(module_list, name .. ":")
     if help.description_short then
@@ -269,7 +270,7 @@ end
 function get_actions()
   local action_list = {}
   local actions
-  for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
+  for _, module_name in ipairs(table.ordervalues(conf.modules)) do
     actions = jester.help_map[module_name].actions
     for action, data in pairs(actions) do
       action_list[action] = data
@@ -285,7 +286,7 @@ function action_help()
   local action_list = {}
   local actions, description
   -- Loop through an alphabetically ordered list of modules.
-  for _, module_name in ipairs(table.ordervalues(jester.conf.modules)) do
+  for _, module_name in ipairs(table.ordervalues(conf.modules)) do
     actions = jester.help_map[module_name].actions
     table.insert(action_list, "\nModule: " .. module_name)
     -- Build and alphabetical list of actions for the module.
