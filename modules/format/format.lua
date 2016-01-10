@@ -1,9 +1,11 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Formats a number according to the supplied mask.
 ]]
-function format_number(action)
+function _M.format_number(action)
   local number = action.number and tostring(action.number)
   local mask = action.mask
   local key = action.storage_key or "number"
@@ -35,15 +37,15 @@ function format_number(action)
     else
       formatted_number = number
     end
-    jester.debug_log("Formatted number '%s' to '%s'", number, formatted_number)
-    jester.set_storage("format", key, formatted_number)
+    core.debug_log("Formatted number '%s' to '%s'", number, formatted_number)
+    core.set_storage("format", key, formatted_number)
   end
 end
 
 --[[
   Formats a Unix timestamp as a date string, with timezone support.
 ]]
-function format_date(action)
+function _M.format_date(action)
   local timestamp = action.timestamp and tostring(action.timestamp)
   local timezone = action.timezone or "Etc/UTC"
   local format = action.format or "%Y-%m-%d %H:%M:%S"
@@ -52,8 +54,9 @@ function format_date(action)
     local api = freeswitch.API()
     local command = string.format("strftime_tz %s %s|%s", timezone, timestamp, format)
     local formatted = api:executeString(command)
-    jester.debug_log("Formatted timestamp '%s' to '%s'", timestamp, formatted)
-    jester.set_storage("format", key, formatted)
+    core.debug_log("Formatted timestamp '%s' to '%s'", timestamp, formatted)
+    core.set_storage("format", key, formatted)
   end
 end
 
+return _M
