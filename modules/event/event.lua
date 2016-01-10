@@ -1,9 +1,11 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Fires a custom event.
 ]]
-function fire_event(action)
+function _M.fire_event(action)
   local subclass = action.subclass or "jester"
   local event_type = action.event_type
   local headers = action.headers
@@ -20,7 +22,7 @@ function fire_event(action)
       -- Ensure that the event body has terminating newlines.
       event:addBody(body .. "\n\n")
     end
-    jester.debug_log("Firing custom event 'jester::%s'", event_type)
+    core.debug_log("Firing custom event 'jester::%s'", event_type)
     event:fire()
   end
 end
