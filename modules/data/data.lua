@@ -1,32 +1,38 @@
-module(..., package.seeall)
+local core = require "jester.core"
 
-local data = jester.modules.data
+local _M = {}
+
+local function load_odbc()
+  local odbc = require("jester.modules.data.odbc")
+  return odbc
+end
 
 --[[
   ODBC action handlers.
 ]]
-function load_data_odbc(action)
-  require("jester.modules.data.odbc")
-  data.odbc.load_data(action)
+function _M.load_data_odbc(action)
+  local odbc = load_odbc()
+  odbc.load_data(action)
 end
 
-function load_data_odbc_count(action)
-  require("jester.modules.data.odbc")
-  data.odbc.load_data_count(action)
+function _M.load_data_count_odbc(action)
+  local odbc = load_odbc()
+  odbc.load_data_count(action)
 end
 
-function update_data_odbc(action)
-  require("jester.modules.data.odbc")
-  data.odbc.update_data(action)
+function _M.update_data_odbc(action)
+  local odbc = load_odbc()
+  odbc.update_data(action)
 end
 
-function delete_data_odbc(action)
-  require("jester.modules.data.odbc")
-  data.odbc.delete_data(action)
+function _M.delete_data_odbc(action)
+  local odbc = load_odbc()
+  odbc.delete_data(action)
 end
 
-function query_data_odbc(action)
-  require("jester.modules.data.odbc")
-  data.odbc.query_data(action)
+function _M.query_data_odbc(action)
+  local odbc = load_odbc()
+  odbc.query_data(action)
 end
 
+return _M

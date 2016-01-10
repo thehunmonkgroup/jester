@@ -1,29 +1,11 @@
-module(..., package.seeall)
+local core = require "jester.core"
 
-local escape
-
---[[
-  Connect to a database.
-]]
-function connect(action)
-  local dbh
-  local conf = action.config
-  -- Check for valid database configuration.
-  if conf and conf.database_type and conf.database and conf.table then
-    -- Based on the database type, set up the escape sequence for
-    -- string input.
-    set_escape(conf.database_type)
-    dbh = assert(freeswitch.Dbh("odbc://" .. conf.database))
-    return dbh, conf
-  else
-    error("Database connection misconfigured")
-  end
-end
+local _M = {}
 
 --[[
   Load data from a database into storage.
 ]]
-function load_data(action)
+function _M.load_data(action)
   local fields = action.fields
   local filters = action.filters or {}
   local multiple = action.multiple
@@ -37,10 +19,10 @@ function load_data(action)
     local load_sort = sort and build_sort(sort, sort_order) or ""
     -- Build the query.
     local sql = "SELECT " .. build_load_fields(fields) .. " FROM " .. conf.table .. build_where(filters) .. load_sort .. limit
-    jester.debug_log("Executing query: %s", sql)
+    core.debug_log("Executing query: %s", sql)
     local count, suffix = 0, ""
     -- Clean out storage area before loading in new data.
-    jester.clear_storage(area)
+    core.clear_storage(area)
     -- Loop through the returned rows.
     assert(dbh:query(sql, function(row)
       count = count + 1
@@ -49,14 +31,14 @@ function load_data(action)
         if multiple then
           suffix = "_" .. count
         end
-        jester.set_storage(area, col .. suffix, val)
+        core.set_storage(area, col .. suffix, val)
       end
     end))
     dbh:release()
     -- Multi-row results get a special count key.
     if multiple then
-      jester.debug_log("Query rows returned: %d", count)
-      jester.set_storage(area, "__count", tonumber(count))
+      core.debug_log("Query rows returned: %d", count)
+      core.set_storage(area, "__count", tonumber(count))
     end
   end
 end
@@ -64,7 +46,7 @@ end
 --[[
   Load data row counts from a database into storage.
 ]]
-function load_data_count(action)
+function _M.load_data_count(action)
   local count_field = action.count_field
   local filters = action.filters or {}
   local key = action.storage_key or "count"
@@ -72,19 +54,19 @@ function load_data_count(action)
     local dbh, conf = connect(action)
     -- Build the query.
     local sql = "SELECT COUNT(" .. count_field .. ") AS count FROM " .. conf.table .. build_where(filters)
-    jester.debug_log("Executing query: %s", sql)
+    core.debug_log("Executing query: %s", sql)
     local count
     -- Loop through the returned rows.
     assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
     dbh:release()
-    jester.set_storage("data", key, count)
+    core.set_storage("data", key, count)
   end
 end
 
 --[[
   Update data in a database.
 ]]
-function update_data(action)
+function _M.update_data(action)
   local fields = action.fields
   local filters = action.filters or {}
   local update_type = action.update_type
@@ -96,7 +78,7 @@ function update_data(action)
     -- No type specified, or update forced, so try an update first.
     if not update_type or update_type == "update" then
       sql = "UPDATE " .. conf.table .. " SET " .. build_update_fields(fields) .. where
-      jester.debug_log("Executing query: %s", sql)
+      core.debug_log("Executing query: %s", sql)
       assert(dbh:query(sql))
       message = "updated"
       count = dbh:affected_rows()
@@ -105,24 +87,24 @@ function update_data(action)
     if update_type == "insert" or (count == 0 and update_type ~= "update") then
       local insert_fields, values = build_insert(filters, fields)
       sql = "INSERT INTO " .. conf.table .. " (" .. insert_fields .. ") VALUES (" .. values .. ")"
-      jester.debug_log("Executing query: %s", sql)
+      core.debug_log("Executing query: %s", sql)
       assert(dbh:query(sql))
       message = "inserted"
       count = 1
     end
     dbh:release()
-    jester.debug_log("Rows %s: %d", message, count)
+    core.debug_log("Rows %s: %d", message, count)
   end
 end
 
 --[[
   Delete data from a database.
 ]]
-function delete_data(action)
+function _M.delete_data(action)
   local filters = action.filters or {}
   local dbh, conf = connect(action)
   local sql = "DELETE FROM " .. conf.table .. build_where(filters)
-  jester.debug_log("Executing query: %s", sql)
+  core.debug_log("Executing query: %s", sql)
   assert(dbh:query(sql))
   dbh:release()
 end
@@ -130,7 +112,7 @@ end
 --[[
   Execute custom queries on a database, optionally returning data.
 ]]
-function query_data(action)
+function _M.query_data(action)
   local query = action.query
   local return_fields = action.return_fields
   local area = action.storage_area or "data"
@@ -148,25 +130,45 @@ function query_data(action)
   else
     sql = query
   end
-  jester.debug_log("Executing query: %s", sql)
+  core.debug_log("Executing query: %s", sql)
   if return_fields then
     local count = 0
     -- Clean out storage area before loading in new data.
-    jester.clear_storage(area)
+    core.clear_storage(area)
     -- Loop through the returned rows.
     assert(dbh:query(sql, function(row)
       count = count + 1
       for col, val in pairs(row) do
-        jester.set_storage(area, col .. "_" .. count, val)
+        core.set_storage(area, col .. "_" .. count, val)
       end
     end))
     dbh:release()
-    jester.debug_log("Query rows returned: %d", count)
-    jester.set_storage(area, "__count", tonumber(count))
+    core.debug_log("Query rows returned: %d", count)
+    core.set_storage(area, "__count", tonumber(count))
   else
     assert(dbh:query(sql))
   end
   dbh:release()
+end
+
+local escape
+
+--[[
+  Connect to a database.
+]]
+local function connect(action)
+  local dbh
+  local conf = action.config
+  -- Check for valid database configuration.
+  if conf and conf.database_type and conf.database and conf.table then
+    -- Based on the database type, set up the escape sequence for
+    -- string input.
+    set_escape(conf.database_type)
+    dbh = assert(freeswitch.Dbh("odbc://" .. conf.database))
+    return dbh, conf
+  else
+    error("Database connection misconfigured")
+  end
 end
 
 --[[
@@ -176,7 +178,7 @@ end
 
   Both the properly formatted field and the field type are returned.
 ]]
-function field_type(field)
+local function field_type(field)
   if string.sub(field, 1, 2) == "__" then
     return string.sub(field, 3), "int"
   else
@@ -188,7 +190,7 @@ end
   Build field values, properly escaping and quoting as necessary depending on
   the field type.
 ]]
-function build_field_value(k, v)
+local function build_field_value(k, v)
   local value
   local field, f_type = field_type(k)
   if f_type == "int" then
@@ -204,7 +206,7 @@ end
   Builds key = value expressions, properly formatting and escaping depending
   on the field type.
 ]]
-function build_expressions(f)
+local function build_expressions(f)
   local expressions = {}
   local field, value
   for k, v in pairs(f) do
@@ -218,7 +220,7 @@ end
   Builds the comma separated list of fields used in SELECT queries, properly
   formatting and escaping depending on field type.
 ]]
-function build_load_fields(f)
+local function build_load_fields(f)
   local fields = {}
   for k, v in ipairs(f) do
     fields[k] = field_type(v)
@@ -230,7 +232,7 @@ end
   Builds the columns and values used in INSERT statements, properly formatting
   and escaping depending on field type.
 ]]
-function build_insert(filters, fields)
+local function build_insert(filters, fields)
   local columns, values = {}, {}
   local field, value
   for k, v in pairs(filters) do
@@ -249,7 +251,7 @@ end
 --[[
   Build WHERE clauses.
 ]]
-function build_where(f)
+local function build_where(f)
   local filters = build_expressions(f)
   if #filters > 0 then
     return " WHERE " .. table.concat(filters, " AND ")
@@ -262,7 +264,7 @@ end
   Builds the columns and values used in INSERT statements, properly formatting
   and escaping depending on field type.
 ]]
-function build_update_fields(f)
+local function build_update_fields(f)
   local fields = build_expressions(f)
   return table.concat(fields, ", ")
 end
@@ -270,7 +272,7 @@ end
 --[[
   Build ORDER BY statement.
 ]]
-function build_sort(sort, sort_order)
+local function build_sort(sort, sort_order)
   if sort_order == "desc" or sort_order == "DESC" then
     sort_order = " DESC"
   else
@@ -282,7 +284,7 @@ end
 --[[
   Sets the escape function based on the database type.
 ]]
-function set_escape(db_type)
+local function set_escape(db_type)
   if db_type == "mysql" then
     escape = mysql_escape
   elseif db_type == "pgsql" then
@@ -297,7 +299,7 @@ end
 --[[
   Escapes special characters for the MySQL database.
 ]]
-function mysql_escape(string)
+local function mysql_escape(string)
   -- Single quote, double quote, backspace.
   string = string.gsub(string, "(['\"\\])", function(x) return "\\" .. x end)
   -- Null byte.
@@ -308,7 +310,7 @@ end
 --[[
   Escapes special characters for the Postgres database.
 ]]
-function pgsql_escape(string)
+local function pgsql_escape(string)
   -- Single quote.
   string = string.gsub(string, "'", "''")
   -- Null byte.
@@ -319,7 +321,7 @@ end
 --[[
   Escapes special characters for the SQLite database.
 ]]
-function sqlite_escape(string)
+local function sqlite_escape(string)
   -- Single quote.
   string = string.gsub(string, "'", "''")
   -- Null byte.
@@ -327,3 +329,4 @@ function sqlite_escape(string)
   return string
 end
 
+return _M
