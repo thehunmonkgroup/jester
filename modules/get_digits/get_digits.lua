@@ -1,9 +1,22 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
+
+--[[
+  Set the digit length to the length of the passed string if prefixed with the
+  length operator.
+]]
+local function set_digit_length(digit_length)
+  if type(digit_length) == "string" and string.sub(digit_length, 1, 1) == ":" then
+    digit_length = string.len(digit_length) - 1
+  end
+  return digit_length
+end
 
 --[[
   Gets digit input from the user.
 ]]
-function get_digits(action)
+function _M.get_digits(action)
   local min_digits = action.min_digits
   local max_digits = action.max_digits
   if min_digits then
@@ -28,22 +41,13 @@ function get_digits(action)
   local digits_regex = action.digits_regex or "\\d+"
   local key = action.storage_key or "digits"
   local digits = session:playAndGetDigits(min_digits, max_digits, max_tries, timeout, terminators, audio_files, bad_input, digits_regex)
-  jester.debug_log("Got digits: %s", digits)
-  jester.set_storage("get_digits", key, digits)
+  core.debug_log("Got digits: %s", digits)
+  core.set_storage("get_digits", key, digits)
 end
 
---[[
-  Set the digit length to the length of the passed string if prefixed with the
-  length operator.
-]]
-function set_digit_length(digit_length)
-  if type(digit_length) == "string" and string.sub(digit_length, 1, 1) == ":" then
-    digit_length = string.len(digit_length) - 1
-  end
-  return digit_length
-end
-
-function flush_digits()
+function _M.flush_digits()
   session:flushDigits()
-  jester.debug_log("Flushing Digits")
+  core.debug_log("Flushing Digits")
 end
+
+return _M
