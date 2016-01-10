@@ -1,5 +1,7 @@
 module(..., package.seeall)
 
+local core = require "jester.core"
+
 --[[
   Sends emails with optional attachments.
 ]]
@@ -114,7 +116,7 @@ function send_email_socket(action)
         )
 
         -- Finally send it.
-        debug_dump(recipient)
+        core.debug_dump(recipient)
         result, error_message = smtp.send(
           {
             from = from,
