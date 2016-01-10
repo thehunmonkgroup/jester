@@ -1,13 +1,15 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Executes a dialplan application.
 ]]
-function execute(action)
+function _M.execute(action)
   local application = action.application
   local data = action.data or ""
   if application then
-    jester.debug_log("Executing dialplan application '%s' with data: %s", application, data)
+    core.debug_log("Executing dialplan application '%s' with data: %s", application, data)
     session:execute(application, data)
   end
 end
@@ -15,15 +17,15 @@ end
 --[[
   Transfers the call to another extension.
 ]]
-function transfer(action)
+function _M.transfer(action)
   local extension = action.extension
   local dialplan = action.dialplan or "XML"
-  local context = action.context or jester.get_variable("context", "default")
+  local context = action.context or core.get_variable("context", "default")
   if extension then
     -- Kill all other sequences in the current stack.
-    jester.reset_stack("sequence")
-    jester.reset_stack("sequence_name")
-    jester.debug_log("Transferring to: %s %s %s", extension, dialplan, context)
+    core.reset_stack("sequence")
+    core.reset_stack("sequence_name")
+    core.debug_log("Transferring to: %s %s %s", extension, dialplan, context)
     session:transfer(extension, dialplan, context)
   end
 end
@@ -31,7 +33,7 @@ end
 --[[
   Bridges the call to other endpoints.
 ]]
-function bridge(action)
+function _M.bridge(action)
   local channel = action.channel
   local extension = action.extension
   local variables = action.variables or {}
@@ -49,8 +51,8 @@ function bridge(action)
   end
   if channel and extension then
     -- Save the current state of the variable so it can be restored.
-    local hangup_var = jester.get_variable("hangup_after_bridge", "true")
-    jester.set_variable("hangup_after_bridge", "false")
+    local hangup_var = core.get_variable("hangup_after_bridge", "true")
+    core.set_variable("hangup_after_bridge", "false")
     -- Complex dialstring.
     if type(channel) == "table" or type(extension) == "table" then
       local channel_pieces = {}
@@ -81,10 +83,10 @@ function bridge(action)
       data = channel .. extension
     end
     data = global_vars .. data
-    jester.debug_log("Bridging call to: %s", data)
+    core.debug_log("Bridging call to: %s", data)
     session:execute("bridge", data)
     -- Restore the original state of the variable.
-    jester.set_variable("hangup_after_bridge", hangup_var)
+    core.set_variable("hangup_after_bridge", hangup_var)
     if hangup_after_bridge then
       session:hangup()
     end
@@ -94,7 +96,7 @@ end
 --[[
   Given a table of variables, return a string.
 ]]
-function build_variables(variables, v_type)
+local function build_variables(variables, v_type)
   local output = ""
   local string_pieces = {}
   for k, v in pairs(variables) do
@@ -115,7 +117,7 @@ end
   Given a the main variables table and location data, a channel and extension,
   return a fully constructed channel string for the channel.
 ]]
-function build_channel(variables, channel, extension, multivars, k)
+local function build_channel(variables, channel, extension, multivars, k)
   if multivars and variables[k] then
     channel_vars = build_variables(variables[k])
   else
@@ -124,3 +126,4 @@ function build_channel(variables, channel, extension, multivars, k)
   return channel_vars .. channel .. extension
 end
 
+return _M

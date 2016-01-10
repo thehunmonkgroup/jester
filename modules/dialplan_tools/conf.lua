@@ -1,13 +1,22 @@
-jester.action_map.execute = {
-  mod = "dialplan_tools",
-  func = "execute",
-}
-jester.action_map.transfer = {
-  mod = "dialplan_tools",
-  func = "transfer",
-}
-jester.action_map.bridge = {
-  mod = "dialplan_tools",
-  func = "bridge",
+local conf = {
+  action_map = {
+
+    execute = {
+      mod = "dialplan_tools",
+      func = "execute",
+    },
+
+    transfer = {
+      mod = "dialplan_tools",
+      func = "transfer",
+    },
+
+    bridge = {
+      mod = "dialplan_tools",
+      func = "bridge",
+    },
+
+  }
 }
 
+return conf
