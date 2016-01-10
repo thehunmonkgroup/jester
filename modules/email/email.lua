@@ -1,11 +1,11 @@
-module(..., package.seeall)
-
 local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Sends emails with optional attachments.
 ]]
-function send_email_socket(action)
+function _M.send_email_socket(action)
   -- Load the smtp support and its friends.
   local smtp = require("socket.smtp")
   local mime = require("mime")
@@ -15,12 +15,12 @@ function send_email_socket(action)
 
   local to = action.to
   local template = action.template
-  local email_templates = action.email_templates or jester.profile.email_templates
+  local email_templates = action.email_templates or core.profile.email_templates
   local from
   if action.from then
     from = "<" .. action.from .. ">"
   else
-    from = "<noreply@" .. jester.get_variable("hostname") .. ">"
+    from = "<noreply@" .. core.get_variable("hostname") .. ">"
   end
   local tokens = action.tokens
   local attachments = action.attachments
@@ -128,12 +128,13 @@ function send_email_socket(action)
         )
 
         if error_message then
-          jester.debug_log("Mail error: " .. tostring(error_message))
+          core.debug_log("Mail error: " .. tostring(error_message))
         else
-          jester.debug_log("Sent email from '%s' to '%s', subject '%s', server '%s', port '%s'", from, recipient, tostring(subject), server, port)
+          core.debug_log("Sent email from '%s' to '%s', subject '%s', server '%s', port '%s'", from, recipient, tostring(subject), server, port)
         end
       end
     end
   end
 end
 
+return _M
