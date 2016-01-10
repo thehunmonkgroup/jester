@@ -7,7 +7,14 @@ function shell_command(action)
   local command = action.command
   local area = action.storage_area or "system"
   if command then
-    local ret = os.execute(command)
+    local ret
+    local val1, val2, val3 = os.execute(command)
+    -- Return signature of os.execute changed in 5.2.
+    if _VERSION == "Lua 5.1" then
+      ret = val1
+    else
+      ret = val3
+    end
     jester.debug_log("Executed command: %s, return code: %s", command, ret)
     jester.set_storage(area, "return_code", tonumber(ret))
   end
