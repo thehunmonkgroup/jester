@@ -29,8 +29,8 @@ function _M.bootstrap(config, profile, sequence, sequence_args)
 
   -- Handle some session-based setup if we have a session.
   if session then
-    channel.uuid = _M.get_variable("uuid")
-    _M.set_storage("channel", "uuid", channel.uuid)
+    _M.channel.uuid = _M.get_variable("uuid")
+    _M.set_storage("channel", "uuid", _M.channel.uuid)
 
     -- Set up the global key handler.
     _G.key_handler = _M.key_handler
@@ -45,7 +45,7 @@ function _M.bootstrap(config, profile, sequence, sequence_args)
     event_type = "sequence",
     sequence = sequence .. " " .. (sequence_args or ""),
   }
-  table.insert(channel.stack.active, event)
+  table.insert(_M.channel.stack.active, event)
 
 end
 
@@ -81,9 +81,9 @@ end
 ]]
 function _M.init_channel()
   _M.debug_log("Creating channel table")
-  channel = {}
-  channel.stack = {}
-  channel.storage = {}
+  _M.channel = {}
+  _M.channel.stack = {}
+  _M.channel.storage = {}
 end
 
 --[[
@@ -146,8 +146,8 @@ end
   Initialize a storage area.
 ]]
 function _M.init_storage(area)
-  if channel and not channel.storage[area] then
-    channel.storage[area] = {}
+  if _M.channel and not _M.channel.storage[area] then
+    _M.channel.storage[area] = {}
   end
 end
 
@@ -156,7 +156,7 @@ end
 ]]
 function _M.reset_stack(name)
   _M.debug_log("Reset stack '%s'", name)
-  channel.stack[name] = {}
+  _M.channel.stack[name] = {}
 end
 
 --[[
@@ -166,7 +166,7 @@ end
 function _M.queue_sequence(sequence)
   if _M.ready() and sequence then
     if _M.conf.debug then
-      table.insert(channel.stack.executed_sequences, #channel.stack.executed_sequences + 1 .. ": " .. sequence)
+      table.insert(_M.channel.stack.executed_sequences, #_M.channel.stack.executed_sequences + 1 .. ": " .. sequence)
     end
     local loaded_sequence, add_to_stack, remove_from_stack
     -- Parse out the sequence name and arguments.
@@ -185,7 +185,7 @@ function _M.queue_sequence(sequence)
     elseif s_type == "up_sequence" then
       remove_from_stack = true
     end
-    local stack = channel.stack.sequence
+    local stack = _M.channel.stack.sequence
     -- Nothing on the current stack, add this sequence on the first stack.
     if #stack == 0 then
       add_to_stack = true
@@ -198,25 +198,25 @@ function _M.queue_sequence(sequence)
         -- Increment the action position of the currently running sequence, as
         -- if/when it resumes it's already run the action it was running when
         -- the subsequence was called.  Skip this if the stack is empty.
-        if #stack > 0 then channel.stack.sequence[#stack].position = stack[#stack].position + 1 end
-        table.insert(channel.stack.sequence, {})
-        table.insert(channel.stack.sequence_name, sequence)
+        if #stack > 0 then _M.channel.stack.sequence[#stack].position = stack[#stack].position + 1 end
+        table.insert(_M.channel.stack.sequence, {})
+        table.insert(_M.channel.stack.sequence_name, sequence)
       -- Remove the last item from the stack if there's more than 1.
       elseif remove_from_stack and #stack > 1 then
-        table.remove(channel.stack.sequence)
-        table.remove(channel.stack.sequence_name)
+        table.remove(_M.channel.stack.sequence)
+        table.remove(_M.channel.stack.sequence_name)
       end
-      _M.debug_log("Current sequence stack: %s", table.concat(channel.stack.sequence_name, " | "))
-      channel.stack.sequence_stack_position = #stack
-      local p = channel.stack.sequence_stack_position
+      _M.debug_log("Current sequence stack: %s", table.concat(_M.channel.stack.sequence_name, " | "))
+      _M.channel.stack.sequence_stack_position = #stack
+      local p = _M.channel.stack.sequence_stack_position
       -- There might be data in here from before, so reset it.
-      channel.stack.sequence[p] = {}
-      channel.stack.sequence[p].file = loaded_sequence
-      channel.stack.sequence[p].sequence = loaded_sequence()
-      channel.stack.sequence[p].name = sequence_name
-      channel.stack.sequence[p].args = sequence_args
-      channel.stack.sequence[p].parsed_args = parsed_args
-      channel.stack.sequence[p].position = 1
+      _M.channel.stack.sequence[p] = {}
+      _M.channel.stack.sequence[p].file = loaded_sequence
+      _M.channel.stack.sequence[p].sequence = loaded_sequence()
+      _M.channel.stack.sequence[p].name = sequence_name
+      _M.channel.stack.sequence[p].args = sequence_args
+      _M.channel.stack.sequence[p].parsed_args = parsed_args
+      _M.channel.stack.sequence[p].position = 1
     else
       _M.debug_log("Failed loading sequence '%s'!", sequence_name)
     end
@@ -273,8 +273,8 @@ end
 ]]
 function _M.get_storage(area, key, default)
   local value
-  if channel.storage[area] and channel.storage[area][key] then
-    value = channel.storage[area][key]
+  if _M.channel.storage[area] and _M.channel.storage[area][key] then
+    value = _M.channel.storage[area][key]
   -- Fall back to a default if provided.
   elseif default then
     value = default
@@ -290,7 +290,7 @@ function _M.set_storage(area, key, value)
   if area and key and value then
     -- Make sure the storage area exists.
     _M.init_storage(area)
-    channel.storage[area][key] = value
+    _M.channel.storage[area][key] = value
     _M.debug_log("Setting storage: area '%s', key '%s', value '%s'", area, key, tostring(value))
   end
 end
@@ -300,12 +300,12 @@ end
 ]]
 function _M.clear_storage(area, key)
   if area and key then
-    if channel.storage[area] then
-      channel.storage[area][key] = nil
+    if _M.channel.storage[area] then
+      _M.channel.storage[area][key] = nil
       _M.debug_log("Cleared storage: area '%s', key '%s'", area, key)
     end
   elseif area then
-    channel.storage[area] = nil
+    _M.channel.storage[area] = nil
     _M.debug_log("Cleared storage: area '%s'", area)
   end
 end
@@ -375,10 +375,10 @@ function _M.main()
       _M.debug_dump(jester, true)
     end
     if _M.conf.debug_output.executed_sequences then
-      _M.debug_log("EXECUTED SEQUENCES:\n%s", table.concat(channel.stack.executed_sequences, "\n"))
+      _M.debug_log("EXECUTED SEQUENCES:\n%s", table.concat(_M.channel.stack.executed_sequences, "\n"))
     end
     if _M.conf.debug_output.run_actions then
-      _M.debug_log("RUN ACTIONS:\n%s", table.concat(channel.stack.run_actions, "\n"))
+      _M.debug_log("RUN ACTIONS:\n%s", table.concat(_M.channel.stack.run_actions, "\n"))
     end
   end
 end
@@ -392,7 +392,7 @@ function _M.run_sequence_loop(loop_type)
   _M.reset_stack("sequence")
   _M.reset_stack("sequence_name")
   -- Loop through the registered events.
-  for _, event in ipairs(channel.stack[loop_type]) do
+  for _, event in ipairs(_M.channel.stack[loop_type]) do
     -- Fire up the sequence loop.
     if event.event_type == "sequence" then
       _M.queue_sequence(event.sequence)
@@ -423,7 +423,7 @@ function _M.execute_sequences()
     _M.run_action(action)
     if _M.conf.debug then
       local new_clock = os.clock()
-      table.insert(channel.stack.run_actions, #channel.stack.run_actions + 1 .. ": " .. action.action .. ": " .. new_clock - clock)
+      table.insert(_M.channel.stack.run_actions, #_M.channel.stack.run_actions + 1 .. ": " .. action.action .. ": " .. new_clock - clock)
       clock = new_clock
     end
 
@@ -433,11 +433,11 @@ function _M.execute_sequences()
     if action == new_action then
       -- Same action that was originally called, move to the next action in
       -- the sequence unless a replay has been requested.
-      if channel.stack.sequence[channel.stack.sequence_stack_position].replay_action then
+      if _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].replay_action then
         _M.debug_log("Action replay requested")
-        channel.stack.sequence[channel.stack.sequence_stack_position].replay_action = nil
+        _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].replay_action = nil
       else
-        channel.stack.sequence[channel.stack.sequence_stack_position].position = channel.stack.sequence[channel.stack.sequence_stack_position].position + 1
+        _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].position = _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].position + 1
       end
       _M.refresh_current_sequence()
       action = _M.load_action()
@@ -448,16 +448,16 @@ function _M.execute_sequences()
     end
     -- No more actions in current sequence, but there are more sequences on
     -- stack, pop the finished one and load the previously running sequence.
-    if not action and #channel.stack.sequence > 1 then
+    if not action and #_M.channel.stack.sequence > 1 then
       local subsequence
       -- The previous stack position may have already finished running its
       -- actions, so keep popping the stack and checking for a valid action
       -- until we find one.
-      while _M.ready() and not action and #channel.stack.sequence > 1 do
-        subsequence = table.remove(channel.stack.sequence)
-        table.remove(channel.stack.sequence_name)
-        channel.stack.sequence_stack_position = #channel.stack.sequence
-        _M.debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(channel.stack.sequence_name, " | "))
+      while _M.ready() and not action and #_M.channel.stack.sequence > 1 do
+        subsequence = table.remove(_M.channel.stack.sequence)
+        table.remove(_M.channel.stack.sequence_name)
+        _M.channel.stack.sequence_stack_position = #_M.channel.stack.sequence
+        _M.debug_log("Returning from subsequence '%s', current sequence stack: %s", subsequence.name .. " " .. subsequence.args, table.concat(_M.channel.stack.sequence_name, " | "))
         _M.refresh_current_sequence()
         action = _M.load_action()
       end
@@ -472,7 +472,7 @@ end
 function _M.refresh_current_sequence()
   -- Only refresh if there's a valid action to be run.
   if _M.load_action() then
-    channel.stack.sequence[channel.stack.sequence_stack_position].sequence = channel.stack.sequence[channel.stack.sequence_stack_position].file()
+    _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].sequence = _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].file()
   end
 end
 
@@ -480,8 +480,8 @@ end
   Loads the current action from the current sequence stack and position.
 ]]
 function _M.load_action()
-  local stack = channel.stack.sequence
-  local p = channel.stack.sequence_stack_position
+  local stack = _M.channel.stack.sequence
+  local p = _M.channel.stack.sequence_stack_position
   if stack[p] then
     return stack[p].sequence[stack[p].position]
   end
@@ -548,7 +548,7 @@ function _M.key_handler(session, input_type, data)
         if keys.invalid_sequence then
           _M.queue_sequence(keys.invalid_sequence)
         else
-          channel.stack.sequence[channel.stack.sequence_stack_position].replay_action = true
+          _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].replay_action = true
         end
         -- Play an invalid sound if specified.
         if keys.invalid_sound then
@@ -566,8 +566,8 @@ end
 ]]
 function _M.run_action(action)
   if _M.ready() and action.action then
-    local stack = channel.stack.sequence
-    local p = channel.stack.sequence_stack_position
+    local stack = _M.channel.stack.sequence
+    local p = _M.channel.stack.sequence_stack_position
     local mod_name
     -- Find the module that provides this action.
     if action_map[action.action] then
