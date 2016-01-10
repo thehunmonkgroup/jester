@@ -39,70 +39,66 @@
   lines of performing database/file manipulation, logging to file, etc.
 ]]
 
-require "jester.core"
-require "jester.conf"
-require "jester.debug"
+local core = require "jester.core"
+local conf = require "jester.conf"
+-- The ESL library in older versions doesn't return the ESL object, so leave
+-- it as a global for compat.
 require "ESL"
+
+local _M = {}
+-- Login information for the event socket.
+_M.host = argv[1] or "localhost"
+_M.port = argv[2] or "8021"
+_M.password = argv[3] or "ClueCon"
 
 --[[
   Logs socket information to the FreeSWITCH console.
 ]]
-function jester.socket_log(message)
-  jester.log(message, "JESTER SOCKET")
+function _M.socket_log(message)
+  core.log(message, "JESTER SOCKET")
 end
 
 --[[
   Connect to FreeSWITCH.
 ]]
-function jester.socket_connect()
-  -- Login information for the event socket.
-  local host = argv[1] or "localhost"
-  local port = argv[2] or "8021"
-  local password = argv[3] or "ClueCon"
-  jester.sock = assert(ESL.ESLconnection(host, port, password))
+function _M.socket_connect()
+  _M.sock = ESL.ESLconnection(_M.host, _M.port, _M.password)
 end
-
 
 -- This is always true on a socket connection, setting it here allows early
 -- logging.
-jester.is_freeswitch = true
-jester.socket_connect()
+core.is_freeswitch = true
+_M.socket_log("connecting")
+_M.socket_connect()
 
-if jester.sock and jester.sock:connected() then
-  jester.socket_log("connected")
+if _M.sock and _M.sock:connected() then
+  _M.socket_log("connected")
   -- Subscribe only to Jester socket events.
-  jester.sock:events("plain", "CUSTOM jester::socket")
-  jester.continue_socket = true
-  while jester.sock and jester.sock:connected() and jester.continue_socket do
-    local event = jester.sock:recvEvent()
-    -- Provide a way to turn exit the listener.
+  _M.sock:events("plain", "CUSTOM jester::socket")
+  _M.continue_socket = true
+  while _M.sock and _M.sock:connected() and _M.continue_socket do
+    local event = _M.sock:recvEvent()
+    -- Provide a way to exit the listener.
     if event:getHeader("Jester-Socket-Exit") then
-      jester.continue_socket = false
-      jester.socket_log("received disconnect command")
+      _M.continue_socket = false
+      _M.socket_log("received disconnect command")
     else
       local sequence = event:getHeader("Jester-Sequence")
       if sequence then
         local profile = event:getHeader("Jester-Profile") or "socket"
         local sequence_args = event:getHeader("Jester-Sequence-Args") or ""
-        local args = {
-          profile,
-          sequence,
-        }
-        if sequence_args then
-          table.insert(args, sequence_args)
-        end
-        jester.socket_log(string.format([[received Jester event: %s]], table.concat(args, " ")))
-        jester.bootstrap(args)
-        if jester.bootstrapped then
-          -- Main loop.
-          jester.main()
-        end
+        _M.socket_log(string.format([[received Jester event: %s %s %s]], profile, sequence, sequence_args))
+        core.bootstrap(conf, profile, sequence, sequence_args)
+        -- Main loop.
+        core.main()
       end
     end
   end
-  jester.socket_log("disconnecting")
-  if jester.sock and jester.sock:connected() then
-    jester.sock:disconnect()
+  _M.socket_log("disconnecting")
+  if _M.sock and _M.sock:connected() then
+    _M.sock:disconnect()
   end
 end
+
+return _M
 
