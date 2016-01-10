@@ -493,20 +493,20 @@ end
 function _M.set_keys(action, sequence)
   -- Clear any key press data from the previously run action.  This prevents
   -- false key press detections on the current action.
-  key_pressed = {}
+  _M.key_pressed = {}
   local message
   -- Key maps defined in the action take precedence.
   if type(action.keys) == "table" then
-    keys = action.keys
+    _M.keys = action.keys
     message = "Set keys for action '%s'"
   -- Fall back to sequence-wide key map if present.
   elseif type(sequence.keys) == "table" then
-    keys = sequence.keys
+    _M.keys = sequence.keys
     message = "Set default sequence keys for action '%s'"
   -- No key map.  Explicitely unset it here so that no action at all is taken
   -- by the input callback function during this action.
   else
-    keys = nil
+    _M.keys = nil
     message = "No keys to set for action '%s'"
   end
   _M.debug_log(message, action.action)
@@ -516,17 +516,17 @@ end
   Global key handler for all key press events in Jester.
 ]]
 function _M.key_handler(session, input_type, data)
-  if keys and input_type == "dtmf" then
+  if _M.keys and input_type == "dtmf" then
     -- Make sure we get a single digit.
-    key_pressed.digit = string.sub(data["digit"], 1, 1)
+    _M.key_pressed.digit = string.sub(data["digit"], 1, 1)
     -- Pressed key is in the current key map, so it's valid.
-    if keys[key_pressed.digit] then
-      key_pressed.valid = key_pressed.digit
-      _M.debug_log("Key pressed: %s, valid", key_pressed.valid)
+    if _M.keys[_M.key_pressed.digit] then
+      _M.key_pressed.valid = _M.key_pressed.digit
+      _M.debug_log("Key pressed: %s, valid", _M.key_pressed.valid)
       -- Parse the key value.  Values prefixed with @ are ad hoc actions,
       -- values prefixed with : are playback commands to return to core
       -- for playback control (break, seek, etc).
-      local marker, command = string.match(keys[key_pressed.digit], "^([:@]?)(.+)")
+      local marker, command = string.match(_M.keys[_M.key_pressed.digit], "^([:@]?)(.+)")
       if marker == ":" then
         return command
       elseif marker == "@" then
@@ -540,20 +540,20 @@ function _M.key_handler(session, input_type, data)
     else
       -- Check to see if the key map wants us to take some action on the
       -- invalid key.
-      if keys.invalid or keys.invalid_sound or keys.invalid_sequence then
-        key_pressed.invalid = key_pressed.digit
-        _M.debug_log("Key pressed: %s, invalid!", key_pressed.invalid)
+      if _M.keys.invalid or _M.keys.invalid_sound or _M.keys.invalid_sequence then
+        _M.key_pressed.invalid = _M.key_pressed.digit
+        _M.debug_log("Key pressed: %s, invalid!", _M.key_pressed.invalid)
         -- By default, replay the current action, but give the option
         -- to load a custom sequence instead.
-        if keys.invalid_sequence then
-          _M.queue_sequence(keys.invalid_sequence)
+        if _M.keys.invalid_sequence then
+          _M.queue_sequence(_M.keys.invalid_sequence)
         else
           _M.channel.stack.sequence[_M.channel.stack.sequence_stack_position].replay_action = true
         end
         -- Play an invalid sound if specified.
-        if keys.invalid_sound then
-          _M.debug_log("Playing invalid sound file: %s", keys.invalid_sound)
-          session:streamFile(keys.invalid_sound)
+        if _M.keys.invalid_sound then
+          _M.debug_log("Playing invalid sound file: %s", _M.keys.invalid_sound)
+          session:streamFile(_M.keys.invalid_sound)
         end
         return "break"
       end
