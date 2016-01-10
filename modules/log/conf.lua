@@ -1,5 +1,6 @@
 local conf = {
   action_map = {
+
     log = {
       mod = "log",
       handlers = {
@@ -7,7 +8,8 @@ local conf = {
         file = "log_file",
         default = "log_console",
       }
-    }
+    },
+
   }
 }
 
