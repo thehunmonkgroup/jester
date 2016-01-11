@@ -1,6 +1,4 @@
 ## TODOs
- * help system could use a table of contents feature, and an HTML page
-   generator
  * figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  * look into various core caching strategies to improve performance
@@ -10,3 +8,4 @@
    pressed
  * simple event consumer script for voicemail profile events, that catches
    them and calls configurable external scripts
+ * Fix jsequence to parse action params from inline code documentation.
