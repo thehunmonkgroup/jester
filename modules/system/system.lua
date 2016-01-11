@@ -1,9 +1,11 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Executes an operating system shell command and stores the return value.
 ]]
-function shell_command(action)
+function _M.shell_command(action)
   local command = action.command
   local area = action.storage_area or "system"
   if command then
@@ -15,8 +17,8 @@ function shell_command(action)
     else
       ret = val3
     end
-    jester.debug_log("Executed command: %s, return code: %s", command, ret)
-    jester.set_storage(area, "return_code", tonumber(ret))
+    core.debug_log("Executed command: %s, return code: %s", command, ret)
+    core.set_storage(area, "return_code", tonumber(ret))
   end
 end
 
@@ -27,7 +29,7 @@ end
   implementation -- it's not portable, doubtful it will work on Windows,
   mileage may vary.
 ]]
-function shell_command_with_output(action)
+function _M.shell_command_with_output(action)
   local command = action.command
   local area = action.storage_area or "system"
   if command then
@@ -45,9 +47,10 @@ function shell_command_with_output(action)
       output = "Unable to parse command output"
       ret = 1
     end
-    jester.debug_log("Executed command: %s, output: %s, return code: %s", command, output, ret)
-    jester.set_storage(area, "output", output)
-    jester.set_storage(area, "return_code", tonumber(ret))
+    core.debug_log("Executed command: %s, output: %s, return code: %s", command, output, ret)
+    core.set_storage(area, "output", output)
+    core.set_storage(area, "return_code", tonumber(ret))
   end
 end
 
+return _M
