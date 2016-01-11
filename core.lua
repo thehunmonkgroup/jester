@@ -229,19 +229,59 @@ end
 function _M.load_sequence(name, arguments)
   -- Set up access to channel variables, storage, global and profile configs,
   -- and sequence arguments.
-  local env = _ENV or _G
-  env.global = _M.conf
-  env.profile = _M.profile
-  env.args = function(i)
-    local arg = arguments[tonumber(i)] or ""
-    _M.debug_log("Got sequence arg(%d): '%s'", i, arg)
-    return arg
-  end
-  env.storage = _M.protected_get_storage
-  env.variable = _M.protected_get_variable
-  -- Allow this function so the user can dump to see what's going on in case
-  -- of problems.
-  env.debug_dump = _M.debug_dump
+  local env = {
+    global = _M.conf,
+    profile = _M.profile
+    args = function(i)
+      local arg = arguments[tonumber(i)] or ""
+      _M.debug_log("Got sequence arg(%d): '%s'", i, arg)
+      return arg
+    end,
+    storage = _M.protected_get_storage,
+    variable = _M.protected_get_variable,
+    -- Allow this function so the user can dump to see what's going on in case
+    -- of problems.
+    debug_dump = _M.debug_dump,
+
+    -- This allows full(ish) access to the Lua API while inside a protected
+    -- environment.
+    _VERSION = _VERSION,
+    assert = assert,
+    bit32 = bit32,
+    collectgarbage = collectgarbage,
+    coroutine = coroutine,
+    debug = debug,
+    dofile = dofile,
+    error = error,
+    getmetatable = getmetatable,
+    io = io,
+    ipairs = ipairs,
+    load = load,
+    loadfile = loadfile,
+    loadstring = loadstring,
+    math = math,
+    -- module = module,
+    next = next,
+    os = os,
+    package = package,
+    pairs = pairs,
+    pcall = pcall,
+    print = print,
+    rawequal = rawequal,
+    rawget = rawget,
+    rawlen = rawlen,
+    rawset = rawset,
+    require = require,
+    select = select,
+    setmetatable = setmetatable,
+    string = string,
+    table = table,
+    tonumber = tonumber,
+    tostring = tostring,
+    type = type,
+    unpack = unpack,
+    xpcall = xpcall,
+  }
   local filepath = _M.conf.sequence_path .. "/" .. name .. ".lua"
   -- Compat with 5.1, as the extra args to loadfile are ignored.
   local sequence, err = assert(loadfile(filepath, "bt", env))
