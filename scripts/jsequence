@@ -1,17 +1,13 @@
 #!/bin/env lua
 
-require "jester.conf"
-require "jester.core"
-require "jester.debug"
-require "jester.help"
-
-jester.help.init_module_help()
+local conf = require "jester.conf"
+local core = require "jester.core"
 
 --[[
   Grab a comma separated list of all available actions.
 ]]
 function actions_list()
-  local actions = jester.help.get_actions()
+  local actions = core.init_modules(conf.modules)
   local ordered_actions = table.orderkeys(actions)
   return table.concat(ordered_actions, ", ")
 end
@@ -91,7 +87,8 @@ function build_actions_output(actions)
   local output_table = {}
   local skipped_actions = {}
   local params, params_table, param_value
-  local all_actions = jester.help.get_actions()
+  -- TODO: These need to be gleaned from code notes, possible to do with ldoc?
+  local all_actions = actions_list()
   -- Loop through all provided actions.
   for _, v in ipairs(actions) do
     -- Make sure the action is a valid one.
