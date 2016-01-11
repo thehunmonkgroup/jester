@@ -1,9 +1,11 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Records a caller's message to a file.
 ]]
-function record_file(action)
+function _M.record_file(action)
   local dir = action.location or "/tmp"
   local timestamp = os.time()
   local filename = action.filename
@@ -17,13 +19,13 @@ function record_file(action)
 
   -- Default filename, formatted date and channel uuid.
   if not filename then
-    filename = os.date("%Y-%m-%d_%H:%M:%S") .. "-" .. jester.channel.uuid .. ".wav"
+    filename = os.date("%Y-%m-%d_%H:%M:%S") .. "-" .. core.channel.uuid .. ".wav"
   end
   local filepath = dir .. "/" .. filename
-  jester.clear_storage("record")
-  jester.set_storage("record", "last_recording_name", filename)
-  jester.set_storage("record", "last_recording_path", filepath)
-  jester.set_storage("record", "last_recording_timestamp", timestamp)
+  core.clear_storage("record")
+  core.set_storage("record", "last_recording_name", filename)
+  core.set_storage("record", "last_recording_path", filepath)
+  core.set_storage("record", "last_recording_timestamp", timestamp)
 
   local record_append
   -- If the append param was set, activate record appending on the channel.
@@ -31,8 +33,8 @@ function record_file(action)
   -- was specified.
   if append then
     -- Save the current state of the variable so it can be restored.
-    record_append = jester.get_variable("record_append")
-    jester.set_variable("record_append", "true")
+    record_append = core.get_variable("record_append")
+    core.set_variable("record_append", "true")
   end
 
   if pre_record_sound then
@@ -47,7 +49,7 @@ function record_file(action)
     session:execute("sleep", pre_record_delay)
   end
 
-  jester.debug_log("Recording file to location: %s", filepath)
+  core.debug_log("Recording file to location: %s", filepath)
   -- Capture recording duration by getting timestamps immediately before and
   -- after the recording.
   local startstamp = os.time()
@@ -56,17 +58,17 @@ function record_file(action)
 
   if append then
     -- Restore the record_append variable.
-    jester.set_variable("record_append", record_append)
+    core.set_variable("record_append", record_append)
   end
 
   if recorded then
-    jester.set_storage("record", "last_recording_duration", endstamp - startstamp)
+    core.set_storage("record", "last_recording_duration", endstamp - startstamp)
     -- Store the recording settings in a custom set of keys if given.
     if area then
-      jester.set_storage(area, "name", filename)
-      jester.set_storage(area, "path", filepath)
-      jester.set_storage(area, "timestamp", timestamp)
-      jester.set_storage(area, "duration", endstamp - startstamp)
+      core.set_storage(area, "name", filename)
+      core.set_storage(area, "path", filepath)
+      core.set_storage(area, "timestamp", timestamp)
+      core.set_storage(area, "duration", endstamp - startstamp)
     end
   end
 end
@@ -74,7 +76,7 @@ end
 --[[
   Merge two recorded files.
 ]]
-function record_file_merge(action)
+function _M.record_file_merge(action)
   local base_file = action.base_file
   local merge_file = action.merge_file
   local merge_type = action.merge_type or "append"
@@ -97,13 +99,14 @@ function record_file_merge(action)
           session:insertFile(merge_file, base_file, 0)
           os.rename(merge_file, base_file)
         end
-        jester.debug_log("Merged file '%s' with '%s'", base_file, merge_file)
+        core.debug_log("Merged file '%s' with '%s'", base_file, merge_file)
       else
-        jester.debug_log("Merge file '%s' does not exist!: %s", merge_file, file_error)
+        core.debug_log("Merge file '%s' does not exist!: %s", merge_file, file_error)
       end
     else
-      jester.debug_log("Base file '%s' does not exist!: %s", base_file, file_error)
+      core.debug_log("Base file '%s' does not exist!: %s", base_file, file_error)
     end
   end
 end
 
+return _M
