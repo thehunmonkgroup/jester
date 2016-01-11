@@ -131,3 +131,4 @@ function _M.play_key_macros(action)
   end
 end
 
+return _M
