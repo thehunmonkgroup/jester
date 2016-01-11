@@ -1,9 +1,11 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 --[[
   Log to the console.
 ]]
-function http_request(action)
+function _M.http_request(action)
   local server = action.server or "localhost"
   local port = action.port or "80"
   local path = action.path or "/"
@@ -42,7 +44,7 @@ function http_request(action)
     user_string = user_string .. "@"
   end
   url = "http://" .. user_string .. server .. ":" .. port .. path .. query_string .. fragment
-  jester.debug_log("HTTP request, URL: %s", url)
+  core.debug_log("HTTP request, URL: %s", url)
 
   local code, description, data
   -- Send the request.
@@ -56,7 +58,7 @@ function http_request(action)
     if code == 200 then
       -- Store raw data.
       if response == "raw" then
-        jester.set_storage(area, "raw", data)
+        core.set_storage(area, "raw", data)
       -- Data is a Lua table.
       elseif response == "lua" then
         -- Load the data string as Lua code.
@@ -68,13 +70,13 @@ function http_request(action)
           -- Make sure a table was returned.
           if type(table_data) == "table" then
             for k, v in pairs(table_data) do
-              jester.set_storage(area, k, v)
+              core.set_storage(area, k, v)
             end
           else
-            jester.debug_log("ERROR: Returned data is not a Lua table.")
+            core.debug_log("ERROR: Returned data is not a Lua table.")
           end
         else
-          jester.debug_log("ERROR: Failed to parse response body as Lua code.")
+          core.debug_log("ERROR: Failed to parse response body as Lua code.")
         end
       end
     end
@@ -84,8 +86,9 @@ function http_request(action)
     description = status_code
     data = ""
   end
-  jester.set_storage("last_http_request", "code", code)
-  jester.set_storage("last_http_request", "description", description)
-  jester.debug_log("HTTP response, Code: %s, Description: %s, Data: %s", code, description, data)
+  core.set_storage("last_http_request", "code", code)
+  core.set_storage("last_http_request", "description", description)
+  core.debug_log("HTTP response, Code: %s, Description: %s, Data: %s", code, description, data)
 end
 
+return _M
