@@ -1,4 +1,6 @@
-module(..., package.seeall)
+local core = require "jester.core"
+
+local _M = {}
 
 local https = require 'ssl.https'
 local ltn12 = require("ltn12")
@@ -7,7 +9,7 @@ local cjson = require("cjson")
 --[[
   Speech to text using AT&T's API.
 ]]
-function speech_to_text_from_file(action, attributes)
+function _M.speech_to_text_from_file(action, attributes)
   local status = 1
   local translations = {}
 
@@ -32,7 +34,7 @@ function speech_to_text_from_file(action, attributes)
 
     if status_code == 200 then
       local response_string = table.concat(response)
-      jester.debug_log("JSON response string '%s'", response_string)
+      core.debug_log("JSON response string '%s'", response_string)
       local data = cjson.decode(response_string)
       status = data.Recognition.Status == "OK" and 0 or 1
       if status == 0 and type(data.Recognition.NBest) == "table" then
@@ -43,7 +45,7 @@ function speech_to_text_from_file(action, attributes)
         end
       end
     else
-      jester.debug_log("ERROR: Request to AT&T API server failed: %s", status_description)
+      core.debug_log("ERROR: Request to AT&T API server failed: %s", status_description)
     end
   end
 
@@ -53,7 +55,7 @@ end
 --[[
   Get an access token from an AT&T API call.
 ]]
-function att_get_access_token(action)
+local function att_get_access_token(action)
   local app_key = action.app_key
   local app_secret = action.app_secret
 
@@ -74,16 +76,17 @@ function att_get_access_token(action)
 
   if status_code == 200 then
     local response_string = table.concat(response)
-    jester.debug_log("JSON response string '%s'", response_string)
+    core.debug_log("JSON response string '%s'", response_string)
     local data = cjson.decode(response_string)
     for key, value in pairs(data) do
       if key == "access_token" then
         return value
       end
     end
-    jester.debug_log("ERROR: No access token found")
+    core.debug_log("ERROR: No access token found")
   else
-    jester.debug_log("ERROR: Request to AT&T token server failed: %s", status_description)
+    core.debug_log("ERROR: Request to AT&T token server failed: %s", status_description)
   end
 end
 
+return _M

@@ -1,4 +1,11 @@
-module(..., package.seeall)
+--[[
+  NOTE: This handler is left for historical purposes, it's doubtful that it
+  still works.
+]]
+
+local core = require "jester.core"
+
+local _M = {}
 
 local http = require("socket.http")
 local ltn12 = require("ltn12")
@@ -7,7 +14,7 @@ local cjson = require("cjson")
 --[[
   Speech to text using Google's API.
 ]]
-function speech_to_text_from_file_google(action, attributes)
+function _M.speech_to_text_from_file_google(action, attributes)
   local status = 1
   local translations = {}
 
@@ -26,7 +33,7 @@ function speech_to_text_from_file_google(action, attributes)
 
   if status_code == 200 then
     local response_string = table.concat(response)
-    jester.debug_log("Google API server response: %s", response_string)
+    core.debug_log("Google API server response: %s", response_string)
     local data = cjson.decode(response_string)
     status = data.status
     if status == 0 and data.hypotheses then
@@ -37,9 +44,10 @@ function speech_to_text_from_file_google(action, attributes)
       end
     end
   else
-    jester.debug_log("ERROR: Request to Google API server failed: %s", status_description)
+    core.debug_log("ERROR: Request to Google API server failed: %s", status_description)
   end
 
   return status, translations
 end
 
+return _M
