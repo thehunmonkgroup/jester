@@ -231,7 +231,7 @@ function _M.load_sequence(name, arguments)
   -- and sequence arguments.
   local env = {
     global = _M.conf,
-    profile = _M.profile
+    profile = _M.profile,
     args = function(i)
       local arg = arguments[tonumber(i)] or ""
       _M.debug_log("Got sequence arg(%d): '%s'", i, arg)
