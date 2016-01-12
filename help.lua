@@ -249,7 +249,8 @@ function _M.init_module_help()
   jester.help_map = {}
   for _, mod in ipairs(conf.modules) do
     help_file = "jester.modules." .. mod .. ".help"
-    if require(help_file) then
+    local load_help_file = function() require(help_file) end
+    if pcall(load_help_file) then
       core.debug_log("Loaded module help '%s'", help_file)
     else
       core.debug_log("Failed loading module help '%s'!", help_file)
