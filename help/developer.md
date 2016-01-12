@@ -1,9 +1,8 @@
--- developer
-jester.help_map.developer = {}
-jester.help_map.developer.description_short = [[Developer documentation.]]
-jester.help_map.developer.description_long = [[In the future this section will be more detailed.  For now it's just a holding place for the outline of the future help, and a quick reference to the Jester core functions that are most commonly used in modules.
+# Developer documentation.
 
-The core code and modules are fairly well documented, and much can be learned from reviewed them directly.  The most important quick tips are:
+In the future this section will be more detailed. For now it's just a holding place for the outline of the future help, and a quick reference to the Jester core functions that are most commonly used in modules.
+
+The core code and modules are fairly well documented, and much can be learned from reviewed them directly. The most important quick tips are:
 
   You must have this line at the top of your main module file:
     module(..., package.seeall)
@@ -40,5 +39,5 @@ Jester keeps track of a lot of things in stacks, at the following namespaces:
   channel.stack.navigation
   channel.stack.active
   channel.stack.exit
-  channel.stack.hangup]]
+  channel.stack.hangup
 

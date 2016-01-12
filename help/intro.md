@@ -1,12 +1,10 @@
--- intro
-jester.help_map.intro = {}
-jester.help_map.intro.description_short = [[A high-level introduction to the way Jester works.]]
-jester.help_map.intro.description_long = [[Jester is VoIP toolkit for FreeSWITCH written in Lua.  The goal of Jester is to provide a standardized set of tools that allow you to accomplish most of the common tasks you'll face when putting together phone trees, voicemail systems, etc.  And, if Jester can't do something you need, it's modular, extensible design allows you to easily add the functionality in a way that not only you but others can benefit from!]]
+# A high-level introduction to the way Jester works
 
--- intro -> run
-jester.help_map.intro.run = {}
-jester.help_map.intro.run.description_short = [[How to run Jester.]]
-jester.help_map.intro.run.description_long = [[Jester is designed to be executed as a standard lua script from the FreeSWITCH dialplan.  The general format is as follows:
+Jester is VoIP toolkit for FreeSWITCH written in Lua. The goal of Jester is to provide a standardized set of tools that allow you to accomplish most of the common tasks you'll face when putting together phone trees, voicemail systems, etc. And, if Jester can't do something you need, it's modular, extensible design allows you to easily add the functionality in a way that not only you but others can benefit from!
+
+## How to run Jester
+
+Jester is designed to be executed as a standard lua script from the FreeSWITCH dialplan. The general format is as follows:
     <action application="lua" data="jester/jester.lua <profile> <sequence> [arg1],[arg2],...,[argN]"/>
 
 Jester also has an extensive help system, which can be accessed in one of three ways:
@@ -20,12 +18,11 @@ Jester also has an extensive help system, which can be accessed in one of three 
   From the jhelp script:
     jhelp [sub-topic] [sub-sub-topic] [...]
 
-  As you can see the jhelp method is much easier -- see 'help scripts jhelp' for more information on how to set it up.]]
+  As you can see the jhelp method is much easier -- see 'help scripts jhelp' for more information on how to set it up.
 
--- intro -> config
-jester.help_map.intro.config = {}
-jester.help_map.intro.config.description_short = [[Basic layout of Jester's configuration system.]]
-jester.help_map.intro.config.description_long = [[Configurations are stored in three different places in Jester:
+## Basic layout of Jester's configuration system
+
+Configurations are stored in three different places in Jester:
 
   1. jester/conf.lua - Global configuration
   2. profiles/[name]/conf.lua - Profile configuration
@@ -35,24 +32,22 @@ The global configuration file and the default profile's configuration file are w
 
 The main configuration gets loaded for all calls to Jester, while the profile configuration only gets loaded for the profile that Jester is currently running.
 
-One important thing to note about these configurations is that any variables in them are only processed once, when Jester initially loads.  If you have variables that change throughout the course of the call, you'll need to put them in storage or in channel variables.]]
+One important thing to note about these configurations is that any variables in them are only processed once, when Jester initially loads. If you have variables that change throughout the course of the call, you'll need to put them in storage or in channel variables.
 
--- intro -> help
-jester.help_map.intro.help = {}
-jester.help_map.intro.help.description_short = [[Basic layout of Jester's help system.]]
-jester.help_map.intro.help.description_long = [[Jester's help is implemented in the simple Lua structured data format of tables.  If you find accessing the help from the help system too tedious, the help files themselves are quite readable directly.
+## Basic layout of Jester's help system
+
+Jester's help is implemented in the simple Lua structured data format of tables. If you find accessing the help from the help system too tedious, the help files themselves are quite readable directly.
 
 The help system lives in two distinct areas:
 
   1. General help:
     These help files deal with most topics and are located at 'jester/help/*'
   2. Module help:
-    Detailed help for modules and the actions they provide.  They are located in 'jester/modules/[name]/help.lua'.]]
+    Detailed help for modules and the actions they provide. They are located in 'jester/modules/[name]/help.lua'.
 
--- intro -> lua
-jester.help_map.intro.lua = {}
-jester.help_map.intro.lua.description_short = [[Brief Lua language tutorial.]]
-jester.help_map.intro.lua.description_long = [===[For a definitive explanation of the Lua language, the online Lua manual is the place to go:
+## Brief Lua language tutorial
+
+For a definitive explanation of the Lua language, the online Lua manual is the place to go:
 
   http://www.lua.org/manual/5.1
 
@@ -97,7 +92,7 @@ Conditional statements:
     -- Ok, do this
   end
 
-Boolean is true or false.  Nil is the 'non-value'.  Comparison operators return false when what they compare is false or nil, all others return true.
+Boolean is true or false. Nil is the 'non-value'. Comparison operators return false when what they compare is false or nil, all others return true.
 
 Logical operators:
 
@@ -129,5 +124,5 @@ Tables:
       three = "four",
     },
   }
-  value = complex[1].one -- value is two]===]
+  value = complex[1].one -- value is two
 

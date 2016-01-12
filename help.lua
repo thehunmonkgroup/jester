@@ -115,39 +115,79 @@ local function build_handlers(module_data, list)
 end
 
 --[[
+  Build detailed help for an action.
+]]
+local function action_help_detail(action)
+  -- Loop through the modules looking for the passed action.
+  for _, module_data in pairs(jester.help_map) do
+    for action_to_check, action_data in pairs(module_data.actions) do
+      -- Found the action.
+      if action_to_check == action then
+        local list = {}
+        local description
+        if action_data.description_long then
+          description = action_data.description_long:wrap(79, " ")
+        elseif action_data.description_short then
+          description = action_data.description_short:wrap(79, " ")
+        else
+          description = ""
+        end
+        table.insert(list, description .. "\n")
+        -- Look for parameters for the action.
+        local params = action_data.params
+        if params then
+          -- Build an ordered list of parameters.
+          for _, param in ipairs(table.orderkeys(params)) do
+            table.insert(list,  " @param " .. param)
+            table.insert(list, params[param]:wrap(79, "   "))
+          end
+        end
+        return table.concat(list, "\n")
+      end
+    end
+  end
+end
+
+--[[
   Build detailed help for a module.
 ]]
 local function module_help_detail(module_name)
-  local description, actions
+  local description, description_short, actions
   -- Loop through all modules looking for the passed one.
   for name_to_check, data in pairs(jester.help_map) do
     if name_to_check == module_name then
-      if data.description_long then
-        description = data.description_long:wrap(79)
-      elseif data.description_short then
-        description = data.description_short:wrap(79)
+      if data.description_short then
+        description_short = data.description_short
+        description = data.description_long and data.description_long:wrap(79, " ") or nil
       end
       break
     end
   end
   -- Found the module.
-  if description then
+  if description_short then
     local list = {}
+    local action_detail = {}
     module_data = jester.help_map[module_name]
     action_data = jester.help_map[module_name].actions
-    table.insert(list, description)
+    table.insert(list, "- " .. description_short .. "\n")
+    if description then table.insert(list, description .. "\n") end
+    table.insert(list, " @classmod jester.modules." .. module_name)
+    table.insert(list, " @author Chad Phillips")
+    table.insert(list, " @copyright 2011-2015 Chad Phillips\n")
     -- Found actions for the module.
     if action_data then
-      table.insert(list, "\nACTIONS:")
       -- Build an ordered list of actions.
       for _, action in ipairs(table.orderkeys(action_data)) do
-        table.insert(list, "  " .. action .. ":")
+        table.insert(list, "\n---------" .. action .. "----------\n")
         if action_data[action].description_short then
-          description = action_data[action].description_short:wrap(79, "    ")
+          description = action_data[action].description_short:wrap(79)
         else
           description = ""
         end
+        description = "- " .. description .. "\n"
         table.insert(list, description)
+        table.insert(list, action_help_detail(action))
+        table.insert(list, "\n\n")
       end
     end
     -- Display all handlers for the module.
@@ -195,45 +235,6 @@ local function action_help()
     end
   end
   return string.format("Run 'help action [name]' to get more help on a specific action.\n\nCurrently installed actions:\n%s", table.concat(action_list, "\n"))
-end
-
---[[
-  Build detailed help for an action.
-]]
-local function action_help_detail(action)
-  -- Loop through the modules looking for the passed action.
-  for _, module_data in pairs(jester.help_map) do
-    for action_to_check, action_data in pairs(module_data.actions) do
-      -- Found the action.
-      if action_to_check == action then
-        local list = {}
-        local description
-        if action_data.description_long then
-          description = action_data.description_long:wrap(79)
-        elseif action_data.description_short then
-          description = action_data.description_short:wrap(79)
-        else
-          description = ""
-        end
-        table.insert(list, description)
-        -- Look for parameters for the action.
-        local params = action_data.params
-        if params then
-          table.insert(list, "\nPARAMETERS:")
-          -- Build an ordered list of parameters.
-          for _, param in ipairs(table.orderkeys(params)) do
-            table.insert(list,  "  " .. param .. ":")
-            table.insert(list, params[param]:wrap(79, "    "))
-          end
-        end
-        -- Display available handlers for the action.
-        if module_data.handlers then
-          list = build_handlers(module_data, list)
-        end
-        return table.concat(list, "\n")
-      end
-    end
-  end
 end
 
 --[[
