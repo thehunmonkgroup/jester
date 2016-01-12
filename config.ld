@@ -4,6 +4,7 @@ description = "Scripting toolkit for FreeSWITCH"
 title = "Jester documentation"
 file = {
   "./modules/data/data.lua",
+  "./modules/core_actions/core_actions.lua",
 }
 dir = "./documentation"
 topics = {
