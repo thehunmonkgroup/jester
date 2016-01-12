@@ -49,6 +49,7 @@ end
 function _M.load_data_count(action)
   local count_field = action.count_field
   local filters = action.filters or {}
+  local area = action.storage_area or "data"
   local key = action.storage_key or "count"
   if count_field then
     local dbh, conf = connect(action)
@@ -59,7 +60,7 @@ function _M.load_data_count(action)
     -- Loop through the returned rows.
     assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
     dbh:release()
-    core.set_storage("data", key, count)
+    core.set_storage(area, key, count)
   end
 end
 
