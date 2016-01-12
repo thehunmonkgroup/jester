@@ -17,14 +17,12 @@ The profile configuration lives at 'jester/profiles/[name]/conf.lua ([name] bein
 
 Profiles can use variables from two places:
 
-  Global configuration:
-    Variables defined in jester/conf.lua can be accessed through the 'jester.conf' namespace, eg. 'jester.conf.base_dir' accesses the 'base_dir' variable from the global configuration.
-  Channel variables:
-    Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the 'jester.get_variable()' function, eg. 'jester.get_variable("caller_id_name")' accesses the 'caller_id_name' variable from the channel.
+ 1. **Global configuration:** Variables defined in jester/conf.lua can be accessed through the <code>global</code> namespace, eg. <code>global.base\_dir</code> accesses the <code>base\_dir</code> variable from the global configuration.
+ 2. **Channel variables:** Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the <code>get\_variable()</code> function, eg. <code>get\_variable("caller\_id\_name")</code> accesses the <code>caller\_id\_name</code> variable from the channel.
 
 Profile configurations are allowed to override the main configuration for the following variables:
 
-modules, sequence_path, key_order, debug
+modules, sequence\_path, key\_order, debug
 
 The default 'voicemail' profile configuration file is well commented, check it out for more details.
 
@@ -37,13 +35,21 @@ In typical practice, the sequences, phrase macros, database schemas, etc. that a
 
 This does require a bit of extra configuration in some areas:
 
-  Sequences:
-    The global 'sequence_path' variable will need to be overridden, and instead pointed to a location inside the profile. A common line would be:
-      sequence_path = jester.conf.profile_path .. "/[name]/sequences"
+**Sequences:**
 
-  Phrase macros:
-    These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the 'conf/lang/en/en.xml' FreeSWITCH configuration file, would be:
-      <X-PRE-PROCESS cmd="include" data="$${base_dir}/scripts/jester/profiles/[name]/phrases.xml"/>
+The global <code>sequence\_path</code> variable will need to be overridden, and instead pointed to a location inside the profile. A common line would be:
+
+```lua
+sequence_path = global.conf.profile_path .. "/[name]/sequences"
+```
+
+**Phrase macros:**
+
+These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the 'conf/lang/en/en.xml' FreeSWITCH configuration file, would be:
+
+```xml
+<X-PRE-PROCESS cmd="include" data="$${base_dir}/scripts/jester/profiles/[name]/phrases.xml"/>
+```
 
 
 ## Overview of the default profile shipped with Jester
