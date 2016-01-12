@@ -133,12 +133,15 @@ local function action_help_detail(action)
           description = ""
         end
         table.insert(list, description .. "\n")
+        table.insert(list, " @action " .. action_to_check)
+        table.insert(list, " @param action")
+        table.insert(list, "   Required, value: " .. action_to_check)
         -- Look for parameters for the action.
         local params = action_data.params
         if params then
           -- Build an ordered list of parameters.
           for _, param in ipairs(table.orderkeys(params)) do
-            table.insert(list,  " @param " .. param)
+            table.insert(list, " @param " .. param)
             table.insert(list, params[param]:wrap(79, "   "))
           end
         end
@@ -171,14 +174,13 @@ local function module_help_detail(module_name)
     action_data = jester.help_map[module_name].actions
     table.insert(list, "- " .. description_short .. "\n")
     if description then table.insert(list, description .. "\n") end
-    table.insert(list, " @classmod jester.modules." .. module_name)
+    table.insert(list, " @module " .. module_name)
     table.insert(list, " @author Chad Phillips")
-    table.insert(list, " @copyright 2011-2015 Chad Phillips\n")
+    table.insert(list, " @copyright 2011-2015 Chad Phillips\n\n")
     -- Found actions for the module.
     if action_data then
       -- Build an ordered list of actions.
       for _, action in ipairs(table.orderkeys(action_data)) do
-        table.insert(list, "\n---------" .. action .. "----------\n")
         if action_data[action].description_short then
           description = action_data[action].description_short:wrap(79)
         else
@@ -187,7 +189,7 @@ local function module_help_detail(module_name)
         description = "- " .. description .. "\n"
         table.insert(list, description)
         table.insert(list, action_help_detail(action))
-        table.insert(list, "\n\n")
+        table.insert(list, "\n")
       end
     end
     -- Display all handlers for the module.
