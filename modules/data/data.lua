@@ -60,6 +60,9 @@
 --   to filter on. Filter values are interpreted as strings by default -- if a
 --   filter value is a number, prefix the filter key with double underscores.
 --   **WARNING:** If you exclude this field, all rows will be deleted!
+-- @param handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "data_delete",
@@ -117,6 +120,9 @@
 -- @param storage_area
 --   (Optional) The storage area to store the data in after loading. Defaults
 --   to 'data'.
+-- @param handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "data_load",
@@ -165,6 +171,9 @@
 -- @param storage_key
 --   (Optional) The key to store the count under in the 'data' storage area.
 --   Default is 'count'.
+-- @param handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "data_load_count",
@@ -216,6 +225,9 @@
 --   colon. Note that for security reasons, all token values will be run
 --   through an escaping function prior to token replacement if
 --   appropriate/available.
+-- @param handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "data_query",
@@ -256,6 +268,9 @@
 --   first attempt an update, and if no rows were updated, then perform an
 --   insert. To force either an update or insert, set this to 'update' or
 --   'insert' respectively.
+-- @param handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "data_update",
