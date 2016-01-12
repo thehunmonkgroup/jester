@@ -135,7 +135,7 @@ local function action_help_detail(action)
         table.insert(list, description .. "\n")
         table.insert(list, " @action " .. action_to_check)
         table.insert(list, " @param action")
-        table.insert(list, "   Required, value: " .. action_to_check)
+        table.insert(list, "   " .. action_to_check)
         -- Look for parameters for the action.
         local params = action_data.params
         if params then
