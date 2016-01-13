@@ -120,13 +120,16 @@
 
     <ul>
         <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_delete
         </li>
         <li><span class="parameter">config</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of information to pass which describes where to find the data.
    Check <a href="#Handlers">handlers</a> to see the fields for this table.
         </li>
         <li><span class="parameter">filters</span>
+            <span class="types"><span class="type">tab</span></span>
            (Optional) A table of filters to apply when loading the data. This
    restricts what is loaded to the filtered values. Filters are cumulative
    (AND logic). The key is the name of the filter, and the value is the value
@@ -135,6 +138,7 @@
    <strong>WARNING:</strong> If you exclude this field, all rows will be deleted!
         </li>
         <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -174,18 +178,22 @@
 
     <ul>
         <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_load
         </li>
         <li><span class="parameter">config</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of information to pass which describes where to find the data.
    Check <a href="#Handlers">handlers</a> to see the fields for this table.
         </li>
         <li><span class="parameter">fields</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of fields to load. Include only the field names as values, no
    keys. Field types are interpreted as strings by default -- if a field type
    is numeric, prefix the field name with double underscores.
         </li>
         <li><span class="parameter">filters</span>
+            <span class="types"><span class="type">tab</span></span>
            (Optional) A table of filters to apply when loading the data. This
    restricts what is loaded to the filtered values. Filters are cumulative
    (AND logic). The key is the name of the filter, and the value is the value
@@ -194,6 +202,7 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be loaded!
         </li>
         <li><span class="parameter">multiple</span>
+            <span class="types"><span class="type">bool</span></span>
            (Optional) Boolean indicating whether to load multiple sets of data. True
    loads all data that passes through the filters, false only loads the first
    set of data. Default is false. Note that multiple results are suffixed
@@ -206,18 +215,22 @@
    rows returned.
         </li>
         <li><span class="parameter">sort</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) A field to sort the data by before loading. This is only used
    with the 'mulitple' parameter.
         </li>
         <li><span class="parameter">sort_order</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The sorting order. Only used with the 'sort' and 'multiple'
    parameters. Valid values are 'asc' and 'desc', the default is 'asc'.
         </li>
         <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -263,16 +276,20 @@
 
     <ul>
         <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_load_count
         </li>
         <li><span class="parameter">config</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of information to pass which describes where to find the data.
    Check <a href="#Handlers">handlers</a> to see the fields for this table.
         </li>
         <li><span class="parameter">count_field</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The field to use for counting.
         </li>
         <li><span class="parameter">filters</span>
+            <span class="types"><span class="type">tab</span></span>
            (Optional) A table of filters to apply when loading the data count. This
    restricts what results are counted to the filtered values. Filters are
    cumulative (AND logic). The key is the name of the filter, and the value
@@ -282,14 +299,17 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be counted!
         </li>
         <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">storage_key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The key to store the count under in the 'data' storage area.
    Default is 'count'.
         </li>
         <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -338,27 +358,33 @@
 
     <ul>
         <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_query
         </li>
         <li><span class="parameter">config</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of information to pass which describes where to find the data.
    Check <a href="#Handlers">handlers</a> to see the fields for this table. Note that
    for this action, any table information is provided by the query parameter.
         </li>
         <li><span class="parameter">query</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The custom query to execute. Tokens are replaced prior to running the
    query.
         </li>
         <li><span class="parameter">return_fields</span>
+            <span class="types"><span class="type">bool</span></span>
            (Optional) If set to true, field data from the query will be returned to
    the specified storage area, and the number of returned rows will be placed
    in the '__count' key. Default is false.
         </li>
         <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">tokens</span>
+            <span class="types"><span class="type">tab</span></span>
            (Optional) A table of token replacements to apply to the query,
    key = token name, value = token replacement. Tokens are prefixed with a
    colon. Note that for security reasons, all token values will be run
@@ -366,6 +392,7 @@
    appropriate/available.
         </li>
         <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -402,19 +429,23 @@
 
     <ul>
         <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_update
         </li>
         <li><span class="parameter">config</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of information to pass which describes where to find the data.
    Check <a href="#Handlers">handlers</a> to see the fields for this table.
         </li>
         <li><span class="parameter">fields</span>
+            <span class="types"><span class="type">tab</span></span>
            A table of fields to update. Keys are the field names to update, values are
    the values to update to. Field types are interpreted as strings by default
    -- if a field type is numeric, prefix the field name with double
    underscores.
         </li>
         <li><span class="parameter">filters</span>
+            <span class="types"><span class="type">tab</span></span>
            (Optional) A table of filters to apply when loading the data. This
    restricts what is loaded to the filtered values. Filters are cumulative
    (AND logic). The key is the name of the filter, and the value is the value
@@ -423,12 +454,14 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be updated!
         </li>
         <li><span class="parameter">update_type</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) If this parameter is not provided, the default behavior is to
    first attempt an update, and if no rows were updated, then perform an
    insert. To force either an update or insert, set this to 'update' or
    'insert' respectively.
         </li>
         <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -521,7 +554,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-12 21:05:43 </i>
+<i style="float:right;">Last updated 2016-01-12 22:19:18 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
