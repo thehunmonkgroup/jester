@@ -15,9 +15,9 @@
 -- still run).
 --
 -- @action hangup
--- @param action
+-- @string action
 --   hangup
--- @param play
+-- @string play
 --   (Optional) The path to a file, or a phrase, to play before hanging up.
 -- @usage
 --   {
@@ -39,9 +39,9 @@
 -- loop instead of here.
 --
 -- @action hangup_sequence
--- @param action
+-- @string action
 --   hangup_sequence
--- @param sequence
+-- @string sequence
 --   The sequence to execute.
 -- @usage
 --   {

@@ -14,11 +14,11 @@
 -- console command line. The command result is stored in the specified key.
 --
 -- @action api_command
--- @param action
+-- @string action
 --   api_command
--- @param command
+-- @string command
 --   The command to execute.
--- @param storage_key
+-- @string storage_key
 --   (Optional) The key to store the command result under in the 'api_command'
 --   storage area. Default is 'result'.
 -- @usage
@@ -34,9 +34,9 @@
 -- This action calls a new sequence from the currently running sequence.
 --
 -- @action call_sequence
--- @param action
+-- @string action
 --   call_sequence
--- @param sequence
+-- @string sequence
 --   The new sequence to call. By default the original sequence is not resumed
 --   when the new sequence completes. To resume the old sequence (effectively
 --   making the new sequence a subroutine of the original), prefix the sequence
@@ -58,13 +58,13 @@
 -- This action removes key/value pairs from the given storage area.
 --
 -- @action clear_storage
--- @param action
+-- @string action
 --   clear_storage
--- @param data_keys
+-- @tab data_keys
 --   (Optional) A table of keys to remove from the storage area. If this
 --   parameter is not given, then the entire storage area is cleared, use
 --   caution!
--- @param storage_area
+-- @string storage_area
 --   (Optional) The area to clear. Defaults to 'default'.
 -- @usage
 --   {
@@ -85,19 +85,19 @@
 -- logic see @{03-Sequences.md.Advanced_tricks} for more information.
 --
 -- @action conditional
--- @param action
+-- @string action
 --   conditional
--- @param compare_to
+-- @string compare_to
 --   The value that you expect it to be, or for pattern matching, any valid Lua
 --   pattern (see the Lua manual for more information on Lua patterns).
--- @param comparison
+-- @string comparison
 --   (Optional) The kind of comparison to perform. Valid values are "equal",
 --   "match", "greater\_than", and "less\_than". Default is "equal".
--- @param if_false
+-- @string if_false
 --   (Optional) The sequence to call if the comparison is false.
--- @param if_true
+-- @string if_true
 --   (Optional) The sequence to call if the comparison is true.
--- @param value
+-- @string value
 --   The value that you want to compare.
 -- @usage
 --   {
@@ -126,15 +126,15 @@
 -- (string, number, boolean) are copied -- all others are ignored.
 --
 -- @action copy_storage
--- @param action
+-- @string action
 --   copy_storage
--- @param copy_to
+-- @string copy_to
 --   The storage area to copy the data to. Note that any data already existing
 --   in this area will be removed prior to the copy.
--- @param move
+-- @bool move
 --   (Optional) If set to true, clears the data from the original storage area,
 --   which effectively makes the operation a move. Default is false.
--- @param storage_area
+-- @string storage_area
 --   (Optional) The area to copy. Defaults to 'default'.
 -- @usage
 --   {
@@ -157,9 +157,9 @@
 -- best to put it here instead of in the hangup loop.
 --
 -- @action exit_sequence
--- @param action
+-- @string action
 --   exit_sequence
--- @param sequence
+-- @string sequence
 --   The sequence to execute.
 -- @usage
 --   {
@@ -176,11 +176,11 @@
 -- within a 'lighter' profile.
 --
 -- @action load_profile
--- @param action
+-- @string action
 --   load_profile
--- @param profile
+-- @string profile
 --   The new profile to load.
--- @param sequence
+-- @string sequence
 --   (Optional) A sequence to execute after loading the profile. If this is
 --   provided, any running sequences in the current loop will be discarded, and
 --   this sequence will be run from the top of a new sequence stack.
@@ -198,7 +198,7 @@
 -- or to provide a way to call another sequence without taking any other action.
 --
 -- @action none
--- @param action
+-- @string action
 --   none
 -- @usage
 --   {
@@ -211,12 +211,12 @@
 -- This action sets key/value pairs in the given storage area.
 --
 -- @action set_storage
--- @param action
+-- @string action
 --   set_storage
--- @param data
+-- @tab data
 --   A table of data to store in the storage area. Keys are the storage keys,
 --   values are the storage values.
--- @param storage_area
+-- @string storage_area
 --   (Optional) The area to store the value in. Defaults to 'default'.
 -- @usage
 --   {
@@ -235,9 +235,9 @@
 -- currently running.
 --
 -- @action set_variable
--- @param action
+-- @string action
 --   set_variable
--- @param data
+-- @tab data
 --   A table of channel variables to set. Keys are the variable
 --   names, values are the variable values.
 -- @usage
@@ -256,11 +256,11 @@
 -- on the channel during the wait period.
 --
 -- @action wait
--- @param action
+-- @string action
 --   wait
--- @param keys
+-- @tab keys
 --   (Optional) See @{03-Sequences.md.Capturing_user_key_input|keys} documentation.
--- @param milliseconds
+-- @int milliseconds
 --   The number of milliseconds to wait.
 -- @usage
 --   {

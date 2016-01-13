@@ -48,19 +48,19 @@
 -- Allows deletion of data from external sources.
 --
 -- @action data_delete
--- @param action
+-- @string action
 --   data_delete
--- @param config
+-- @tab config
 --   A table of information to pass which describes where to find the data.
 --   Check [handlers](#Handlers) to see the fields for this table.
--- @param filters
+-- @tab filters
 --   (Optional) A table of filters to apply when loading the data. This
 --   restricts what is loaded to the filtered values. Filters are cumulative
 --   (AND logic). The key is the name of the filter, and the value is the value
 --   to filter on. Filter values are interpreted as strings by default -- if a
 --   filter value is a number, prefix the filter key with double underscores.
 --   **WARNING:** If you exclude this field, all rows will be deleted!
--- @param handler
+-- @string handler
 --   The handler to use, see [handlers](#Handlers). If not specified, defaults
 --   to the default handler for the module.
 -- @usage
@@ -84,23 +84,23 @@
 -- storage area!
 --
 -- @action data_load
--- @param action
+-- @string action
 --   data_load
--- @param config
+-- @tab config
 --   A table of information to pass which describes where to find the data.
 --   Check [handlers](#Handlers) to see the fields for this table.
--- @param fields
+-- @tab fields
 --   A table of fields to load. Include only the field names as values, no
 --   keys. Field types are interpreted as strings by default -- if a field type
 --   is numeric, prefix the field name with double underscores.
--- @param filters
+-- @tab filters
 --   (Optional) A table of filters to apply when loading the data. This
 --   restricts what is loaded to the filtered values. Filters are cumulative
 --   (AND logic). The key is the name of the filter, and the value is the value
 --   to filter on. Filter values are interpreted as strings by default -- if a
 --   filter value is a number, prefix the filter key with double underscores.
 --   **WARNING:** if you exclude this field, all rows will be loaded!
--- @param multiple
+-- @bool multiple
 --   (Optional) Boolean indicating whether to load multiple sets of data. True
 --   loads all data that passes through the filters, false only loads the first
 --   set of data. Default is false. Note that multiple results are suffixed
@@ -111,16 +111,16 @@
 --   addition to storing the data that is loaded, a special key
 --   <code>__count</code> is added, which holds an integer of the number of
 --   rows returned.
--- @param sort
+-- @string sort
 --   (Optional) A field to sort the data by before loading. This is only used
 --   with the 'mulitple' parameter.
--- @param sort_order
+-- @string sort_order
 --   (Optional) The sorting order. Only used with the 'sort' and 'multiple'
 --   parameters. Valid values are 'asc' and 'desc', the default is 'asc'.
--- @param storage_area
+-- @string storage_area
 --   (Optional) The storage area to store the data in after loading. Defaults
 --   to 'data'.
--- @param handler
+-- @string handler
 --   The handler to use, see [handlers](#Handlers). If not specified, defaults
 --   to the default handler for the module.
 -- @usage
@@ -150,14 +150,14 @@
 -- the number of rows of data, this is more efficient than the data_load action.
 --
 -- @action data_load_count
--- @param action
+-- @string action
 --   data\_load\_count
--- @param config
+-- @tab config
 --   A table of information to pass which describes where to find the data.
 --   Check [handlers](#Handlers) to see the fields for this table.
--- @param count_field
+-- @string count_field
 --   The field to use for counting.
--- @param filters
+-- @tab filters
 --   (Optional) A table of filters to apply when loading the data count. This
 --   restricts what results are counted to the filtered values. Filters are
 --   cumulative (AND logic). The key is the name of the filter, and the value
@@ -165,13 +165,13 @@
 --   default -- if a filter value is a number, prefix the filter key with double
 --   underscores.
 --   **WARNING:** if you exclude this field, all rows will be counted!
--- @param storage_area
+-- @string storage_area
 --   (Optional) The storage area to store the data in after loading. Defaults
 --   to 'data'.
--- @param storage_key
+-- @string storage_key
 --   (Optional) The key to store the count under in the 'data' storage area.
 --   Default is 'count'.
--- @param handler
+-- @string handler
 --   The handler to use, see [handlers](#Handlers). If not specified, defaults
 --   to the default handler for the module.
 -- @usage
@@ -203,29 +203,29 @@
 -- storage area!
 --
 -- @action data_query
--- @param action
+-- @string action
 --   data_query
--- @param config
+-- @tab config
 --   A table of information to pass which describes where to find the data.
 --   Check [handlers](#Handlers) to see the fields for this table. Note that
 --   for this action, any table information is provided by the query parameter.
--- @param query
+-- @string query
 --   The custom query to execute. Tokens are replaced prior to running the
 --   query.
--- @param return_fields
+-- @bool return_fields
 --   (Optional) If set to true, field data from the query will be returned to
 --   the specified storage area, and the number of returned rows will be placed
 --   in the '__count' key. Default is false.
--- @param storage_area
+-- @string storage_area
 --   (Optional) The storage area to store the data in after loading. Defaults
 --   to 'data'.
--- @param tokens
+-- @tab tokens
 --   (Optional) A table of token replacements to apply to the query,
 --   key = token name, value = token replacement. Tokens are prefixed with a
 --   colon. Note that for security reasons, all token values will be run
 --   through an escaping function prior to token replacement if
 --   appropriate/available.
--- @param handler
+-- @string handler
 --   The handler to use, see [handlers](#Handlers). If not specified, defaults
 --   to the default handler for the module.
 -- @usage
@@ -246,29 +246,29 @@
 -- Allows updating/insertion of data to external sources.
 --
 -- @action data_update
--- @param action
+-- @string action
 --   data_update
--- @param config
+-- @tab config
 --   A table of information to pass which describes where to find the data.
 --   Check [handlers](#Handlers) to see the fields for this table.
--- @param fields
+-- @tab fields
 --   A table of fields to update. Keys are the field names to update, values are
 --   the values to update to. Field types are interpreted as strings by default
 --   -- if a field type is numeric, prefix the field name with double
 --   underscores.
--- @param filters
+-- @tab filters
 --   (Optional) A table of filters to apply when loading the data. This
 --   restricts what is loaded to the filtered values. Filters are cumulative
 --   (AND logic). The key is the name of the filter, and the value is the value
 --   to filter on. Filter values are interpreted as strings by default -- if a
 --   filter value is a number, prefix the filter key with double underscores.
 --   **WARNING:** if you exclude this field, all rows will be updated!
--- @param update_type
+-- @string update_type
 --   (Optional) If this parameter is not provided, the default behavior is to
 --   first attempt an update, and if no rows were updated, then perform an
 --   insert. To force either an update or insert, set this to 'update' or
 --   'insert' respectively.
--- @param handler
+-- @string handler
 --   The handler to use, see [handlers](#Handlers). If not specified, defaults
 --   to the default handler for the module.
 -- @usage
