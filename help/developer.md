@@ -1,4 +1,4 @@
-# Developer documentation.
+# Developer documentation
 
 In the future this section will be more detailed. For now it's just a holding place for the outline of the future help, and a quick reference to the Jester core functions that are most commonly used in modules.
 
@@ -13,7 +13,7 @@ The core code and modules are fairly well documented, and much can be learned fr
     'jester/modules/foo/conf.lua'
    The file contains a mapping of module functions to action names, and can declare multiple handlers for actions.
 
-## Quick reference to the main core functions that are used in modules, by area:
+## Quick reference
 
  * workflow:
     core.run_action(action)

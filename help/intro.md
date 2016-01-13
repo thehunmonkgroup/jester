@@ -3,16 +3,19 @@
 Jester is VoIP toolkit for FreeSWITCH written in Lua. The goal of Jester is to provide a standardized set of tools that allow you to accomplish most of the common tasks you'll face when putting together phone trees, voicemail systems, etc. And, if Jester can't do something you need, it's modular, extensible design allows you to easily add the functionality in a way that not only you but others can benefit from!
 
 
-## How to run Jester
+## Running Jester
 
-Jester is designed to be executed as a standard lua script from the FreeSWITCH dialplan. The general format is as follows:
+Jester is designed to be executed as a standard Lua script from the FreeSWITCH dialplan. The general format is as follows:
 
 ```xml
-<action application="lua" data="jester/jester.lua <profile> <sequence> [arg1],[arg2],...,[argN]"/>
+<action
+  application="lua"
+  data="jester/jester.lua <profile> <sequence> [arg1],[arg2],...,[argN]"
+/>
 ```
 
 
-## Basic layout of Jester's configuration system
+## Configuration system
 
 Configurations are stored in three different places in Jester:
 
@@ -72,6 +75,8 @@ Variable names can be any string of letters, digits and underscores, not beginni
   >= -- greater than or equal to
 ```
 
+These return false when what they compare is false or nil, all others return true.
+
 **String concatenation:**
 
 ```lua
@@ -93,13 +98,18 @@ Variable names can be any string of letters, digits and underscores, not beginni
   end
 ```
 
-**Boolean:** true or false
+**Boolean:**
 
-**Non-value:** nil
+```lua
+  foo = true
+  bar = false
+```
 
-**Comparison operators:**
+**Non-value:**
 
-Return false when what they compare is false or nil, all others return true.
+```lua
+  baz = nil
+```
 
 **Logical operators:**
 
