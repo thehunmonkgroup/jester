@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Profile_configuration">Profile configuration </a></li>
+<li><a href="#Things_typically_stored_in_a_profile">Things typically stored in a profile </a></li>
+<li><a href="#Default_profile">Default profile </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><strong>02-Profiles</strong></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>Jester's profile system</h1>
+
+<p>A profile is a high-level configuration tool that allows you to override certain Jester global configurations, in addition to providing your own custom constants that you can access in any sequences loaded within the profile.</p>
+
+<p>Jester must be given a valid profile to run when it is called.</p>
+
+<p>The main advatages of profiles are:</p>
+
+<ol>
+    <li>They provide an easy way to store constants that are used over and over again in sequences, such as database connection configurations, or paths to custom sound files, etc.</li>
+    <li>They allow you to only load the modules you need for the sequences you are running, so you can load different sets of modules at different times depending on what sequences you are running. Used properly, this can make Jester more efficient.</li>
+    <li>If you design your sequences intelligently, you can make them behave in different ways by loading different profiles with different settings.</li>
+</ol>
+
+
+<p><a name="Profile_configuration"></a></p>
+<h2>Profile configuration</h2>
+
+<p>The profile configuration lives at 'jester/profiles/[name]/conf.lua ([name] being the name of the profile). The configuration is loaded after the global configuration to allow overrides, but also loaded fairly early in the bootstrap process to allow for maximum control.</p>
+
+<p>Profiles can use variables from two places:</p>
+
+<ol>
+    <li><strong>Global configuration:</strong> Variables defined in jester/conf.lua can be accessed through the <code>global</code> namespace, eg.
+
+<pre>
+global.base_dir
+</pre>
+
+Accesses the 'base_dir' variable from the global configuration.</li>
+    <li><strong>Channel variables:</strong> Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the <code>get_variable()</code> function, eg.
+
+<pre>
+get_variable(<span class="string">"caller_id_name"</span>)
+</pre>
+
+Accesses the 'caller_id_name' variable from the channel.</li>
+</ol>
+
+<p>Profile configurations are allowed to override the main configuration for the following variables:</p>
+
+<ul>
+    <li>modules</li>
+    <li>sequence_path</li>
+    <li>key_order</li>
+    <li>debug</li>
+</ul>
+
+<p>The default 'voicemail' profile configuration file is well commented, check it out for more details.</p>
+
+
+<p><a name="Things_typically_stored_in_a_profile"></a></p>
+<h2>Things typically stored in a profile</h2>
+
+<p>Profiles are meant to be an easy way to keep everything together.</p>
+
+<p>In typical practice, the sequences, phrase macros, database schemas, etc. that a profile uses are all stored under the main profile directory, to make it centralized and portable.</p>
+
+<p>This does require a bit of extra configuration in some areas:</p>
+
+<p><strong>Sequences:</strong></p>
+
+<p>The global <code>sequence_path</code> variable will need to be overridden, and instead pointed to a location inside the profile. A common line would be:</p>
+
+
+<pre>
+sequence_path = global.profile_path .. <span class="string">"/[name]/sequences"</span>
+</pre>
+
+
+<p><strong>Phrase macros:</strong></p>
+
+<p>These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the 'conf/lang/en/en.xml' FreeSWITCH configuration file, would be:</p>
+
+
+<pre>
+&lt;X-PRE-PROCESS
+  cmd=<span class="string">"include"</span>
+  data=<span class="string">"$${base_dir}/scripts/jester/profiles/[name]/phrases.xml"</span>
+/&gt;
+</pre>
+
+
+
+<p><a name="Default_profile"></a></p>
+<h2>Default profile</h2>
+
+<p>The included default 'voicemail' profile is a replica of <a href="http://www.voip-info.org/wiki/index.php?page_id=502">Asterisk's Comedian Mail</a>.</p>
+
+<p>It is intended to be an exact replica of the original version shipped with <a href="http://www.asterisk.org/">Asterisk</a> 1.2/1.4, a showcase of the power and flexibility of the Jester system, and a template to use as a starting place for learning and building other workflows.</p>
+
+<p>Everything needed to set up the profile is included in the profile directory. Check out the INSTALL.txt there for more details.</p>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-12 21:05:43 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

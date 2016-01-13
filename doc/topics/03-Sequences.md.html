@@ -1,0 +1,605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Writing_sequences">Writing sequences </a></li>
+<li><a href="#Writing_actions">Writing actions </a></li>
+<li><a href="#Accessing_using_variables">Accessing/using variables </a></li>
+<li><a href="#Storage_system">Storage system </a></li>
+<li><a href="#Capturing_user_key_input">Capturing user key input </a></li>
+<li><a href="#Passing_arguments">Passing arguments </a></li>
+<li><a href="#Simple_decision_making">Simple decision making </a></li>
+<li><a href="#Subroutines">Subroutines </a></li>
+<li><a href="#IVR_phone_tree_functionality">IVR/phone tree functionality </a></li>
+<li><a href="#Phrase_macros">Phrase macros </a></li>
+<li><a href="#Triggering_actions_on_hangup_exit">Triggering actions on hangup/exit </a></li>
+<li><a href="#Debugging">Debugging </a></li>
+<li><a href="#Advanced_tricks">Advanced tricks </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><strong>03-Sequences</strong></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>Sequence tutorial</h1>
+
+<p>A sequence is a series of actions that are executed in a sequential order.</p>
+
+<p>Sequences are the primary control mechanism for building workflows in Jester.</p>
+
+
+<p><a name="Writing_sequences"></a></p>
+<h2>Writing sequences</h2>
+
+<p>At its heart, a sequence is a Lua script. If you are familiar with Lua syntax, then writing sequences should be quite trivial. If you're new to Lua, check out <a href="../topics/01-Intro.md.html#Brief_Lua_language_tutorial">Brief Lua language tutorial</a> for a primer on the basic syntax that will be used in sequences.</p>
+
+<p>A sequence is a list of 'actions' to take in a certain order, very similar to how commands would be executed sequentially in a dialplan extension.</p>
+
+<p>The most simple sequence you can write illustrates its basic format:</p>
+
+
+<pre>
+  <span class="keyword">return</span>
+  {
+    {
+      action = <span class="string">"none"</span>,
+    },
+  }
+</pre>
+
+
+<p>This sequence calls the "none" action, which is just a passthrough. This is a sequence (the outer curly brackets), with one action (the second set of curly braces around the 'action' parameter). For more on how to write actions, see <a href="#Writing_actions">Writing actions</a>.</p>
+
+<p>Here's a slightly more complex sequence:</p>
+
+
+<pre>
+  mailbox = variable(<span class="string">"mailbox_number"</span>)
+  record_location = storage(<span class="string">"default"</span>, <span class="string">"where_to_record"</span>)
+
+  <span class="keyword">return</span>
+  {
+    {
+      action = play,
+      file = <span class="string">"/var/voicemail/"</span> .. mailbox_number .. <span class="string">"/greeting.wav"</span>,
+    },
+    {
+      action = record,
+      location = record_location .. <span class="string">"/messages"</span>,
+    },
+  }
+</pre>
+
+
+<p>As you can see, sequences can contain variables. They can also use conditional statements and concatenate strings (in fact, they can actually do everything a Lua script can do, but that is beyond the scope of this tutorial). See <a href="#Accessing_using_variables">Accessing/using variables</a> for more information on using variables in sequences, and <a href="#Advanced_tricks">Advanced tricks</a> for more creative sequence designs.</p>
+
+<p>The last example illustrates a basic design point of sequences. You can think of everything above the <code>return</code> keyword as a kind of scratch pad, where you can assemble the necessary variables and perform other tasks to prepare things to be used in the actual sequence -- and everything below the <code>return</code> keyword statement as the final sequence you give to Jester for executing.</p>
+
+<p>One important thing to note is that Jester re-evaluates the entire sequence before each sequence action is run. In a practical sense this means that if you set a variable in action #1, that variable's value will be available in action #2. This is a very useful feature!  On the down side, this also means that Jester core has to do a lot of evaluating, which could have an impact on high load systems. For this reason it is recommended that if you're going to use any channel variables or storage items more than once in your sequence, you should define a variable for them in the top section, and use that variable when writing actions.</p>
+
+<p>For an easy way to generate templates for sequences, see the <a href="../topics/04-Scripts.md.html#jsequence">jsequence</a> documentation.</p>
+
+
+<p><a name="Writing_actions"></a></p>
+<h2>Writing actions</h2>
+
+<p>Actions are the mechanism for doing something in a sequence. They are configurable templates that allow you to pass a command with options to Jester, which are then passed on to the module providing the action for execution. Put simply, you give the module a few simple instructions, and it handles the dirty work of accomplishing the job through the FreeSWITCH/Lua API.</p>
+
+<p>Each action is a Lua table within the main sequence (for more information on overall sequence design, see <a href="#Writing_sequences">Writing sequences</a>. The table is a series of key/value pairs (called parameters from here out) that contain the action instructions. Here's an example of the 'play' action, which plays a sound file on the channel:</p>
+
+
+<pre>
+  {
+    action = <span class="string">"play"</span>,
+    file = <span class="string">"/tmp/mysoundfile.wav"</span>,
+    keys = {
+      [<span class="string">"#"</span>] = <span class="string">":break"</span>,
+    },
+    repetitions = <span class="number">2</span>,
+    wait = <span class="number">3000</span>,
+  },
+</pre>
+
+
+<p>An action always has at least one required parameter, 'action', which is the action to execute. The other parameters are dependant on the action being taken, see the various module documentation for detailed help on a particular action, including the parameters it accepts.</p>
+
+<p>For an easy way to generate templates for actions, see the the <a href="../topics/04-Scripts.md.html#jsequence">jsequence</a> documentation.</p>
+
+
+<p><a name="Accessing_using_variables"></a></p>
+<h2>Accessing/using variables</h2>
+
+<p>Variables in sequences are standard Lua variable definitions:</p>
+
+
+<pre>
+  name = value
+</pre>
+
+
+<p>See <a href="../topics/01-Intro.md.html#Brief_Lua_language_tutorial">Brief Lua language tutorial</a> for more examples of defining variables.</p>
+
+<p>You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below. Note that for any new variable you create in the sequence, you should always initialize it to some value (or to an empty string) before attempting to use it.</p>
+
+<p>To avoid namespace collisions in your sequence, the following variable names are prohibited:</p>
+
+<ul>
+    <li>global</li>
+    <li>profile</li>
+    <li>args</li>
+    <li>variable</li>
+    <li>storage</li>
+    <li>debug_dump</li>
+</ul>
+
+<p>Sequences can access outside variables from five places:</p>
+
+<ul>
+    <li><strong>Global configuration:</strong>
+Variables defined in jester/conf.lua can be accessed through the <code>global</code> namespace, eg.
+
+<pre>
+foo = global.base_dir
+</pre>
+
+Accesses the 'base_dir' variable from the global configuration.</li>
+    <li><strong>Profile configuration:</strong>
+Variables defined in the running profile's conf.lua can be accessed through the <code>profile</code> namespace, eg.
+
+<pre>
+foo = profile.mailbox_dir
+</pre>
+
+Accesses the 'mailbox_dir' variable from the profile configuration.</li>
+    <li><strong>Channel variables:</strong>
+Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the <code>variable()</code> function, eg.
+
+<pre>
+foo = variable(<span class="string">"caller_id_name"</span>)
+</pre>
+
+Accesses the 'caller_id_name' variable from the channel.</li>
+    <li><strong>Jester's internal storage system:</strong>
+Variables defined in Jester's internal storage can be accessed through the <code>storage()</code> function, eg.
+
+<pre>
+foo = storage(<span class="string">"mailbox_settings"</span>, <span class="string">"mailbox"</span>)
+</pre>
+
+Accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area. See <a href="#Storage_system">Storage system</a> to learn more.</li>
+    <li><strong>Sequence arguments:</strong>
+Sequences can be called with arguments, and these can be accessed through the <code>args()</code> function, eg.
+
+<pre>
+foo = args(<span class="number">1</span>)
+</pre>
+
+Accesses the first argument passed to the sequence. See <a href="#Passing_arguments">Passing arguments</a> for more information.</li>
+</ul>
+
+
+<p><a name="Storage_system"></a></p>
+<h2>Storage system</h2>
+
+<p>Jester provides a simple key/value storage mechanism. This allows you to store user input, load data from external sources for later use, keep track of how many times something was done, etc.</p>
+
+<p>The storage is divided into 'areas'. Each area stores key/value pairs that are independent of other storage areas.</p>
+
+<p>To learn how to access storage areas in sequences, see <a href="#Accessing_using_variables">Accessing/using variables</a>.</p>
+
+<p>To learn how to perform various operations on storage areas from a sequence, see the <a href="../modules/core_actions.html#">core_actions</a> module.</p>
+
+
+<p><a name="Capturing_user_key_input"></a></p>
+<h2>Capturing user key input</h2>
+
+<p>Jester provides high-level implementations for acting on keys pressed by the user.</p>
+
+<p>To maintain the simplicity of the engine, menu-type navigation is limited to single digits. Any action that has the 'keys' parameter supports responding to key presses. The layout of the keys parameter is as follows:</p>
+
+
+<pre>
+  keys = {
+    [<span class="string">"1"</span>] = <span class="string">"somesequence"</span>,
+    [<span class="string">"2"</span>] = <span class="string">"someothersequence arg1,arg2"</span>,
+    [<span class="string">"3"</span>] = <span class="string">"@someaction"</span>,
+    [<span class="string">"4"</span>] = <span class="string">":break"</span>,
+    [<span class="string">"5"</span>] = <span class="string">":seek:+2000"</span>,
+    [<span class="string">"6"</span>] = <span class="string">":seek:-2000"</span>,
+    [<span class="string">"7"</span>] = <span class="string">":pause"</span>,
+    [<span class="string">"*"</span>] = <span class="string">"@navigation_up"</span>,
+    invalid = <span class="keyword">true</span>,
+    invalid_sound = <span class="string">"ivr/ivr-that_was_an_invalid_entry.wav"</span>,
+    invalid_sequence = <span class="string">"mysequence arg1,arg2"</span>,
+  }
+</pre>
+
+
+<p>The key itself is enclosed in square brackets and quotes. The values for each key can be in one of these forms:</p>
+
+<ol>
+    <li>A sequence to run (with arguments if desired)</li>
+    <li>An action to run directly (not common besides navigation)</li>
+    <li>A special playback operator</li>
+</ol>
+
+<p>Sequences are called in the same format as they are anywhere else in Jester. When a sequence is called, the key press is registered as valid, playback of the file is stopped, the currently running action is terminated, and the new sequence is called.</p>
+
+<p>Actions are preceded by the @ symbol.</p>
+
+<p>Actions run this way are run in 'ad hoc' mode -- they can accept no key presses, and the previously running action will be returned to if the ad hoc action does not call a new sequence. The <a href="../modules/navigation.html#">navigation</a> actions are the most likely actions to be run in this form.</p>
+
+<p>Playback operators are preceeded by a colon.</p>
+
+<p>The common playback operators are as follows:</p>
+
+<ul>
+    <li><strong>:break</strong> --
+    Break playback or recording of a file</li>
+    <li><strong>:seek:+[milliseconds]</strong> --
+    Fast forward through a playing file. Replace [milliseconds] with the number of milliseconds to fast forward.</li>
+    <li><strong>:seek:-[milliseconds]</strong> --
+    Rewind through a playing file. Replace [milliseconds] with the number of milliseconds to rewind.</li>
+    <li><strong>:seek:0</strong> --
+    Begin playback of a file from the beginning.</li>
+    <li><strong>:pause</strong> --
+    Pause a playing file. If the file is already paused, resume playback.</li>
+</ul>
+
+<p>There are other operators, check the Lua scripts in the FreeSWITCH source for more.</p>
+
+<p>There are three extra parameters besides the keys that can be used to control how invalid key presses are handled. The default, if none of these are present, is to simply ignore the key press:</p>
+
+<ul>
+    <li><strong>invalid</strong> --
+    Set this to true if you just want to register the key press as invalid and break the currently running action.</li>
+    <li><strong>invalid_sound</strong> --
+    Set this to a file or phrase to play to the user after registering the key press as invalid and stopping playback of the file. The format of the filepath is the same as the ones accepted by the play module.</li>
+    <li><strong>invalid_sequence</strong> --
+    Set this to a sequence to call after registering the key press as invalid and stopping playback of the file.</li>
+</ul>
+
+<p>The <code>keys</code> parameter can be put in one of two places:</p>
+
+<p><strong>As an action parameter:</strong></p>
+
+<p>This sets the key mapping for just the action that it's defined in, eg.</p>
+
+
+<pre>
+      <span class="keyword">return</span>
+      {
+        {
+          action = <span class="string">"play"</span>,
+          file = <span class="string">"myfile"</span>,
+          keys = {
+            [<span class="string">'#'</span>] = <span class="string">':break'</span>,
+          },
+        },
+      }
+</pre>
+
+<p>In this case, once the action is complete, the mapping is cleared.</p>
+
+<p><strong>As a sequence parameter:</strong></p>
+
+<p>This sets the key mapping for all actions in the sequence, eg.</p>
+
+
+<pre>
+      <span class="keyword">return</span>
+      {
+        keys = {
+          [<span class="string">'#'</span>] = <span class="string">':break'</span>,
+        },
+        {
+          action = <span class="string">"play"</span>,
+          file = <span class="string">"myfile"</span>,
+        },
+        {
+          action = <span class="string">"record"</span>,
+          file = <span class="string">"myrecording"</span>,
+        },
+      }
+</pre>
+
+<p>In this case, once the sequence is complete, the mapping is cleared. Note that individual actions in the sequence can still provide their own key mappings, and they will override the sequence mapping for that action.</p>
+
+
+<p><a name="Passing_arguments"></a></p>
+<h2>Passing arguments</h2>
+
+<p>Any code system that wants more flexibility supports arguments, and Jester sequenes are no different. Arguments allow you to pass data to a sequence at the time it is called, and this data can then be used by the sequence.</p>
+
+<p>Passing arguments to a sequence is simple -- just follow the sequence name with a space, then a comma-separated list of arguments. In the interest of keeping the core small, Jester's argument parser is fairly simplistic, so you need to follow these rules when passing arguments:</p>
+
+<ul>
+    <li>The arguments themselves can contain no commas.</li>
+    <li>The arguments must be separated by commas.</li>
+    <li>There can be no space in the argument list.</li>
+</ul>
+
+<p>eg.</p>
+
+<pre>
+{
+  action = <span class="string">"call_sequence"</span>,
+  sequence = <span class="string">"mysequence value1,value2,some_other_value,1.2.3.4"</span>,
+}
+</pre>
+
+<p>See <a href="#Accessing_using_variables">Accessing/using variables</a> for how to access arguments in your sequences.</p>
+
+
+<p><a name="Simple_decision_making"></a></p>
+<h2>Simple decision making</h2>
+
+<p>At certain points in a sequence, you may want to take different actions based on the value of some channel variable or storage item. Jester provides a simple mechanism to do this, the <a href="../modules/core_actions.html#conditional">conditional</a> action.</p>
+
+<p>It allows you to compare one value with another using various comparison strategies, and call a new sequence based on if the comparison is true or false. An example conditonal would be:</p>
+
+
+<pre>
+  {
+    action = <span class="string">"conditional"</span>,
+    value = number_of_messages,
+    compare_to = <span class="number">0</span>,
+    comparison = <span class="string">"equal"</span>,
+    if_true = <span class="string">"exit"</span>,
+    if_false = <span class="string">"play_messages"</span>,
+  },
+</pre>
+
+
+<p>See the <a href="../modules/core_actions.html#conditional">conditional</a> action for more details.</p>
+
+
+<p><a name="Subroutines"></a></p>
+<h2>Subroutines</h2>
+
+<p>At certain points in a sequence, it may be desirable to fire off another sequence, and when it completes have Jester return to the previously running sequence. Subsequences allow you to accomplish this.</p>
+
+<p>Jester's basic logic is to run one sequence and then exit. It will only run other sequences if you specifically tell it to. Normally, when you call one sequence from another, the original sequence is forgotten and the new sequence is run -- ie, only one sequence at a time runs.</p>
+
+<p>To allow you to run more than one sequence at a time, Jester keeps a 'sequence stack'. It runs sequences at a stack level until no more are called, then it checks to see if there's another level above it. If so, it returns to that level and continues running the sequence at that level, and so on until finally there are no more stack levels and Jester exits.</p>
+
+<p>To operate on the sequence stack, you prefix calls to a sequence with one of three commands:</p>
+
+<ul>
+    <li><strong>sub:</strong> --
+This moves the sequence stack down one level, and runs the called sequence there, remembering which action the current sequence is running. When the lower level stack finishes, the stack level is discarded, Jester moves up one level in the sequence stack, and continues with the next action in the seqeunce at that level, eg.
+
+<pre>
+{
+  action = <span class="string">"call_sequence"</span>,
+  sequence = <span class="string">"sub:mysubsequence"</span>,
+}
+</pre>
+
+calls the 'mysubsequence' sequence in the next stack level down from the sequence where it's called.</li>
+    <li><strong>up:</strong> --
+This moves the sequence stack up one level, overwrites the previously stored sequence at that level, and runs the called sequence, eg.
+
+<pre>
+{
+  action = <span class="string">"call_sequence"</span>,
+  sequence = <span class="string">"up:somesequence"</span>,
+}
+</pre>
+
+replaces the sequence at the next level up with the 'somesequence' sequence and runs it.</li>
+    <li><strong>top:</strong> --
+This completely clears the sequence stack and runs the called sequence on a fresh stack. It's equivalent to setting the stack to the same state as when Jester is originally invoked, eg.
+
+<pre>
+{
+  action = <span class="string">"call_sequence"</span>,
+  sequence = <span class="string">"top:main"</span>,
+}
+</pre>
+
+runs the 'main' sequence on a completely fresh sequence stack.</li>
+</ul>
+
+<p>As a general rule, it's best not to use any actions that deal with navigation (see the <a href="../modules/navigation.html#">navigation</a> module) or responding to user key presses (see <a href="#Capturing_user_key_input">Capturing user key input</a>) when you are on a sequence stack level other than the top. You can try, but most likely it will just be a confusing mess. ;)  Subsequences are ideally designed for non-user facing actions like loading data, or making a conditional decision, etc.</p>
+
+
+<p><a name="IVR_phone_tree_functionality"></a></p>
+<h2>IVR/phone tree functionality</h2>
+
+<p>Through the <a href="../modules/navigation.html#">navigation</a> module, Jester provides the necessary facilities to implement phone menus in sequences.</p>
+
+<p>To provide a phone menu, it's necessary to track where a user has been. The navigation stack serves this purpose. By adding a sequence to the navigation stack, you can later return to that sequence by going 'up' the stack, or to the beginning of the phone tree by going to the 'top' of the stack.</p>
+
+<p>One important thing to note is that you can't add the same sequence with the same arguments to the navigation stack in adjacent positions -- this is an internal restriction to ease the implementation of the navigation stack, and it wouldn't be sensible to do it anyways... ;)</p>
+
+<p>See the <a href="../modules/navigation.html#">navigation</a> module for more information on using the navigation stack.</p>
+
+
+<p><a name="Phrase_macros"></a></p>
+<h2>Phrase macros</h2>
+
+<p>You are encouraged to use FreeSWITCH's phrase macro functionality when designing sequences. Doing so creates a nice logical separation between the kind of thing you want to play, and the actual process of playing the sound files. For example, if you use only phrase macros in your sequences for system prompts, then switching languages or voices becomes trivial.</p>
+
+<p>All of the actions related to playback in Jester support using phrase macros, either directly, or by prefixing the macro name with 'phrase:', eg.</p>
+
+
+<pre>
+  {
+    action = <span class="string">"play"</span>,
+    file = <span class="string">"phrase:some_configured_phrase_macro"</span>,
+  },
+</pre>
+
+
+<p>See the <a href="../modules/play.html#">play</a> module for most of the playback-related functionality in Jester.</p>
+
+
+<p><a name="Triggering_actions_on_hangup_exit"></a></p>
+<h2>Triggering actions on hangup/exit</h2>
+
+<p>Sometimes you need to make sure a sequence is run regardless if the user hangs up the call, or otherwise leaves the Jester environment.</p>
+
+<p>Jester accomodates this by providing two places where you can register sequences to run at a later time:</p>
+
+<ul>
+    <li><strong>On hangup:</strong> --
+    See the <a href="../modules/hangup.html#hangup_sequence">hangup_sequence</a> action</li>
+    <li><strong>After the last active sequence ends:</strong>
+    See the <a href="../modules/core_actions.html#exit_sequence">exit_sequence</a> action</li>
+</ul>
+
+
+<p><a name="Debugging"></a></p>
+<h2>Debugging</h2>
+
+<p>Sometimes as you're designing a sequence, it's either crashing Jester or not behaving as you would expect, and you can't easily figure out why. Jester provides a few debugging utilities to aid your investigative efforts:</p>
+
+<ul>
+    <li><p><strong>Turn on Jester's debug output:</strong> --
+    This can be done globally by setting the 'debug' variable to true in 'jester/conf.lua', or per profile by setting the same variable in the profile. Turning this on outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs. You can further control what debugging information is output by changing the values (not the keys) in the <code>debug_output</code> table in 'jester/conf.lua' -- true turns on debugging output for that area, false turns it off.</p></li>
+    <li><p><strong>Use the debug dump functionality in your sequence:</strong> --
+Jester exposes its core variable dumping function <code>debug_dump()</code> to all sequences. You can place it in the top section of any sequence, give it a variable name, and it will dump the variable to the FreeSWITCH console. For example, to debug the 'foo' variable:</p>
+
+<pre>
+debug_dump(foo)
+</pre>
+
+<p><br /></p></li>
+</ul>
+
+<p>Syntax errors can be hard to debug. If you have one in your sequence Jester will most assuredly crash, and you can check the FreeSWITCH console for the error message. Usually it contains some helpful information pointing you to a line number and a suggestion what the problem might be. The most common mistakes are:</p>
+
+<ul>
+    <li>Missing a closing curly brace on the sequence, an action, or an action parameter.</li>
+    <li>Missing a comma at the end of a parameter or an action.</li>
+    <li>Trying to concatenate something that has no value.</li>
+    <li>Using '=' in a conditional when you meant '=='.</li>
+</ul>
+
+
+<p><a name="Advanced_tricks"></a></p>
+<h2>Advanced tricks</h2>
+
+<p>Here are a few tricks that evolved as the default profile was written. They should start to open your mind as to what else is possible to do when designing sequences.</p>
+
+<p><strong>Complex conditionals:</strong></p>
+
+<p>If you want to use a conditional action to make a decision, but your condition is more complex than a single comparision, use native Lua conditionals to do the harder work, store the answer in a variable, and use that in the conditional:</p>
+
+
+<pre>
+  <span class="comment">-- Complex message count.
+</span>  <span class="keyword">if</span> number_of_messages &gt; <span class="number">0</span> <span class="keyword">and</span> number_of_messages &lt; <span class="number">100</span> <span class="keyword">then</span>
+    access = <span class="string">"yes"</span>
+  <span class="keyword">else</span>
+    access = <span class="string">"no"</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">return</span>
+  {
+    {
+      action = <span class="string">"conditional"</span>,
+      value = access,
+      compare_to = <span class="string">"yes"</span>,
+      comparison = <span class="string">"equal"</span>,
+      if_true = <span class="string">"access_messages"</span>,
+      if_false = <span class="string">"mailbox_full"</span>,
+    },
+  }
+</pre>
+
+
+<p><strong>Conditional keys in the key map:</strong></p>
+
+<p>If the key map for an action depends on the state of certain variables, create a temporary key map variable containing the key map with constant key presses, use Lua conditionals to optionally add the other keys, then use the finalized key map variable as the value of the <code>keys</code> parameter:</p>
+
+
+<pre>
+  <span class="comment">-- Add a key to the map conditionally.
+</span>  temp_keys = {
+    [<span class="string">"3"</span>] = <span class="string">"advanced_options"</span>,
+    [<span class="string">"5"</span>] = <span class="string">"repeat_message"</span>,
+    [<span class="string">"9"</span>] = <span class="string">"save_message"</span>,
+    [<span class="string">"*"</span>] = <span class="string">"help_exit"</span>,
+  }
+
+  <span class="keyword">if</span> current_message ~= <span class="number">1</span> <span class="keyword">then</span>
+    temp_keys[<span class="string">"4"</span>] = <span class="string">"prev_message"</span>
+  <span class="keyword">end</span>
+  <span class="keyword">if</span> current_message ~= last_message <span class="keyword">then</span>
+    temp_keys[<span class="string">"6"</span>] = <span class="string">"next_message"</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">return</span>
+  {
+    {
+      action = <span class="string">"play"</span>,
+      file = <span class="string">"myfile"</span>,
+      keys = temp_keys,
+    },
+  }
+</pre>
+
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-12 21:05:43 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

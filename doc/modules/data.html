@@ -1,0 +1,528 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+<li><a href="#Handlers">Handlers</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>data</strong></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>data</code></h1>
+<p>Handle external data.</p>
+<p> This module provides actions that deal with reading and writing of external
+ data in Jester.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#data_delete">data_delete</a></td>
+	<td class="summary">Delete data.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#data_load">data_load</a></td>
+	<td class="summary">Load data into Jester storage.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#data_load_count">data_load_count</a></td>
+	<td class="summary">Retrieves a count of data into Jester storage.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#data_query">data_query</a></td>
+	<td class="summary">Executes a custom query against a data source.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#data_update">data_update</a></td>
+	<td class="summary">Update data.</td>
+	</tr>
+</table>
+<h2><a href="#Handlers">Handlers</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#odbc">odbc</a></td>
+	<td class="summary">The ODBC handler (default).</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "data_delete"></a>
+    <strong>data_delete</strong>
+    </dt>
+    <dd>
+    Delete data. </p>
+
+<p> Allows deletion of data from external sources.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           data_delete
+        </li>
+        <li><span class="parameter">config</span>
+           A table of information to pass which describes where to find the data.
+   Check <a href="#Handlers">handlers</a> to see the fields for this table.
+        </li>
+        <li><span class="parameter">filters</span>
+           (Optional) A table of filters to apply when loading the data. This
+   restricts what is loaded to the filtered values. Filters are cumulative
+   (AND logic). The key is the name of the filter, and the value is the value
+   to filter on. Filter values are interpreted as strings by default -- if a
+   filter value is a number, prefix the filter key with double underscores.
+   <strong>WARNING:</strong> If you exclude this field, all rows will be deleted!
+        </li>
+        <li><span class="parameter">handler</span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"data_delete"</span>,
+     config = profile.db_config,
+     filters = {
+       context = <span class="string">"default"</span>,
+       __mailbox = <span class="number">1234</span>,
+     },
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "data_load"></a>
+    <strong>data_load</strong>
+    </dt>
+    <dd>
+    Load data into Jester storage. </p>
+
+<p> Allows loading of data from external sources.</p>
+
+<p> <strong>IMPORTANT NOTE:</strong> core handlers for the data_load action clear all data
+ from the specified storage area before they load new data into it -- if you
+ need something preserved across mulitple loads, put it in a different
+ storage area!
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           data_load
+        </li>
+        <li><span class="parameter">config</span>
+           A table of information to pass which describes where to find the data.
+   Check <a href="#Handlers">handlers</a> to see the fields for this table.
+        </li>
+        <li><span class="parameter">fields</span>
+           A table of fields to load. Include only the field names as values, no
+   keys. Field types are interpreted as strings by default -- if a field type
+   is numeric, prefix the field name with double underscores.
+        </li>
+        <li><span class="parameter">filters</span>
+           (Optional) A table of filters to apply when loading the data. This
+   restricts what is loaded to the filtered values. Filters are cumulative
+   (AND logic). The key is the name of the filter, and the value is the value
+   to filter on. Filter values are interpreted as strings by default -- if a
+   filter value is a number, prefix the filter key with double underscores.
+   <strong>WARNING:</strong> if you exclude this field, all rows will be loaded!
+        </li>
+        <li><span class="parameter">multiple</span>
+           (Optional) Boolean indicating whether to load multiple sets of data. True
+   loads all data that passes through the filters, false only loads the first
+   set of data. Default is false. Note that multiple results are suffixed
+   with the result set number before being put in the data storage area, eg.
+   if you loaded multiple result sets of a field named <code>number</code>,
+   the first set would be stored as <code>number_1</code>, the second as
+   <code>number_2</code> and so on... Note that if this parameter is set, in
+   addition to storing the data that is loaded, a special key
+   <code>__count</code> is added, which holds an integer of the number of
+   rows returned.
+        </li>
+        <li><span class="parameter">sort</span>
+           (Optional) A field to sort the data by before loading. This is only used
+   with the 'mulitple' parameter.
+        </li>
+        <li><span class="parameter">sort_order</span>
+           (Optional) The sorting order. Only used with the 'sort' and 'multiple'
+   parameters. Valid values are 'asc' and 'desc', the default is 'asc'.
+        </li>
+        <li><span class="parameter">storage_area</span>
+           (Optional) The storage area to store the data in after loading. Defaults
+   to 'data'.
+        </li>
+        <li><span class="parameter">handler</span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"data_load"</span>,
+     config = profile.db_config,
+     fields = {
+       <span class="string">"__mailbox"</span>,
+       <span class="string">"context"</span>,
+       <span class="string">"password"</span>,
+       <span class="string">"email"</span>,
+     },
+     filters = {
+       context = <span class="string">"default"</span>,
+       __mailbox = <span class="number">1234</span>,
+     },
+     multiple = <span class="keyword">true</span>,
+     sort = <span class="string">"mailbox"</span>,
+     sort_order = <span class="string">"asc"</span>,
+     storage_area = <span class="string">"mailbox_settings"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "data_load_count"></a>
+    <strong>data_load_count</strong>
+    </dt>
+    <dd>
+    Retrieves a count of data into Jester storage. </p>
+
+<p> Allows loading of data counts from external sources. If you only need to know
+ the number of rows of data, this is more efficient than the data_load action.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           data_load_count
+        </li>
+        <li><span class="parameter">config</span>
+           A table of information to pass which describes where to find the data.
+   Check <a href="#Handlers">handlers</a> to see the fields for this table.
+        </li>
+        <li><span class="parameter">count_field</span>
+           The field to use for counting.
+        </li>
+        <li><span class="parameter">filters</span>
+           (Optional) A table of filters to apply when loading the data count. This
+   restricts what results are counted to the filtered values. Filters are
+   cumulative (AND logic). The key is the name of the filter, and the value
+   is the value to filter on. Filter values are interpreted as strings by
+   default -- if a filter value is a number, prefix the filter key with double
+   underscores.
+   <strong>WARNING:</strong> if you exclude this field, all rows will be counted!
+        </li>
+        <li><span class="parameter">storage_area</span>
+           (Optional) The storage area to store the data in after loading. Defaults
+   to 'data'.
+        </li>
+        <li><span class="parameter">storage_key</span>
+           (Optional) The key to store the count under in the 'data' storage area.
+   Default is 'count'.
+        </li>
+        <li><span class="parameter">handler</span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"data_load_count"</span>,
+     config = profile.db_config,
+     count_field = <span class="string">"messages"</span>,
+     filters = {
+       context = <span class="string">"default"</span>,
+       __mailbox = <span class="number">1234</span>,
+     },
+     storage_area = <span class="string">"mailbox"</span>,
+     storage_key = <span class="string">"number_of_messages"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "data_query"></a>
+    <strong>data_query</strong>
+    </dt>
+    <dd>
+    Executes a custom query against a data source. </p>
+
+<p> Allows running custom queries on external data sources. Row data can be
+ optionally loaded into a storage area.</p>
+
+<p> This action should only be used if regular data actions will not suffice --
+ its use is discouraged as it may not be portable across handlers/databases.
+ If table joins are needed, it is suggested you handle that at the database
+ layer (eg, by creating a view in MySQL).</p>
+
+<p> <strong>Important note:</strong> core handlers for the data_query action clear all data
+ from the specified storage area before they load new data into it -- if you
+ need something preserved across mulitple loads, put it in a different
+ storage area!
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           data_query
+        </li>
+        <li><span class="parameter">config</span>
+           A table of information to pass which describes where to find the data.
+   Check <a href="#Handlers">handlers</a> to see the fields for this table. Note that
+   for this action, any table information is provided by the query parameter.
+        </li>
+        <li><span class="parameter">query</span>
+           The custom query to execute. Tokens are replaced prior to running the
+   query.
+        </li>
+        <li><span class="parameter">return_fields</span>
+           (Optional) If set to true, field data from the query will be returned to
+   the specified storage area, and the number of returned rows will be placed
+   in the '__count' key. Default is false.
+        </li>
+        <li><span class="parameter">storage_area</span>
+           (Optional) The storage area to store the data in after loading. Defaults
+   to 'data'.
+        </li>
+        <li><span class="parameter">tokens</span>
+           (Optional) A table of token replacements to apply to the query,
+   key = token name, value = token replacement. Tokens are prefixed with a
+   colon. Note that for security reasons, all token values will be run
+   through an escaping function prior to token replacement if
+   appropriate/available.
+        </li>
+        <li><span class="parameter">handler</span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"data_query"</span>,
+     config = profile.db_config,
+     query = <span class="string">"SELECT mailbox, SUM(messages) AS count FROM messages WHERE context = ':context' GROUP BY mailbox"</span>,
+     return_fields = <span class="keyword">true</span>,
+     storage_area = <span class="string">"message_counts"</span>,
+     tokens = {
+       context = <span class="string">"default"</span>,
+     },
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "data_update"></a>
+    <strong>data_update</strong>
+    </dt>
+    <dd>
+    Update data. </p>
+
+<p> Allows updating/insertion of data to external sources.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           data_update
+        </li>
+        <li><span class="parameter">config</span>
+           A table of information to pass which describes where to find the data.
+   Check <a href="#Handlers">handlers</a> to see the fields for this table.
+        </li>
+        <li><span class="parameter">fields</span>
+           A table of fields to update. Keys are the field names to update, values are
+   the values to update to. Field types are interpreted as strings by default
+   -- if a field type is numeric, prefix the field name with double
+   underscores.
+        </li>
+        <li><span class="parameter">filters</span>
+           (Optional) A table of filters to apply when loading the data. This
+   restricts what is loaded to the filtered values. Filters are cumulative
+   (AND logic). The key is the name of the filter, and the value is the value
+   to filter on. Filter values are interpreted as strings by default -- if a
+   filter value is a number, prefix the filter key with double underscores.
+   <strong>WARNING:</strong> if you exclude this field, all rows will be updated!
+        </li>
+        <li><span class="parameter">update_type</span>
+           (Optional) If this parameter is not provided, the default behavior is to
+   first attempt an update, and if no rows were updated, then perform an
+   insert. To force either an update or insert, set this to 'update' or
+   'insert' respectively.
+        </li>
+        <li><span class="parameter">handler</span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"data_update"</span>,
+     config = profile.db_config,
+     fields = {
+       __max_messages = <span class="number">100</span>,
+       password = <span class="string">"supersecret"</span>,
+     },
+     filters = {
+       context = <span class="string">"default"</span>,
+       __mailbox = <span class="number">1234</span>,
+     },
+     update_type = <span class="string">"update"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Handlers"></a>Handlers</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "odbc"></a>
+    <strong>odbc</strong>
+    </dt>
+    <dd>
+    The ODBC handler (default). </p>
+
+<p> The 'config' parameter for all actions using this handler is a table with
+ the parameters listed below.</p>
+
+<p> Note that in order for this handler to work properly, you'll need to have
+ ODBC installed, the correct ODBC driver for your database type installed,
+ and an ODBC resource set up to access your database. If you don't know
+ how, there's a nice tutorial <a href="http://bit.ly/b6d0Wm">here</a> (for CentOS).</p>
+
+<p> For now you'll need to include your username/password in the odbc.ini
+ file, future versions will probably support passing that at connect time
+ also.
+
+
+    <ul>
+        <li><span class="parameter">config</span>   Table of connection parameters
+        <ul>
+        <li><span class="parameter">database_type</span>
+           The type of database being accessed. Valid values are 'mysql',
+   'pgsql', and 'sqlite'
+        </li>
+        <li><span class="parameter">database</span>
+           The name of the ODBC datasource to access
+        </li>
+        <li><span class="parameter">table</span>
+           The table in the database to operate on
+        </li>
+        </li></ul>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"data_load"</span>,
+     config = {
+       database_type = <span class="string">"sqlite"</span>,
+       database = <span class="string">"/tmp/test.db"</span>,
+       <span class="global">table</span> = <span class="string">"test"</span>,
+     },
+     <span class="comment">-- other params...
+</span>   }</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-12 21:05:43 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

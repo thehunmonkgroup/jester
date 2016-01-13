@@ -1,0 +1,589 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/data.html">data</a></li>
+  <li><strong>core_actions</strong></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>core_actions</code></h1>
+<p>Actions provided by jester core.</p>
+<p> This module provides actions that are closely tied to the core functionality
+ of Jester.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#api_command">api_command</a></td>
+	<td class="summary">Execute a FreeSWITCH API command.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#call_sequence">call_sequence</a></td>
+	<td class="summary">Call a new sequence from the currently running sequence.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#clear_storage">clear_storage</a></td>
+	<td class="summary">Remove storage values from a given storage area.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#conditional">conditional</a></td>
+	<td class="summary">Call a new sequence based on a simple conditional check.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#copy_storage">copy_storage</a></td>
+	<td class="summary">Copy storage values from one storage area to another.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#exit_sequence">exit_sequence</a></td>
+	<td class="summary">Registers a sequence to be executed on exit.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#load_profile">load_profile</a></td>
+	<td class="summary">Load a profile dynamically.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#none">none</a></td>
+	<td class="summary">Dummy action which does nothing.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#set_storage">set_storage</a></td>
+	<td class="summary">Set storage values in a given storage area.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#set_variable">set_variable</a></td>
+	<td class="summary">Set channel variables.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#wait">wait</a></td>
+	<td class="summary">Wait before performing the next action.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "api_command"></a>
+    <strong>api_command</strong>
+    </dt>
+    <dd>
+    Execute a FreeSWITCH API command. </p>
+
+<p> This action allows you to execute a FreeSWITCH API command, as if from the
+ console command line. The command result is stored in the specified key.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           api_command
+        </li>
+        <li><span class="parameter">command</span>
+           The command to execute.
+        </li>
+        <li><span class="parameter">storage_key</span>
+           (Optional) The key to store the command result under in the 'api_command'
+   storage area. Default is 'result'.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"api_command"</span>,
+     command = <span class="string">"uptime"</span>,
+     storage_key = <span class="string">"uptime_result"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "call_sequence"></a>
+    <strong>call_sequence</strong>
+    </dt>
+    <dd>
+    Call a new sequence from the currently running sequence. </p>
+
+<p> This action calls a new sequence from the currently running sequence.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           call_sequence
+        </li>
+        <li><span class="parameter">sequence</span>
+           The new sequence to call. By default the original sequence is not resumed
+   when the new sequence completes. To resume the old sequence (effectively
+   making the new sequence a subroutine of the original), prefix the sequence
+   with 'sub:'. See <a href="../topics/03-Sequences.md.html#Subroutines">Subroutines</a> for more information.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"call_sequence"</span>,
+     sequence = <span class="string">"foo_sequence arg1"</span>,
+   }
+   <span class="comment">-- or...
+</span>   {
+     action = <span class="string">"call_sequence"</span>,
+     sequence = <span class="string">"sub:foo_sequence arg1,arg2"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "clear_storage"></a>
+    <strong>clear_storage</strong>
+    </dt>
+    <dd>
+    Remove storage values from a given storage area. </p>
+
+<p> This action removes key/value pairs from the given storage area.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           clear_storage
+        </li>
+        <li><span class="parameter">data_keys</span>
+           (Optional) A table of keys to remove from the storage area. If this
+   parameter is not given, then the entire storage area is cleared, use
+   caution!
+        </li>
+        <li><span class="parameter">storage_area</span>
+           (Optional) The area to clear. Defaults to 'default'.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"clear_storage"</span>,
+     data_keys = {
+       <span class="string">"key1"</span>,
+       <span class="string">"key2"</span>,
+     },
+     storage_area = <span class="string">"someplace"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "conditional"></a>
+    <strong>conditional</strong>
+    </dt>
+    <dd>
+    Call a new sequence based on a simple conditional check. </p>
+
+<p> This action allows simple comparison of a value against another value, and
+ can call another sequence based on if the comparison returns true or false.
+ It's really only meant for fairly simple sequence logic -- for more complex
+ logic see <a href="../topics/03-Sequences.md.html#Advanced_tricks">Advanced tricks</a> for more information.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           conditional
+        </li>
+        <li><span class="parameter">compare_to</span>
+           The value that you expect it to be, or for pattern matching, any valid Lua
+   pattern (see the Lua manual for more information on Lua patterns).
+        </li>
+        <li><span class="parameter">comparison</span>
+           (Optional) The kind of comparison to perform. Valid values are "equal",
+   "match", "greater_than", and "less_than". Default is "equal".
+        </li>
+        <li><span class="parameter">if_false</span>
+           (Optional) The sequence to call if the comparison is false.
+        </li>
+        <li><span class="parameter">if_true</span>
+           (Optional) The sequence to call if the comparison is true.
+        </li>
+        <li><span class="parameter">value</span>
+           The value that you want to compare.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"conditional"</span>,
+     value = number_of_messages,
+     compare_to = <span class="number">0</span>,
+     comparison = <span class="string">"equal"</span>,
+     if_true = <span class="string">"exit"</span>,
+     if_false = <span class="string">"play_messages"</span>,
+   }
+   <span class="comment">-- or...
+</span>   {
+     action = <span class="string">"conditional"</span>,
+     value = name,
+     compare_to = <span class="string">"^bob"</span>,
+     comparison = <span class="string">"match"</span>,
+     if_true = <span class="string">"its_bob"</span>,
+     if_false = <span class="string">"not_bob"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "copy_storage"></a>
+    <strong>copy_storage</strong>
+    </dt>
+    <dd>
+    Copy storage values from one storage area to another. </p>
+
+<p> This action performs a complete copy of all keys in a storage area, placing
+ them in the specified new storage area. Note that only basic data types
+ (string, number, boolean) are copied -- all others are ignored.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           copy_storage
+        </li>
+        <li><span class="parameter">copy_to</span>
+           The storage area to copy the data to. Note that any data already existing
+   in this area will be removed prior to the copy.
+        </li>
+        <li><span class="parameter">move</span>
+           (Optional) If set to true, clears the data from the original storage area,
+   which effectively makes the operation a move. Default is false.
+        </li>
+        <li><span class="parameter">storage_area</span>
+           (Optional) The area to copy. Defaults to 'default'.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"copy_storage"</span>,
+     copy_to = <span class="string">"new_place"</span>,
+     move = <span class="keyword">true</span>,
+     storage_area = <span class="string">"old_place"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "exit_sequence"></a>
+    <strong>exit_sequence</strong>
+    </dt>
+    <dd>
+    Registers a sequence to be executed on exit. </p>
+
+<p> This action registers a sequence to be executed after Jester has finished
+ running all sequences related to the active call. Channel variables and
+ storage values are available when the registered sequence is run.</p>
+
+<p> Sequences registered here are run before the sequences registered on hangup,
+ and are always run, regardless if the user actively hung up the call. If you
+ want to guarantee that the sequence will run regardless of user hangup, it's
+ best to put it here instead of in the hangup loop.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           exit_sequence
+        </li>
+        <li><span class="parameter">sequence</span>
+           The sequence to execute.
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../modules/hangup.html#hangup_sequence">hangup.hangup_sequence</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"exit_sequence"</span>,
+     sequence = <span class="string">"perform_maintenance"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "load_profile"></a>
+    <strong>load_profile</strong>
+    </dt>
+    <dd>
+    Load a profile dynamically. </p>
+
+<p> This action allows you to load a profile dynamically from within a sequence.
+ This can be useful for loading a 'heavier' profile only when needed from
+ within a 'lighter' profile.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           load_profile
+        </li>
+        <li><span class="parameter">profile</span>
+           The new profile to load.
+        </li>
+        <li><span class="parameter">sequence</span>
+           (Optional) A sequence to execute after loading the profile. If this is
+   provided, any running sequences in the current loop will be discarded, and
+   this sequence will be run from the top of a new sequence stack.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"load_profile"</span>,
+     profile = <span class="string">"another_profile"</span>,
+     sequence = <span class="string">"start"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "none"></a>
+    <strong>none</strong>
+    </dt>
+    <dd>
+    Dummy action which does nothing. </p>
+
+<p> This action is just a placeholder. It can be used to skip taking any action,
+ or to provide a way to call another sequence without taking any other action.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           none
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"none"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "set_storage"></a>
+    <strong>set_storage</strong>
+    </dt>
+    <dd>
+    Set storage values in a given storage area. </p>
+
+<p> This action sets key/value pairs in the given storage area.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           set_storage
+        </li>
+        <li><span class="parameter">data</span>
+           A table of data to store in the storage area. Keys are the storage keys,
+   values are the storage values.
+        </li>
+        <li><span class="parameter">storage_area</span>
+           (Optional) The area to store the value in. Defaults to 'default'.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"set_storage"</span>,
+     data = {
+       foo = <span class="string">"bar"</span>,
+       baz = <span class="string">"bang"</span>,
+     },
+     storage_area = <span class="string">"some_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "set_variable"></a>
+    <strong>set_variable</strong>
+    </dt>
+    <dd>
+    Set channel variables. </p>
+
+<p> This action sets FreeSWITCH channel variables on the channel that Jester is
+ currently running.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           set_variable
+        </li>
+        <li><span class="parameter">data</span>
+           A table of channel variables to set. Keys are the variable
+   names, values are the variable values.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"set_variable"</span>,
+     data = {
+       foo = <span class="string">"bar"</span>,
+       baz = <span class="string">"bang"</span>,
+     },
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "wait"></a>
+    <strong>wait</strong>
+    </dt>
+    <dd>
+    Wait before performing the next action. </p>
+
+<p> This action causes Jester to wait before continuing on. Silence is streamed
+ on the channel during the wait period.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+           wait
+        </li>
+        <li><span class="parameter">keys</span>
+           (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">keys</a> documentation.
+        </li>
+        <li><span class="parameter">milliseconds</span>
+           The number of milliseconds to wait.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"wait"</span>,
+     keys = profile.some_keys_setting,
+     milliseconds = <span class="number">3000</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-12 21:05:43 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

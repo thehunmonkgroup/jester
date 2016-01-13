@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Running_Jester">Running Jester </a></li>
+<li><a href="#Configuration_system">Configuration system </a></li>
+<li><a href="#Brief_Lua_language_tutorial">Brief Lua language tutorial </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>01-Intro</strong></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>High-level introduction</h1>
+
+<p>Jester is VoIP toolkit for FreeSWITCH written in Lua. The goal of Jester is to provide a standardized set of tools that allow you to accomplish most of the common tasks you'll face when putting together phone trees, voicemail systems, etc. And, if Jester can't do something you need, it's modular, extensible design allows you to easily add the functionality in a way that not only you but others can benefit from!</p>
+
+
+<p><a name="Running_Jester"></a></p>
+<h2>Running Jester</h2>
+
+<p>Jester is designed to be executed as a standard Lua script from the FreeSWITCH dialplan. The general format is as follows:</p>
+
+
+<pre>
+&lt;action
+  application=<span class="string">"lua"</span>
+  data=<span class="string">"jester/jester.lua &lt;profile&gt; &lt;sequence&gt; [arg1],[arg2],...,[argN]"</span>
+/&gt;
+</pre>
+
+
+
+<p><a name="Configuration_system"></a></p>
+<h2>Configuration system</h2>
+
+<p>Configurations are stored in three different places in Jester:</p>
+
+<ol>
+    <li>jester/conf.lua - Global configuration</li>
+    <li>profiles/[name]/conf.lua - Profile configuration</li>
+    <li>modules/[name]/conf.lua - Module configuration</li>
+</ol>
+
+<p>The global configuration file and the voicemail profile's configuration file are well commented, check them out for more details.</p>
+
+<p>The main configuration gets loaded for all calls to Jester, while the profile configuration only gets loaded for the profile that Jester is currently running.</p>
+
+<p>One important thing to note about these configurations is that any variables in them are only processed once, when Jester initially loads. If you have variables that change throughout the course of the call, you'll need to put them in storage or in channel variables.</p>
+
+
+<p><a name="Brief_Lua_language_tutorial"></a></p>
+<h2>Brief Lua language tutorial</h2>
+
+<p>For a definitive explanation of the Lua language, the online <a href="http://www.lua.org/manual/5.2">Lua manual</a> is the place to go:</p>
+
+
+
+<p>This will be a very quick overview of the basics that you'll most likely use in sequences.</p>
+
+<p>Lua is loosely typed, and will automatically convert types based on the operation you're trying to perform, eg. if you concatenate a string with an integer, the integer will be converted to a string.</p>
+
+<p><strong>Define a variable:</strong></p>
+
+
+<pre>
+  <span class="comment">-- Assign the 'name' variable an integer value of zero.
+</span>  name = <span class="number">0</span>
+  <span class="comment">-- Assign the 'name' variable the string value of "foo"
+</span>  name = <span class="string">"foo"</span>
+  <span class="comment">-- Another way to Assign the 'name' variable the string value of "foo"
+</span>  name = <span class="string">[[foo]]</span>
+  <span class="comment">-- Assign one variable to another
+</span>  name = value
+</pre>
+
+
+<p>Variable names can be any string of letters, digits and underscores, not beginning with a digit</p>
+
+<p><strong>Math:</strong></p>
+
+
+<pre>
+  foo = foo + <span class="number">1</span>
+  foo = foo - <span class="number">1</span>
+  foo = foo * <span class="number">1</span>
+  foo = foo / <span class="number">1</span>
+</pre>
+
+
+<p><strong>Relational operators:</strong></p>
+
+
+<pre>
+  == <span class="comment">-- equal
+</span>  ~= <span class="comment">-- not equal
+</span>  &lt;  <span class="comment">-- less than
+</span>  &gt;  <span class="comment">-- greater than
+</span>  &lt;= <span class="comment">-- less than or equal to
+</span>  &gt;= <span class="comment">-- greater than or equal to
+</span>
+</pre>
+
+
+<p>These return false when what they compare is false or nil, all others return true.</p>
+
+<p><strong>String concatenation:</strong></p>
+
+
+<pre>
+  newstring = oldstring .. <span class="string">"more"</span>
+</pre>
+
+
+<p><strong>Conditional statements:</strong></p>
+
+
+<pre>
+  <span class="keyword">if</span> foo ~= <span class="string">"yes"</span> <span class="keyword">then</span>
+    <span class="comment">-- Do something
+</span>  <span class="keyword">end</span>
+  <span class="keyword">if</span> foo == <span class="number">1</span> <span class="keyword">then</span>
+    <span class="comment">-- Do some stuff
+</span>  <span class="keyword">elseif</span> foo == <span class="string">"bar"</span> <span class="keyword">then</span>
+    <span class="comment">-- Do something else
+</span>  <span class="keyword">else</span>
+    <span class="comment">-- Ok, do this
+</span>  <span class="keyword">end</span>
+</pre>
+
+
+<p><strong>Boolean:</strong></p>
+
+
+<pre>
+  foo = <span class="keyword">true</span>
+  bar = <span class="keyword">false</span>
+</pre>
+
+
+<p><strong>Non-value:</strong></p>
+
+
+<pre>
+  baz = <span class="keyword">nil</span>
+</pre>
+
+
+<p><strong>Logical operators:</strong></p>
+
+
+<pre>
+  foo = <span class="keyword">true</span> <span class="keyword">and</span> <span class="keyword">false</span> <span class="comment">-- returns false
+</span>  foo = <span class="keyword">true</span> <span class="keyword">and</span> <span class="string">"bar"</span> <span class="comment">-- returns "bar"
+</span>  foo = <span class="keyword">false</span> <span class="keyword">or</span> <span class="keyword">true</span> <span class="comment">-- returns true
+</span>  foo = <span class="string">"foo"</span> <span class="keyword">or</span> <span class="string">"bar"</span> returns <span class="string">"foo"</span>
+  foo = <span class="keyword">false</span> <span class="keyword">or</span> <span class="keyword">nil</span> <span class="comment">-- returns nil
+</span>  foo = <span class="keyword">true</span> <span class="keyword">and</span> <span class="string">"bar"</span> <span class="keyword">or</span> <span class="string">"baz"</span> <span class="comment">-- returns bar
+</span>  foo = <span class="keyword">false</span> <span class="keyword">and</span> <span class="string">"bar"</span> <span class="keyword">or</span> <span class="string">"baz"</span> <span class="comment">-- returns baz
+</span>
+</pre>
+
+
+<p><strong>Tables:</strong></p>
+
+<p>The only structured data in Lua. Table keys that are strings have the same restrictions as variable names (in the Jester world, anyways).</p>
+
+
+<pre>
+  <span class="comment">-- Create an empty table.
+</span>  foo = {}
+  <span class="comment">-- Create an ordered list.
+</span>  table1 = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>}
+  <span class="comment">-- Create a record-style table, this is not ordered!
+</span>  table2 = {
+    <span class="comment">-- String table keys have the same restrictions as variable names
+</span>    bar = <span class="string">"baz"</span>,
+    bang = <span class="string">"zoom"</span>,
+  }
+  value = table1[<span class="number">1</span>] <span class="comment">-- value is 10
+</span>  value = table2.bar <span class="comment">-- value is "baz"
+</span>  complex = {
+    {
+      one = <span class="string">"two"</span>,
+    },
+    {
+      three = <span class="string">"four"</span>,
+    },
+  }
+  <span class="comment">-- Value is two
+</span>  value = complex[<span class="number">1</span>].one
+</pre>
+
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-12 21:05:43 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
