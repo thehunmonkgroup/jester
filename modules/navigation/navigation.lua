@@ -1,3 +1,6 @@
+--- Navigation module.
+-- @module navigation
+
 local core = require "jester.core"
 
 local _M = {}

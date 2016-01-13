@@ -1,3 +1,6 @@
+--- Play module.
+-- @module play
+
 local core = require "jester.core"
 
 local _M = {}
