@@ -1,4 +1,4 @@
-# How to build voice workflows with sequences
+# Sequence tutorial
 
 A sequence is a series of actions that are executed in a sequential order.
 
