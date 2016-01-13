@@ -5,6 +5,9 @@ title = "Jester documentation"
 file = {
   "./modules/data/data.lua",
   "./modules/core_actions/core_actions.lua",
+  "./modules/navigation/navigation.lua",
+  "./modules/play/play.lua",
+  "./modules/hangup/hangup.lua",
 }
 dir = "./documentation"
 topics = {
