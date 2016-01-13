@@ -11,7 +11,7 @@ file = {
 }
 dir = "./documentation"
 topics = {
-  "./help"
+  "./doc"
 }
 format = "markdown"
 all = true

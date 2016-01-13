@@ -7,7 +7,7 @@ Sequences are the primary control mechanism for building workflows in Jester.
 
 ## Writing sequences
 
-At its heart, a sequence is a Lua script. If you are familiar with Lua syntax, then writing sequences should be quite trivial. If you're new to Lua, check out @{intro.md.Brief_Lua_language_tutorial} for a primer on the basic syntax that will be used in sequences.
+At its heart, a sequence is a Lua script. If you are familiar with Lua syntax, then writing sequences should be quite trivial. If you're new to Lua, check out @{01-Intro.md.Brief_Lua_language_tutorial} for a primer on the basic syntax that will be used in sequences.
 
 A sequence is a list of 'actions' to take in a certain order, very similar to how commands would be executed sequentially in a dialplan extension.
 
@@ -49,7 +49,7 @@ The last example illustrates a basic design point of sequences. You can think of
 
 One important thing to note is that Jester re-evaluates the entire sequence before each sequence action is run. In a practical sense this means that if you set a variable in action #1, that variable's value will be available in action #2. This is a very useful feature!  On the down side, this also means that Jester core has to do a lot of evaluating, which could have an impact on high load systems. For this reason it is recommended that if you're going to use any channel variables or storage items more than once in your sequence, you should define a variable for them in the top section, and use that variable when writing actions.
 
-For an easy way to generate templates for sequences, see the @{scripts.md.jsequence} documentation.
+For an easy way to generate templates for sequences, see the @{04-Scripts.md.jsequence} documentation.
 
 
 ## Writing actions
@@ -72,7 +72,7 @@ Each action is a Lua table within the main sequence (for more information on ove
 
 An action always has at least one required parameter, 'action', which is the action to execute. The other parameters are dependant on the action being taken, see the various module documentation for detailed help on a particular action, including the parameters it accepts.
 
-For an easy way to generate templates for actions, see the the @{scripts.md.jsequence} documentation.
+For an easy way to generate templates for actions, see the the @{04-Scripts.md.jsequence} documentation.
 
 
 ## Accessing/using variables
@@ -83,7 +83,7 @@ Variables in sequences are standard Lua variable definitions:
   name = value
 ```
 
-See @{intro.md.Brief_Lua_language_tutorial} for more examples of defining variables.
+See @{01-Intro.md.Brief_Lua_language_tutorial} for more examples of defining variables.
 
 You can assign variables to other variables you create in the sequence itself, and to the set of outside variables detailed below. Note that for any new variable you create in the sequence, you should always initialize it to some value (or to an empty string) before attempting to use it.
 

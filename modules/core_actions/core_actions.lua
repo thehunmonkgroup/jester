@@ -40,7 +40,7 @@
 --   The new sequence to call. By default the original sequence is not resumed
 --   when the new sequence completes. To resume the old sequence (effectively
 --   making the new sequence a subroutine of the original), prefix the sequence
---   with 'sub:'. See @{sequences.md|sequences} for more information.
+--   with 'sub:'. See @{03-Sequences.md.Subroutines} for more information.
 -- @usage
 --   {
 --     action = "call_sequence",
@@ -82,7 +82,7 @@
 -- This action allows simple comparison of a value against another value, and
 -- can call another sequence based on if the comparison returns true or false.
 -- It's really only meant for fairly simple sequence logic -- for more complex
--- logic see @{sequences.md|sequences} for more information.
+-- logic see @{03-Sequences.md.Advanced_tricks} for more information.
 --
 -- @action conditional
 -- @param action
@@ -259,7 +259,7 @@
 -- @param action
 --   wait
 -- @param keys
---   (Optional) See keys documentation in @{sequences.md|sequences}.
+--   (Optional) See @{03-Sequences.md.Capturing_user_key_input|keys} documentation.
 -- @param milliseconds
 --   The number of milliseconds to wait.
 -- @usage
