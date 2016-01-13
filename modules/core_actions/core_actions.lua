@@ -166,6 +166,7 @@
 --     action = "exit_sequence",
 --     sequence = "perform_maintenance",
 --   }
+-- @see hangup.hangup_sequence
 
 
 --- Load a profile dynamically.
