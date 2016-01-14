@@ -13,6 +13,7 @@ file = {
   "./modules/format/format.lua",
   "./modules/get_digits/get_digits.lua",
   "./modules/hangup/hangup.lua",
+  "./modules/log/log.lua",
   "./modules/navigation/navigation.lua",
   "./modules/play/play.lua",
 }
