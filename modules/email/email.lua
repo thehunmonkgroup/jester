@@ -1,3 +1,138 @@
+--- Send emails from Jester.
+--
+-- This module provides email functionality from within Jester. Support for
+-- attachments is included.
+--
+-- @module email
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- The socket handler (default).
+--
+-- Socket-based email using LuaSocket. This is the default handler.
+--
+-- @handler socket
+-- @usage
+--   {
+--     action = "email",
+--     handler = "socket",
+--     -- other params...
+--   }
+
+
+--- Email a custom message.
+--
+-- Emails a custom message, with optional attachments. Tokens are supported
+-- where noted -- tokens are inserted by prefixing the token name with a colon,
+-- eg. ':mailbox' would be substituted with the 'mailbox' token value, if it
+-- exists.
+--
+-- The email action uses a template system for composing emails. You can create
+-- as many templates as you wish, and specify which template is to be used at
+-- the time of sending.
+--
+-- @action email
+-- @string action
+--   email
+-- @tab attachments
+--   (Optional) A list of attachments to send. Each item in the list is a
+--   table with the following key/value pairs:
+--
+--     filetype:
+--       The MIME type of the file.
+--     filename:
+--       Name of the file.
+--     description:
+--       (Optional) File description.
+--     filepath:
+--       Full path to the file.
+--
+-- @tab email_templates
+--   (Optional) A table of email templates to use. Keys are template names,
+--   values are a table of template information with the following key/value
+--   pairs:
+--
+--     subject:
+--       (Optional) The message subject. Tokens are supported.
+--     message:
+--       (Optional) The message to email. Tokens are supported.
+--     allow_attachments:
+--       (Optional) Boolean to control if attachments can be sent using this
+--       template. Set to false to disable sending attachments even if they
+--       exist. Default is true, allow sending.
+--
+--   If this parameter is not provided, the action will look in the profile
+--   settings for an 'email_templates' table to use instead. The templates must
+--   either be defined in this parameter or the profile parameter!
+-- @string from
+--   (Optional) The address to send the email from. Defaults to
+--   'noreply@[hostname]'.
+-- @tab headers
+--   (Optional) A table of email headers, key = header name, value = header
+--   description. Note that some email headers will need to use the full table
+--   key syntax.
+-- @int port
+--   (Optional) The port to use to send the message. Defaults to 25.
+-- @string server
+--   (Optional) The server to use to send the message. Defaults to 'localhost'.
+-- @tab template
+--   List of template names to use for sending. Templates should be listed in
+--   the order that they should be used with the addresses in the 'to'
+--   parameter -- ie, the first listed template is used for the first listed
+--   address, etc. Can be either a table or a comma separated list. If no
+--   template name is provided for the address, the action will fall back to
+--   the template named 'default'.
+-- @tab to
+--   List of addresses to send to. Can be either a table or a comma separated
+--   list.
+-- @tab tokens
+--   (Optional) A table of token replacements to apply, key = token name, value
+--   = token replacement, eg. <code>tokens = {foo = "bar"}</code> would replace
+--   the token ':foo' with 'bar' in the message. All token replacements are
+--   searched for in all areas that support tokens.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "email",
+--     attachments = {
+--       {
+--         filetype = "audio/x-wav",
+--         filename = "word.wav",
+--         description = "your word of the day",
+--         filepath = profile.temp_recording_dir .. "/word.wav",
+--       },
+--     },
+--     email_templates = {
+--       custom = {
+--         subject = "Hi, :name",
+--         message = "Your word of the day is :word",
+--         allow_attachments = true,
+--       },
+--     },
+--     from = "mail@example.com",
+--     headers = {
+--       ["Reply-To"] = "baz@example.com",
+--     },
+--     port = 25,
+--     server = 'localhost',
+--     template = {
+--       "default",
+--       "custom",
+--     },
+--     to = {
+--       "foo@example.com",
+--       "bar@example.com",
+--     },
+--     tokens = {
+--       name = "Bob",
+--       word = "cucumber",
+--     },
+--   },
+
+
 local core = require "jester.core"
 
 local _M = {}
