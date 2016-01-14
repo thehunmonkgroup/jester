@@ -6,6 +6,7 @@ file = {
   "./modules/core_actions/core_actions.lua",
   "./modules/couchdb/couchdb.lua",
   "./modules/data/data.lua",
+  "./modules/dialplan_tools/dialplan_tools.lua",
   "./modules/hangup/hangup.lua",
   "./modules/navigation/navigation.lua",
   "./modules/play/play.lua",
