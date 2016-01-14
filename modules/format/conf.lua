@@ -1,9 +1,9 @@
 local conf = {
   action_map = {
 
-    format_number = {
+    format_string = {
       mod = "format",
-      func = "format_number",
+      func = "format_string",
     },
 
     format_date = {

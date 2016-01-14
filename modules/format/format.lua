@@ -3,42 +3,42 @@ local core = require "jester.core"
 local _M = {}
 
 --[[
-  Formats a number according to the supplied mask.
+  Formats a string according to the supplied mask.
 ]]
-function _M.format_number(action)
-  local number = action.number and tostring(action.number)
+function _M.format_string(action)
+  local f_string = action.string and tostring(action.string)
   local mask = action.mask
-  local key = action.storage_key or "number"
-  if number then
-    local formatted_number = ''
+  local key = action.storage_key or "formatted_string"
+  if f_string then
+    local formatted_string = ''
     if mask and mask ~= "" then
       local pos = 1
-      local number_placeholder, mask_placeholder
+      local string_placeholder, mask_placeholder
       for i = 1, string.len(mask) do
-        number_placeholder = string.sub(number, pos, pos)
+        string_placeholder = string.sub(f_string, pos, pos)
         mask_placeholder = string.sub(mask, i, i)
-        -- Skip digit placeholder, increment to the next phone digit if it
+        -- Skip character placeholder, increment to the next character if it
         -- exists.
-        if mask_placeholder == '!' and number_placeholder then
+        if mask_placeholder == '!' and string_placeholder then
           pos = pos + 1;
-        -- Number placeholder, insert the next digit if it exists.
-        elseif mask_placeholder == '_' and number_placeholder then
-          formatted_number = formatted_number .. number_placeholder
+        -- Character placeholder, insert the next character if it exists.
+        elseif mask_placeholder == '_' and string_placeholder then
+          formatted_string = formatted_string .. string_placeholder
           pos = pos + 1;
         -- Non-placeholder, output directly.
         else
-          formatted_number = formatted_number .. mask_placeholder
+          formatted_string = formatted_string .. mask_placeholder
         end
       end
       -- Extra digits get output at the end if they exist.
-      if string.len(number) > pos - 1 then
-        formatted_number = formatted_number .. string.sub(number, pos)
+      if string.len(f_string) > pos - 1 then
+        formatted_string = formatted_string .. string.sub(f_string, pos)
       end
     else
-      formatted_number = number
+      formatted_string = f_string
     end
-    core.debug_log("Formatted number '%s' to '%s'", number, formatted_number)
-    core.set_storage("format", key, formatted_number)
+    core.debug_log("Formatted string '%s' to '%s'", f_string, formatted_string)
+    core.set_storage("format", key, formatted_string)
   end
 end
 
