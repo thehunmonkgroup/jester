@@ -34,6 +34,7 @@
 -- @usage
 --   {
 --     action = "data_load",
+--     handler = "odbc",
 --     config = {
 --       database_type = "sqlite",
 --       database = "/tmp/test.db",
