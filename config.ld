@@ -8,6 +8,7 @@ file = {
   "./modules/data/data.lua",
   "./modules/dialplan_tools/dialplan_tools.lua",
   "./modules/email/email.lua",
+  "./modules/event/event.lua",
   "./modules/hangup/hangup.lua",
   "./modules/navigation/navigation.lua",
   "./modules/play/play.lua",
