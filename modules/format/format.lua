@@ -1,3 +1,80 @@
+--- Custom formatters for sequences.
+--
+-- This module provides custom formatting functionality for sequences. It can
+-- be used to alter the formatting of certain data within a sequence.
+--
+-- @module format
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- Formats a Unix timestamp as a date string.
+--
+-- The format string is configurable, and timezones are supported. The
+-- formatted result is placed in the 'format' storage area.
+--
+-- @action format_date
+-- @string action
+--   format_date
+-- @string format
+--   (Optional) The format string to use. Should be a string in the form taken
+--   by [strftime](http://linux.die.net/man/3/strftime).
+--   Default is '<code>%Y-%m-%d %H:%M:%S</code>'.
+-- @string storage_key
+--   (Optional) The key to store the formatted result under in the 'format'
+--   storage area. Default is 'date'.
+-- @int timestamp
+--   The Unix timestamp to format.
+-- @string timezone
+--   (Optional) The timezone to use to calculate the time. This should be a
+--   string that represents the [timezone name](https://en.wikipedia.org/wiki/Tz_database#Names_of_time_zones)
+--   as found in server's timezone database (often in '/usr/share/zoneinfo').
+--   Default is 'Etc/UTC'.
+-- @usage
+--   {
+--     action = "format_date",
+--     format = "%Y-%m-%d %H:%M:%S",
+--     storage_key = "formatted_date",
+--     timestamp = 1452792192,
+--     timezone = "Etc/UTC",
+--   },
+
+
+--- Formats a string using a given mask.
+--
+-- The mask can be used to exclude specific characters, and to add additional
+-- formatting.
+--
+-- A specific use case is formatting the number '+15555551212' into the more
+-- readable '(555) 555-1212'. The formatted result is placed in the 'format'
+-- storage area.
+--
+-- Note that currently, due to limitations in the parser, the string to be
+-- formatted cannot contain any of the mask special placeholder characters,
+-- see the 'mask' parameter below for those.
+--
+-- @action format_string
+-- @string action
+--   format_string
+-- @string mask
+--   (Optional) The mask to apply to the string. Default is to do no
+--   formatting. The mask has two special placeholder characters, the
+--   exclamation point and the underscore. To ignore a character, use the
+--   exclamation point. To place a character, use the underscore.
+-- @string string
+--   The string to format.
+-- @string storage_key
+--   (Optional) The key to store the formatted result under in the 'format'
+--   storage area. Default is 'formatted_string'.
+-- @usage
+--   {
+--     action = "format_string",
+--     mask = "!!(___) ___-____",
+--     string = "+15555551212",
+--     storage_key = "formatted_phone_number",
+--   },
+
+
 local core = require "jester.core"
 
 local _M = {}

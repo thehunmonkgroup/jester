@@ -10,6 +10,7 @@ file = {
   "./modules/email/email.lua",
   "./modules/event/event.lua",
   "./modules/file/file.lua",
+  "./modules/format/format.lua",
   "./modules/hangup/hangup.lua",
   "./modules/navigation/navigation.lua",
   "./modules/play/play.lua",
