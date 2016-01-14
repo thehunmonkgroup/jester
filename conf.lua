@@ -1,16 +1,51 @@
---[[
-  This is the global configuration file for Jester.
+--- This is the global configuration file for Jester.
+--
+-- Probably not a good idea to change any of these settings unless you know
+-- what you're doing.
+--
+-- Some values can be overridden per-profile, check the documentation below.
+--
+-- @module core.conf
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
 
-  Probably not a good idea to change any of these settings unless you know
-  what you're doing.
-]]
+
+--- Global configuration table.
+--
+-- Check the conf.lua file for further descriptions of these values.
+--
+-- @table conf
+-- @field debug
+--   Enable this setting to turn on debuggging.
+--   This value can be overridden per profile.
+-- @field debug_output
+--   Control debug output.
+-- @field base_dir
+--   Full path to FreeSWITCH base directory.
+-- @field sounds_dir
+--   Full path to FreeSWITCH sounds directory.
+-- @field scripts_dir
+--   Full path to FreeSWITCH scripts directory.
+-- @field jester_dir
+--   Full path to Jester directory.
+-- @field sequence_path
+--   Full path to Jester's global sequence directory.
+--   This value can be overridden per profile.
+-- @field profile_path
+--   Full path to Jester's global profile directory.
+-- @field key_order
+--   The order that keys are played in for announcements.
+--   This value can be overridden per profile.
+--   This value can be overridden in actions.
+-- @field modules
+--   The modules to load.
+--   This value can be overridden per profile.
 local conf = {}
 
--- Enable this setting to turn on debuggging.
--- This value can be overridden per profile.
 conf.debug = true
 
--- These settings control what debugging information is output.
+-- These settings control what debugging information is output, only edit the
+-- values of the table, not the keys.
 conf.debug_output = {
   -- Ongoing progress.
   log = true,
@@ -29,25 +64,12 @@ if freeswitch then
   -- Override this if scripts are hosted in a non-standard location.
   conf.scripts_dir = conf.base_dir .. "/scripts"
   conf.jester_dir = conf.scripts_dir .. "/jester"
-  -- This value can be overridden per profile.
   conf.sequence_path = conf.jester_dir .. "/sequences"
   conf.profile_path = conf.jester_dir .. "/profiles"
 end
 
-conf.help_path = "jester/help"
-
--- The order that keys are played in for announcements.
--- This value can be overridden per profile.
--- This value can be overridden in actions.
 conf.key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
 
--- The modules to load.
--- This value can be overridden per profile.
--- Note that the help system looks at this setting, not profile settings,
--- when it builds the module/action help.  Therefore the recommended
--- configuration is to include all modules here, and override the setting
--- in each profile listing only the modules that need to be loaded for
--- the profile.
 conf.modules = {
   "core_actions",
   "couchdb",
