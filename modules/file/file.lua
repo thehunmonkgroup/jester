@@ -1,3 +1,171 @@
+--- Simple file operations.
+--
+-- This module provides actions to handle simple filesystem operations.
+--
+-- @module file
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- The filesystem handler (default).
+--
+-- The default handler for the file module. This handles file operations on
+-- the local filesystem.
+--
+-- @handler filesystem
+-- @usage
+--   {
+--     action = "create_directory",
+--     handler = "filesystem",
+--     -- other params...
+--   }
+
+
+--- Creates a directory.
+--
+-- This action creates a directory on the filesystem in the specified location.
+--
+-- @action create_directory
+-- @string action
+--   create_directory
+-- @string directory
+--   The directory to create, including the path. Provide either the full path
+--   or a relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "create_directory",
+--     directory = "/tmp/mynewdir",
+--   }
+
+
+--- Delete a file.
+--
+-- This action deletes a file from a location on the filesystem.
+--
+-- @action delete_file
+-- @string action
+--   delete_file
+-- @string file
+--   The file to delete, including the path. Provide either the full path or a
+--   relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "delete_file",
+--     file = "/tmp/afile.txt",
+--   }
+
+
+--- Determines if a file exists in the filesystem.
+--
+-- This action determines if a file exists on the filesystem. This only checks
+-- for basic existence -- the file must be readable by the FreeSWITCH user.
+--
+-- The action will store the result of its check in the 'file' storage area, key
+-- 'file_exists': 'true' if the file exists, 'false' otherwise.
+--
+-- @action file_exists
+-- @string action
+--   file_exists
+-- @string file
+--   The file to check, including the path. Provide either the full path or a
+--   relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string if_false
+--   (Optional) The sequence to call if the file does not exist.
+-- @string if_true
+--   (Optional) The sequence to call if the file exists.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "file_exists",
+--     file = "/tmp/afile.txt",
+--     if_false = "do_this",
+--     if_true = "do_that",
+--   }
+
+
+--- Checks a file's size.
+--
+-- This action checks the size of a file. The result is stored in the 'file'
+-- storage area, key 'size'.
+--
+-- @action file_size
+-- @string action
+--   file_size
+-- @string file
+--   The file to check, including the path. Provide either the full path or a
+--   relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "file_size",
+--     file = "/tmp/afile.txt",
+--   }
+
+
+--- Move a file from one location to another.
+--
+-- This action moves a file from one location on the filesystem to another.
+--
+-- @action move_file
+-- @string action
+--   move_file
+-- @bool binary
+--   (Optional) Boolean, only neccesary for copying files. Set to true if the
+--   source file is binary (sound files are typically binary). Default is
+--   false.
+-- @bool copy
+--   (Optional) To copy the file to the destination instead of moving it, set
+--   this to true. Default is false.
+-- @string destination
+--   The new destination of the file, including the path. Provide either the
+--   full path or a relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string source
+--   The file to move, including the path. Provide either the full path or a
+--   relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "move_file",
+--     binary = false,
+--     copy = false,
+--     destination = "storage/mymovedfile.txt",
+--     source = "/tmp/originalfile.txt",
+--   }
+
+
+--- Removes a directory.
+--
+-- This action removes a directory from the filesystem in the specified
+-- location.
+--
+-- @action remove_directory
+-- @string action
+--   remove_directory
+-- @string directory
+--   The directory to remove, including the path. Provide either the full path
+--   or a relative path from the FreeSWITCH 'base_dir' global variable.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "remove_directory",
+--     directory = "/tmp/somedir",
+--   }
+
+
 local core = require "jester.core"
 
 local _M = {}
