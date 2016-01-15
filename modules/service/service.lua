@@ -1,3 +1,91 @@
+--- Access external services.
+--
+-- This module provides actions for accessing external services, such as
+-- webservices.
+--
+-- @module service
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+--- Last HTTP request storage.
+--
+-- The resulting status of the last request is stored in the
+-- 'last\_http\_request' storage area, with the following keys:
+--
+-- @table last_http_request
+--
+-- @field code
+--   An HTTP/1.1 return code, or 'error' if the request fails.
+-- @field description
+--   A human-readable description of the code.
+
+
+--- Make an HTTP request to a external server.
+--
+-- Only the http:// protocol is supported.
+--
+-- The status of the completed request is stored in the @{last_http_request}
+-- storage area.
+--
+-- If the request returns a '200' status code, then the body of the response
+-- will be stored according to the parameter settings.
+--
+-- @action http_request
+-- @string action
+--   http_request
+-- @string fragment
+--   (Optional) A fragment to append to the URL. It will be properly escaped
+--   before sending.
+-- @string password
+--   (Optional) A password to use for basic authentication. 'user' parameter
+--   must also be provided.
+-- @string path
+--   (Optional) The server path to send the request to, no leading or trailing
+--   slash.
+-- @int port
+--   (Optional) The port to send the request to. Default is 80.
+-- @tab query
+--   (Optional) A table of query parameters to append to the URL. Keys must be
+--   only numbers, letters, and underscores, values can be any string and will
+--   be properly URL escaped before sending.
+-- @string response
+--   (Optional) The format to expect the response in:
+--     lua:
+--       A string that represents a Lua table, of the following format:
+--         return {
+--           foo = 'bar',
+--         }
+--         The table data will be loaded into the specified storage area. Table
+--         values cannot contain a table.
+--     raw:
+--       A string of raw data. This will be stored in the specified storage
+--       area under the 'raw' storage key.
+--   Default is 'raw'.
+-- @string server
+--   (Optional) The server to send the request to. Default is 'localhost'.
+-- @string storage_area
+--   (Optional) The storage area to store the response in. Defaults to
+--   'service'.
+-- @string user
+--   (Optional) A user name to use for basic authentication.
+-- @usage
+--   {
+--     action = "http_request",
+--     fragment = "some fragment",
+--     password = "secret",
+--     path = "path/to/resource",
+--     port = 80,
+--     query = {
+--       foo = "bar",
+--       baz = "two words"
+--     },
+--     response = "raw",
+--     server = "www.example.com",
+--     storage_area = "my_http_request",
+--     user = "bob",
+--   }
+
+
 local core = require "jester.core"
 
 local _M = {}

@@ -18,6 +18,7 @@ file = {
   "./modules/navigation/navigation.lua",
   "./modules/play/play.lua",
   "./modules/record/record.lua",
+  "./modules/service/service.lua",
 }
 dir = "./documentation"
 topics = {
