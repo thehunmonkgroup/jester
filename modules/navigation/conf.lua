@@ -1,9 +1,15 @@
 local conf = {
   action_map = {
 
+    -- Alias for add_to_navigation, to maintain backwards compat.
     add_to_stack = {
       mod = "navigation",
-      func = "add_to_stack",
+      func = "add_to_navigation",
+    },
+
+    add_to_navigation = {
+      mod = "navigation",
+      func = "add_to_navigation",
     },
 
     navigation_up = {
