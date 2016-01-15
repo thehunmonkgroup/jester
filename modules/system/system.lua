@@ -1,3 +1,66 @@
+--- Access to operating system commands.
+--
+-- This module provides access to various commands available at the operating
+-- system level.
+--
+-- @module system
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- Execute a shell command.
+--
+-- This action executes a system shell command, storing the return code in the
+-- 'return\_code' key of the specificed storage area. The environment the shell
+-- command runs in is the same environment FreeSWITCH provides to Lua.
+--
+-- This action is preferred over the @{shell_command_with_output} action if
+-- the output of the command is not needed.
+--
+-- @action shell_command
+-- @string action
+--   shell_command
+-- @string command
+--   The shell command to run. Arguments can be provided if needed.
+-- @string storage_area
+--   The storage area to store the return code. Default is 'system'.
+-- @usage
+--   {
+--     action = "shell_command",
+--     command = "service foo start",
+--     storage_area = "service_return_code",
+--   }
+
+
+--- Execute a shell command, saving the output.
+--
+-- This action executes a system shell command, storing the return code in the
+-- 'return\_code' key, and the command output in the 'output' key of the
+-- specificed storage area. The environment the shell command runs in is the
+-- same environment FreeSWITCH provides to Lua.
+--
+-- If the command output is not needed, the @{shell_command} action is
+-- preferred.
+--
+-- NOTE: Due to limitations in Lua 5.x, this action has a slightly hackish
+-- implementation -- it's not portable, doubtful it will work on Windows,
+-- mileage may vary.
+--
+-- @action shell_command_with_output
+-- @string action
+--   shell\_command\_with\_output
+-- @string command
+--   The shell command to run. Arguments can be provided if needed.
+-- @string storage_area
+--   The storage area to store the return code and output. Default is 'system'.
+-- @usage
+--   {
+--     action = "shell_command_with_output",
+--     command = "ls -1 /tmp/*.wav",
+--     storage_area = "ls_return",
+--   }
+
+
 local core = require "jester.core"
 
 local _M = {}
@@ -25,9 +88,6 @@ end
 --[[
   Executes an operating system shell command and stores the output and return
   value.
-  Due to limitations in Lua 5.1, this action has a slightly hackish
-  implementation -- it's not portable, doubtful it will work on Windows,
-  mileage may vary.
 ]]
 function _M.shell_command_with_output(action)
   local command = action.command

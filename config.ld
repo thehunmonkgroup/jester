@@ -20,6 +20,7 @@ file = {
   "./modules/record/record.lua",
   "./modules/service/service.lua",
   "./modules/speech_to_text/speech_to_text.lua",
+  "./modules/system/system.lua",
 }
 dir = "./documentation"
 topics = {
