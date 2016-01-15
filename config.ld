@@ -21,6 +21,7 @@ file = {
   "./modules/service/service.lua",
   "./modules/speech_to_text/speech_to_text.lua",
   "./modules/system/system.lua",
+  "./modules/tracker/tracker.lua",
 }
 dir = "./documentation"
 topics = {

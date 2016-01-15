@@ -1,3 +1,59 @@
+--- Track various states in the channel.
+--
+-- This module provides actions to assist in tracking various states in a
+-- channel.
+--
+-- @module tracker
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- Incremental custom variable counter.
+--
+-- This action provides a simple method to keep a count of any arbitrary value,
+-- and provides access to calling sequences by comparing a number against the
+-- total in the counter.  It's useful for storing how many times you've done
+-- something, eg. on 3rd failed login attempt, hang up.  Counters are
+-- initialized with a value of zero, and placed in storage area 'counter'.
+--
+-- @action counter
+-- @string action
+--   counter
+-- @int compare_to
+--   (Optional) The value to compare the current counter value against.
+-- @string if_equal
+--   (Optional) The sequence to call if the counter value is equal to the
+--   'compare_to' value.
+-- @string if_greater
+--   (Optional) The sequence to call if the counter value is greater than the
+--   'compare_to' value.
+-- @string if_less
+--   (Optional) The sequence to call if the counter value is less than the
+--   'compare_to' value.
+-- @int increment
+--   (Optional) Increment the counter by this amount before performing the
+--   comparison to the 'compare_to' parameter.  Negative increments are allowed.
+--   The default is to not increment the counter.
+-- @bool reset
+--   (Optional) Set to true to reset the counter to zero.  This happens before
+--   any incrementing, so it can be used with incrementing to set a new initial
+--   value for the counter.
+-- @string storage_key
+--   (Optional) The key in the 'counter' storage area where the counter value is
+--   stored and checked.  Default is 'counter'
+-- @usage
+--   {
+--     action = "counter",
+--     compare_to = profile.max_login_attempts,
+--     if_equal = "one_more_try",
+--     if_greater = "mailbox_login_failed",
+--     if_less = "login",
+--     increment = 1,
+--     reset = false,
+--     storage_key = "failed_login_counter",
+--   }
+
+
 local core = require "jester.core"
 
 local _M = {}
