@@ -19,6 +19,7 @@ file = {
   "./modules/play/play.lua",
   "./modules/record/record.lua",
   "./modules/service/service.lua",
+  "./modules/speech_to_text/speech_to_text.lua",
 }
 dir = "./documentation"
 topics = {
