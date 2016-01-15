@@ -32,9 +32,9 @@ local function show_navigation_stack(stack)
 end
 
 --[[
-  Add a sequence to the navigation stack.
+  Add a sequence to the navigation path.
 ]]
-function _M.add_to_stack(action)
+function _M.navigation_add(action)
   local stack = core.channel.stack.navigation
   local sequence_stack = core.channel.stack.sequence
   local p = core.channel.stack.sequence_stack_position
@@ -49,12 +49,12 @@ function _M.add_to_stack(action)
 end
 
 --[[
-  Go up the navigation stack one level.
+  Go to the previous item in the navigation path.
 ]]
-function _M.navigation_up(action)
+function _M.navigation_previous(action)
   local stack = core.channel.stack.navigation
   if #stack == 0 then
-    core.debug_log("Cannnot navigate up the stack, stack is empty!")
+    core.debug_log("Cannnot navigate to previous item, path is empty!")
   else
     local last_sequence, new_sequence
     -- Remove the current sequence from the stack unless it's the only one.
@@ -63,50 +63,50 @@ function _M.navigation_up(action)
     end
     -- Last item on the stack is now up one level.
     new_sequence = stack[#stack]
-    core.debug_log("Moving up the stack from sequence '%s' to sequence '%s'", tostring(last_sequence), new_sequence)
+    core.debug_log("Moving to previous navigation item from sequence '%s' to sequence '%s'", tostring(last_sequence), new_sequence)
     show_navigation_stack(stack)
     core.queue_sequence(new_sequence)
   end
 end
 
 --[[
-  Clear the navigation stack.
+  Clear the navigation path.
 ]]
 function _M.navigation_clear(action)
   core.channel.stack.navigation = {}
-  core.debug_log("Navigation stack cleared.")
+  core.debug_log("Navigation path cleared.")
 end
 
 --[[
-  Go to the top of the navigation stack.
+  Go to the begining of the navigation path.
 ]]
-function _M.navigation_top(action)
+function _M.navigation_beginning(action)
   local stack = core.channel.stack.navigation
   if #stack == 0 then
-    core.debug_log("Cannnot navigate to the top of the stack, stack is empty!")
+    core.debug_log("Cannnot navigate to the beginning of the path, path is empty!")
   else
     local last_sequence, new_sequence
     last_sequence = stack[#stack]
     new_sequence = stack[1]
     -- New stack starts with first sequence from old stack.
     core.channel.stack.navigation = { new_sequence }
-    core.debug_log("Moving to top of stack from sequence '%s' to sequence '%s'", last_sequence, new_sequence)
+    core.debug_log("Moving to beginning of path from sequence '%s' to sequence '%s'", last_sequence, new_sequence)
     core.queue_sequence(new_sequence)
   end
 end
 
 --[[
-  Set the last item on the navigation stack as the new top.
+  Set the last item on the navigation path as the new beginning.
 ]]
 function _M.navigation_reset(action)
   local stack = core.channel.stack.navigation
   if #stack == 0 then
-    core.debug_log("Cannnot reset stack, stack is empty!")
+    core.debug_log("Cannnot reset path, path is empty!")
   else
     -- New stack starts with last sequence from old stack.
     new_sequence = table.remove(stack)
     core.channel.stack.navigation = { new_sequence }
-    core.debug_log("Reset top of stack to sequence '%s'", new_sequence)
+    core.debug_log("Reset beginning of path to sequence '%s'", new_sequence)
   end
 end
 

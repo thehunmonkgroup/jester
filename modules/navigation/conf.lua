@@ -1,20 +1,26 @@
 local conf = {
   action_map = {
 
-    -- Alias for add_to_navigation, to maintain backwards compat.
+    -- Alias for navigation_add, to maintain backwards compat.
     add_to_stack = {
       mod = "navigation",
-      func = "add_to_navigation",
+      func = "navigation_add",
     },
 
-    add_to_navigation = {
+    navigation_add = {
       mod = "navigation",
-      func = "add_to_navigation",
+      func = "navigation_add",
     },
 
+    -- Alias for navigation_previous, to maintain backwards compat.
     navigation_up = {
       mod = "navigation",
-      func = "navigation_up",
+      func = "navigation_previous",
+    },
+
+    navigation_previous = {
+      mod = "navigation",
+      func = "navigation_previous",
     },
 
     navigation_clear = {
@@ -22,9 +28,15 @@ local conf = {
       func = "navigation_clear",
     },
 
+    -- Alias for navigation_beginning, to maintain backwards compat.
     navigation_top = {
       mod = "navigation",
-      func = "navigation_top",
+      func = "navigation_beginning",
+    },
+
+    navigation_beginning = {
+      mod = "navigation",
+      func = "navigation_beginning",
     },
 
     navigation_reset = {
