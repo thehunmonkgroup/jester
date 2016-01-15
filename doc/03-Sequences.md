@@ -146,7 +146,7 @@ To maintain the simplicity of the engine, menu-type navigation is limited to sin
     ["5"] = ":seek:+2000",
     ["6"] = ":seek:-2000",
     ["7"] = ":pause",
-    ["*"] = "@navigation_up",
+    ["*"] = "@navigation_previous",
     invalid = true,
     invalid_sound = "ivr/ivr-that_was_an_invalid_entry.wav",
     invalid_sequence = "mysequence arg1,arg2",

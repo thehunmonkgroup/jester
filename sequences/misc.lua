@@ -1,6 +1,6 @@
 local key_map = {
   ["1"] = "foo",
-  ["9"] = ":navigation_up",
+  ["9"] = ":navigation_previous",
   invalid_sound = "ivr/ivr-that_was_an_invalid_entry.wav"
 }
 
