@@ -1,5 +1,110 @@
---- Navigation module.
+--- Menu/phone tree navigation.
+--
+-- This module provides actions that help with navigating menus and phone trees.
+--
+-- The actions in this module are most often used directly when responding to
+-- user input, see @{03-Sequences.md.Capturing_user_key_input} for more
+-- information.
+--
 -- @module navigation
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- Add a sequence to the navigation path.
+--
+-- This action adds a sequence to the navigation path.  It can be used for
+-- tracking when a channel moves deeper into a menu tree.  Adding a sequence to
+-- the path allows for using the navigation actions to traverse through
+-- previous additions to the path.
+--
+-- @action navigation_add
+-- @param action
+--   navigation_add
+-- @param sequence
+--   (Optional) The sequence to add to the path.  Defaults to the currently
+--   running sequence.
+-- @usage
+--   {
+--     action = "navigation_add",
+--   }
+
+
+--- Move to the beginning of the navigation path.
+--
+-- This action clears the navigation path, and executes the first item from the
+-- old path, placing it at the beginning of the new path.  It can be used for
+-- providing 'return to beginning' functionality in phone trees.
+--
+-- This action is most often used in the 'keys' array like so:
+--
+--    keys = {
+--      ["9"] = "@navigation_beginning",
+--    }
+--
+-- It can however be used in a regular sequence as well.
+--
+-- @action navigation_beginning
+-- @param action
+--   navigation_beginning
+-- @usage
+--   {
+--     action = "navigation_beginning",
+--   }
+
+
+--- Clear the navigation path.
+--
+-- This action clears the navigation path.  No sequences will be left on the
+-- path after this operation.
+--
+-- @action navigation_clear
+-- @param action
+--   navigation_clear
+-- @usage
+--   {
+--     action = "navigation_clear",
+--   }
+
+
+--- Move to the previous item on the navigation path.
+--
+-- This action pops the current action off the navigation path, and executes
+-- the previously added item in the path.  It can be used for providing
+-- 'previous menu' functionality in phone trees.
+--
+-- This action is most often used in the 'keys' array like so:
+--
+--    keys = {
+--      ["9"] = "@navigation_previous"
+--    }
+--
+-- It can however be used in a regular sequence as well.
+--
+-- @action navigation_previous
+-- @param action
+--   navigation_previous
+-- @usage
+--   {
+--     action = "navigation_previous",
+--   }
+
+
+--- Set the current sequence as the new navigation path beginning.
+--
+-- This action clears the navigation path, and sets the last item in the old
+-- path to be the first item in the new path.  It can be used to set a new
+-- beginning for the navigation path.
+--
+-- @action navigation_reset
+-- @param action
+--   navigation_reset
+-- @usage
+--   {
+--     action = "navigation_reset",
+--   }
+
+
 
 local core = require "jester.core"
 
