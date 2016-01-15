@@ -16,3 +16,8 @@ New in 2.0:
    'navigation_previous' action instead.
  * navigation module action 'navigation_top' deprecated: use equivalent
    'navigation_beginning' action instead.
+ * tracker module, counter action, increment default behavior change:
+   Previously, the default behavior of the tracker module's counter action
+   when its 'increment' parameter was not set was to do no incrementing of
+   the counter. The new default behavior is to increment by 1. The old default
+   behavior can be acheived by setting 'increment' to 0.

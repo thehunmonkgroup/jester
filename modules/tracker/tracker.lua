@@ -33,7 +33,7 @@
 -- @int increment
 --   (Optional) Increment the counter by this amount before performing the
 --   comparison to the 'compare_to' parameter.  Negative increments are allowed.
---   The default is to not increment the counter.
+--   Default is 1. To disable counting, set this to 0.
 -- @bool reset
 --   (Optional) Set to true to reset the counter to zero.  This happens before
 --   any incrementing, so it can be used with incrementing to set a new initial
@@ -64,7 +64,7 @@ local _M = {}
 ]]
 function _M.counter(action)
   local key = action.storage_key or "counter"
-  local increment = action.increment and tonumber(action.increment) or nil
+  local increment = action.increment and tonumber(action.increment) or 1
   local compare_to = action.compare_to and tonumber(action.compare_to) or nil
   -- Perform reset first to allow increment to be used to set the initial
   -- value of the counter.
@@ -77,7 +77,7 @@ function _M.counter(action)
     core.set_storage("counter", key, current_count)
   end
   -- Increment the counter if specified.
-  if increment then
+  if increment ~= 0 then
     current_count = current_count + increment
     core.debug_log("Incremented counter '%s' by %d, new value %d", key, increment, current_count)
     core.set_storage("counter", key, current_count)
