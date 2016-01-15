@@ -115,7 +115,7 @@ Sequences can access outside variables from five places:
     foo = storage("mailbox_settings", "mailbox")
    Accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area. See [Storage system](#Storage_system) to learn more.
  * **Sequence arguments:**
-   Sequences can be called with arguments, and these can be accessed through the <code>args()</code> function, eg.
+   Sequences can be called with arguments (see [Passing arguments](#Passing_arguments)), and these can be accessed through the <code>args()</code> function, eg.
     foo = args(1)
    Accesses the first argument passed to the sequence. See [Passing arguments](#Passing_arguments) for more information.
 
