@@ -1,5 +1,192 @@
---- Play module.
+--- Play sounds on a channel.
+--
+-- This module provides actions for playing various sounds on a channel.
+--
 -- @module play
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
+
+--- The file handler (default).
+--
+--  The default handler for the play module, operates on files on the local
+--  filesystem.
+--
+-- @handler file
+-- @usage
+--   {
+--     action = "play",
+--     handler = "file",
+--     -- other params...
+--   }
+
+
+--- Play something on the channel.
+--
+-- @action play
+-- @string action
+--   play
+-- @tab file
+--   The name of the resource to play. It should be:
+--     1. A full file path
+--     2. A relative file path from the FreeSWITCH 'sounds' directory
+--     3. A phrase prefixed with 'phrase:'
+--
+--   To play a single file, a string can be passed. To play several files
+--   together in a group, pass a table of names instead.
+--
+--   Jester uses an ampersand (&) as the default delimiter for playback of
+--   mulitple files; to override this, set the '<code>playback_delimiter</code>'
+--   variable in either the global or profile configuration file.
+-- @tab keys
+--   (Optional) See @{03-Sequences.md.Capturing_user_key_input}.
+-- @int repetitions
+--   (Optional) How many times to repeat the file(s). Default is 1.
+-- @int wait
+--   (Optional) How long to wait between repetitions, in milliseconds. Default
+--   is no wait.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "play",
+--     file = {
+--       "/tmp/foo.wav",
+--       "bar.wav",
+--       "phrase:goodbye",
+--     },
+--     keys = profile.play_keys,
+--     repititions = 3,
+--     wait = 2000,
+--   }
+
+
+--- Play a series of key press choices on the channel.
+--
+-- This action allows you to map key press choices to announcements about what
+-- each key press will do, and play these announcements in a set order on the
+-- channel.
+--
+-- Keys are mapped both to actions, and to phrases in the FreeSWITCH phrase
+-- engine. The phrases receive the mapped key as an argument.
+--
+-- You use this alongside of the standard 'keys' parameter to provide 'Press 1
+-- for this, press 2 for that' menu selections.
+--
+-- The order that the announcements are made can be customized.
+--
+-- @action play_keys
+-- @string action
+--   play_keys
+-- @tab key_announcements
+--   A table similar to the 'keys' table, with the value for each key being
+--   the name of a FreeSWITCH phrase macro to play for the key announcement.
+-- @tab keys
+--   (Optional) See @{03-Sequences.md.Capturing_user_key_input}.
+-- @tab order
+--   (Optional) A list of keys representing the order to play the announcements
+--   in. If not provided, then the default order from the profile or from the
+--   global configuration is used.
+-- @int repetitions
+--   (Optional) How many times to repeat the file(s). Default is 1.
+-- @int wait
+--   (Optional) How long to wait between repetitions, in milliseconds. Default
+--   is no wait.
+-- @usage
+--   {
+--     action = "play_keys",
+--     key_announcements = {
+--       ["4"] = "play_previous",
+--       ["6"] = "play_next",
+--       ["#"] = "exit",
+--     },
+--     keys = {
+--       ["4"] = "previous_sequence",
+--       ["6"] = "next_sequence",
+--       ["#"] = "exit_sequence",
+--     },
+--     order = {"6", "4", "#"}
+--     repititions = 3,
+--     wait = 2000,
+--   }
+
+
+--- Play a phrase macro.
+--
+-- This action plays a FreeSWITCH phrase macro on the channel.
+--
+-- @action play_phrase
+-- @string action
+--   play_phrase
+-- @tab keys
+--   (Optional) See @{03-Sequences.md.Capturing_user_key_input}.
+-- @string language
+--   (Optional) Language to play the phrase in. Defaults to the language set on
+--   the channel or the default global language.
+-- @string phrase
+--   The name of the phrase macro to play.
+-- @string phrase_arguments
+--   (Optional) Arguments to pass to the phrase macro, if any.
+-- @int repetitions
+--   (Optional) How many times to repeat the file(s). Default is 1.
+-- @int wait
+--   (Optional) How long to wait between repetitions, in milliseconds. Default
+--   is no wait.
+-- @usage
+--   {
+--     action = "play",
+--     keys = profile.play_keys,
+--     language = "en",
+--     phrase = "some_phrase",
+--     phrase_arguments = "arg1,arg2,arg3",
+--     repititions = 3,
+--     wait = 2000,
+--   }
+
+
+--- From a list of files, play the first valid file found.
+--
+-- This action checks a list of files in order, and plays the first valid file
+-- it finds from the list. Useful for playing a custom file, but falling back
+-- to default file. Note that for speed, only basic file existence is checked
+-- -- the file must be readable by the FreeSWITCH user.
+--
+-- @action play_valid_file
+-- @string action
+--   play\_valid\_file
+-- @tab files
+--   A table of resources to check for possible playback on the channel. Values
+--   in the table should be:
+--     1. Full file paths
+--     2. Relative file paths from the FreeSWITCH 'sounds' directory
+--     3. A phrase prefixed with 'phrase:' (note that this will always be
+--        considered a valid file)
+--
+--   List the files in the order you would prefer them to be searched.
+-- @tab keys
+--   (Optional) See @{03-Sequences.md.Capturing_user_key_input}.
+-- @int repetitions
+--   (Optional) How many times to repeat the file(s). Default is 1.
+-- @int wait
+--   (Optional) How long to wait between repetitions, in milliseconds. Default
+--   is no wait.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
+-- @usage
+--   {
+--     action = "play_valid_file",
+--     files = {
+--       "/tmp/customgreeting.wav",
+--       "standardgreeting.wav",
+--       "phrase:invalid_entry",
+--     },
+--     keys = profile.play_keys,
+--     repititions = 3,
+--     wait = 2000,
+--   }
+
 
 local core = require "jester.core"
 
