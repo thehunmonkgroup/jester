@@ -1,23 +1,25 @@
-module(..., package.seeall)
+local core = require "jester.core"
 
 local io = require("io")
 local lfs = require("lfs")
 require "jester.support.file"
 
-local google = require("jester.modules.speech_to_text.google")
+--local google = require("jester.modules.speech_to_text.google")
 local att = require("jester.modules.speech_to_text.att")
+
+local _M = {}
 
 --[[
   Speech to text using Google's API.
 ]]
-function speech_to_text_from_file_google(action)
-  speech_to_text_from_file(action, google.speech_to_text_from_file)
-end
+--function speech_to_text_from_file_google(action)
+--  speech_to_text_from_file(action, google.speech_to_text_from_file)
+--end
 
 --[[
   Speech to text using AT&T's API.
 ]]
-function speech_to_text_from_file_att(action)
+function _M.speech_to_text_from_file_att(action)
   speech_to_text_from_file(action, att.speech_to_text_from_file)
 end
 
@@ -26,7 +28,7 @@ end
 
   This function wraps the handler's specific functionaliy.
 ]]
-function speech_to_text_from_file(action, handler)
+local function speech_to_text_from_file(action, handler)
   local filepath = action.filepath
   local area = action.storage_area or "speech_to_text"
 
@@ -41,14 +43,15 @@ function speech_to_text_from_file(action, handler)
         filesize = filesize,
       }
       status, translations = handler(action, attributes)
-      jester.set_storage(area, "status", status)
+      core.set_storage(area, "status", status)
       for k, translation in ipairs(translations) do
-        jester.set_storage(area, "translation_" .. k, translation.text)
-        jester.set_storage(area, "confidence_" .. k, translation.confidence)
+        core.set_storage(area, "translation_" .. k, translation.text)
+        core.set_storage(area, "confidence_" .. k, translation.confidence)
       end
     else
-      jester.debug_log("ERROR: File %s does not exist", filepath)
+      core.debug_log("ERROR: File %s does not exist", filepath)
     end
   end
 end
 
+return _M
