@@ -7,7 +7,7 @@ local _M = {}
 ]]
 function _M.http_request(action)
   local server = action.server or "localhost"
-  local port = action.port or "80"
+  local port = action.port and tostring(action.port) or "80"
   local path = action.path or "/"
   local query = action.query
   local fragment = action.fragment or ""
