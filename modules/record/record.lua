@@ -7,6 +7,19 @@
 -- @copyright 2011-2015 Chad Phillips
 
 
+--- The file handler (default).
+--
+--  The default handler for the record module, operates on files on the local
+--  filesystem.
+--
+-- @handler file
+-- @usage
+--   {
+--     action = "record",
+--     handler = "file",
+--     -- other params...
+--   }
+
 --- Last recording storage.
 --
 -- The following variables/values related to the recording are put into the
@@ -68,6 +81,9 @@
 --   this storage area with the 'last\_recording\_' prefix stripped, eg.
 --   '<code>storage_area = "message"</code>' would store 'name' in the 'message'
 --   storage area with the same value as 'last\_recording\_name'.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "record",
@@ -103,6 +119,9 @@
 -- @string merge_type
 --   (Optional) The type of merge to perform, valid values are 'append' and
 --   'prepend'. Default is 'append'.
+-- @string handler
+--   The handler to use, see [handlers](#Handlers). If not specified, defaults
+--   to the default handler for the module.
 -- @usage
 --   {
 --     action = "record_merge",
