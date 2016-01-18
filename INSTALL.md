@@ -32,9 +32,9 @@ Jester is relatively easy to install, especially if you have a modern package-ba
    directory.  This is for easy access when you are logged in at the command
    line.  For the bash shell, in a typical installation, it would look like
    this:
-   <code>
+    ```
      export LUA_PATH=";;/usr/local/freeswitch/scripts/?.lua"
-   </code>
+    ```
 
 
    The two semicolons at the beginning of the path are not a typo!  Lua
@@ -43,9 +43,9 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 4. Drop the entire 'jester' directory inside the FreeSWITCH 'scripts'
    directory.  In a typical installation, it would be at:
 
-   <code>
-     /usr/local/freeswitch/scripts/jester
-   </code>
+    ```
+      /usr/local/freeswitch/scripts/jester
+    ```
 
 
 
@@ -58,15 +58,14 @@ Jester is relatively easy to install, especially if you have a modern package-ba
    For example, the configuration for LUA_CPATH should be somewhat like this:
 
 
-   <code>
-     <param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>
-   </code>
+    ```xml
+      <param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>
+    ```
+   or
 
-       or
-
-   <code>
-     <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
-   </code>
+    ```xml
+      <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
+    ```
 
 
 
@@ -77,9 +76,9 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 7. Jester is now installed.  If you want to additionally install the default
    profile, see the INSTALL.txt located at
 
-   <code>
-     jester/profiles/voicemail/INSTALL.txt
-   </code>
+    ```
+      jester/profiles/voicemail/INSTALL.txt
+    ```
 
 
 #### Note to Windows users:
