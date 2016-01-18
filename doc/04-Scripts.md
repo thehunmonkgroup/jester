@@ -20,7 +20,7 @@ The script is installed into your path if the [Luarocks](https://luarocks.org) p
 
 ###### Manually
 
-  1. Follow the instructions in the main Jester INSTALL.txt for properly setting your LUA_PATH environment variable.
+  1. Follow the instructions in the [main Jester installation instructions](https://github.com/thehunmonkgroup/jester/blob/master/INSTALL.md) for properly setting your LUA_PATH environment variable.
 
   2. Move (or better yet, symlink) this script somewhere into your $PATH (~/bin, /usr/local/bin, etc.)
 
