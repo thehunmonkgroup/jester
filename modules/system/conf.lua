@@ -4,7 +4,7 @@ local conf = {
     shell_command = {
       mod = "system",
       func = "shell_command",
-    }
+    },
 
     shell_command_with_output = {
       mod = "system",
