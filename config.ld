@@ -26,6 +26,7 @@ file = {
   "./modules/system/system.lua",
   "./modules/tracker/tracker.lua",
   -- Scripts.
+  "./jester.lua",
   "./socket.lua",
   "./scripts/extract_actions.lua",
   "./action_map.lua",

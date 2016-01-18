@@ -1,3 +1,22 @@
+--- Main launching point for Jester.
+--
+-- This script is used to launch the Jester environment from within
+-- FreeSWITCH. Invoke it from within your dialplan like this:
+--
+--```xml
+--  <action
+--    application="lua"
+--    data="jester/jester.lua <profile> <sequence> [arg1],[arg2],...,[argN]"
+--  />
+--```
+--
+-- See the @{01-Intro.md|Intro} and other documentation for more details on
+-- using Jester.
+--
+-- @script jester.lua
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
 local core = require "jester.core"
 local conf = require "jester.conf"
 
