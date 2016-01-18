@@ -1,7 +1,10 @@
 core.lua
 jester.lua
+socket.lua
 modules/core_actions/conf.lua
 modules/core_actions/core_actions.lua
+modules/couchdb/conf.lua
+modules/couchdb/couchdb.lua
 modules/data/conf.lua
 modules/data/data.lua
 modules/data/odbc.lua
@@ -27,9 +30,14 @@ modules/play/conf.lua
 modules/play/play.lua
 modules/record/conf.lua
 modules/record/record.lua
+modules/service/conf.lua
+modules/service/service.lua
+modules/speech_to_text/conf.lua
+modules/speech_to_text/speech_to_text.lua
 modules/system/conf.lua
 modules/system/system.lua
 modules/tracker/conf.lua
 modules/tracker/tracker.lua
+support/file.lua
 support/string.lua
 support/table.lua
