@@ -19,16 +19,16 @@
 Jester is relatively easy to install, especially if you have a modern package-based Linux distribution.  Here are the basic steps:
 
 1. Install Lua (should be readily available from your packaging system)
-   eg. ```yum install lua```
+   eg. ```yum install lua``` or ```apt-get install lua5.2```
 
-2. Install the LuaFileSystem and LuaSocket packages (also probably available
-   in your packaging system, they're in the EPEL repository for
-   RHEL/CentOS/Fedora, and in the Debian repos as well.
-     eg. ```yum install lua-filesystem lua-socket```
-   If you can't find these in a package, you can use the LuaRocks system
-   (http://luarocks.org), or install from source:
-   * http://keplerproject.github.com/luafilesystem
-   * http://w3.impa.br/~diego/software/luasocket
+2. Install the [LuaFileSystem](http://keplerproject.github.com/luafilesystem)
+   and [LuaSocket](http://w3.impa.br/~diego/software/luasocket) packages (also
+   probably available in your packaging system, they're in the EPEL repository for
+   RHEL/CentOS/Fedora, and in the Debian repos as well. eg.
+   ```yum install lua-filesystem lua-socket``` or ```apt-get install
+   lua-filesystem lua-socket```
+   If you can't find these in a package, you can use the
+   [LuaRocks](http://luarocks.org) package manager, or install from source:
 
 3. Set your LUA_PATH environment variable to include the FreeSWITCH 'scripts'
    directory.  This is for easy access when you are logged in at the command
@@ -61,12 +61,12 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 
 
     ```xml
-      <param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>
+      <param name="module-directory" value="/usr/lib64/lua/5.2/?.so"/>
     ```
    or
 
     ```xml
-      <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
+      <param name="module-directory" value="/usr/lib/lua/5.2/?.so"/>
     ```
 
 
