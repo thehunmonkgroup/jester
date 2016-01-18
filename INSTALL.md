@@ -12,6 +12,8 @@
     * A mailserver with an open socket that you can send messages through.
  * For Jester's event listener support via socket.lua (experimental):
     * A mod_event_socket connection to the FreeSWITCH server.
+ * *Note that some other core modules have other dependencies, these are
+    documented in the main description for each particular module.*
 
 ## Installation
 Jester is relatively easy to install, especially if you have a modern package-based Linux distribution.  Here are the basic steps:
