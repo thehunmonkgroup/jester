@@ -1,3 +1,9 @@
+--- Core functions for Jester.
+--
+-- @module core
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
 local _M = {}
 
 --[[
