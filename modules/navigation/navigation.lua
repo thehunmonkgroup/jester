@@ -19,14 +19,15 @@
 -- previous additions to the path.
 --
 -- @action navigation_add
--- @param action
+-- @string action
 --   navigation_add
--- @param sequence
+-- @string sequence
 --   (Optional) The sequence to add to the path.  Defaults to the currently
 --   running sequence.
 -- @usage
 --   {
 --     action = "navigation_add",
+--     sequence = "some_sequence",
 --   }
 
 
@@ -45,7 +46,7 @@
 -- It can however be used in a regular sequence as well.
 --
 -- @action navigation_beginning
--- @param action
+-- @string action
 --   navigation_beginning
 -- @usage
 --   {
@@ -59,7 +60,7 @@
 -- path after this operation.
 --
 -- @action navigation_clear
--- @param action
+-- @string action
 --   navigation_clear
 -- @usage
 --   {
@@ -82,7 +83,7 @@
 -- It can however be used in a regular sequence as well.
 --
 -- @action navigation_previous
--- @param action
+-- @string action
 --   navigation_previous
 -- @usage
 --   {
@@ -97,7 +98,7 @@
 -- beginning for the navigation path.
 --
 -- @action navigation_reset
--- @param action
+-- @string action
 --   navigation_reset
 -- @usage
 --   {
