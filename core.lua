@@ -1,29 +1,58 @@
 --- Core functions for Jester.
 --
+-- This module provides the lower-level functionality for Jester -- storage,
+-- management of sequences, etc. Unless you're developing a module or doing
+-- something very advanced, you probably don't need to be familiar with this
+-- functionality -- it just works. :)
+--
+-- The @{05-Developer.md|Developer} documentation has more information about
+-- the core functionality, and how it pertains to writing modules.
+--
 -- @module core
 -- @author Chad Phillips
 -- @copyright 2011-2015 Chad Phillips
 
+
+
+
 local _M = {}
 
---[[
-  Initial setup for running Jester.
-]]
+--- Bootstrap the Jester environment.
+--
+-- @tab config
+--   The @{core.conf|global configuration}.
+-- @tab profile
+--   The profile configuration, see the {@02-Profiles.md|profile documentation}.
+-- @string sequence
+--   The sequence name to initialize with.
+-- @string sequence_args
+--   Arguments for the initial sequence.
+-- @usage
+--   core.bootstrap(conf, "someprofile", "somesequence", "arg1,arg2")
 function _M.bootstrap(config, profile, sequence, sequence_args)
-
-  _M.conf = config
-
-  -- Check to see if we're calling the script from within FreeSWITCH.
-  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
 
   -- Initialize the channel object.
   _M.init_channel()
+
+  --- Global configuration table.
+  --
+  -- As configured in @{core.conf}.
+  --
+  -- @field conf
+  _M.conf = config
+
+  --- Boolean indicating if the script was called from within FreeSWITCH.
+  --
+  -- @field is_freeswitch
+  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
 
   -- Initialize sequence loop stacks.  Sequence stacks are initialized just
   -- prior to each sequence loop run.
   _M.init_stacks({"active", "exit", "hangup"})
 
-  -- Save the initial arguments.
+  --- List of the initial arguments passed to Jester.
+  --
+  -- @field initial_args
   _M.initial_args = sequence_args and _M.parse_args(sequence_args) or {}
 
   -- Add profile configuration here so it can leverage access to channel
@@ -55,24 +84,29 @@ function _M.bootstrap(config, profile, sequence, sequence_args)
 
 end
 
---[[
-  Initialize the specified modules.
-]]
+--- Initialize modules.
+--
+-- Modules and custom scripts can call this function to load additional
+-- modules.
+--
+-- @tab modules
+--   List of module names to initialize.
+-- @usage
+--   core.init_modules({"foo_module", "bar_module"})
 function _M.init_modules(modules)
   local config
   local conf_file
-  -- Create a lightweight map of all actions that can be called.
-  -- Modules and custom scripts can call this function to load
-  -- additional modules, so make sure that any existing action_map
-  -- is preserved.
-  action_map = action_map or {}
+  --- Lightweight map of all actions that can be called.
+  --
+  -- @field action_map
+  _M.action_map = _M.action_map or {}
   for _, mod in ipairs(modules) do
     conf_file = "jester.modules." .. mod .. ".conf"
     config = require(conf_file)
     if config then
       config.action_map = config.action_map or {}
       for action, data in pairs(config.action_map) do
-        action_map[action] = data
+        _M.action_map[action] = data
       end
       _M.debug_log("Loaded module configuration '%s'", conf_file)
     else
@@ -81,34 +115,73 @@ function _M.init_modules(modules)
   end
 end
 
---[[
-  Initialize the channel namespace.  This holds all the stacks and storage
-  for a Jester run.
-]]
+--- Initialize the channel namespace.
+--
+-- This holds all the stacks and storage for a Jester run.
+--
+-- @usage
+--   core.init_channel()
 function _M.init_channel()
   _M.debug_log("Creating channel table")
-  _M.channel = {}
-  _M.channel.stack = {}
-  _M.channel.storage = {}
+
+  --- Internal storage for channel data.
+  --
+  -- Stores various channel-specific data for the duration of a single call to
+  -- the Jester core engine.
+  --
+  -- @tab stack
+  --   Maintain the different stacks in Jester core.
+  -- @tab storage
+  --   Persistant storage areas.
+  _M.channel = {
+    stack = {},
+    storage = {},
+  }
 end
 
---[[
-  Initialize the specified stacks.
-]]
+--- Initialize the specified stacks.
+--
+-- Ensures passed stacks are in their proper initial state.
+--
+-- @tab stacks
+--   List of stacks to init.
+-- @usage
+--   init_stacks({"run_actions", "executed_sequences"})
 function _M.init_stacks(stacks)
   for _, name in ipairs(stacks) do
     _M.reset_stack(name)
   end
 end
 
---[[
-  Initialize the specified profile.
-]]
+--- Initialize the specified profile.
+--
+-- Loads the provided profile as the current active profile in Jester core.
+--
+-- @string profile_name
+--   The name of the profile to load, see @{02-Profiles.md|Profiles}.
+-- @usage
+--   core.init_profile("demo")
 function _M.init_profile(profile_name)
 
   _M.debug_log("Loading profile '%s'", profile_name)
+  --- Currently loaded profile.
+  --
   -- Set up access to channel variables, storage, global configs, and initial
   -- arguments.
+  --
+  -- Listed fields are accessible as environment-level variables from within
+  -- the profile.
+  --
+  -- @tab global
+  --   Global configuration.
+  -- @func args
+  --   Access to arguments passed when Jester was invoked.
+  -- @func storage
+  --   Access to storage areas.
+  -- @func variable
+  --   Access to FreeSWITCH channel variables.
+  -- @func debug_dump
+  --   Access to the @{debug_dump} function.
   _M.profile = {
     global = _M.conf,
     args = function(i)
@@ -118,8 +191,6 @@ function _M.init_profile(profile_name)
     end,
     storage = _M.protected_get_storage,
     variable = _M.protected_get_variable,
-    -- Allow this function so the user can dump to see what's going on in case
-    -- of problems.
     debug_dump = _M.debug_dump,
   }
   local filepath = _M.conf.profile_path .. "/" .. profile_name .. "/conf.lua"
@@ -148,18 +219,26 @@ function _M.init_profile(profile_name)
   end
 end
 
---[[
-  Initialize a storage area.
-]]
+--- Initialize a storage area.
+--
+-- @string area
+--   The name of the storage area.
+-- @usage
+--   core.init_storage("foo")
 function _M.init_storage(area)
   if _M.channel and not _M.channel.storage[area] then
     _M.channel.storage[area] = {}
   end
 end
 
---[[
-  Empties the specified stack.  Can also be used to initialize a stack.
-]]
+--- Empties the specified stack.
+--
+-- Can also be used to initialize a stack.
+--
+-- @string name
+--   The name of the stack.
+-- @usage
+--   core.reset_stack("sequence");
 function _M.reset_stack(name)
   _M.debug_log("Reset stack '%s'", name)
   _M.channel.stack[name] = {}
@@ -616,8 +695,8 @@ function _M.run_action(action)
     local p = _M.channel.stack.sequence_stack_position
     local mod_name
     -- Find the module that provides this action.
-    if action_map[action.action] then
-      mod_name = action_map[action.action].mod
+    if _M.action_map[action.action] then
+      mod_name = _M.action_map[action.action].mod
     else
       error(string.format([[JESTER: No valid action '%s']], action.action))
     end
@@ -656,7 +735,7 @@ end
 ]]
 function _M.load_action_handler(action)
   local func
-  local handlers = action_map[action.action].handlers
+  local handlers = _M.action_map[action.action].handlers
   -- Does the action have handlers?
   if handlers then
     -- Look for a declared handler, fall back to default.
@@ -667,7 +746,7 @@ function _M.load_action_handler(action)
     end
   else
     -- Use the function instead.
-    func = action_map[action.action].func
+    func = _M.action_map[action.action].func
   end
   return func
 end
@@ -768,9 +847,16 @@ function _M.set_variable(call_var, value, default)
   _M.debug_log(message, call_var, tostring(value))
 end
 
---[[
-  Dumps values to console, with recursive option for tables.
-]]
+--- Dumps values to console.
+--
+-- @param var
+--   Variable to dump.
+-- @bool recursive
+--   Dump tables recursively. Default false.
+-- @string prefix
+--   Prefix dumped values with this string, default is no prefix.
+-- @usage
+--   core.debug_dump(profile, true, "PROFILE: ")
 function _M.debug_dump(var, recursive, prefix)
   local key, value
   prefix = prefix or ""
