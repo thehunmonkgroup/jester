@@ -4,8 +4,8 @@ description = "Scripting toolkit for FreeSWITCH"
 title = "Jester documentation"
 file = {
   -- Core.
-  "core.lua",
-  "conf.lua",
+  "./core.lua",
+  "./conf.lua",
   -- Modules.
   "./modules/core_actions/core_actions.lua",
   "./modules/couchdb/couchdb.lua",
@@ -26,7 +26,9 @@ file = {
   "./modules/system/system.lua",
   "./modules/tracker/tracker.lua",
   -- Scripts.
-  "socket.lua",
+  "./socket.lua",
+  "./scripts/extract_actions.lua",
+  "./action_map.lua",
 }
 dir = "./documentation"
 topics = {
