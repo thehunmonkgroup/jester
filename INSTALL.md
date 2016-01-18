@@ -17,7 +17,7 @@
 Jester is relatively easy to install, especially if you have a modern package-based Linux distribution.  Here are the basic steps:
 
 1. Install Lua (should be readily available from your packaging system)
-     eg. ```yum install lua```
+   eg. ```yum install lua```
 
 2. Install the LuaFileSystem and LuaSocket packages (also probably available
    in your packaging system, they're in the EPEL repository for
@@ -33,7 +33,8 @@ Jester is relatively easy to install, especially if you have a modern package-ba
    line.  For the bash shell, in a typical installation, it would look like
    this:
 
-    ```export LUA_PATH=";;/usr/local/freeswitch/scripts/?.lua"```
+     export LUA_PATH=";;/usr/local/freeswitch/scripts/?.lua"
+
 
    The two semicolons at the beginning of the path are not a typo!  Lua
    interprets those as 'include my default paths too'.
@@ -41,7 +42,8 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 4. Drop the entire 'jester' directory inside the FreeSWITCH 'scripts'
    directory.  In a typical installation, it would be at:
 
-    ```/usr/local/freeswitch/scripts/jester```
+    /usr/local/freeswitch/scripts/jester
+
 
 5. Depending on where you install the packages from step 2, you may need to
    fiddle with the LUA_PATH and LUA_CPATH settings in the lua.conf.xml file
@@ -51,9 +53,13 @@ Jester is relatively easy to install, especially if you have a modern package-ba
    load "lfs" or "socket", then this is the most likely cause.
    For example, the configuration for LUA_CPATH should be somewhat like this:
 
-    ```<param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>```
+
+    <param name="module-directory" value="/usr/lib64/lua/5.1/?.so"/>
+
        or
-    ```<param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>```
+
+    <param name="module-directory" value="/usr/lib/lua/5.1/?.so"/>
+
 
 6. If your FreeSWITCH 'scripts' directory is in a non-standard location, edit
    the value of the ```jester_dir``` variable in ```jester/conf.lua```
@@ -62,7 +68,7 @@ Jester is relatively easy to install, especially if you have a modern package-ba
 7. Jester is now installed.  If you want to additionally install the default
    profile, see the INSTALL.txt located at
 
-    ```jester/profiles/voicemail/INSTALL.txt```
+    jester/profiles/voicemail/INSTALL.txt
 
 #### Note to Windows users:
   Jester won't work on Windows unless you figure out the path separator
