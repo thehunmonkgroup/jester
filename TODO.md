@@ -8,4 +8,3 @@
    pressed
  * simple event consumer script for voicemail profile events, that catches
    them and calls configurable external scripts
- * Fix jsequence to parse action params from inline code documentation.
