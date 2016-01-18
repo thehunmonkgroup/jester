@@ -1,4 +1,4 @@
-## TODOs
+## TODO
  * figure out how to work the record_trim script into Jester -- perhaps as an
    action in the record module?
  * look into various core caching strategies to improve performance
