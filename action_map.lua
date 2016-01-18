@@ -1,9 +1,9 @@
---- This module represents Jester actions as extracted from Jester using ldoc.
+--- This table represents Jester actions as extracted from Jester using ldoc.
 --
 -- It is a simple map of all actions, their parameters (minus the action
 -- itself), and what value type the parameter accepts.
 --
--- @module action_map
+-- @script action_map
 -- @author Chad Phillips
 -- @copyright 2011-2015 Chad Phillips
 
