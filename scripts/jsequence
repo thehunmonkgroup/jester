@@ -1,5 +1,11 @@
 #!/bin/env lua
 
+--- Helper script to quickly generate sequence templates.
+--
+-- @script jsequence
+-- @author Chad Phillips
+-- @copyright 2011-2015 Chad Phillips
+
 local conf = require "jester.conf"
 local core = require "jester.core"
 local action_map = require "jester.action_map"
