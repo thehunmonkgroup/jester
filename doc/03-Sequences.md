@@ -89,6 +89,7 @@ You can assign variables to other variables you create in the sequence itself, a
 
 To avoid namespace collisions in your sequence, the following variable names are prohibited:
 
+ * core *(access to Jester core functions, usually not needed)*
  * global
  * profile
  * args

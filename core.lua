@@ -189,8 +189,8 @@ function _M.init_profile(profile_name)
       _M.debug_log("Got profile arg(%d): '%s'", i, arg)
       return arg
     end,
-    storage = _M.protected_get_storage,
-    variable = _M.protected_get_variable,
+    storage = protected_get_storage,
+    variable = protected_get_variable,
     debug_dump = _M.debug_dump,
   }
   local filepath = _M.conf.profile_path .. "/" .. profile_name .. "/conf.lua"
@@ -244,10 +244,14 @@ function _M.reset_stack(name)
   _M.channel.stack[name] = {}
 end
 
---[[
-  Queues the sequence to be the next one run in the current sequence loop,
-  at the current sequence stack position.
-]]
+--- Queues a sequence to be the next one run.
+--
+-- The sequence is queued in the current sequence loop, at the current sequence
+-- stack position.
+--
+-- @string sequence
+--   The full sequence name command, including arguments.
+-- @usage core.queue_sequence("sub:foo_sequence arg1,arg2")
 function _M.queue_sequence(sequence)
   if _M.ready() and sequence then
     if _M.conf.debug then
@@ -308,13 +312,24 @@ function _M.queue_sequence(sequence)
   end
 end
 
---[[
-  Loads the specified sequence into a protected function environment.
-]]
+--- Loads the specified sequence into separate environment.
+--
+-- This allows special variables to be injected in the global namespace of the
+-- sequence, as well as allowing control over which global Lua functionality is
+-- exposed.
+--
+-- @string name
+--   The sequence name.
+-- @tab arguments
+--   List of passed arguments.
+-- @return
+--   The loaded sequence function if it can be loaded, nil otherwise.
+-- @usage core.load_sequence("foo_sequence", {"arg1", "arg2" })
 function _M.load_sequence(name, arguments)
   -- Set up access to channel variables, storage, global and profile configs,
   -- and sequence arguments.
   local env = {
+    core = _M,
     global = _M.conf,
     profile = _M.profile,
     args = function(i)
@@ -322,8 +337,8 @@ function _M.load_sequence(name, arguments)
       _M.debug_log("Got sequence arg(%d): '%s'", i, arg)
       return arg
     end,
-    storage = _M.protected_get_storage,
-    variable = _M.protected_get_variable,
+    storage = protected_get_storage,
+    variable = protected_get_variable,
     -- Allow this function so the user can dump to see what's going on in case
     -- of problems.
     debug_dump = _M.debug_dump,
@@ -378,24 +393,45 @@ function _M.load_sequence(name, arguments)
   end
 end
 
---[[
-  Get the value for a key in a storage area, with an empty string as the
-  default.
-]]
-function _M.protected_get_storage(area, key)
+--- Get the value for a key in a storage area.
+--
+-- This is the function that is exposed to sequences.
+--
+-- @string area
+--   The storage area.
+-- @string key
+--   The storage key.
+-- @return
+--   The value stored in the key of the storage area, or an empty string if
+--   none is found.
+local function protected_get_storage(area, key)
   return _M.get_storage(area, key, "")
 end
 
---[[
-  Get the value for a channel variable, with an empty string as the default.
-]]
-function _M.protected_get_variable(var)
+--- Get the value for a channel variable.
+--
+-- This is the function that is exposed to sequences.
+--
+-- @string var
+--   The name of the channel variable.
+-- @return
+--   The value stored in the channel variable, or an empty string if none is
+--   found.
+local function protected_get_variable(var)
   return _M.get_variable(var, "")
 end
 
---[[
-  Get the value for a key in a storage area.
-]]
+--- Get the value for a key in a storage area.
+--
+-- @string area
+--   The storage area.
+-- @string key
+--   The storage key.
+-- @param default
+--   The default value for the key if none is found in storage.
+-- @return
+--   The value stored in the key of the storage area, or the default value if
+--   none is found.
 function _M.get_storage(area, key, default)
   local value
   if _M.channel.storage[area] and _M.channel.storage[area][key] then
@@ -815,27 +851,42 @@ function _M.trim(s)
   return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end
 
---[[
-  Wrapper to grab session variables.
-]]
-function _M.get_variable(call_var, default)
-  local value = session:getVariable(call_var)
+--- Wrapper to grab session variables.
+--
+-- @string chan_var
+--   The name of the channel variable.
+-- @param default
+--   The default value for the variable if none is found on the channel.
+-- @return
+--   The value stored in the channel variable, or the default value if none is
+--   found.
+function _M.get_variable(chan_var, default)
+  local value = session:getVariable(chan_var)
   if value then
-    _M.debug_log("Got value %s: %s", call_var, tostring(value))
+    _M.debug_log("Got value %s: %s", chan_var, tostring(value))
   elseif default then
     value = default
-    _M.debug_log("Variable %s returned default: %s", call_var, tostring(default))
+    _M.debug_log("Variable %s returned default: %s", chan_var, tostring(default))
   else
-    _M.debug_log("Variable %s: not set", call_var)
+    _M.debug_log("Variable %s: not set", chan_var)
   end
 
   return value
 end
 
---[[
-  Wrapper to set session variables.
-]]
-function _M.set_variable(call_var, value, default)
+--- Wrapper to set session variables.
+--
+-- @string chan_var
+--   The name of the channel variable.
+-- @string value
+--   The value of the channel variable.
+-- @string default
+--   The default value for the variable if none is provided by the value
+--   argument.
+-- @return
+--   The value stored in the channel variable, or the default value if none is
+--   found.
+function _M.set_variable(chan_var, value, default)
   local message
   if value then
     message = "Set value %s: %s"
@@ -843,8 +894,8 @@ function _M.set_variable(call_var, value, default)
     value = default
     message = "Set value %s to default: %s"
   end
-  session:setVariable(call_var, value)
-  _M.debug_log(message, call_var, tostring(value))
+  session:setVariable(chan_var, value)
+  _M.debug_log(message, chan_var, tostring(value))
 end
 
 --- Dumps values to console.
