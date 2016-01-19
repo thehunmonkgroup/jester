@@ -36,7 +36,7 @@ topics = {
   "./doc"
 }
 format = "markdown"
-all = true
+all = false
 --examples = "./examples"
 wrap = true
 no_space_before_args = true
