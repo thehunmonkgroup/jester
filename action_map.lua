@@ -3,7 +3,7 @@
 -- It is a simple map of all actions, their parameters (minus the action
 -- itself), and what value type the parameter accepts.
 --
--- @script action_map
+-- @script action_map.lua
 -- @author Chad Phillips
 -- @copyright 2011-2015 Chad Phillips
 
