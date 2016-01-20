@@ -13,16 +13,16 @@ The main advatages of profiles are:
 
 ## Profile configuration
 
-The profile configuration lives at 'jester/profiles/[name]/conf.lua ([name] being the name of the profile). The configuration is loaded after the global configuration to allow overrides, but also loaded fairly early in the bootstrap process to allow for maximum control.
+The profile configuration lives at <code>jester/profiles/[name]/conf.lua</code> ([name] being the name of the profile). The configuration is loaded after the global configuration to allow overrides, but also loaded fairly early in the bootstrap process to allow for maximum control.
 
 Profiles can use variables from two places:
 
- 1. **Global configuration:** Variables defined in jester/conf.lua can be accessed through the <code>global</code> namespace, eg.
+ 1. **Global configuration:** Variables defined in <code>jester/conf.lua</code> can be accessed through the <code>global</code> namespace, eg.
     global.base_dir
-   Accesses the 'base_dir' variable from the global configuration.
+   Accesses the <code>base_dir</code> variable from the global configuration.
  2. **Channel variables:** Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the <code>get_variable()</code> function, eg.
     get_variable("caller_id_name")
-   Accesses the 'caller\_id\_name' variable from the channel.
+   Accesses the <code>caller\_id\_name</code> variable from the channel.
 
 Profile configurations are allowed to override the main configuration for the following variables:
 
@@ -52,7 +52,7 @@ sequence_path = global.profile_path .. "/[name]/sequences"
 
 **Phrase macros:**
 
-These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the 'conf/lang/en/en.xml' FreeSWITCH configuration file, would be:
+These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the <code>conf/lang/en/en.xml</code> FreeSWITCH configuration file, would be:
 
 ```xml
 <X-PRE-PROCESS
@@ -64,9 +64,9 @@ These are normally kept in the various 'lang' folders in the main FreeSWITCH con
 
 ## Default profile
 
-The included default 'voicemail' profile is a replica of [Asterisk's Comedian Mail](http://www.voip-info.org/wiki/index.php?page_id=502).
+The included default 'voicemail' profile (located at <code>profiles/voicemail</code>) is a replica of [Asterisk's Comedian Mail](http://www.voip-info.org/wiki/index.php?page_id=502).
 
 It is intended to be an exact replica of the original version shipped with [Asterisk](http://www.asterisk.org/) 1.2/1.4, a showcase of the power and flexibility of the Jester system, and a template to use as a starting place for learning and building other workflows.
 
-Everything needed to set up the profile is included in the profile directory. Check out the INSTALL.txt there for more details.
+Everything needed to set up the profile is included in the profile directory. Check out the <code>INSTALL.txt</code> there for more details.
 

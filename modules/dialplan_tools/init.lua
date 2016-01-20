@@ -1,4 +1,4 @@
---- Provides access to dialplan applications.
+--- Access to dialplan applications.
 --
 -- This module provides access to various dialplan applications. An
 -- understanding of how these applications are used in FreeSWITCH dialplans is

@@ -1,4 +1,4 @@
---- Actions provided by jester core.
+--- Actions provided by Jester core.
 --
 -- This module provides actions that are closely tied to the core functionality
 -- of Jester.

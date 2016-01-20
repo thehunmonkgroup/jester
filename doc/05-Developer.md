@@ -6,11 +6,11 @@ The core code and modules are fairly well documented, and much can be learned fr
 
  * You must have this line at the top of your main module file:
       local core = require "jester.core"
-   This allows you to access jester core via the <code>core</code> variable.
- * The main module file must named ```init.lua```. The 'foo' module would live at
-     'jester/modules/foo/init.lua'
+   This allows you to access Jester core via the <code>core</code> variable.
+ * The main module file must named <code>init.lua</code>. The <code>foo</code> module would live at
+     jester/modules/foo/init.lua
  * A 'conf.lua' is required:
-    'jester/modules/foo/conf.lua'
+     jester/modules/foo/conf.lua
    The file contains a mapping of module functions to action names, and can declare multiple handlers for actions.
 
 ## Quick reference
@@ -45,10 +45,10 @@ Other core functions are available, check the code directly.
 
 Jester keeps track of a lot of things in stacks, at the following namespaces:
 
- * core.channel.stack.sequence
- * core.channel.stack.sequence_name
- * core.channel.stack.navigation
- * core.channel.stack.active
- * core.channel.stack.exit
- * core.channel.stack.hangup
+ * <code>core.channel.stack.sequence</code>
+ * <code>core.channel.stack.sequence\_name</code>
+ * <code>core.channel.stack.navigation</code>
+ * <code>core.channel.stack.active</code>
+ * <code>core.channel.stack.exit</code>
+ * <code>core.channel.stack.hangup</code>
 

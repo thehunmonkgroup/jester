@@ -16,7 +16,7 @@
 
 local filename = "action_map.lua"
 
-local    output =  "--- This table represents Jester actions as extracted from Jester using ldoc.\n"
+local    output =  "--- Table of Jester actions as extracted from Jester using ldoc.\n"
 output = output .. "--\n"
 output = output .. "-- It is a simple map of all actions, their parameters (minus the action\n"
 output = output .. "-- itself), and what value type the parameter accepts.\n"

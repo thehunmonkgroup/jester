@@ -1,4 +1,4 @@
---- Send emails from Jester.
+--- Send email.
 --
 -- This module provides email functionality from within Jester. Support for
 -- attachments is included.

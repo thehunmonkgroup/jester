@@ -56,7 +56,7 @@ For an easy way to generate templates for sequences, see the @{04-Scripts.md.jse
 
 Actions are the mechanism for doing something in a sequence. They are configurable templates that allow you to pass a command with options to Jester, which are then passed on to the module providing the action for execution. Put simply, you give the module a few simple instructions, and it handles the dirty work of accomplishing the job through the FreeSWITCH/Lua API.
 
-Each action is a Lua table within the main sequence (for more information on overall sequence design, see [Writing sequences](#Writing_sequences). The table is a series of key/value pairs (called parameters from here out) that contain the action instructions. Here's an example of the 'play' action, which plays a sound file on the channel:
+Each action is a Lua table within the main sequence. The table is a series of key/value pairs (called parameters from here out) that contain the action instructions. Here's an example of the <code>play</code> action, which plays a sound file on the channel:
 
 ```lua
   {
@@ -70,7 +70,11 @@ Each action is a Lua table within the main sequence (for more information on ove
   },
 ```
 
-An action always has at least one required parameter, 'action', which is the action to execute. The other parameters are dependant on the action being taken, see the various module documentation for detailed help on a particular action, including the parameters it accepts.
+An action always has at least one required parameter, <code>action</code>, which is the action to execute. The other parameters are dependant on the action being taken, see the various module documentation for detailed help on a particular action, including the parameters it accepts.
+
+For more information on overall sequence design, see [Writing sequences](#Writing_sequences).
+
+To learn about Lua tables, see @{01-Intro.md.Brief_Lua_language_tutorial}.
 
 For an easy way to generate templates for actions, see the the @{04-Scripts.md.jsequence} documentation.
 
@@ -100,21 +104,21 @@ To avoid namespace collisions in your sequence, the following variable names are
 Sequences can access outside variables from five places:
 
  * **Global configuration:**
-   Variables defined in jester/conf.lua can be accessed through the <code>global</code> namespace, eg.
+   Variables defined in <code>jester/conf.lua</code> can be accessed through the <code>global</code> namespace, eg.
     foo = global.base_dir
-   Accesses the 'base_dir' variable from the global configuration.
+   Accesses the <code>base_dir</code> variable from the global configuration.
  * **Profile configuration:**
-   Variables defined in the running profile's conf.lua can be accessed through the <code>profile</code> namespace, eg.
+   Variables defined in the running profile's <code>conf.lua</code> can be accessed through the <code>profile</code> namespace, eg.
     foo = profile.mailbox_dir
-   Accesses the 'mailbox_dir' variable from the profile configuration.
+   Accesses the <code>mailbox_dir</code> variable from the profile configuration.
  * **Channel variables:**
    Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the <code>variable()</code> function, eg.
     foo = variable("caller_id_name")
-   Accesses the 'caller\_id\_name' variable from the channel.
+   Accesses the <code>caller\_id\_name</code> variable from the channel.
  * **Jester's internal storage system:**
    Variables defined in Jester's internal storage can be accessed through the <code>storage()</code> function, eg.
     foo = storage("mailbox_settings", "mailbox")
-   Accesses the value of the 'mailbox' key from the 'mailbox_settings' storage area. See [Storage system](#Storage_system) to learn more.
+   Accesses the value of the <code>mailbox</code> key from the <code>mailbox\_settings<code> storage area. See [Storage system](#Storage_system) to learn more.
  * **Sequence arguments:**
    Sequences can be called with arguments (see [Passing arguments](#Passing_arguments)), and these can be accessed through the <code>args()</code> function, eg.
     foo = args(1)
@@ -136,7 +140,7 @@ To learn how to perform various operations on storage areas from a sequence, see
 
 Jester provides high-level implementations for acting on keys pressed by the user.
 
-To maintain the simplicity of the engine, menu-type navigation is limited to single digits. Any action that has the 'keys' parameter supports responding to key presses. The layout of the keys parameter is as follows:
+To maintain the simplicity of the engine, menu-type navigation is limited to single digits. Any action that has the <code>keys</code> parameter supports responding to key presses. The layout of the keys parameter is as follows:
 
 ```lua
   keys = {
@@ -188,7 +192,7 @@ There are three extra parameters besides the keys that can be used to control ho
  * **invalid** --
    Set this to true if you just want to register the key press as invalid and break the currently running action.
  * **invalid_sound** --
-   Set this to a file or phrase to play to the user after registering the key press as invalid and stopping playback of the file. The format of the filepath is the same as the ones accepted by the play module.
+   Set this to a file or phrase to play to the user after registering the key press as invalid and stopping playback of the file. The format of the filepath is the same as the ones accepted by the @{play} module.
  * **invalid_sequence** --
    Set this to a sequence to call after registering the key press as invalid and stopping playback of the file.
 
@@ -278,7 +282,7 @@ See the @{core_actions.conditional|conditional} action for more details.
 
 At certain points in a sequence, it may be desirable to fire off another sequence, and when it completes have Jester return to the previously running sequence. Subsequences allow you to accomplish this.
 
-Jester's basic logic is to run one sequence and then exit. It will only run other sequences if you specifically tell it to. Normally, when you call one sequence from another, the original sequence is forgotten and the new sequence is run -- ie, only one sequence at a time runs.
+Jester's basic logic is to run one sequence and then exit. It will only run other sequences if you specifically tell it to. Normally, when you call one sequence from another, the original sequence is forgotten and the new sequence is run -- i.e., only one sequence at a time runs.
 
 To allow you to run more than one sequence at a time, Jester keeps a 'sequence stack'. It runs sequences at a stack level until no more are called, then it checks to see if there's another level above it. If so, it returns to that level and continues running the sequence at that level, and so on until finally there are no more stack levels and Jester exits.
 
@@ -290,21 +294,21 @@ To operate on the sequence stack, you prefix calls to a sequence with one of thr
       action = "call_sequence",
       sequence = "sub:mysubsequence",
     }
-   calls the 'mysubsequence' sequence in the next stack level down from the sequence where it's called.
+   calls the <code>mysubsequence</code> sequence in the next stack level down from the sequence where it's called.
  * **up:** --
    This moves the sequence stack up one level, overwrites the previously stored sequence at that level, and runs the called sequence, eg.
     {
       action = "call_sequence",
       sequence = "up:somesequence",
     }
-   replaces the sequence at the next level up with the 'somesequence' sequence and runs it.
+   replaces the sequence at the next level up with the <code>somesequence</code> sequence and runs it.
  * **top:** --
    This completely clears the sequence stack and runs the called sequence on a fresh stack. It's equivalent to setting the stack to the same state as when Jester is originally invoked, eg.
     {
       action = "call_sequence",
       sequence = "top:main",
     }
-   runs the 'main' sequence on a completely fresh sequence stack.
+   runs the <code>main</code> sequence on a completely fresh sequence stack.
 
 As a general rule, it's best not to use any actions that deal with navigation (see the @{navigation} module) or responding to user key presses (see [Capturing user key input](#Capturing_user_key_input)) when you are on a sequence stack level other than the top. You can try, but most likely it will just be a confusing mess. ;)  Subsequences are ideally designed for non-user facing actions like loading data, or making a conditional decision, etc.
 
@@ -313,11 +317,11 @@ As a general rule, it's best not to use any actions that deal with navigation (s
 
 Through the @{navigation} module, Jester provides the necessary facilities to implement phone menus in sequences.
 
-To provide a phone menu, it's necessary to track where a user has been. The navigation stack serves this purpose. By adding a sequence to the navigation stack, you can later return to that sequence by going 'up' the stack, or to the beginning of the phone tree by going to the 'top' of the stack.
+To provide a phone menu, it's necessary to track where a user has been. The navigation path serves this purpose. By adding a sequence to the navigation path, you can later return to that sequence by going up the path, or to the beginning of the phone tree by going to the beginning of the path.
 
-One important thing to note is that you can't add the same sequence with the same arguments to the navigation stack in adjacent positions -- this is an internal restriction to ease the implementation of the navigation stack, and it wouldn't be sensible to do it anyways... ;)
+One important thing to note is that you can't add the same sequence with the same arguments to the navigation path in adjacent positions -- this is an internal restriction to ease the implementation of the navigation path, and it wouldn't be sensible to do it anyways... ;)
 
-See the @{navigation} module for more information on using the navigation stack.
+See the @{navigation} module for more information on using navigation paths.
 
 
 ## Phrase macros
@@ -353,10 +357,10 @@ Jester accomodates this by providing two places where you can register sequences
 Sometimes as you're designing a sequence, it's either crashing Jester or not behaving as you would expect, and you can't easily figure out why. Jester provides a few debugging utilities to aid your investigative efforts:
 
  * **Turn on Jester's debug output:** --
-   This can be done globally by setting the 'debug' variable to true in 'jester/conf.lua', or per profile by setting the same variable in the profile. Turning this on outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs. You can further control what debugging information is output by changing the values (not the keys) in the <code>debug_output</code> table in 'jester/conf.lua' -- true turns on debugging output for that area, false turns it off.
+   This can be done globally by setting the <code>debug</code> variable to true in <code>jester/conf.lua</code>, or per profile by setting the same variable in the profile. Turning this on outputs a massive amount of debugging information, pretty much detailing every single thing Jester is doing as it runs. You can further control what debugging information is output by changing the values (not the keys) in the <code>debug\_output</code> table in <code>jester/conf.lua</code> -- true turns on debugging output for that area, false turns it off.
 
  * **Use the debug dump functionality in your sequence:** --
-   Jester exposes its core variable dumping function <code>debug_dump()</code> to all sequences. You can place it in the top section of any sequence, give it a variable name, and it will dump the variable to the FreeSWITCH console. For example, to debug the 'foo' variable:
+   Jester exposes its core variable dumping function <code>debug\_dump()</code> to all sequences. You can place it in the top section of any sequence, give it a variable name, and it will dump the variable to the FreeSWITCH console. For example, to debug the <code>foo</code> variable:
     debug_dump(foo)
 <br />
 

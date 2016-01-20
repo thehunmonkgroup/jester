@@ -19,9 +19,9 @@ Jester is designed to be executed as a standard Lua script from the FreeSWITCH d
 
 Configurations are stored in three different places in Jester:
 
-  1. jester/conf.lua - Global configuration
-  2. profiles/[name]/conf.lua - Profile configuration
-  3. modules/[name]/conf.lua - Module configuration
+  1. <code>jester/conf.lua</code> - Global configuration
+  2. <code>profiles/[name]/conf.lua</code> - Profile configuration
+  3. <code>modules/[name]/conf.lua</code> - Module configuration
 
 The global configuration file and the voicemail profile's configuration file are well commented, check them out for more details.
 
@@ -32,13 +32,13 @@ One important thing to note about these configurations is that any variables in 
 
 ## Brief Lua language tutorial
 
-For a definitive explanation of the Lua language, the online [Lua manual](http://www.lua.org/manual/5.2) is the place to go:
+For a definitive explanation of the Lua language, the online [Lua manual](http://www.lua.org/manual/5.2) is the place to go.
 
 
 
 This will be a very quick overview of the basics that you'll most likely use in sequences.
 
-Lua is loosely typed, and will automatically convert types based on the operation you're trying to perform, eg. if you concatenate a string with an integer, the integer will be converted to a string.
+Lua is loosely typed, and will automatically convert types based on the operation you're trying to perform -- eg. if you concatenate a string with an integer, the integer will be converted to a string.
 
 **Define a variable:**
 
@@ -53,7 +53,7 @@ Lua is loosely typed, and will automatically convert types based on the operatio
   name = value
 ```
 
-Variable names can be any string of letters, digits and underscores, not beginning with a digit
+Variable names can be any string of letters, digits and underscores, not beginning with a digit.
 
 **Math:**
 
@@ -74,8 +74,6 @@ Variable names can be any string of letters, digits and underscores, not beginni
   <= -- less than or equal to
   >= -- greater than or equal to
 ```
-
-These return false when what they compare is false or nil, all others return true.
 
 **String concatenation:**
 
@@ -122,6 +120,8 @@ These return false when what they compare is false or nil, all others return tru
   foo = true and "bar" or "baz" -- returns bar
   foo = false and "bar" or "baz" -- returns baz
 ```
+
+These return false when what they compare is false or nil, all others return true.
 
 **Tables:**
 

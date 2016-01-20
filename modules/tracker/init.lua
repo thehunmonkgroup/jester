@@ -1,7 +1,7 @@
---- Track various states in the channel.
+--- Track various states.
 --
--- This module provides actions to assist in tracking various states in a
--- channel.
+-- This module provides actions to assist in tracking various states during
+-- sequence execution.
 --
 -- @module tracker
 -- @author Chad Phillips

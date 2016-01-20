@@ -1,4 +1,4 @@
---- This table represents Jester actions as extracted from Jester using ldoc.
+--- Table of Jester actions as extracted from Jester using ldoc.
 --
 -- It is a simple map of all actions, their parameters (minus the action
 -- itself), and what value type the parameter accepts.

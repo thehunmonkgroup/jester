@@ -1,4 +1,4 @@
---- Core functions for Jester.
+--- Core functions.
 --
 -- This module provides the lower-level functionality for Jester -- storage,
 -- management of sequences, etc. Unless you're developing a module or doing

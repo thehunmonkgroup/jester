@@ -1,4 +1,4 @@
---- This is the global configuration file for Jester.
+--- Global configuration file.
 --
 -- Probably not a good idea to change any of these settings unless you know
 -- what you're doing.
