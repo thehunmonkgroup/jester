@@ -805,7 +805,7 @@ function _M.run_action(action)
     end
     -- Load the module.  Since Lua caches loaded modules, this is only an
     -- expensive operation the first time the module code is loaded.
-    local mod = require("jester.modules." .. mod_name .. "." .. mod_name)
+    local mod = require("jester.modules." .. mod_name .. ".init")
     _M.debug_log("Loaded module '%s'", mod_name)
     -- Load the handler for the action.
     local func = _M.load_action_handler(action)

@@ -7,8 +7,8 @@ The core code and modules are fairly well documented, and much can be learned fr
  * You must have this line at the top of your main module file:
       local core = require "jester.core"
    This allows you to access jester core via the <code>core</code> variable.
- * The module file must have the same name as the folder it lives in. The 'foo' module would live at
-     'jester/modules/foo/foo.lua'
+ * The main module file must named ```init.lua```. The 'foo' module would live at
+     'jester/modules/foo/init.lua'
  * A 'conf.lua' is required:
     'jester/modules/foo/conf.lua'
    The file contains a mapping of module functions to action names, and can declare multiple handlers for actions.
