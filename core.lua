@@ -251,7 +251,8 @@ end
 --
 -- @string sequence
 --   The full sequence name command, including arguments.
--- @usage core.queue_sequence("sub:foo_sequence arg1,arg2")
+-- @usage
+--   core.queue_sequence("sub:foo_sequence arg1,arg2")
 function _M.queue_sequence(sequence)
   if _M.ready() and sequence then
     if _M.conf.debug then
@@ -324,7 +325,8 @@ end
 --   List of passed arguments.
 -- @return
 --   The loaded sequence function if it can be loaded, nil otherwise.
--- @usage core.load_sequence("foo_sequence", {"arg1", "arg2" })
+-- @usage
+--   core.load_sequence("foo_sequence", {"arg1", "arg2" })
 function _M.load_sequence(name, arguments)
   -- Set up access to channel variables, storage, global and profile configs,
   -- and sequence arguments.
@@ -432,6 +434,8 @@ end
 -- @return
 --   The value stored in the key of the storage area, or the default value if
 --   none is found.
+-- @usage
+--   core.get_storage("foo_area", "bar_key", "default_value")
 function _M.get_storage(area, key, default)
   local value
   if _M.channel.storage[area] and _M.channel.storage[area][key] then
@@ -444,9 +448,16 @@ function _M.get_storage(area, key, default)
   return value
 end
 
---[[
-  Set a key/value pair in a storage area.
-]]
+--- Set a key/value pair in a storage area.
+--
+-- @string area
+--   The storage area.
+-- @string key
+--   The storage key.
+-- @param value
+--   The storage value.
+-- @usage
+--   core.set_storage("foo_area", "bar_key", "baz_value")
 function _M.set_storage(area, key, value)
   if area and key and value then
     -- Make sure the storage area exists.
@@ -456,9 +467,14 @@ function _M.set_storage(area, key, value)
   end
 end
 
---[[
-  Clear a key in a storage area, or the whole storage area.
-]]
+--- Clear a key in a storage area, or the whole storage area.
+--
+-- @string area
+--   The storage area.
+-- @string key
+--   The storage key. If not provided, the entire storage area is cleared.
+-- @usage
+--   core.clear_storage("foo_area", "bar_key")
 function _M.clear_storage(area, key)
   if area and key then
     if _M.channel.storage[area] then
@@ -471,9 +487,17 @@ function _M.clear_storage(area, key)
   end
 end
 
---[[
-  Parse sequence, return the sequence name and sequence args.
-]]
+--- Parse a sequence.
+--
+-- @string sequence
+--   The full sequence name command, including arguments.
+-- @return sequence type,
+--   one of "subsequence", "top\_sequence", "up\_sequence", "".
+-- @return sequence name
+-- @return arguments,
+--   as a string
+-- @usage
+--   core.parse_sequence("sub:foo_sequence arg1,arg2")
 function _M.parse_sequence(sequence)
   sequence = _M.trim(sequence)
   local s_type = "sequence"
@@ -496,9 +520,15 @@ function _M.parse_sequence(sequence)
   return s_type, sequence_name, sequence_args
 end
 
---[[
-  Parse sequence arguments, and return them as an ordered list.
-]]
+--- Parse sequence arguments.
+--
+-- @string args
+--   Arguments.
+--
+-- @return
+--   An ordered list of arguments.
+-- @usage
+--   core.parse_args("arg1,arg2")
 function _M.parse_args(args)
   local result, from, i = {}, 1, 1
   if args ~= "" then
@@ -860,6 +890,8 @@ end
 -- @return
 --   The value stored in the channel variable, or the default value if none is
 --   found.
+-- @usage
+--   core.get_variable("some_channel_var", "default_value")
 function _M.get_variable(chan_var, default)
   local value = session:getVariable(chan_var)
   if value then
@@ -886,6 +918,8 @@ end
 -- @return
 --   The value stored in the channel variable, or the default value if none is
 --   found.
+-- @usage
+--   core.get_variable("some_channel_var", "some_value", "default_value")
 function _M.set_variable(chan_var, value, default)
   local message
   if value then
