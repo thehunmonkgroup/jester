@@ -62,6 +62,12 @@ function _M.bootstrap(config, profile, sequence, sequence_args)
   -- Load modules.
   _M.init_modules(_M.conf.modules)
 
+  --- Table of information for current key map.
+  _M.keys = {}
+
+  --- Table of information for the pressed key.
+  _M.key_pressed = {}
+
   -- Handle some session-based setup if we have a session.
   if session then
     _M.channel.uuid = _M.get_variable("uuid")
@@ -544,20 +550,29 @@ function _M.parse_args(args)
   return result
 end
 
---[[
-  Main entry point for a call to Jester.
-]]
+--- Main entry point for a call to Jester.
+--
+-- Call this after @{bootstrap}, to execute all sequences loops in succession.
+--
+-- @usage
+--   core.main()
 function _M.main()
   if _M.conf.debug then
     _M.init_stacks({"run_actions", "executed_sequences"})
   end
   -- Sequences run during an active call.
   _M.run_sequence_loop("active")
-  exiting = true
+  --- Boolean indicating if Jester is in the exiting state.
+  --
+  -- @field exiting
+  _M.exiting = true
   -- Sequences run that were registered for the exit loop.
   _M.run_sequence_loop("exit")
   if session and not session:ready() then
-    hungup = true
+    --- Boolean indicating if Jester is in the hungup state.
+    --
+    -- @field hungup
+    _M.hungup = true
     -- Sequences run that were registered for the hangup loop.
     _M.run_sequence_loop("hangup")
   end
@@ -574,9 +589,12 @@ function _M.main()
   end
 end
 
---[[
-  Runs the specified sequence loop.
-]]
+--- Runs the specified sequence loop.
+--
+-- @string loop_type
+--   The sequence loop name.
+-- @usage
+--   core.run_sequence_loop("active")
 function _M.run_sequence_loop(loop_type)
   _M.debug_log("Executing sequence loop '%s'", loop_type)
   -- Clear the sequence stack prior to execution.
@@ -597,10 +615,14 @@ function _M.run_sequence_loop(loop_type)
   end
 end
 
---[[
-  Main loop for executing sequences until there are no more in the current
-  loop.
-]]
+--- Main loop for executing sequences.
+--
+-- This loops until there are no more sequences to run. If Jester is not in
+-- the @{exiting} or @{hungup} state, the loop terminates when the user hangs
+-- up.
+--
+-- @usage
+--   core.execute_sequences()
 function _M.execute_sequences()
   local action, new_action
 
@@ -608,8 +630,6 @@ function _M.execute_sequences()
   action = _M.load_action()
   local clock = os.clock()
 
-  -- Main loop.  This runs until there are no more sequences to run, or the
-  -- caller hangs up.
   while _M.ready() and action do
     _M.run_action(action)
     if _M.conf.debug then
@@ -633,7 +653,7 @@ function _M.execute_sequences()
       _M.refresh_current_sequence()
       action = _M.load_action()
     else
-      -- A new sequence was loaded, make it's first action the active action.
+      -- A new sequence was loaded, make its first action the active action.
       action = _M.load_action()
       _M.debug_log("Action loaded a new sequence")
     end
@@ -657,9 +677,10 @@ function _M.execute_sequences()
   _M.debug_log("No more actions, exiting")
 end
 
---[[
-  Reloads the current sequence file, refreshing all variables.
-]]
+--- Reloads the current sequence file, refreshing all variables.
+--
+-- @usage
+--   core.refresh_current_sequence()
 function _M.refresh_current_sequence()
   -- Only refresh if there's a valid action to be run.
   if _M.load_action() then
@@ -667,9 +688,10 @@ function _M.refresh_current_sequence()
   end
 end
 
---[[
-  Loads the current action from the current sequence stack and position.
-]]
+--- Loads the action from the current global sequence stack and position.
+--
+-- @usage
+--   core.load_action()
 function _M.load_action()
   local stack = _M.channel.stack.sequence
   local p = _M.channel.stack.sequence_stack_position
@@ -678,9 +700,14 @@ function _M.load_action()
   end
 end
 
---[[
-  Sets the key map for the currently running action.
-]]
+--- Sets the key map for the specified action/sequence combination.
+--
+-- @tab action
+--   The action table.
+-- @tab sequence
+--   The sequence table.
+-- @usage
+--   core.set_keys(action, sequence)
 function _M.set_keys(action, sequence)
   -- Clear any key press data from the previously run action.  This prevents
   -- false key press detections on the current action.
@@ -703,9 +730,14 @@ function _M.set_keys(action, sequence)
   _M.debug_log(message, action.action)
 end
 
---[[
-  Global key handler for all key press events in Jester.
-]]
+--- Global key handler for all key press events in Jester.
+--
+-- @param session
+--   The session object.
+-- @string input_type
+--   The type of input data.
+-- @tab data
+--   The input data.
 function _M.key_handler(session, input_type, data)
   if _M.keys and input_type == "dtmf" then
     -- Make sure we get a single digit.
@@ -752,9 +784,14 @@ function _M.key_handler(session, input_type, data)
   end
 end
 
---[[
-  Runs a loaded action.
-]]
+--- Runs a loaded action.
+--
+-- If the action is not an ad hoc action, the global sequence stack is referenced.
+--
+-- @tab action
+--   The action table.
+-- @usage
+--   core.run_action(action)
 function _M.run_action(action)
   if _M.ready() and action.action then
     local stack = _M.channel.stack.sequence
@@ -795,10 +832,13 @@ function _M.run_action(action)
   end
 end
 
---[[
-  Loads the correct handler for the passed action, falling back to the default
-  handler if none is specified.
-]]
+--- Loads the correct handler for the passed action.
+--
+-- The default handler is used if none is specified.
+-- @tab action
+--   The action table.
+-- @usage
+--   core.load_action_handler(action)
 function _M.load_action_handler(action)
   local func
   local handlers = _M.action_map[action.action].handlers
@@ -817,44 +857,57 @@ function _M.load_action_handler(action)
   return func
 end
 
---[[
-  Determines if Jester is still in a ready state.  Unlike session:ready(),
-  this ready check returns true if Jester is in either its exit or hungup
-  states as well.
+--- Determines if Jester is still in a ready state.
+--
+-- Unlike session:ready(), this ready check returns true if Jester is in either
+-- its exit or hungup states as well.
 
-  Do use this if you want to loop until Jester finishes, don't use this if
-  you want to loop until the call hangs up.
-]]
+-- Do use this if you want to loop until Jester finishes, don't use this if you
+-- want to loop until the call hangs up.
+--
+-- @usage
+--   core.ready()
 function _M.ready()
   -- No session means running from socket or luarun, always ready.
   if not session then
     return true
   else
-    return session:ready() or exiting or hungup
+    return session:ready() or _M.exiting or _M.hungup
   end
 end
 
---[[
-  Determines if a key was pressed that will result in some action by core.
-
-  Modules can call this function to check for valid key presses, to break
-  out of loops, etc.
-]]
+--- Determines if a key was pressed that will result in some action by core.
+--
+-- Modules can call this function to check for valid key presses, to break out
+-- of loops, etc.
+--
+-- @usage
+--   core.actionable_key()
 function _M.actionable_key()
   return _M.key_pressed.valid or _M.key_pressed.invalid
 end
 
---[[
-  Stream silence for a specified number of milliseconds.
-]]
+--- Stream silence for a specified number of milliseconds.
+--
+-- @int milliseconds
+--   Number of milliseconds to wait.
+-- @usage
+--   core.wait(1000)
 function _M.wait(milliseconds)
   _M.debug_log("Waiting %d milliseconds", milliseconds)
   session:streamFile("silence_stream://" .. milliseconds)
 end
 
---[[
-  Log to FreeSWITCH console or stdout depending on the environment.
-]]
+--- Log to FreeSWITCH console or stdout depending on the environment.
+--
+-- @string msg
+--   The message to log.
+-- @string prefix
+--   Prefix the message with this string.
+-- @string level
+--   Log level.
+-- @usage
+--   core.log("Some message", "CUSTOM LOG", "info")
 function _M.log(msg, prefix, level)
   if _M.is_freeswitch then
     prefix = prefix or "JESTER"
@@ -865,18 +918,26 @@ function _M.log(msg, prefix, level)
   end
 end
 
---[[
-  Conditional debug logger.
-]]
+--- Conditional debug logger.
+--
+-- Extra arguments are substituted for placeholders using @{string.format}.
+--
+-- @string msg
+--   The message to log.
+-- @usage
+--   core.debug_log("Hello %s", name)
 function _M.debug_log(msg, ...)
   if _M.conf.debug and _M.conf.debug_output.log then
     _M.log(string.format(msg, ...), "JESTER DEBUG")
   end
 end
 
---[[
-  Trims whitespace from either end of a string.
-]]
+--- Trims whitespace from either end of a string.
+--
+-- @string s
+--   String to trim.
+-- @return
+--   The trimmed string.
 function _M.trim(s)
   return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end
