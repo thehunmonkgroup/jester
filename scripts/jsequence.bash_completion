@@ -1,0 +1,14 @@
+#!/bin/bash
+
+_jsequence()
+{
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  if [ $COMP_CWORD > 0 ]; then
+    local actions=$(jsequence actions)
+    COMPREPLY=($(compgen -W "${actions}" -- ${cur}))
+  fi
+  return 0
+}
+complete -F _jsequence jsequence
+

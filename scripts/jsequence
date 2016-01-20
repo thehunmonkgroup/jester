@@ -15,9 +15,10 @@ require "jester.support.table"
 --[[
   Grab a comma separated list of all available actions.
 ]]
-function actions_list()
+function actions_list(sep)
+  sep = sep or ", "
   local ordered_actions = table.orderkeys(action_map)
-  return table.concat(ordered_actions, ", ")
+  return table.concat(ordered_actions, sep)
 end
 
 --[[
@@ -162,7 +163,9 @@ local skipped_actions = {}
 
 -- Arguments were passed, use them to build actions instead of full output.
 if #arguments > 0 then
-  if arguments[1] == "keys" then
+  if arguments[1] == "actions" then
+    preview = actions_list(" ")
+  elseif arguments[1] == "keys" then
     preview = "    keys = " .. keys_table() .. ",\n"
   else
     output, skipped_actions = build_actions_output(arguments)
