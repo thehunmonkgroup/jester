@@ -1,4 +1,4 @@
-#!/bin/env lua
+#!/usr/bin/env lua
 
 --- Helper script to quickly generate sequence templates.
 --
