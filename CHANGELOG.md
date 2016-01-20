@@ -21,3 +21,6 @@ New in 2.0:
    when its 'increment' parameter was not set was to do no incrementing of
    the counter. The new default behavior is to increment by 1. The old default
    behavior can be acheived by setting 'increment' to 0.
+ * Main module files now named init.lua: Previously, module naming convention
+   for the main module file was 'modules/[name]/[name].lua'. This has been
+   changed to the more standardized 'modules/[name]/init.lua'.
