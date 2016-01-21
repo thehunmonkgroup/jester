@@ -63,5 +63,7 @@ assume you already have Jester installed correctly:
 
    You can register for these events as follows:
 
+     ```
      event plain CUSTOM jester::new_message jester::mailbox_updated jester::messages_checked
+     ```
 
