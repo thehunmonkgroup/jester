@@ -13,8 +13,6 @@
 -- @copyright 2011-2015 Chad Phillips
 
 
-
-
 local _M = {}
 
 --- Bootstrap the Jester environment.
@@ -31,8 +29,8 @@ local _M = {}
 --   core.bootstrap(conf, "someprofile", "somesequence", "arg1,arg2")
 function _M.bootstrap(config, profile, sequence, sequence_args)
 
-  -- Initialize the channel object.
-  _M.init_channel()
+  -- Use regular log here, debug_log needs config.
+  _M.log("Bootstrapping Jester")
 
   --- Global configuration table.
   --
@@ -45,6 +43,9 @@ function _M.bootstrap(config, profile, sequence, sequence_args)
   --
   -- @field is_freeswitch
   _M.is_freeswitch = freeswitch and freeswitch.consoleLog
+
+  -- Initialize the channel object.
+  _M.init_channel()
 
   -- Initialize sequence loop stacks.  Sequence stacks are initialized just
   -- prior to each sequence loop run.
