@@ -14,34 +14,23 @@ Jester's default profile is a replica of Asterisk's Comedian Mail system. Those 
 
 ## Documentation
 
-Jester comes with an extensive help system, available from both the command line and within the FreeSWITCH console, which should make it easy for new users and developers to get up to speed.
+Jester comes with extensive documentation available [online](http://thehunmonkgroup.github.io/jester/doc/), which should make it easy for new users and developers to get up to speed.
 
-Once you've installed Jester, the next best step is to read the help.  The exact way help is accessed depends on where you're calling it from. ```help scripts jhelp``` would be called in the following ways depending on where/how you're accessing help:
+Once you've installed Jester, the next best step is to read the help. If you'd like to install it locally, install [LDoc](https://github.com/stevedonovan/LDoc), then run the following from the root directory:
 
- * From the command line:
-
-   ```
-   cd /path/to/freeswitch/scripts
-   lua jester/jester.lua help scripts jhelp
-   ```
- * From the FreeSWITCH console:
-
-   ```
-   lua jester/jester.lua help scripts jhelp
-   ```
- * Using the jhelp script (find this in the jester/scripts directory):
-
-   ```
-   jhelp scripts jhelp
-   ```
+    ```sh
+    ldoc .
+    ```
 
 ## Support
 
 The issue tracker for this project is provided to file bug reports, feature requests, and project tasks -- support requests are not accepted via the issue tracker. For all support-related issues, including configuration, usage, and training, consider hiring a competent consultant.
 
 ## Other stuff
-See **LICENSE.txt** to view the license for this software.
+See [LICENSE.txt](LICENSE.txt) to view the license for this software.
 
-See **BUGS.md** for a list of known issues.
+See [BUGS.md](BUGS.md) for a list of known issues.
 
-See **TODO.md** for a list of things we're working on.
+See [TODO.md](TODO.md) for a list of things we're working on.
+
+See [CHANGELOG.md](CHANGELOG.md) for a running list of important changes.
