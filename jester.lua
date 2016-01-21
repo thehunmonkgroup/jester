@@ -24,12 +24,6 @@ local conf = require "jester.conf"
 -- provide a default empty table.
 local args = argv or arg or {}
 
--- Check for help query.
-if args[1] == "help" then
-  local help = require "jester.help"
-  return help.get_help(args[2], args[3], args[4], args[5])
-end
-
 -- Run normally.
 if args[1] and args[2] then
   core.bootstrap(conf, args[1], args[2], args[3])
