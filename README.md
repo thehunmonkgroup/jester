@@ -18,9 +18,9 @@ Jester comes with extensive documentation available [online](http://thehunmonkgr
 
 Once you've installed Jester, the next best step is to read the help. If you'd like to install it locally, install [LDoc](https://github.com/stevedonovan/LDoc), then run the following from the root directory:
 
-    ```sh
-    ldoc .
-    ```
+```sh
+  ldoc .
+```
 
 ## Support
 
