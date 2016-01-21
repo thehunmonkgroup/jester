@@ -84,20 +84,6 @@ local att = require("jester.modules.speech_to_text.att")
 local _M = {}
 
 --[[
-  Speech to text using Google's API.
-]]
---function speech_to_text_from_file_google(action)
---  speech_to_text_from_file(action, google.speech_to_text_from_file)
---end
-
---[[
-  Speech to text using AT&T's API.
-]]
-function _M.speech_to_text_from_file_att(action)
-  speech_to_text_from_file(action, att.speech_to_text_from_file)
-end
-
---[[
   Speech to text base function.
 
   This function wraps the handler's specific functionaliy.
@@ -126,6 +112,20 @@ local function speech_to_text_from_file(action, handler)
       core.debug_log("ERROR: File %s does not exist", filepath)
     end
   end
+end
+
+--[[
+  Speech to text using Google's API.
+]]
+--function speech_to_text_from_file_google(action)
+--  speech_to_text_from_file(action, google.speech_to_text_from_file)
+--end
+
+--[[
+  Speech to text using AT&T's API.
+]]
+function _M.speech_to_text_from_file_att(action)
+  speech_to_text_from_file(action, att.speech_to_text_from_file)
 end
 
 return _M

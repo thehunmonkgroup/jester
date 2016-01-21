@@ -2,6 +2,43 @@ local core = require "jester.core"
 
 local _M = {}
 
+--[[
+  Get an access token from an AT&T API call.
+]]
+local function att_get_access_token(action)
+  local app_key = action.app_key
+  local app_secret = action.app_secret
+
+  local post_data = string.format("client_id=%s&client_secret=%s&grant_type=client_credentials&scope=SPEECH,TTS", app_key, app_secret)
+
+  local response = {}
+
+  local body, status_code, headers, status_description = https.request({
+    method = "POST",
+    headers = {
+      ["content-length"] = post_data:len(),
+    },
+    url = "https://api.att.com/oauth/v4/token",
+    sink = ltn12.sink.table(response),
+    source = ltn12.source.string(post_data),
+    protocol = "tlsv1",
+  })
+
+  if status_code == 200 then
+    local response_string = table.concat(response)
+    core.debug_log("JSON response string '%s'", response_string)
+    local data = cjson.decode(response_string)
+    for key, value in pairs(data) do
+      if key == "access_token" then
+        return value
+      end
+    end
+    core.debug_log("ERROR: No access token found")
+  else
+    core.debug_log("ERROR: Request to AT&T token server failed: %s", status_description)
+  end
+end
+
 local https = require 'ssl.https'
 local ltn12 = require("ltn12")
 local cjson = require("cjson")
@@ -50,43 +87,6 @@ function _M.speech_to_text_from_file(action, attributes)
   end
 
   return status, translations
-end
-
---[[
-  Get an access token from an AT&T API call.
-]]
-local function att_get_access_token(action)
-  local app_key = action.app_key
-  local app_secret = action.app_secret
-
-  local post_data = string.format("client_id=%s&client_secret=%s&grant_type=client_credentials&scope=SPEECH,TTS", app_key, app_secret)
-
-  local response = {}
-
-  local body, status_code, headers, status_description = https.request({
-    method = "POST",
-    headers = {
-      ["content-length"] = post_data:len(),
-    },
-    url = "https://api.att.com/oauth/v4/token",
-    sink = ltn12.sink.table(response),
-    source = ltn12.source.string(post_data),
-    protocol = "tlsv1",
-  })
-
-  if status_code == 200 then
-    local response_string = table.concat(response)
-    core.debug_log("JSON response string '%s'", response_string)
-    local data = cjson.decode(response_string)
-    for key, value in pairs(data) do
-      if key == "access_token" then
-        return value
-      end
-    end
-    core.debug_log("ERROR: No access token found")
-  else
-    core.debug_log("ERROR: Request to AT&T token server failed: %s", status_description)
-  end
 end
 
 return _M

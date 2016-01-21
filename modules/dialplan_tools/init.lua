@@ -108,6 +108,39 @@ local core = require "jester.core"
 local _M = {}
 
 --[[
+  Given a table of variables, return a string.
+]]
+local function build_variables(variables, v_type)
+  local output = ""
+  local string_pieces = {}
+  for k, v in pairs(variables) do
+    table.insert(string_pieces, k .. "='" .. v .."'")
+  end
+  if #string_pieces > 0 then
+    output = table.concat(string_pieces, ",")
+    if v_type == "global" then
+      output = "{" .. output .. "}"
+    else
+      output = "[" .. output .. "]"
+    end
+  end
+  return output
+end
+
+--[[
+  Given a the main variables table and location data, a channel and extension,
+  return a fully constructed channel string for the channel.
+]]
+local function build_channel(variables, channel, extension, multivars, k)
+  if multivars and variables[k] then
+    channel_vars = build_variables(variables[k])
+  else
+    channel_vars = ""
+  end
+  return channel_vars .. channel .. extension
+end
+
+--[[
   Executes a dialplan application.
 ]]
 function _M.execute(action)
@@ -196,39 +229,6 @@ function _M.bridge(action)
       session:hangup()
     end
   end
-end
-
---[[
-  Given a table of variables, return a string.
-]]
-local function build_variables(variables, v_type)
-  local output = ""
-  local string_pieces = {}
-  for k, v in pairs(variables) do
-    table.insert(string_pieces, k .. "='" .. v .."'")
-  end
-  if #string_pieces > 0 then
-    output = table.concat(string_pieces, ",")
-    if v_type == "global" then
-      output = "{" .. output .. "}"
-    else
-      output = "[" .. output .. "]"
-    end
-  end
-  return output
-end
-
---[[
-  Given a the main variables table and location data, a channel and extension,
-  return a fully constructed channel string for the channel.
-]]
-local function build_channel(variables, channel, extension, multivars, k)
-  if multivars and variables[k] then
-    channel_vars = build_variables(variables[k])
-  else
-    channel_vars = ""
-  end
-  return channel_vars .. channel .. extension
 end
 
 return _M

@@ -15,6 +15,34 @@
 
 local _M = {}
 
+--- Get the value for a key in a storage area.
+--
+-- This is the function that is exposed to sequences.
+--
+-- @string area
+--   The storage area.
+-- @string key
+--   The storage key.
+-- @return
+--   The value stored in the key of the storage area, or an empty string if
+--   none is found.
+local function protected_get_storage(area, key)
+  return _M.get_storage(area, key, "")
+end
+
+--- Get the value for a channel variable.
+--
+-- This is the function that is exposed to sequences.
+--
+-- @string var
+--   The name of the channel variable.
+-- @return
+--   The value stored in the channel variable, or an empty string if none is
+--   found.
+local function protected_get_variable(var)
+  return _M.get_variable(var, "")
+end
+
 --- Bootstrap the Jester environment.
 --
 -- @tab config
@@ -400,34 +428,6 @@ function _M.load_sequence(name, arguments)
     end
     return sequence
   end
-end
-
---- Get the value for a key in a storage area.
---
--- This is the function that is exposed to sequences.
---
--- @string area
---   The storage area.
--- @string key
---   The storage key.
--- @return
---   The value stored in the key of the storage area, or an empty string if
---   none is found.
-local function protected_get_storage(area, key)
-  return _M.get_storage(area, key, "")
-end
-
---- Get the value for a channel variable.
---
--- This is the function that is exposed to sequences.
---
--- @string var
---   The name of the channel variable.
--- @return
---   The value stored in the channel variable, or an empty string if none is
---   found.
-local function protected_get_variable(var)
-  return _M.get_variable(var, "")
 end
 
 --- Get the value for a key in a storage area.
