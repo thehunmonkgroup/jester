@@ -75,3 +75,4 @@ function _M.fire_event(action)
   end
 end
 
+return _M
