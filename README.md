@@ -10,7 +10,7 @@ See [INSTALL.md](INSTALL.md) for installation instructions.
 Jester is written to be small, simple, and extensible. The core code is less than 800 lines! Most user tasks are carried out by pluggable modules, and people familiar with Lua scripting will find it easy to add new modules to extend functionality further. End users are spared the complexity of writing full scripts, and instead work inside script-like templates called 'sequences', that allow them to pass commands with parameters to the underlying modules, which handle all the dirty work.
 
 ## Comedian mail replica
-Jester's default profile is a replica of Asterisk's Comedian Mail system. Those transitioning from Asterisk to FreeSWITCH with concerns about the differences between the two voicemail systems can leverage this to provide a seamless transition to their end users.
+Jester's default profile is a replica of [Asterisk's Comedian Mail](http://www.voip-info.org/wiki/index.php?page_id=502) system. The implementation is acheived using fourteen modules containing thirty-four distinct configurable 'actions', all re-usable for other complex voice workflows. Those transitioning from Asterisk to FreeSWITCH with concerns about the differences between the two voicemail systems can leverage this to provide a seamless transition to their end users.
 
 ## Documentation
 
