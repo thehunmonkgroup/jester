@@ -49,11 +49,33 @@
 </ul>
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><a href="../modules/play.html">play</a></li>
-  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 
 </div>
@@ -79,25 +101,25 @@
 <p><a name="Profile_configuration"></a></p>
 <h2>Profile configuration</h2>
 
-<p>The profile configuration lives at 'jester/profiles/[name]/conf.lua ([name] being the name of the profile). The configuration is loaded after the global configuration to allow overrides, but also loaded fairly early in the bootstrap process to allow for maximum control.</p>
+<p>The profile configuration lives at <code>jester/profiles/[name]/conf.lua</code> ([name] being the name of the profile). The configuration is loaded after the global configuration to allow overrides, but also loaded fairly early in the bootstrap process to allow for maximum control.</p>
 
 <p>Profiles can use variables from two places:</p>
 
 <ol>
-    <li><strong>Global configuration:</strong> Variables defined in jester/conf.lua can be accessed through the <code>global</code> namespace, eg.
+    <li><strong>Global configuration:</strong> Variables defined in <code>jester/conf.lua</code> can be accessed through the <code>global</code> namespace, eg.
 
 <pre>
 global.base_dir
 </pre>
 
-Accesses the 'base_dir' variable from the global configuration.</li>
+Accesses the <code>base_dir</code> variable from the global configuration.</li>
     <li><strong>Channel variables:</strong> Variables defined in the current FreeSWITCH channel that Jester is running in can be accessed through the <code>get_variable()</code> function, eg.
 
 <pre>
 get_variable(<span class="string">"caller_id_name"</span>)
 </pre>
 
-Accesses the 'caller_id_name' variable from the channel.</li>
+Accesses the <code>caller_id_name</code> variable from the channel.</li>
 </ol>
 
 <p>Profile configurations are allowed to override the main configuration for the following variables:</p>
@@ -133,7 +155,7 @@ sequence_path = global.profile_path .. <span class="string">"/[name]/sequences"<
 
 <p><strong>Phrase macros:</strong></p>
 
-<p>These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the 'conf/lang/en/en.xml' FreeSWITCH configuration file, would be:</p>
+<p>These are normally kept in the various 'lang' folders in the main FreeSWITCH configuration, but they can be stored in a custom location. A typical configuration line for that in, for example, the <code>conf/lang/en/en.xml</code> FreeSWITCH configuration file, would be:</p>
 
 
 <pre>
@@ -148,11 +170,11 @@ sequence_path = global.profile_path .. <span class="string">"/[name]/sequences"<
 <p><a name="Default_profile"></a></p>
 <h2>Default profile</h2>
 
-<p>The included default 'voicemail' profile is a replica of <a href="http://www.voip-info.org/wiki/index.php?page_id=502">Asterisk's Comedian Mail</a>.</p>
+<p>The included default 'voicemail' profile (located at <code>profiles/voicemail</code>) is a replica of <a href="http://www.voip-info.org/wiki/index.php?page_id=502">Asterisk's Comedian Mail</a>.</p>
 
 <p>It is intended to be an exact replica of the original version shipped with <a href="http://www.asterisk.org/">Asterisk</a> 1.2/1.4, a showcase of the power and flexibility of the Jester system, and a template to use as a starting place for learning and building other workflows.</p>
 
-<p>Everything needed to set up the profile is included in the profile directory. Check out the INSTALL.txt there for more details.</p>
+<p>Everything needed to set up the profile is included in the profile directory. Check out the <code>INSTALL.txt</code> there for more details.</p>
 
 
 
@@ -160,7 +182,7 @@ sequence_path = global.profile_path .. <span class="string">"/[name]/sequences"<
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-12 22:19:18 </i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

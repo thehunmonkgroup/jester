@@ -1,0 +1,452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+<li><a href="#Handlers">Handlers</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><strong>file</strong></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>file</code></h1>
+<p>Simple file operations.</p>
+<p> This module provides actions to handle simple filesystem operations.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#create_directory">create_directory</a></td>
+	<td class="summary">Creates a directory.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#delete_file">delete_file</a></td>
+	<td class="summary">Delete a file.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#file_exists">file_exists</a></td>
+	<td class="summary">Determines if a file exists in the filesystem.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#file_size">file_size</a></td>
+	<td class="summary">Checks a file's size.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#move_file">move_file</a></td>
+	<td class="summary">Move a file from one location to another.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#remove_directory">remove_directory</a></td>
+	<td class="summary">Removes a directory.</td>
+	</tr>
+</table>
+<h2><a href="#Handlers">Handlers</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#filesystem">filesystem</a></td>
+	<td class="summary">The filesystem handler (default).</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "create_directory"></a>
+    <strong>create_directory</strong>
+    </dt>
+    <dd>
+    Creates a directory. </p>
+
+<p> This action creates a directory on the filesystem in the specified location.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           create_directory
+        </li>
+        <li><span class="parameter">directory</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The directory to create, including the path. Provide either the full path
+   or a relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"create_directory"</span>,
+     directory = <span class="string">"/tmp/mynewdir"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "delete_file"></a>
+    <strong>delete_file</strong>
+    </dt>
+    <dd>
+    Delete a file. </p>
+
+<p> This action deletes a file from a location on the filesystem.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           delete_file
+        </li>
+        <li><span class="parameter">file</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The file to delete, including the path. Provide either the full path or a
+   relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"delete_file"</span>,
+     file = <span class="string">"/tmp/afile.txt"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "file_exists"></a>
+    <strong>file_exists</strong>
+    </dt>
+    <dd>
+    Determines if a file exists in the filesystem. </p>
+
+<p> This action determines if a file exists on the filesystem. This only checks
+ for basic existence -- the file must be readable by the FreeSWITCH user.</p>
+
+<p> The action will store the result of its check in the 'file' storage area, key
+ 'file_exists': 'true' if the file exists, 'false' otherwise.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           file_exists
+        </li>
+        <li><span class="parameter">file</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The file to check, including the path. Provide either the full path or a
+   relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">if_false</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The sequence to call if the file does not exist.
+        </li>
+        <li><span class="parameter">if_true</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The sequence to call if the file exists.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"file_exists"</span>,
+     file = <span class="string">"/tmp/afile.txt"</span>,
+     if_false = <span class="string">"do_this"</span>,
+     if_true = <span class="string">"do_that"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "file_size"></a>
+    <strong>file_size</strong>
+    </dt>
+    <dd>
+    Checks a file's size. </p>
+
+<p> This action checks the size of a file. The result is stored in the 'file'
+ storage area, key 'size'.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           file_size
+        </li>
+        <li><span class="parameter">file</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The file to check, including the path. Provide either the full path or a
+   relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"file_size"</span>,
+     file = <span class="string">"/tmp/afile.txt"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "move_file"></a>
+    <strong>move_file</strong>
+    </dt>
+    <dd>
+    Move a file from one location to another. </p>
+
+<p> This action moves a file from one location on the filesystem to another.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           move_file
+        </li>
+        <li><span class="parameter">binary</span>
+            <span class="types"><span class="type">bool</span></span>
+           (Optional) Boolean, only neccesary for copying files. Set to true if the
+   source file is binary (sound files are typically binary). Default is
+   false.
+        </li>
+        <li><span class="parameter">copy</span>
+            <span class="types"><span class="type">bool</span></span>
+           (Optional) To copy the file to the destination instead of moving it, set
+   this to true. Default is false.
+        </li>
+        <li><span class="parameter">destination</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The new destination of the file, including the path. Provide either the
+   full path or a relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">source</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The file to move, including the path. Provide either the full path or a
+   relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"move_file"</span>,
+     binary = <span class="keyword">false</span>,
+     copy = <span class="keyword">false</span>,
+     destination = <span class="string">"storage/mymovedfile.txt"</span>,
+     source = <span class="string">"/tmp/originalfile.txt"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "remove_directory"></a>
+    <strong>remove_directory</strong>
+    </dt>
+    <dd>
+    Removes a directory. </p>
+
+<p> This action removes a directory from the filesystem in the specified
+ location.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           remove_directory
+        </li>
+        <li><span class="parameter">directory</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The directory to remove, including the path. Provide either the full path
+   or a relative path from the FreeSWITCH 'base_dir' global variable.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"remove_directory"</span>,
+     directory = <span class="string">"/tmp/somedir"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Handlers"></a>Handlers</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "filesystem"></a>
+    <strong>filesystem</strong>
+    </dt>
+    <dd>
+    The filesystem handler (default). </p>
+
+<p> The default handler for the file module. This handles file operations on
+ the local filesystem.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"create_directory"</span>,
+     handler = <span class="string">"filesystem"</span>,
+     <span class="comment">-- other params...
+</span>   }</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

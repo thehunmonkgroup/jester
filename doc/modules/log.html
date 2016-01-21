@@ -34,6 +34,7 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Actions">Actions</a></li>
+<li><a href="#Handlers">Handlers</a></li>
 </ul>
 
 
@@ -50,8 +51,8 @@
   <li><a href="../modules/file.html">file</a></li>
   <li><a href="../modules/format.html">format</a></li>
   <li><a href="../modules/get_digits.html">get_digits</a></li>
-  <li><strong>hangup</strong></li>
-  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><strong>log</strong></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><a href="../modules/play.html">play</a></li>
   <li><a href="../modules/record.html">record</a></li>
@@ -80,10 +81,10 @@
 
 <div id="content">
 
-<h1>Module <code>hangup</code></h1>
-<p>Actions related to hanging up a channel.</p>
-<p> This module provides actions that deal with hanging up a channel, or dealing
- with a channel in a hung up state.</p>
+<h1>Module <code>log</code></h1>
+<p>Custom logger for sequences.</p>
+<p> This module provides custom logging functionality for sequences. It can be
+ used to log data somewhere from within a sequence.</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
@@ -94,12 +95,19 @@
 <h2><a href="#Actions">Actions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#hangup">hangup</a></td>
-	<td class="summary">Hang up a call.</td>
+	<td class="name" ><a href="#log">log</a></td>
+	<td class="summary">Log a custom message.</td>
+	</tr>
+</table>
+<h2><a href="#Handlers">Handlers</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#console">console</a></td>
+	<td class="summary">The console handler (default).</td>
 	</tr>
 	<tr>
-	<td class="name" ><a href="#hangup_sequence">hangup_sequence</a></td>
-	<td class="summary">Registers a sequence to be executed on hangup.</td>
+	<td class="name" ><a href="#file">file</a></td>
+	<td class="summary">The file handler.</td>
 	</tr>
 </table>
 
@@ -111,25 +119,38 @@
 
     <dl class="function">
     <dt>
-    <a name = "hangup"></a>
-    <strong>hangup</strong>
+    <a name = "log"></a>
+    <strong>log</strong>
     </dt>
     <dd>
-    Hang up a call. </p>
+    Log a custom message. </p>
 
-<p> This action hangs up the call.  No more regular sequences or actions run
- after this action is called (registered exit/hangup sequences/actions will
- still run).
+<p> Allows logging a message from within a sequence, with a custom level.
 
 
     <ul>
         <li><span class="parameter">action</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup
+           log
         </li>
-        <li><span class="parameter">play</span>
+        <li><span class="parameter">file</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The path to a file, or a phrase, to play before hanging up.
+           (Optional) Required only for handlers that log to a file. Provide a full
+   path to the file. Default is '/tmp/jester.log'.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The log level of the message. This value will vary depending on
+   the handler, see <a href="#Handlers">handlers</a>. Default is 'info'.
+        </li>
+        <li><span class="parameter">message</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The message to log.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
         </li>
     </ul>
 
@@ -140,55 +161,75 @@
     <ul>
         <pre class="example">
    {
-     action = <span class="string">"hangup"</span>,
-     play = <span class="string">"phrase:goodbye"</span>,
+     action = <span class="string">"log"</span>,
+     file = <span class="string">"/tmp/jester.log"</span>,
+     level = <span class="string">"info"</span>,
+     message = <span class="string">"A custom log message"</span>,
+     handler = <span class="string">"file"</span>,
    }</pre>
     </ul>
 
 </dd>
+</dl>
+    <h2 class="section-header "><a name="Handlers"></a>Handlers</h2>
+
+    <dl class="function">
     <dt>
-    <a name = "hangup_sequence"></a>
-    <strong>hangup_sequence</strong>
+    <a name = "console"></a>
+    <strong>console</strong>
     </dt>
     <dd>
-    Registers a sequence to be executed on hangup. </p>
+    The console handler (default). </p>
 
-<p> This action registers a sequence to be executed after the call has been hung
- up.  Channel variables and storage values are available when the registered
- sequence is run.</p>
+<p>  Logs to the FreeSWITCH console.</p>
 
-<p> Sequences registered here are run after the sequences registered on exit, and
- are only run if the caller hangups up the call before Jester finishes running
- all active sequences related to the call.  If you want to guarantee that the
- sequence will run regardless of user hangup, it's best to put it in the exit
- loop instead of here.
-
-
-    <ul>
-        <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup_sequence
-        </li>
-        <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           The sequence to execute.
-        </li>
-    </ul>
+<p>  When using this handler, the 'level' argument for the action can be any
+  valid level used by
+  <a href="https://freeswitch.org/confluence/display/FREESWITCH/Lua+API+Reference#LuaAPIReference-freeswitch.consoleLog">freeswitch.consoleLog</a>
 
 
 
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/core_actions.html#exit_sequence">core_actions.exit_sequence</a>
-    </ul>
+
+
 
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
    {
-     action = <span class="string">"hangup_sequence"</span>,
-     sequence = <span class="string">"cleanup_temp_recording"</span>,
-   }</pre>
+     action = <span class="string">"log"</span>,
+     handler = <span class="string">"console"</span>,
+     level = <span class="string">"info"</span>,
+     <span class="comment">-- other params...
+</span>   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "file"></a>
+    <strong>file</strong>
+    </dt>
+    <dd>
+    The file handler. </p>
+
+<p>  Logs to a file on the local filesystem.</p>
+
+<p>  When using this handler, the 'level' argument for the action can be any
+  arbitrary value the user decides.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"log"</span>,
+     handler = <span class="string">"file"</span>,
+     level = <span class="string">"WARN"</span>,
+     <span class="comment">-- other params...
+</span>   }</pre>
     </ul>
 
 </dd>

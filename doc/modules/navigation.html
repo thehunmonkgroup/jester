@@ -31,15 +31,41 @@
   <li><a href="../index.html">Index</a></li>
 </ul>
 
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+</ul>
 
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
   <li><strong>navigation</strong></li>
   <li><a href="../modules/play.html">play</a></li>
-  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
@@ -55,24 +81,237 @@
 <div id="content">
 
 <h1>Module <code>navigation</code></h1>
-<p>Navigation module.</p>
-<p>
+<p>Menu/phone tree navigation.</p>
+<p> This module provides actions that help with navigating menus and phone trees.</p>
 
-</p>
+<p> The actions in this module are most often used directly when responding to
+ user input, see <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a> for more
+ information.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
 
 
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#navigation_add">navigation_add</a></td>
+	<td class="summary">Add a sequence to the navigation path.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#navigation_beginning">navigation_beginning</a></td>
+	<td class="summary">Move to the beginning of the navigation path.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#navigation_clear">navigation_clear</a></td>
+	<td class="summary">Clear the navigation path.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#navigation_previous">navigation_previous</a></td>
+	<td class="summary">Move to the previous item on the navigation path.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#navigation_reset">navigation_reset</a></td>
+	<td class="summary">Set the current sequence as the new navigation path beginning.</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
 
 
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "navigation_add"></a>
+    <strong>navigation_add</strong>
+    </dt>
+    <dd>
+    Add a sequence to the navigation path. </p>
+
+<p> This action adds a sequence to the navigation path.  It can be used for
+ tracking when a channel moves deeper into a menu tree.  Adding a sequence to
+ the path allows for using the navigation actions to traverse through
+ previous additions to the path.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           navigation_add
+        </li>
+        <li><span class="parameter">sequence</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The sequence to add to the path.  Defaults to the currently
+   running sequence.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"navigation_add"</span>,
+     sequence = <span class="string">"some_sequence"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "navigation_beginning"></a>
+    <strong>navigation_beginning</strong>
+    </dt>
+    <dd>
+    Move to the beginning of the navigation path. </p>
+
+<p> This action clears the navigation path, and executes the first item from the
+ old path, placing it at the beginning of the new path.  It can be used for
+ providing 'return to beginning' functionality in phone trees.</p>
+
+<p> This action is most often used in the 'keys' array like so:</p>
+
+<pre><code>keys = {
+  ["9"] = "@navigation_beginning",
+}
+</code></pre>
+
+<p> It can however be used in a regular sequence as well.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           navigation_beginning
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"navigation_beginning"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "navigation_clear"></a>
+    <strong>navigation_clear</strong>
+    </dt>
+    <dd>
+    Clear the navigation path. </p>
+
+<p> This action clears the navigation path.  No sequences will be left on the
+ path after this operation.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           navigation_clear
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"navigation_clear"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "navigation_previous"></a>
+    <strong>navigation_previous</strong>
+    </dt>
+    <dd>
+    Move to the previous item on the navigation path. </p>
+
+<p> This action pops the current action off the navigation path, and executes
+ the previously added item in the path.  It can be used for providing
+ 'previous menu' functionality in phone trees.</p>
+
+<p> This action is most often used in the 'keys' array like so:</p>
+
+<pre><code>keys = {
+  ["9"] = "@navigation_previous"
+}
+</code></pre>
+
+<p> It can however be used in a regular sequence as well.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           navigation_previous
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"navigation_previous"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "navigation_reset"></a>
+    <strong>navigation_reset</strong>
+    </dt>
+    <dd>
+    Set the current sequence as the new navigation path beginning. </p>
+
+<p> This action clears the navigation path, and sets the last item in the old
+ path to be the first item in the new path.  It can be used to set a new
+ beginning for the navigation path.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           navigation_reset
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"navigation_reset"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-12 22:19:18 </i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

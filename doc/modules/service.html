@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><strong>service</strong></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>service</code></h1>
+<p>Access external services.</p>
+<p> This module provides actions for accessing external services, such as
+ webservices.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#http_request">http_request</a></td>
+	<td class="summary">Make an HTTP request to a external server.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#last_http_request">last_http_request</a></td>
+	<td class="summary">Last HTTP request storage.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "http_request"></a>
+    <strong>http_request</strong>
+    </dt>
+    <dd>
+    Make an HTTP request to a external server. </p>
+
+<p> Only the http:// protocol is supported.</p>
+
+<p> The status of the completed request is stored in the <a href="../modules/service.html#last_http_request">last_http_request</a>
+ storage area.</p>
+
+<p> If the request returns a '200' status code, then the body of the response
+ will be stored according to the parameter settings.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           http_request
+        </li>
+        <li><span class="parameter">fragment</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) A fragment to append to the URL. It will be properly escaped
+   before sending.
+        </li>
+        <li><span class="parameter">password</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) A password to use for basic authentication. 'user' parameter
+   must also be provided.
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The server path to send the request to, no leading or trailing
+   slash.
+        </li>
+        <li><span class="parameter">port</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) The port to send the request to. Default is 80.
+        </li>
+        <li><span class="parameter">query</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of query parameters to append to the URL. Keys must be
+   only numbers, letters, and underscores, values can be any string and will
+   be properly URL escaped before sending.
+        </li>
+        <li><span class="parameter">response</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The format to expect the response in:</p>
+<pre><code> lua:
+   A string that represents a Lua table, of the following format:
+     return {
+       foo = 'bar',
+     }
+     The table data will be loaded into the specified storage area. Table
+     values cannot contain a table.
+ raw:
+   A string of raw data. This will be stored in the specified storage
+   area under the 'raw' storage key.
+</code></pre>
+<p>   Default is 'raw'.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The server to send the request to. Default is 'localhost'.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the response in. Defaults to
+   'service'.
+        </li>
+        <li><span class="parameter">user</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) A user name to use for basic authentication.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"http_request"</span>,
+     fragment = <span class="string">"some fragment"</span>,
+     password = <span class="string">"secret"</span>,
+     path = <span class="string">"path/to/resource"</span>,
+     port = <span class="number">80</span>,
+     query = {
+       foo = <span class="string">"bar"</span>,
+       baz = <span class="string">"two words"</span>
+     },
+     response = <span class="string">"raw"</span>,
+     server = <span class="string">"www.example.com"</span>,
+     storage_area = <span class="string">"my_http_request"</span>,
+     user = <span class="string">"bob"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "last_http_request"></a>
+    <strong>last_http_request</strong>
+    </dt>
+    <dd>
+    Last HTTP request storage. </p>
+
+<p> The resulting status of the last request is stored in the
+ 'last_http_request' storage area, with the following keys:
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">code</span>
+           An HTTP/1.1 return code, or 'error' if the request fails.
+        </li>
+        <li><span class="parameter">description</span>
+           A human-readable description of the code.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

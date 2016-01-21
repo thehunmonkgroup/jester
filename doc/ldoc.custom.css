@@ -11,7 +11,7 @@ body,
 #main,
 #navigation,
 #content {
-  background: #ffffff;
+  background: #fffae5;
 }
 
 #content {
@@ -36,8 +36,9 @@ body,
 }
 
 #navigation h2 {
+  background: #cccccc;
   margin-right: 10px;
-  border: 1px solid gray;
+  border: 1px solid #cccccc;
   border-radius: 5px;
 }
 #content {
@@ -50,7 +51,7 @@ table.module_list td.name,
 table.module_list td.summary,
 table.function_list td.name,
 table.function_list td.summary {
-  background: #ffffff;
+  background: #fffae5;
   border-color: gray;
 }
 a:link, a:visited {

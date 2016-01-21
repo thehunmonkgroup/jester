@@ -50,7 +50,7 @@
   <li><a href="../modules/file.html">file</a></li>
   <li><a href="../modules/format.html">format</a></li>
   <li><a href="../modules/get_digits.html">get_digits</a></li>
-  <li><strong>hangup</strong></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
   <li><a href="../modules/log.html">log</a></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><a href="../modules/play.html">play</a></li>
@@ -58,7 +58,7 @@
   <li><a href="../modules/service.html">service</a></li>
   <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
   <li><a href="../modules/system.html">system</a></li>
-  <li><a href="../modules/tracker.html">tracker</a></li>
+  <li><strong>tracker</strong></li>
 </ul>
 <h2>Scripts</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
@@ -80,10 +80,10 @@
 
 <div id="content">
 
-<h1>Module <code>hangup</code></h1>
-<p>Actions related to hanging up a channel.</p>
-<p> This module provides actions that deal with hanging up a channel, or dealing
- with a channel in a hung up state.</p>
+<h1>Module <code>tracker</code></h1>
+<p>Track various states.</p>
+<p> This module provides actions to assist in tracking various states during
+ sequence execution.</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
@@ -94,12 +94,8 @@
 <h2><a href="#Actions">Actions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#hangup">hangup</a></td>
-	<td class="summary">Hang up a call.</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#hangup_sequence">hangup_sequence</a></td>
-	<td class="summary">Registers a sequence to be executed on hangup.</td>
+	<td class="name" ><a href="#counter">counter</a></td>
+	<td class="summary">Incremental custom variable counter.</td>
 	</tr>
 </table>
 
@@ -111,25 +107,59 @@
 
     <dl class="function">
     <dt>
-    <a name = "hangup"></a>
-    <strong>hangup</strong>
+    <a name = "counter"></a>
+    <strong>counter</strong>
     </dt>
     <dd>
-    Hang up a call. </p>
+    Incremental custom variable counter. </p>
 
-<p> This action hangs up the call.  No more regular sequences or actions run
- after this action is called (registered exit/hangup sequences/actions will
- still run).
+<p> This action provides a simple method to keep a count of any arbitrary value,
+ and provides access to calling sequences by comparing a number against the
+ total in the counter.  It's useful for storing how many times you've done
+ something, eg. on 3rd failed login attempt, hang up.  Counters are
+ initialized with a value of zero, and placed in storage area 'counter'.
 
 
     <ul>
         <li><span class="parameter">action</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup
+           counter
         </li>
-        <li><span class="parameter">play</span>
+        <li><span class="parameter">compare_to</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) The value to compare the current counter value against.
+        </li>
+        <li><span class="parameter">if_equal</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The path to a file, or a phrase, to play before hanging up.
+           (Optional) The sequence to call if the counter value is equal to the
+   'compare_to' value.
+        </li>
+        <li><span class="parameter">if_greater</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The sequence to call if the counter value is greater than the
+   'compare_to' value.
+        </li>
+        <li><span class="parameter">if_less</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The sequence to call if the counter value is less than the
+   'compare_to' value.
+        </li>
+        <li><span class="parameter">increment</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) Increment the counter by this amount before performing the
+   comparison to the 'compare_to' parameter.  Negative increments are allowed.
+   Default is 1. To disable counting, set this to 0.
+        </li>
+        <li><span class="parameter">reset</span>
+            <span class="types"><span class="type">bool</span></span>
+           (Optional) Set to true to reset the counter to zero.  This happens before
+   any incrementing, so it can be used with incrementing to set a new initial
+   value for the counter.
+        </li>
+        <li><span class="parameter">storage_key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The key in the 'counter' storage area where the counter value is
+   stored and checked.  Default is 'counter'
         </li>
     </ul>
 
@@ -140,54 +170,14 @@
     <ul>
         <pre class="example">
    {
-     action = <span class="string">"hangup"</span>,
-     play = <span class="string">"phrase:goodbye"</span>,
-   }</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "hangup_sequence"></a>
-    <strong>hangup_sequence</strong>
-    </dt>
-    <dd>
-    Registers a sequence to be executed on hangup. </p>
-
-<p> This action registers a sequence to be executed after the call has been hung
- up.  Channel variables and storage values are available when the registered
- sequence is run.</p>
-
-<p> Sequences registered here are run after the sequences registered on exit, and
- are only run if the caller hangups up the call before Jester finishes running
- all active sequences related to the call.  If you want to guarantee that the
- sequence will run regardless of user hangup, it's best to put it in the exit
- loop instead of here.
-
-
-    <ul>
-        <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup_sequence
-        </li>
-        <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           The sequence to execute.
-        </li>
-    </ul>
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/core_actions.html#exit_sequence">core_actions.exit_sequence</a>
-    </ul>
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"hangup_sequence"</span>,
-     sequence = <span class="string">"cleanup_temp_recording"</span>,
+     action = <span class="string">"counter"</span>,
+     compare_to = profile.max_login_attempts,
+     if_equal = <span class="string">"one_more_try"</span>,
+     if_greater = <span class="string">"mailbox_login_failed"</span>,
+     if_less = <span class="string">"login"</span>,
+     increment = <span class="number">1</span>,
+     reset = <span class="keyword">false</span>,
+     storage_key = <span class="string">"failed_login_counter"</span>,
    }</pre>
     </ul>
 

@@ -33,14 +33,14 @@
 
 <h2>Contents</h2>
 <ul>
-<li><a href="#Actions">Actions</a></li>
+<li><a href="#Tables">Tables</a></li>
 </ul>
 
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
   <li><a href="../modules/core.html">core</a></li>
-  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><strong>core.conf</strong></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
   <li><a href="../modules/couchdb.html">couchdb</a></li>
   <li><a href="../modules/data.html">data</a></li>
@@ -50,7 +50,7 @@
   <li><a href="../modules/file.html">file</a></li>
   <li><a href="../modules/format.html">format</a></li>
   <li><a href="../modules/get_digits.html">get_digits</a></li>
-  <li><strong>hangup</strong></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
   <li><a href="../modules/log.html">log</a></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><a href="../modules/play.html">play</a></li>
@@ -80,10 +80,12 @@
 
 <div id="content">
 
-<h1>Module <code>hangup</code></h1>
-<p>Actions related to hanging up a channel.</p>
-<p> This module provides actions that deal with hanging up a channel, or dealing
- with a channel in a hung up state.</p>
+<h1>Module <code>core.conf</code></h1>
+<p>Global configuration file.</p>
+<p> Probably not a good idea to change any of these settings unless you know
+ what you're doing.</p>
+
+<p> Some values can be overridden per-profile, check the documentation below.</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
@@ -91,15 +93,11 @@
     </ul>
 
 
-<h2><a href="#Actions">Actions</a></h2>
+<h2><a href="#Tables">Tables</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#hangup">hangup</a></td>
-	<td class="summary">Hang up a call.</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#hangup_sequence">hangup_sequence</a></td>
-	<td class="summary">Registers a sequence to be executed on hangup.</td>
+	<td class="name" ><a href="#conf">conf</a></td>
+	<td class="summary">Global configuration table.</td>
 	</tr>
 </table>
 
@@ -107,89 +105,61 @@
 <br/>
 
 
-    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
 
     <dl class="function">
     <dt>
-    <a name = "hangup"></a>
-    <strong>hangup</strong>
+    <a name = "conf"></a>
+    <strong>conf</strong>
     </dt>
     <dd>
-    Hang up a call. </p>
+    Global configuration table. </p>
 
-<p> This action hangs up the call.  No more regular sequences or actions run
- after this action is called (registered exit/hangup sequences/actions will
- still run).
+<p> Check the conf.lua file for further descriptions of these values.
 
 
+    <h3>Fields:</h3>
     <ul>
-        <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup
+        <li><span class="parameter">debug</span>
+           Enable this setting to turn on debuggging.
+   This value can be overridden per profile.
         </li>
-        <li><span class="parameter">play</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The path to a file, or a phrase, to play before hanging up.
+        <li><span class="parameter">debug_output</span>
+           Control debug output.
         </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"hangup"</span>,
-     play = <span class="string">"phrase:goodbye"</span>,
-   }</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "hangup_sequence"></a>
-    <strong>hangup_sequence</strong>
-    </dt>
-    <dd>
-    Registers a sequence to be executed on hangup. </p>
-
-<p> This action registers a sequence to be executed after the call has been hung
- up.  Channel variables and storage values are available when the registered
- sequence is run.</p>
-
-<p> Sequences registered here are run after the sequences registered on exit, and
- are only run if the caller hangups up the call before Jester finishes running
- all active sequences related to the call.  If you want to guarantee that the
- sequence will run regardless of user hangup, it's best to put it in the exit
- loop instead of here.
-
-
-    <ul>
-        <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup_sequence
+        <li><span class="parameter">base_dir</span>
+           Full path to FreeSWITCH base directory.
         </li>
-        <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           The sequence to execute.
+        <li><span class="parameter">sounds_dir</span>
+           Full path to FreeSWITCH sounds directory.
+        </li>
+        <li><span class="parameter">scripts_dir</span>
+           Full path to FreeSWITCH scripts directory.
+        </li>
+        <li><span class="parameter">jester_dir</span>
+           Full path to Jester directory.
+        </li>
+        <li><span class="parameter">sequence_path</span>
+           Full path to Jester's global sequence directory.
+   This value can be overridden per profile.
+        </li>
+        <li><span class="parameter">profile_path</span>
+           Full path to Jester's global profile directory.
+        </li>
+        <li><span class="parameter">key_order</span>
+           The order that keys are played in for announcements.
+   This value can be overridden per profile.
+   This value can be overridden in actions.
+        </li>
+        <li><span class="parameter">modules</span>
+           The modules to load.
+   This value can be overridden per profile.
         </li>
     </ul>
 
 
 
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/core_actions.html#exit_sequence">core_actions.exit_sequence</a>
-    </ul>
 
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"hangup_sequence"</span>,
-     sequence = <span class="string">"cleanup_temp_recording"</span>,
-   }</pre>
-    </ul>
 
 </dd>
 </dl>

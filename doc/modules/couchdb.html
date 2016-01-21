@@ -1,0 +1,634 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><strong>couchdb</strong></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>couchdb</code></h1>
+<p>Access to CouchDB.</p>
+<p> This module provides actions that allow access to CouchDB.</p>
+
+<p> The module uses <a href="https://github.com/thehunmonkgroup/luchia">Luchia</a> to
+ interface with CouchDB, so it must be installed and configured correctly.</p>
+
+<p> For all actions below that support the 'server' parameter: the 'server'
+ parameter is a table of connection parameters to the CouchDB server, see
+ <a href="http://thehunmonkgroup.github.io/luchia/doc/modules/luchia.conf.html#default.server">here</a>
+ for details.</p>
+
+<p> If things aren't working, be sure to check the log file, as configured in
+ luchia/conf.lua.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#couchdb_add_attachment">couchdb_add_attachment</a></td>
+	<td class="summary">Add an attachment to a document.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_create_document">couchdb_create_document</a></td>
+	<td class="summary">Create a document.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_delete_attachment">couchdb_delete_attachment</a></td>
+	<td class="summary">Delete an attachment from a document.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_delete_document">couchdb_delete_document</a></td>
+	<td class="summary">Delete a document.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_retrieve">couchdb_retrieve</a></td>
+	<td class="summary">Retrieve general data.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_retrieve_attachment">couchdb_retrieve_attachment</a></td>
+	<td class="summary">Retrieve an attachment from a document.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_retrieve_document">couchdb_retrieve_document</a></td>
+	<td class="summary">Retrieve a document.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#couchdb_update_document">couchdb_update_document</a></td>
+	<td class="summary">Update a document.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "couchdb_add_attachment"></a>
+    <strong>couchdb_add_attachment</strong>
+    </dt>
+    <dd>
+    Add an attachment to a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_add_attachment
+        </li>
+        <li><span class="parameter">attachment_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) File name for the attachment.
+        </li>
+        <li><span class="parameter">content_type</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           MIME type of the attachment.
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The document ID. If not provided, a new empty document will be
+   created.
+        </li>
+        <li><span class="parameter">document_rev</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The current document revision, required if attaching to an existing
+   document.
+        </li>
+        <li><span class="parameter">file_path</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           File path to the attachment.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the server response in. Defaults to
+   'couchdb_add_attachment'. This will contain 'id' and 'rev' keys of the
+   updated document on success.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_add_attachment"</span>,
+     attachment_name = <span class="string">"attachment.txt"</span>,
+     content_type = <span class="string">"text/plain"</span>,
+     database = <span class="string">"example_db"</span>,
+     document_id = <span class="string">"example_doc"</span>,
+     document_rev = <span class="string">"1-5bfa2c99eefe2b2eb4962db50aa3cfd4"</span>,
+     file_path = <span class="string">"/tmp/attachment.txt"</span>,
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_create_document"></a>
+    <strong>couchdb_create_document</strong>
+    </dt>
+    <dd>
+    Create a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_create_document
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document</span>
+            <span class="types"><span class="type">tab</span></span>
+           A table of data representing the docuement to create.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The document ID, one will be generated by the server if not
+   provided.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the server response in. Defaults to
+   'couchdb_create_document'. This will contain 'id' and 'rev' keys of the
+   created document on success.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_create_document"</span>,
+     database = <span class="string">"example_db"</span>,
+     document = {
+       foo = <span class="string">"bar"</span>,
+     },
+     document_id = <span class="string">"example_doc"</span>,
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_delete_attachment"></a>
+    <strong>couchdb_delete_attachment</strong>
+    </dt>
+    <dd>
+    Delete an attachment from a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_delete_attachment
+        </li>
+        <li><span class="parameter">attachment_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The attachment name.
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The document ID.
+        </li>
+        <li><span class="parameter">document_rev</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The current document revision.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the server response in. Defaults to
+   'couchdb_delete_attachment'. This will contain 'id' and 'rev' keys of the
+   updated document on success.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_delete_attachment"</span>,
+     attachment_name = <span class="string">"attachment.txt"</span>,
+     database = <span class="string">"example_db"</span>,
+     document_id = <span class="string">"example_doc"</span>,
+     document_rev = <span class="string">"1-5bfa2c99eefe2b2eb4962db50aa3cfd4"</span>,
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_delete_document"></a>
+    <strong>couchdb_delete_document</strong>
+    </dt>
+    <dd>
+    Delete a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_delete_document
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The document ID.
+        </li>
+        <li><span class="parameter">document_rev</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The current document revision.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the server response in. Defaults to
+   'couchdb_delete_document'. This will contain 'id' and 'rev' keys of the
+   deleted document on success.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_delete_document"</span>,
+     database = <span class="string">"example_db"</span>,
+     document_id = <span class="string">"example_doc"</span>,
+     document_rev = <span class="string">"1-5bfa2c99eefe2b2eb4962db50aa3cfd4"</span>,
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_retrieve"></a>
+    <strong>couchdb_retrieve</strong>
+    </dt>
+    <dd>
+    Retrieve general data. </p>
+
+<p> General retrieval function, this can be used to fetch data from any valid
+ path, such as for views, etc.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_retrieve
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The path to retrieve. This should not include the database.
+        </li>
+        <li><span class="parameter">query_parameters</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of query parameters to pass to the server.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the data in after loading. Defaults
+   to 'couchdb_retrieve'. This will contain a 'data' key on success with a
+   table representing the data.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_retrieve"</span>,
+     database = <span class="string">"example_db"</span>,
+     path = <span class="string">"_design/foo/_view/bar"</span>,
+     query_parameters = {
+       revs = <span class="string">"true"</span>,
+     },
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_retrieve_attachment"></a>
+    <strong>couchdb_retrieve_attachment</strong>
+    </dt>
+    <dd>
+    Retrieve an attachment from a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_retrieve_attachment
+        </li>
+        <li><span class="parameter">attachment_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The attachment name.
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The document ID.
+        </li>
+        <li><span class="parameter">file_path</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           File path to write the retrieved attachment to.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the server response in. Defaults to
+   'couchdb_retrieve_attachment'. This will contain 'attachment_name' and
+   'file_path' keys of the retrieved attachment on success.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_retrieve_attachment"</span>,
+     attachment_name = <span class="string">"attachment.txt"</span>,
+     database = <span class="string">"example_db"</span>,
+     document_id = <span class="string">"example_doc"</span>,
+     file_path = <span class="string">"/tmp/attachment.txt"</span>,
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_retrieve_document"></a>
+    <strong>couchdb_retrieve_document</strong>
+    </dt>
+    <dd>
+    Retrieve a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_retrieve_document
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The document ID.
+        </li>
+        <li><span class="parameter">query_parameters</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of query parameters to pass to the server.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the document in after loading.
+   Defaults to 'couchdb_retrieve_document'. This will contain 'document', 'id'
+   and 'rev' keys on success, 'document' is a table representing the document.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_retrieve_document"</span>,
+     database = <span class="string">"example_db"</span>,
+     document_id = <span class="string">"example_doc"</span>,
+     query_parameters = {
+       revs = <span class="string">"true"</span>,
+     },
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "couchdb_update_document"></a>
+    <strong>couchdb_update_document</strong>
+    </dt>
+    <dd>
+    Update a document.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           couchdb_update_document
+        </li>
+        <li><span class="parameter">database</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Database to connect to.
+        </li>
+        <li><span class="parameter">document</span>
+            <span class="types"><span class="type">tab</span></span>
+           A table of data representing the docuement to update.
+        </li>
+        <li><span class="parameter">document_id</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The document ID.
+        </li>
+        <li><span class="parameter">document_rev</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The current document revision.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) Table of server connection parameters.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the server response in. Defaults to
+   'couchdb_update_document'. This will contain 'id' and 'rev' keys of the
+   updated document on success.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"couchdb_update_document"</span>,
+     database = <span class="string">"example_db"</span>,
+     document = {
+       foo = <span class="string">"bar"</span>,
+     }
+     document_id = <span class="string">"example_doc"</span>,
+     document_rev = <span class="string">"1-5bfa2c99eefe2b2eb4962db50aa3cfd4"</span>,
+     server = profile.couchdb_server_params,
+     storage_area = <span class="string">"example_storage"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

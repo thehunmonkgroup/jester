@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+<li><a href="#Handlers">Handlers</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><strong>speech_to_text</strong></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>speech_to_text</code></h1>
+<p>Speech to text translation (experimental).</p>
+<p> <strong>WARNING:</strong> totally experimental, no guarantees it will work!</p>
+
+<p> This module provides speech to text translation.</p>
+
+<p> The module requires the Lua
+ <a href="https://luarocks.org/modules/luarocks/lua-cjson">lua-cjson</a> and
+ <a href="https://luarocks.org/modules/brunoos/luasec">luasec</a> packages.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#speech_to_text_from_file">speech_to_text_from_file</a></td>
+	<td class="summary">Translates a sound file to text.</td>
+	</tr>
+</table>
+<h2><a href="#Handlers">Handlers</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#att">att</a></td>
+	<td class="summary">The AT&amp;T handler (default).</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#speech_to_text">speech_to_text</a></td>
+	<td class="summary">Speech to text storage.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "speech_to_text_from_file"></a>
+    <strong>speech_to_text_from_file</strong>
+    </dt>
+    <dd>
+    Translates a sound file to text. </p>
+
+<p> This action requires that <a href="https://xiph.org/flac">flac</a> is installed and
+ executable by FreeSWITCH.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           speech_to_text_from_file
+        </li>
+        <li><span class="parameter">app_key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The application key used to access the service.
+        </li>
+        <li><span class="parameter">app_secret</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The application secret used to access the service.
+        </li>
+        <li><span class="parameter">filepath</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The full path to the file to translate.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The storage area to store the response in. Defaults to
+   'speech_to_text'.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"speech_to_text_from_file"</span>,
+     app_key = profile.speech_to_text_app_key,
+     app_secret = profile.speech_to_text_app_secret,
+     filepatch = <span class="string">"/tmp/foo.wav"</span>,
+     storage_area = <span class="string">"foo_to_text"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Handlers"></a>Handlers</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "att"></a>
+    <strong>att</strong>
+    </dt>
+    <dd>
+    The AT&amp;T handler (default). </p>
+
+<p>  Uses AT&amp;T's Speech to Text service. The service requires a valid developer
+  account and application key/secret, see
+  <a href="https://developer.att.com/apis/speech">here</a> for more information.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"speech_to_text_from_file"</span>,
+     handler = <span class="string">"att"</span>,
+     <span class="comment">-- other params...
+</span>   }</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "speech_to_text"></a>
+    <strong>speech_to_text</strong>
+    </dt>
+    <dd>
+    Speech to text storage. </p>
+
+<p> Translations are stored in the specified storage area with the following
+ keys, where <code>X</code> is the chunk number:</p>
+
+<p> A 'status' key is also placed in the storage area, indicating the result of
+ the translation. A value of 0 indicates the translation was successful.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">translation_X</span>
+           The translated text for the chunk.
+        </li>
+        <li><span class="parameter">confidence_X</span>
+           The confidence level of the translated chunk, a decimal number in the
+   range of 0 to 1.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

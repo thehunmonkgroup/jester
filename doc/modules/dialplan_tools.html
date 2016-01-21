@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><strong>dialplan_tools</strong></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>dialplan_tools</code></h1>
+<p>Access to dialplan applications.</p>
+<p> This module provides access to various dialplan applications. An
+ understanding of how these applications are used in FreeSWITCH dialplans is
+ essential in order to properly use the actions in this module.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#bridge">bridge</a></td>
+	<td class="summary">Bridges the current Jester channel with another endpoint.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#execute">execute</a></td>
+	<td class="summary">Execute dialplan applications.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#transfer">transfer</a></td>
+	<td class="summary">Transfer to another extension in the dialplan.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "bridge"></a>
+    <strong>bridge</strong>
+    </dt>
+    <dd>
+    Bridges the current Jester channel with another endpoint. </p>
+
+<p> Note that many characteristics of the bridge can be controlled by setting
+ various channel variables prior to the bridge. Check the FreeSWITCH wiki for
+ more information on the available channel variables, and
+ <a href="../modules/core_actions.html#set_variable">core_actions.set_variable</a> for setting channel variables from Jester.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           bridge
+        </li>
+        <li><span class="parameter">channel</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The channel to use for the bridge. Can be a string (used for all
+   extensions), or optionally a table of multiple channels (used with the
+   matching extension in the extension table). Be sure to include everything
+   up to the actual extension, including trailing slash and any dial prefix.
+        </li>
+        <li><span class="parameter">extension</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The extension to bridge to. Can be a string (used for all channels), or
+   optionally a table of multiple extensions (used with the matching channel
+   in the channel table).
+        </li>
+        <li><span class="parameter">hangup_after_bridge</span>
+            <span class="types"><span class="type">bool</span></span>
+           (Optional) If set to true, the call will be hungup after the bridge
+   completes. Note that all sequences registered for the exit and hangup
+   loops will still be run.
+        </li>
+        <li><span class="parameter">multichannel_type</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) If multiple channels or extensions are specified, this setting
+   determines how they will be connected. 'first_wins' rings all channels
+   until the first responds with media, then bridges that channel.
+   'sequential' rings each channel in succession, bridging the first one that
+   responds with media. Default is 'first_wins'.
+        </li>
+        <li><span class="parameter">variables</span>
+            <span class="types"><span class="type">tab</span></span>
+           A table of channel variables to set for the bridge, key = variable name,
+   value = variable value. Can be a single table (used for all channels), or
+   optionally a table of variable tables (used with the matching channel in
+   the channel list).
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"bridge"</span>,
+     channel = <span class="string">"sofia/internal/"</span>,
+     extension = {
+       <span class="string">"1005"</span>,
+       <span class="string">"1006"</span>,
+     },
+     hangup_after_bridge = <span class="keyword">true</span>,
+     multichannel_type = <span class="string">"first_wins"</span>,
+     variables = {
+       foo = <span class="string">"bar"</span>,
+     },
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "execute"></a>
+    <strong>execute</strong>
+    </dt>
+    <dd>
+    Execute dialplan applications. </p>
+
+<p> This action provides access to execute any dialplan application via Jester.
+ Note that key presses will not be recognized during the execute action, use
+ the various play and record actions to allow capturing of key presses.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           execute
+        </li>
+        <li><span class="parameter">application</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The application to execute.
+        </li>
+        <li><span class="parameter">data</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) Data to pass to the application.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"execute"</span>,
+     application = <span class="string">"execute_extension"</span>,
+     data = <span class="string">"set_up_call"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "transfer"></a>
+    <strong>transfer</strong>
+    </dt>
+    <dd>
+    Transfer to another extension in the dialplan. </p>
+
+<p> This action is used to transfer to another extension in the dialplan. Prior
+ to the transfer, the active sequence stack is cleared.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           transfer
+        </li>
+        <li><span class="parameter">context</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The context to transfer to. Default is the current context.
+        </li>
+        <li><span class="parameter">dialplan</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The dialplan to transfer to. Default is 'XML'.
+        </li>
+        <li><span class="parameter">extension</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The extension to transfer to.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"transfer"</span>,
+     context = <span class="string">"example"</span>,
+     dialplan = <span class="string">"XML"</span>,
+     extension = <span class="string">"101"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

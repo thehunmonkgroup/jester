@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+<li><a href="#Handlers">Handlers</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><strong>email</strong></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>email</code></h1>
+<p>Send email.</p>
+<p> This module provides email functionality from within Jester. Support for
+ attachments is included.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#email">email</a></td>
+	<td class="summary">Email a custom message.</td>
+	</tr>
+</table>
+<h2><a href="#Handlers">Handlers</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#socket">socket</a></td>
+	<td class="summary">The socket handler (default).</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "email"></a>
+    <strong>email</strong>
+    </dt>
+    <dd>
+    Email a custom message. </p>
+
+<p> Emails a custom message, with optional attachments. Tokens are supported
+ where noted -- tokens are inserted by prefixing the token name with a colon,
+ eg. ':mailbox' would be substituted with the 'mailbox' token value, if it
+ exists.</p>
+
+<p> The email action uses a template system for composing emails. You can create
+ as many templates as you wish, and specify which template is to be used at
+ the time of sending.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           email
+        </li>
+        <li><span class="parameter">attachments</span>
+            <span class="types"><span class="type">tab</span></span>
+
+
+<p>   (Optional) A list of attachments to send. Each item in the list is a
+   table with the following key/value pairs:</p>
+
+<pre><code> filetype:
+   The MIME type of the file.
+ filename:
+   Name of the file.
+ description:
+   (Optional) File description.
+ filepath:
+   Full path to the file.
+</code></pre>
+
+
+        </li>
+        <li><span class="parameter">email_templates</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of email templates to use. Keys are template names,
+   values are a table of template information with the following key/value
+   pairs:</p>
+
+<pre><code> subject:
+   (Optional) The message subject. Tokens are supported.
+ message:
+   (Optional) The message to email. Tokens are supported.
+ allow_attachments:
+   (Optional) Boolean to control if attachments can be sent using this
+   template. Set to false to disable sending attachments even if they
+   exist. Default is true, allow sending.
+</code></pre>
+
+<p>   If this parameter is not provided, the action will look in the profile
+   settings for an 'email_templates' table to use instead. The templates must
+   either be defined in this parameter or the profile parameter!
+        </li>
+        <li><span class="parameter">from</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The address to send the email from. Defaults to
+   'noreply@[hostname]'.
+        </li>
+        <li><span class="parameter">headers</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of email headers, key = header name, value = header
+   description. Note that some email headers will need to use the full table
+   key syntax.
+        </li>
+        <li><span class="parameter">port</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) The port to use to send the message. Defaults to 25.
+        </li>
+        <li><span class="parameter">server</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The server to use to send the message. Defaults to 'localhost'.
+        </li>
+        <li><span class="parameter">template</span>
+            <span class="types"><span class="type">tab</span></span>
+           List of template names to use for sending. Templates should be listed in
+   the order that they should be used with the addresses in the 'to'
+   parameter -- ie, the first listed template is used for the first listed
+   address, etc. Can be either a table or a comma separated list. If no
+   template name is provided for the address, the action will fall back to
+   the template named 'default'.
+        </li>
+        <li><span class="parameter">to</span>
+            <span class="types"><span class="type">tab</span></span>
+           List of addresses to send to. Can be either a table or a comma separated
+   list.
+        </li>
+        <li><span class="parameter">tokens</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of token replacements to apply, key = token name, value
+   = token replacement, eg. <code>tokens = {foo = "bar"}</code> would replace
+   the token ':foo' with 'bar' in the message. All token replacements are
+   searched for in all areas that support tokens.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"email"</span>,
+     attachments = {
+       {
+         filetype = <span class="string">"audio/x-wav"</span>,
+         filename = <span class="string">"word.wav"</span>,
+         description = <span class="string">"your word of the day"</span>,
+         filepath = profile.temp_recording_dir .. <span class="string">"/word.wav"</span>,
+       },
+     },
+     email_templates = {
+       custom = {
+         subject = <span class="string">"Hi, :name"</span>,
+         message = <span class="string">"Your word of the day is :word"</span>,
+         allow_attachments = <span class="keyword">true</span>,
+       },
+     },
+     from = <span class="string">"mail@example.com"</span>,
+     headers = {
+       [<span class="string">"Reply-To"</span>] = <span class="string">"baz@example.com"</span>,
+     },
+     port = <span class="number">25</span>,
+     server = <span class="string">'localhost'</span>,
+     template = {
+       <span class="string">"default"</span>,
+       <span class="string">"custom"</span>,
+     },
+     to = {
+       <span class="string">"foo@example.com"</span>,
+       <span class="string">"bar@example.com"</span>,
+     },
+     tokens = {
+       name = <span class="string">"Bob"</span>,
+       word = <span class="string">"cucumber"</span>,
+     },
+   },</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Handlers"></a>Handlers</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "socket"></a>
+    <strong>socket</strong>
+    </dt>
+    <dd>
+    The socket handler (default). </p>
+
+<p> Socket-based email using LuaSocket. This is the default handler.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"email"</span>,
+     handler = <span class="string">"socket"</span>,
+     <span class="comment">-- other params...
+</span>   }</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

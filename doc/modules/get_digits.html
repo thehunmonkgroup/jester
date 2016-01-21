@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><strong>get_digits</strong></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>get_digits</code></h1>
+<p>Collect user input from the channel.</p>
+<p> This module provides actions for collecting user input from a channel, in the
+ form of DTMF key presses.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#flush_digits">flush_digits</a></td>
+	<td class="summary">Flush DTMF in the session.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#get_digits">get_digits</a></td>
+	<td class="summary">Collect user input from the channel.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "flush_digits"></a>
+    <strong>flush_digits</strong>
+    </dt>
+    <dd>
+    Flush DTMF in the session. </p>
+
+<p> This action flushes any pending DTMF in the session.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           flush_digits
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"flush_digits"</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get_digits"></a>
+    <strong>get_digits</strong>
+    </dt>
+    <dd>
+    Collect user input from the channel. </p>
+
+<p> This action collects user input from a channel, in the form of DTMF key
+ presses, and stores the collected digits in the 'get_digits' storage area.
+ Note that if no user input is collected, or validation fails, an empty string
+ is saved to the storage area instead.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           get_digits
+        </li>
+        <li><span class="parameter">audio_files</span>
+            <span class="types"><span class="type">tab</span></span>
+           A file or files to play to the user during collection. Playback is
+   terminated when the user enters the first key. Usually used to give the
+   user instructions on what to enter. Provide either a single file as a
+   string, or multiple files in a table. The default is to play nothing.
+        </li>
+        <li><span class="parameter">bad_input</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) An audio file to play to the user when input validation fails.
+   Default is 'ivr/ivr-that_was_an_invalid_entry.wav'.
+        </li>
+        <li><span class="parameter">digits_regex</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) A regular expression to use for validating the user input. If
+   the user input does not match the expression, then validation fails. The
+   regex is in the same form as the regular expressions used in the FreeSWITCH
+   dialplan. Default is '<code>\d+</code>', which matches one or more digits.
+   Note: If you need to match the * key in the regex, you will have to escape
+   it twice, as in '<code>\d+|\*</code>'.
+        </li>
+        <li><span class="parameter">max_digits</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) The maximum number of digits to collect. Default is 10.
+   Alternatively, a string prefixed with a colon can be passed, and the length
+   of the string will be used to set the value.
+        </li>
+        <li><span class="parameter">max_tries</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) The maximum amount of times that validation will fail before
+   giving up. Default is 3.
+        </li>
+        <li><span class="parameter">min_digits</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) The minimum number of digits to collect. Default is 1.
+   Alternatively, a string prefixed with a colon can be passed, and the length
+   of the string will be used to set the value.
+        </li>
+        <li><span class="parameter">storage_key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The key to store the collected digits under in the 'get_digits'
+   storage area. Default is 'digits'.
+        </li>
+        <li><span class="parameter">terminators</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) A string of keys that the user can use to end the collection
+   before the timeout. Multiple values keys can be used, eg. '*' or '*#'. To
+   accept no terminators, pass an empty string. Default is '#'.
+        </li>
+        <li><span class="parameter">timeout</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) Number of seconds to wait for max_digits before trying to
+   validate. Default is 3.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"get_digits"</span>,
+     audio_files = {
+       <span class="string">"phrase:extension"</span>,
+       <span class="string">"/path/to/another/file.wav"</span>,
+     },
+     bad_input = <span class="string">"ivr/ivr-that_was_an_invalid_entry.wav"</span>,
+     digits_regex = <span class="string">"\\d+'"</span>,
+     max_digits = <span class="number">8</span>,
+     max_tries = <span class="number">3</span>,
+     min_digits = <span class="number">3</span>,
+     storage_key = <span class="string">"extension"</span>,
+     terminators = <span class="string">"#*"</span>,
+     timeout = <span class="number">3</span>,
+   },</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

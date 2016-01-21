@@ -1,0 +1,1402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>core</strong></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>core</code></h1>
+<p>Core functions.</p>
+<p> This module provides the lower-level functionality for Jester -- storage,
+ management of sequences, etc. Unless you're developing a module or doing
+ something very advanced, you probably don't need to be familiar with this
+ functionality -- it just works. :)</p>
+
+<p> The <a href="../topics/05-Developer.md.html#">Developer</a> documentation has more information about
+ the core functionality, and how it pertains to writing modules.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#bootstrap">bootstrap(config, profile, sequence, sequence_args)</a></td>
+	<td class="summary">Bootstrap the Jester environment.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#init_modules">init_modules(modules)</a></td>
+	<td class="summary">Initialize modules.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#init_channel">init_channel()</a></td>
+	<td class="summary">Initialize the channel namespace.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#init_stacks">init_stacks(stacks)</a></td>
+	<td class="summary">Initialize the specified stacks.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#init_profile">init_profile(profile_name)</a></td>
+	<td class="summary">Initialize the specified profile.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#init_storage">init_storage(area)</a></td>
+	<td class="summary">Initialize a storage area.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#reset_stack">reset_stack(name)</a></td>
+	<td class="summary">Empties the specified stack.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#queue_sequence">queue_sequence(sequence)</a></td>
+	<td class="summary">Queues a sequence to be the next one run.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#load_sequence">load_sequence(name, arguments)</a></td>
+	<td class="summary">Loads the specified sequence into separate environment.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#get_storage">get_storage(area, key, default)</a></td>
+	<td class="summary">Get the value for a key in a storage area.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#set_storage">set_storage(area, key, value)</a></td>
+	<td class="summary">Set a key/value pair in a storage area.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#clear_storage">clear_storage(area, key)</a></td>
+	<td class="summary">Clear a key in a storage area, or the whole storage area.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#parse_sequence">parse_sequence(sequence)</a></td>
+	<td class="summary">Parse a sequence.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#parse_args">parse_args(args)</a></td>
+	<td class="summary">Parse sequence arguments.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#main">main()</a></td>
+	<td class="summary">Main entry point for a call to Jester.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#run_sequence_loop">run_sequence_loop(loop_type)</a></td>
+	<td class="summary">Runs the specified sequence loop.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#execute_sequences">execute_sequences()</a></td>
+	<td class="summary">Main loop for executing sequences.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#refresh_current_sequence">refresh_current_sequence()</a></td>
+	<td class="summary">Reloads the current sequence file, refreshing all variables.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#load_action">load_action()</a></td>
+	<td class="summary">Loads the action from the current global sequence stack and position.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#set_keys">set_keys(action, sequence)</a></td>
+	<td class="summary">Sets the key map for the specified action/sequence combination.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#key_handler">key_handler(session, input_type, data)</a></td>
+	<td class="summary">Global key handler for all key press events in Jester.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#run_action">run_action(action)</a></td>
+	<td class="summary">Runs a loaded action.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#load_action_handler">load_action_handler(action)</a></td>
+	<td class="summary">Loads the correct handler for the passed action.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#actionable_key">actionable_key()</a></td>
+	<td class="summary">Determines if a key was pressed that will result in some action by core.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#wait">wait(milliseconds)</a></td>
+	<td class="summary">Stream silence for a specified number of milliseconds.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#log">log(msg, prefix, level)</a></td>
+	<td class="summary">Log to FreeSWITCH console or stdout depending on the environment.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#debug_log">debug_log(msg)</a></td>
+	<td class="summary">Conditional debug logger.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#trim">trim(s)</a></td>
+	<td class="summary">Trims whitespace from either end of a string.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#get_variable">get_variable(chan_var, default)</a></td>
+	<td class="summary">Wrapper to grab session variables.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#set_variable">set_variable(chan_var, value, default)</a></td>
+	<td class="summary">Wrapper to set session variables.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#debug_dump">debug_dump(var, recursive, prefix)</a></td>
+	<td class="summary">Dumps values to console.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#keys">keys</a></td>
+	<td class="summary">Table of information for current key map.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#key_pressed">key_pressed</a></td>
+	<td class="summary">Table of information for the pressed key.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#channel">channel</a></td>
+	<td class="summary">Internal storage for channel data.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#profile">profile</a></td>
+	<td class="summary">Currently loaded profile.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#conf">conf</a></td>
+	<td class="summary">Global configuration table.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#is_freeswitch">is_freeswitch</a></td>
+	<td class="summary">Boolean indicating if the script was called from within FreeSWITCH.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#initial_args">initial_args</a></td>
+	<td class="summary">List of the initial arguments passed to Jester.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#action_map">action_map</a></td>
+	<td class="summary">Lightweight map of all actions that can be called.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#exiting">exiting</a></td>
+	<td class="summary">Boolean indicating if Jester is in the exiting state.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#hungup">hungup</a></td>
+	<td class="summary">Boolean indicating if Jester is in the hungup state.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "bootstrap"></a>
+    <strong>bootstrap(config, profile, sequence, sequence_args)</strong>
+    </dt>
+    <dd>
+    Bootstrap the Jester environment.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">config</span>
+            <span class="types"><span class="type">tab</span></span>
+           The <a href="../modules/core.conf.html#">global configuration</a>.
+        </li>
+        <li><span class="parameter">profile</span>
+            <span class="types"><span class="type">tab</span></span>
+           The profile configuration, see the {@02-Profiles.md|profile documentation}.
+        </li>
+        <li><span class="parameter">sequence</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The sequence name to initialize with.
+        </li>
+        <li><span class="parameter">sequence_args</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Arguments for the initial sequence.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.bootstrap(conf, <span class="string">"someprofile"</span>, <span class="string">"somesequence"</span>, <span class="string">"arg1,arg2"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "init_modules"></a>
+    <strong>init_modules(modules)</strong>
+    </dt>
+    <dd>
+    Initialize modules. </p>
+
+<p> Modules and custom scripts can call this function to load additional
+ modules.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">modules</span>
+            <span class="types"><span class="type">tab</span></span>
+           List of module names to initialize.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.init_modules({<span class="string">"foo_module"</span>, <span class="string">"bar_module"</span>})</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "init_channel"></a>
+    <strong>init_channel()</strong>
+    </dt>
+    <dd>
+    Initialize the channel namespace. </p>
+
+<p> This holds all the stacks and storage for a Jester run.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.init_channel()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "init_stacks"></a>
+    <strong>init_stacks(stacks)</strong>
+    </dt>
+    <dd>
+    Initialize the specified stacks. </p>
+
+<p> Ensures passed stacks are in their proper initial state.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">stacks</span>
+            <span class="types"><span class="type">tab</span></span>
+           List of stacks to init.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">init_stacks({<span class="string">"run_actions"</span>, <span class="string">"executed_sequences"</span>})</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "init_profile"></a>
+    <strong>init_profile(profile_name)</strong>
+    </dt>
+    <dd>
+    Initialize the specified profile. </p>
+
+<p> Loads the provided profile as the current active profile in Jester core.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">profile_name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The name of the profile to load, see <a href="../topics/02-Profiles.md.html#">Profiles</a>.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.init_profile(<span class="string">"demo"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "init_storage"></a>
+    <strong>init_storage(area)</strong>
+    </dt>
+    <dd>
+    Initialize a storage area.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The name of the storage area.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.init_storage(<span class="string">"foo"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "reset_stack"></a>
+    <strong>reset_stack(name)</strong>
+    </dt>
+    <dd>
+    Empties the specified stack. </p>
+
+<p> Can also be used to initialize a stack.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The name of the stack.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.reset_stack(<span class="string">"sequence"</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "queue_sequence"></a>
+    <strong>queue_sequence(sequence)</strong>
+    </dt>
+    <dd>
+    Queues a sequence to be the next one run. </p>
+
+<p> The sequence is queued in the current sequence loop, at the current sequence
+ stack position.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">sequence</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The full sequence name command, including arguments.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.queue_sequence(<span class="string">"sub:foo_sequence arg1,arg2"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "load_sequence"></a>
+    <strong>load_sequence(name, arguments)</strong>
+    </dt>
+    <dd>
+    Loads the specified sequence into separate environment. </p>
+
+<p> This allows special variables to be injected in the global namespace of the
+ sequence, as well as allowing control over which global Lua functionality is
+ exposed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The sequence name.
+        </li>
+        <li><span class="parameter">arguments</span>
+            <span class="types"><span class="type">tab</span></span>
+           List of passed arguments.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The loaded sequence function if it can be loaded, nil otherwise.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.load_sequence(<span class="string">"foo_sequence"</span>, {<span class="string">"arg1"</span>, <span class="string">"arg2"</span> })</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "get_storage"></a>
+    <strong>get_storage(area, key, default)</strong>
+    </dt>
+    <dd>
+    Get the value for a key in a storage area.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage area.
+        </li>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage key.
+        </li>
+        <li><span class="parameter">default</span>
+           The default value for the key if none is found in storage.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           The value stored in the key of the storage area, or the default value if
+   none is found.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.get_storage(<span class="string">"foo_area"</span>, <span class="string">"bar_key"</span>, <span class="string">"default_value"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "set_storage"></a>
+    <strong>set_storage(area, key, value)</strong>
+    </dt>
+    <dd>
+    Set a key/value pair in a storage area.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage area.
+        </li>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage key.
+        </li>
+        <li><span class="parameter">value</span>
+           The storage value.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.set_storage(<span class="string">"foo_area"</span>, <span class="string">"bar_key"</span>, <span class="string">"baz_value"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "clear_storage"></a>
+    <strong>clear_storage(area, key)</strong>
+    </dt>
+    <dd>
+    Clear a key in a storage area, or the whole storage area.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage area.
+        </li>
+        <li><span class="parameter">key</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage key. If not provided, the entire storage area is cleared.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.clear_storage(<span class="string">"foo_area"</span>, <span class="string">"bar_key"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "parse_sequence"></a>
+    <strong>parse_sequence(sequence)</strong>
+    </dt>
+    <dd>
+    Parse a sequence.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">sequence</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The full sequence name command, including arguments.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        sequence type,
+   one of "subsequence", "top_sequence", "up_sequence", "".</li>
+        <li>
+        sequence name</li>
+        <li>
+        arguments,
+   as a string</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.parse_sequence(<span class="string">"sub:foo_sequence arg1,arg2"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "parse_args"></a>
+    <strong>parse_args(args)</strong>
+    </dt>
+    <dd>
+    Parse sequence arguments.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">args</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Arguments.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        An ordered list of arguments.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.parse_args(<span class="string">"arg1,arg2"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "main"></a>
+    <strong>main()</strong>
+    </dt>
+    <dd>
+    Main entry point for a call to Jester. </p>
+
+<p> Call this after <a href="../modules/core.html#bootstrap">bootstrap</a>, to execute all sequences loops in succession.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.main()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "run_sequence_loop"></a>
+    <strong>run_sequence_loop(loop_type)</strong>
+    </dt>
+    <dd>
+    Runs the specified sequence loop.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop_type</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The sequence loop name.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.run_sequence_loop(<span class="string">"active"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "execute_sequences"></a>
+    <strong>execute_sequences()</strong>
+    </dt>
+    <dd>
+    Main loop for executing sequences. </p>
+
+<p> This loops until there are no more sequences to run. If Jester is not in
+ the <a href="../modules/core.html#exiting">exiting</a> or <a href="../modules/core.html#hungup">hungup</a> state, the loop terminates when the user hangs
+ up.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.execute_sequences()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "refresh_current_sequence"></a>
+    <strong>refresh_current_sequence()</strong>
+    </dt>
+    <dd>
+    Reloads the current sequence file, refreshing all variables.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.refresh_current_sequence()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "load_action"></a>
+    <strong>load_action()</strong>
+    </dt>
+    <dd>
+    Loads the action from the current global sequence stack and position.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.load_action()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "set_keys"></a>
+    <strong>set_keys(action, sequence)</strong>
+    </dt>
+    <dd>
+    Sets the key map for the specified action/sequence combination.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><span class="type">tab</span></span>
+           The action table.
+        </li>
+        <li><span class="parameter">sequence</span>
+            <span class="types"><span class="type">tab</span></span>
+           The sequence table.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.set_keys(action, sequence)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "key_handler"></a>
+    <strong>key_handler(session, input_type, data)</strong>
+    </dt>
+    <dd>
+    Global key handler for all key press events in Jester.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">session</span>
+           The session object.
+        </li>
+        <li><span class="parameter">input_type</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The type of input data.
+        </li>
+        <li><span class="parameter">data</span>
+            <span class="types"><span class="type">tab</span></span>
+           The input data.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "run_action"></a>
+    <strong>run_action(action)</strong>
+    </dt>
+    <dd>
+    Runs a loaded action. </p>
+
+<p> If the action is not an ad hoc action, the global sequence stack is referenced.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><span class="type">tab</span></span>
+           The action table.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.run_action(action)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "load_action_handler"></a>
+    <strong>load_action_handler(action)</strong>
+    </dt>
+    <dd>
+    Loads the correct handler for the passed action. </p>
+
+<p> The default handler is used if none is specified.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><span class="type">tab</span></span>
+           The action table.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.load_action_handler(action)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "actionable_key"></a>
+    <strong>actionable_key()</strong>
+    </dt>
+    <dd>
+    Determines if a key was pressed that will result in some action by core. </p>
+
+<p> Modules can call this function to check for valid key presses, to break out
+ of loops, etc.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.actionable_key()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "wait"></a>
+    <strong>wait(milliseconds)</strong>
+    </dt>
+    <dd>
+    Stream silence for a specified number of milliseconds.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">milliseconds</span>
+            <span class="types"><span class="type">int</span></span>
+           Number of milliseconds to wait.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.wait(<span class="number">1000</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "log"></a>
+    <strong>log(msg, prefix, level)</strong>
+    </dt>
+    <dd>
+    Log to FreeSWITCH console or stdout depending on the environment.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">msg</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The message to log.
+        </li>
+        <li><span class="parameter">prefix</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Prefix the message with this string.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Log level.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.log(<span class="string">"Some message"</span>, <span class="string">"CUSTOM LOG"</span>, <span class="string">"info"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "debug_log"></a>
+    <strong>debug_log(msg)</strong>
+    </dt>
+    <dd>
+    Conditional debug logger. </p>
+
+<p> Extra arguments are substituted for placeholders using <a href="http://www.lua.org/manual/5.2/manual.html#pdf-string.format">string.format</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">msg</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The message to log.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.debug_log(<span class="string">"Hello %s"</span>, name)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "trim"></a>
+    <strong>trim(s)</strong>
+    </dt>
+    <dd>
+    Trims whitespace from either end of a string.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">s</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           String to trim.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The trimmed string.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_variable"></a>
+    <strong>get_variable(chan_var, default)</strong>
+    </dt>
+    <dd>
+    Wrapper to grab session variables.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">chan_var</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The name of the channel variable.
+        </li>
+        <li><span class="parameter">default</span>
+           The default value for the variable if none is found on the channel.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           The value stored in the channel variable, or the default value if none is
+   found.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.get_variable(<span class="string">"some_channel_var"</span>, <span class="string">"default_value"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "set_variable"></a>
+    <strong>set_variable(chan_var, value, default)</strong>
+    </dt>
+    <dd>
+    Wrapper to set session variables.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">chan_var</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The name of the channel variable.
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The value of the channel variable.
+        </li>
+        <li><span class="parameter">default</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The default value for the variable if none is provided by the value
+   argument.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           The value stored in the channel variable, or the default value if none is
+   found.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.get_variable(<span class="string">"some_channel_var"</span>, <span class="string">"some_value"</span>, <span class="string">"default_value"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "debug_dump"></a>
+    <strong>debug_dump(var, recursive, prefix)</strong>
+    </dt>
+    <dd>
+    Dumps values to console.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">var</span>
+           Variable to dump.
+        </li>
+        <li><span class="parameter">recursive</span>
+            <span class="types"><span class="type">bool</span></span>
+           Dump tables recursively. Default false.
+        </li>
+        <li><span class="parameter">prefix</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           Prefix dumped values with this string, default is no prefix.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">core.debug_dump(profile, <span class="keyword">true</span>, <span class="string">"PROFILE: "</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "keys"></a>
+    <strong>keys</strong>
+    </dt>
+    <dd>
+    Table of information for current key map.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "key_pressed"></a>
+    <strong>key_pressed</strong>
+    </dt>
+    <dd>
+    Table of information for the pressed key.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "channel"></a>
+    <strong>channel</strong>
+    </dt>
+    <dd>
+    Internal storage for channel data. </p>
+
+<p> Stores various channel-specific data for the duration of a single call to
+ the Jester core engine.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">stack</span>
+            <span class="types"><span class="type">tab</span></span>
+           Maintain the different stacks in Jester core.
+        </li>
+        <li><span class="parameter">storage</span>
+            <span class="types"><span class="type">tab</span></span>
+           Persistant storage areas.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "profile"></a>
+    <strong>profile</strong>
+    </dt>
+    <dd>
+    Currently loaded profile. </p>
+
+<p> Set up access to channel variables, storage, global configs, and initial
+ arguments.</p>
+
+<p> Listed fields are accessible as environment-level variables from within
+ the profile.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">global</span>
+            <span class="types"><span class="type">tab</span></span>
+           Global configuration.
+        </li>
+        <li><span class="parameter">args</span>
+            <span class="types"><span class="type">func</span></span>
+           Access to arguments passed when Jester was invoked.
+        </li>
+        <li><span class="parameter">storage</span>
+            <span class="types"><span class="type">func</span></span>
+           Access to storage areas.
+        </li>
+        <li><span class="parameter">variable</span>
+            <span class="types"><span class="type">func</span></span>
+           Access to FreeSWITCH channel variables.
+        </li>
+        <li><span class="parameter">debug_dump</span>
+            <span class="types"><span class="type">func</span></span>
+           Access to the <a href="../modules/core.html#debug_dump">debug_dump</a> function.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "conf"></a>
+    <strong>conf</strong>
+    </dt>
+    <dd>
+    Global configuration table. </p>
+
+<p> As configured in <a href="../modules/core.conf.html#">core.conf</a>.
+
+
+    <ul>
+        <li><span class="parameter">conf</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "is_freeswitch"></a>
+    <strong>is_freeswitch</strong>
+    </dt>
+    <dd>
+    Boolean indicating if the script was called from within FreeSWITCH.
+
+
+    <ul>
+        <li><span class="parameter">is_freeswitch</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "initial_args"></a>
+    <strong>initial_args</strong>
+    </dt>
+    <dd>
+    List of the initial arguments passed to Jester.
+
+
+    <ul>
+        <li><span class="parameter">initial_args</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "action_map"></a>
+    <strong>action_map</strong>
+    </dt>
+    <dd>
+    Lightweight map of all actions that can be called.
+
+
+    <ul>
+        <li><span class="parameter">action_map</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "exiting"></a>
+    <strong>exiting</strong>
+    </dt>
+    <dd>
+    Boolean indicating if Jester is in the exiting state.
+
+
+    <ul>
+        <li><span class="parameter">exiting</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "hungup"></a>
+    <strong>hungup</strong>
+    </dt>
+    <dd>
+    Boolean indicating if Jester is in the hungup state.
+
+
+    <ul>
+        <li><span class="parameter">hungup</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -46,11 +46,11 @@
   <li><a href="../modules/data.html">data</a></li>
   <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
   <li><a href="../modules/email.html">email</a></li>
-  <li><a href="../modules/event.html">event</a></li>
+  <li><strong>event</strong></li>
   <li><a href="../modules/file.html">file</a></li>
   <li><a href="../modules/format.html">format</a></li>
   <li><a href="../modules/get_digits.html">get_digits</a></li>
-  <li><strong>hangup</strong></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
   <li><a href="../modules/log.html">log</a></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><a href="../modules/play.html">play</a></li>
@@ -80,10 +80,10 @@
 
 <div id="content">
 
-<h1>Module <code>hangup</code></h1>
-<p>Actions related to hanging up a channel.</p>
-<p> This module provides actions that deal with hanging up a channel, or dealing
- with a channel in a hung up state.</p>
+<h1>Module <code>event</code></h1>
+<p>Interact with the FreeSWITCH event system.</p>
+<p> This module provides actions for interacting with the FreeSWITCH event
+ system.</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
@@ -94,12 +94,8 @@
 <h2><a href="#Actions">Actions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#hangup">hangup</a></td>
-	<td class="summary">Hang up a call.</td>
-	</tr>
-	<tr>
-	<td class="name" ><a href="#hangup_sequence">hangup_sequence</a></td>
-	<td class="summary">Registers a sequence to be executed on hangup.</td>
+	<td class="name" ><a href="#fire_event">fire_event</a></td>
+	<td class="summary">Fires a custom event.</td>
 	</tr>
 </table>
 
@@ -111,25 +107,45 @@
 
     <dl class="function">
     <dt>
-    <a name = "hangup"></a>
-    <strong>hangup</strong>
+    <a name = "fire_event"></a>
+    <strong>fire_event</strong>
     </dt>
     <dd>
-    Hang up a call. </p>
+    Fires a custom event. </p>
 
-<p> This action hangs up the call.  No more regular sequences or actions run
- after this action is called (registered exit/hangup sequences/actions will
- still run).
+<p> Event-Name will be 'CUSTOM', and Event-Subclass will
+ be '[subclass]::[event_type]'.</p>
+
+<p> The body will automatically have two newline characters appended to it.
 
 
     <ul>
         <li><span class="parameter">action</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup
+           fire_event
         </li>
-        <li><span class="parameter">play</span>
+        <li><span class="parameter">body</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The path to a file, or a phrase, to play before hanging up.
+           (Optional) The event body.
+        </li>
+        <li><span class="parameter">event_type</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The second portion of the Event-Subclass header (after the double colons).
+        </li>
+        <li><span class="parameter">header_prefix</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) Prefix all header keys with this string. Defaults to 'Jester-'.
+        </li>
+        <li><span class="parameter">headers</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A table of event headers, key = header name, value = header
+   description.  Note that some headers will need to use the full table key
+   syntax.
+        </li>
+        <li><span class="parameter">subclass</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) The first portion of the Event-Subclass header (before the
+   double colons). Default is 'jester'.
         </li>
     </ul>
 
@@ -140,55 +156,17 @@
     <ul>
         <pre class="example">
    {
-     action = <span class="string">"hangup"</span>,
-     play = <span class="string">"phrase:goodbye"</span>,
-   }</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "hangup_sequence"></a>
-    <strong>hangup_sequence</strong>
-    </dt>
-    <dd>
-    Registers a sequence to be executed on hangup. </p>
-
-<p> This action registers a sequence to be executed after the call has been hung
- up.  Channel variables and storage values are available when the registered
- sequence is run.</p>
-
-<p> Sequences registered here are run after the sequences registered on exit, and
- are only run if the caller hangups up the call before Jester finishes running
- all active sequences related to the call.  If you want to guarantee that the
- sequence will run regardless of user hangup, it's best to put it in the exit
- loop instead of here.
-
-
-    <ul>
-        <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup_sequence
-        </li>
-        <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           The sequence to execute.
-        </li>
-    </ul>
-
-
-
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/core_actions.html#exit_sequence">core_actions.exit_sequence</a>
-    </ul>
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"hangup_sequence"</span>,
-     sequence = <span class="string">"cleanup_temp_recording"</span>,
-   }</pre>
+     action = <span class="string">"fire_event"</span>,
+     body = <span class="string">"some message body, if you need it..."</span>,
+     event_type = <span class="string">"messages_checked"</span>,
+     header_prefix = <span class="string">"Checked-Messages-"</span>,
+     headers = {
+       Mailbox = mailbox,
+       Domain = profile.domain,
+       [<span class="string">"New-Message-Count"</span>] = message_count,
+     },
+     subclass = <span class="string">"messages-checked"</span>,
+   },</pre>
     </ul>
 
 </dd>

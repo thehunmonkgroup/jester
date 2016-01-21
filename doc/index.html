@@ -32,11 +32,33 @@
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="modules/data.html">data</a></li>
+  <li><a href="modules/core.html">core</a></li>
+  <li><a href="modules/core.conf.html">core.conf</a></li>
   <li><a href="modules/core_actions.html">core_actions</a></li>
+  <li><a href="modules/couchdb.html">couchdb</a></li>
+  <li><a href="modules/data.html">data</a></li>
+  <li><a href="modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="modules/email.html">email</a></li>
+  <li><a href="modules/event.html">event</a></li>
+  <li><a href="modules/file.html">file</a></li>
+  <li><a href="modules/format.html">format</a></li>
+  <li><a href="modules/get_digits.html">get_digits</a></li>
+  <li><a href="modules/hangup.html">hangup</a></li>
+  <li><a href="modules/log.html">log</a></li>
   <li><a href="modules/navigation.html">navigation</a></li>
   <li><a href="modules/play.html">play</a></li>
-  <li><a href="modules/hangup.html">hangup</a></li>
+  <li><a href="modules/record.html">record</a></li>
+  <li><a href="modules/service.html">service</a></li>
+  <li><a href="modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="modules/system.html">system</a></li>
+  <li><a href="modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
@@ -57,24 +79,103 @@
 <h2>Modules</h2>
 <table class="module_list">
 	<tr>
+		<td class="name"  ><a href="modules/core.html">core</a></td>
+		<td class="summary">Core functions.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/core.conf.html">core.conf</a></td>
+		<td class="summary">Global configuration file.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/core_actions.html">core_actions</a></td>
+		<td class="summary">Actions provided by Jester core.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/couchdb.html">couchdb</a></td>
+		<td class="summary">Access to CouchDB.</td>
+	</tr>
+	<tr>
 		<td class="name"  ><a href="modules/data.html">data</a></td>
 		<td class="summary">Handle external data.</td>
 	</tr>
 	<tr>
-		<td class="name"  ><a href="modules/core_actions.html">core_actions</a></td>
-		<td class="summary">Actions provided by jester core.</td>
+		<td class="name"  ><a href="modules/dialplan_tools.html">dialplan_tools</a></td>
+		<td class="summary">Access to dialplan applications.</td>
 	</tr>
 	<tr>
-		<td class="name"  ><a href="modules/navigation.html">navigation</a></td>
-		<td class="summary">Navigation module.</td>
+		<td class="name"  ><a href="modules/email.html">email</a></td>
+		<td class="summary">Send email.</td>
 	</tr>
 	<tr>
-		<td class="name"  ><a href="modules/play.html">play</a></td>
-		<td class="summary">Play module.</td>
+		<td class="name"  ><a href="modules/event.html">event</a></td>
+		<td class="summary">Interact with the FreeSWITCH event system.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/file.html">file</a></td>
+		<td class="summary">Simple file operations.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/format.html">format</a></td>
+		<td class="summary">Custom formatters for sequences.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/get_digits.html">get_digits</a></td>
+		<td class="summary">Collect user input from the channel.</td>
 	</tr>
 	<tr>
 		<td class="name"  ><a href="modules/hangup.html">hangup</a></td>
 		<td class="summary">Actions related to hanging up a channel.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/log.html">log</a></td>
+		<td class="summary">Custom logger for sequences.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/navigation.html">navigation</a></td>
+		<td class="summary">Menu/phone tree navigation.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/play.html">play</a></td>
+		<td class="summary">Play sounds on a channel.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/record.html">record</a></td>
+		<td class="summary">Record sound from a channel.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/service.html">service</a></td>
+		<td class="summary">Access external services.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/speech_to_text.html">speech_to_text</a></td>
+		<td class="summary">Speech to text translation (experimental).</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/system.html">system</a></td>
+		<td class="summary">Access to operating system commands.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="modules/tracker.html">tracker</a></td>
+		<td class="summary">Track various states.</td>
+	</tr>
+</table>
+<h2>Scripts</h2>
+<table class="module_list">
+	<tr>
+		<td class="name"  ><a href="scripts/jester.lua.html">jester.lua</a></td>
+		<td class="summary">Main launching point for Jester.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="scripts/socket.lua.html">socket.lua</a></td>
+		<td class="summary">Socket listener.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="scripts/extract_actions.lua.html">extract_actions.lua</a></td>
+		<td class="summary">Extracts Jester module actions using ldoc.</td>
+	</tr>
+	<tr>
+		<td class="name"  ><a href="scripts/action_map.lua.html">action_map.lua</a></td>
+		<td class="summary">Table of Jester actions as extracted from Jester using ldoc.</td>
 	</tr>
 </table>
 <h2>Topics</h2>
@@ -105,7 +206,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-12 22:19:18 </i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

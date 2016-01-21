@@ -31,15 +31,42 @@
   <li><a href="../index.html">Index</a></li>
 </ul>
 
+<h2>Contents</h2>
+<ul>
+<li><a href="#Actions">Actions</a></li>
+<li><a href="#Handlers">Handlers</a></li>
+</ul>
 
 
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><strong>play</strong></li>
-  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
@@ -55,24 +82,362 @@
 <div id="content">
 
 <h1>Module <code>play</code></h1>
-<p>Play module.</p>
-<p>
+<p>Play sounds on a channel.</p>
+<p> This module provides actions for playing various sounds on a channel.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Author</strong>: Chad Phillips</li>
+    </ul>
 
-</p>
 
-
+<h2><a href="#Actions">Actions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#play">play</a></td>
+	<td class="summary">Play something on the channel.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#play_keys">play_keys</a></td>
+	<td class="summary">Play a series of key press choices on the channel.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#play_phrase">play_phrase</a></td>
+	<td class="summary">Play a phrase macro.</td>
+	</tr>
+	<tr>
+	<td class="name" ><a href="#play_valid_file">play_valid_file</a></td>
+	<td class="summary">From a list of files, play the first valid file found.</td>
+	</tr>
+</table>
+<h2><a href="#Handlers">Handlers</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" ><a href="#file">file</a></td>
+	<td class="summary">The file handler (default).</td>
+	</tr>
+</table>
 
 <br/>
 <br/>
 
 
+    <h2 class="section-header "><a name="Actions"></a>Actions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "play"></a>
+    <strong>play</strong>
+    </dt>
+    <dd>
+    Play something on the channel.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           play
+        </li>
+        <li><span class="parameter">file</span>
+            <span class="types"><span class="type">tab</span></span>
+           The name of the resource to play. It should be:</p>
+<pre><code> 1. A full file path
+ 2. A relative file path from the FreeSWITCH 'sounds' directory
+ 3. A phrase prefixed with 'phrase:'
+</code></pre>
+
+<p>   To play a single file, a string can be passed. To play several files
+   together in a group, pass a table of names instead.</p>
+
+<p>   Jester uses an ampersand (&amp;) as the default delimiter for playback of
+   mulitple files; to override this, set the '<code>playback_delimiter</code>'
+   variable in either the global or profile configuration file.
+        </li>
+        <li><span class="parameter">keys</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a>.
+        </li>
+        <li><span class="parameter">repetitions</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How many times to repeat the file(s). Default is 1.
+        </li>
+        <li><span class="parameter">wait</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How long to wait between repetitions, in milliseconds. Default
+   is no wait.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"play"</span>,
+     file = {
+       <span class="string">"/tmp/foo.wav"</span>,
+       <span class="string">"bar.wav"</span>,
+       <span class="string">"phrase:goodbye"</span>,
+     },
+     keys = profile.play_keys,
+     repititions = <span class="number">3</span>,
+     wait = <span class="number">2000</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "play_keys"></a>
+    <strong>play_keys</strong>
+    </dt>
+    <dd>
+    Play a series of key press choices on the channel. </p>
+
+<p> This action allows you to map key press choices to announcements about what
+ each key press will do, and play these announcements in a set order on the
+ channel.</p>
+
+<p> Keys are mapped both to actions, and to phrases in the FreeSWITCH phrase
+ engine. The phrases receive the mapped key as an argument.</p>
+
+<p> You use this alongside of the standard 'keys' parameter to provide 'Press 1
+ for this, press 2 for that' menu selections.</p>
+
+<p> The order that the announcements are made can be customized.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           play_keys
+        </li>
+        <li><span class="parameter">key_announcements</span>
+            <span class="types"><span class="type">tab</span></span>
+           A table similar to the 'keys' table, with the value for each key being
+   the name of a FreeSWITCH phrase macro to play for the key announcement.
+        </li>
+        <li><span class="parameter">keys</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a>.
+        </li>
+        <li><span class="parameter">order</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) A list of keys representing the order to play the announcements
+   in. If not provided, then the default order from the profile or from the
+   global configuration is used.
+        </li>
+        <li><span class="parameter">repetitions</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How many times to repeat the file(s). Default is 1.
+        </li>
+        <li><span class="parameter">wait</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How long to wait between repetitions, in milliseconds. Default
+   is no wait.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"play_keys"</span>,
+     key_announcements = {
+       [<span class="string">"4"</span>] = <span class="string">"play_previous"</span>,
+       [<span class="string">"6"</span>] = <span class="string">"play_next"</span>,
+       [<span class="string">"#"</span>] = <span class="string">"exit"</span>,
+     },
+     keys = {
+       [<span class="string">"4"</span>] = <span class="string">"previous_sequence"</span>,
+       [<span class="string">"6"</span>] = <span class="string">"next_sequence"</span>,
+       [<span class="string">"#"</span>] = <span class="string">"exit_sequence"</span>,
+     },
+     order = {<span class="string">"6"</span>, <span class="string">"4"</span>, <span class="string">"#"</span>}
+     repititions = <span class="number">3</span>,
+     wait = <span class="number">2000</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "play_phrase"></a>
+    <strong>play_phrase</strong>
+    </dt>
+    <dd>
+    Play a phrase macro. </p>
+
+<p> This action plays a FreeSWITCH phrase macro on the channel.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           play_phrase
+        </li>
+        <li><span class="parameter">keys</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a>.
+        </li>
+        <li><span class="parameter">language</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) Language to play the phrase in. Defaults to the language set on
+   the channel or the default global language.
+        </li>
+        <li><span class="parameter">phrase</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The name of the phrase macro to play.
+        </li>
+        <li><span class="parameter">phrase_arguments</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           (Optional) Arguments to pass to the phrase macro, if any.
+        </li>
+        <li><span class="parameter">repetitions</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How many times to repeat the file(s). Default is 1.
+        </li>
+        <li><span class="parameter">wait</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How long to wait between repetitions, in milliseconds. Default
+   is no wait.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"play"</span>,
+     keys = profile.play_keys,
+     language = <span class="string">"en"</span>,
+     phrase = <span class="string">"some_phrase"</span>,
+     phrase_arguments = <span class="string">"arg1,arg2,arg3"</span>,
+     repititions = <span class="number">3</span>,
+     wait = <span class="number">2000</span>,
+   }</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "play_valid_file"></a>
+    <strong>play_valid_file</strong>
+    </dt>
+    <dd>
+    From a list of files, play the first valid file found. </p>
+
+<p> This action checks a list of files in order, and plays the first valid file
+ it finds from the list. Useful for playing a custom file, but falling back
+ to default file. Note that for speed, only basic file existence is checked
+ -- the file must be readable by the FreeSWITCH user.
+
+
+    <ul>
+        <li><span class="parameter">action</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           play_valid_file
+        </li>
+        <li><span class="parameter">files</span>
+            <span class="types"><span class="type">tab</span></span>
+           A table of resources to check for possible playback on the channel. Values
+   in the table should be:</p>
+<pre><code> 1. Full file paths
+ 2. Relative file paths from the FreeSWITCH 'sounds' directory
+ 3. A phrase prefixed with 'phrase:' (note that this will always be
+    considered a valid file)
+</code></pre>
+
+<p>   List the files in the order you would prefer them to be searched.
+        </li>
+        <li><span class="parameter">keys</span>
+            <span class="types"><span class="type">tab</span></span>
+           (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a>.
+        </li>
+        <li><span class="parameter">repetitions</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How many times to repeat the file(s). Default is 1.
+        </li>
+        <li><span class="parameter">wait</span>
+            <span class="types"><span class="type">int</span></span>
+           (Optional) How long to wait between repetitions, in milliseconds. Default
+   is no wait.
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
+   to the default handler for the module.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"play_valid_file"</span>,
+     files = {
+       <span class="string">"/tmp/customgreeting.wav"</span>,
+       <span class="string">"standardgreeting.wav"</span>,
+       <span class="string">"phrase:invalid_entry"</span>,
+     },
+     keys = profile.play_keys,
+     repititions = <span class="number">3</span>,
+     wait = <span class="number">2000</span>,
+   }</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Handlers"></a>Handlers</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "file"></a>
+    <strong>file</strong>
+    </dt>
+    <dd>
+    The file handler (default). </p>
+
+<p>  The default handler for the play module, operates on files on the local
+  filesystem.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">
+   {
+     action = <span class="string">"play"</span>,
+     handler = <span class="string">"file"</span>,
+     <span class="comment">-- other params...
+</span>   }</pre>
+    </ul>
+
+</dd>
+</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-12 22:19:18 </i>
+<i style="float:right;">Last updated 2016-01-20 21:44:47 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

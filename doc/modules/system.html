@@ -50,14 +50,14 @@
   <li><a href="../modules/file.html">file</a></li>
   <li><a href="../modules/format.html">format</a></li>
   <li><a href="../modules/get_digits.html">get_digits</a></li>
-  <li><strong>hangup</strong></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
   <li><a href="../modules/log.html">log</a></li>
   <li><a href="../modules/navigation.html">navigation</a></li>
   <li><a href="../modules/play.html">play</a></li>
   <li><a href="../modules/record.html">record</a></li>
   <li><a href="../modules/service.html">service</a></li>
   <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
-  <li><a href="../modules/system.html">system</a></li>
+  <li><strong>system</strong></li>
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
@@ -80,10 +80,10 @@
 
 <div id="content">
 
-<h1>Module <code>hangup</code></h1>
-<p>Actions related to hanging up a channel.</p>
-<p> This module provides actions that deal with hanging up a channel, or dealing
- with a channel in a hung up state.</p>
+<h1>Module <code>system</code></h1>
+<p>Access to operating system commands.</p>
+<p> This module provides access to various commands available at the operating
+ system level.</p>
     <h3>Info:</h3>
     <ul>
         <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
@@ -94,12 +94,12 @@
 <h2><a href="#Actions">Actions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#hangup">hangup</a></td>
-	<td class="summary">Hang up a call.</td>
+	<td class="name" ><a href="#shell_command">shell_command</a></td>
+	<td class="summary">Execute a shell command.</td>
 	</tr>
 	<tr>
-	<td class="name" ><a href="#hangup_sequence">hangup_sequence</a></td>
-	<td class="summary">Registers a sequence to be executed on hangup.</td>
+	<td class="name" ><a href="#shell_command_with_output">shell_command_with_output</a></td>
+	<td class="summary">Execute a shell command, saving the output.</td>
 	</tr>
 </table>
 
@@ -111,25 +111,32 @@
 
     <dl class="function">
     <dt>
-    <a name = "hangup"></a>
-    <strong>hangup</strong>
+    <a name = "shell_command"></a>
+    <strong>shell_command</strong>
     </dt>
     <dd>
-    Hang up a call. </p>
+    Execute a shell command. </p>
 
-<p> This action hangs up the call.  No more regular sequences or actions run
- after this action is called (registered exit/hangup sequences/actions will
- still run).
+<p> This action executes a system shell command, storing the return code in the
+ 'return_code' key of the specificed storage area. The environment the shell
+ command runs in is the same environment FreeSWITCH provides to Lua.</p>
+
+<p> This action is preferred over the <a href="../modules/system.html#shell_command_with_output">shell_command_with_output</a> action if
+ the output of the command is not needed.
 
 
     <ul>
         <li><span class="parameter">action</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup
+           shell_command
         </li>
-        <li><span class="parameter">play</span>
+        <li><span class="parameter">command</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The path to a file, or a phrase, to play before hanging up.
+           The shell command to run. Arguments can be provided if needed.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage area to store the return code. Default is 'system'.
         </li>
     </ul>
 
@@ -140,54 +147,58 @@
     <ul>
         <pre class="example">
    {
-     action = <span class="string">"hangup"</span>,
-     play = <span class="string">"phrase:goodbye"</span>,
+     action = <span class="string">"shell_command"</span>,
+     command = <span class="string">"service foo start"</span>,
+     storage_area = <span class="string">"service_return_code"</span>,
    }</pre>
     </ul>
 
 </dd>
     <dt>
-    <a name = "hangup_sequence"></a>
-    <strong>hangup_sequence</strong>
+    <a name = "shell_command_with_output"></a>
+    <strong>shell_command_with_output</strong>
     </dt>
     <dd>
-    Registers a sequence to be executed on hangup. </p>
+    Execute a shell command, saving the output. </p>
 
-<p> This action registers a sequence to be executed after the call has been hung
- up.  Channel variables and storage values are available when the registered
- sequence is run.</p>
+<p> This action executes a system shell command, storing the return code in the
+ 'return_code' key, and the command output in the 'output' key of the
+ specificed storage area. The environment the shell command runs in is the
+ same environment FreeSWITCH provides to Lua.</p>
 
-<p> Sequences registered here are run after the sequences registered on exit, and
- are only run if the caller hangups up the call before Jester finishes running
- all active sequences related to the call.  If you want to guarantee that the
- sequence will run regardless of user hangup, it's best to put it in the exit
- loop instead of here.
+<p> If the command output is not needed, the <a href="../modules/system.html#shell_command">shell_command</a> action is
+ preferred.</p>
+
+<p> NOTE: Due to limitations in Lua 5.x, this action has a slightly hackish
+ implementation -- it's not portable, doubtful it will work on Windows,
+ mileage may vary.
 
 
     <ul>
         <li><span class="parameter">action</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           hangup_sequence
+           shell_command_with_output
         </li>
-        <li><span class="parameter">sequence</span>
+        <li><span class="parameter">command</span>
             <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           The sequence to execute.
+           The shell command to run. Arguments can be provided if needed.
+        </li>
+        <li><span class="parameter">storage_area</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+           The storage area to store the return code and output. Default is 'system'.
         </li>
     </ul>
 
 
 
-    <h3>See also:</h3>
-    <ul>
-         <a href="../modules/core_actions.html#exit_sequence">core_actions.exit_sequence</a>
-    </ul>
 
     <h3>Usage:</h3>
     <ul>
         <pre class="example">
    {
-     action = <span class="string">"hangup_sequence"</span>,
-     sequence = <span class="string">"cleanup_temp_recording"</span>,
+     action = <span class="string">"shell_command_with_output"</span>,
+     command = <span class="string">"ls -1 /tmp/*.wav"</span>,
+     storage_area = <span class="string">"ls_return"</span>,
    }</pre>
     </ul>
 
