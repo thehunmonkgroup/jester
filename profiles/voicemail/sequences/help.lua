@@ -13,10 +13,6 @@ current_folder = storage("message_settings", "current_folder")
 
 help_keys = {
   ["2"] = "change_folders",
-  ["3"] = "advanced_options",
-  ["4"] = "prev_message",
-  ["5"] = "repeat_message",
-  ["6"] = "next_message",
   ["0"] = "mailbox_options",
   ["*"] = "help " .. skip_folder_announcement,
   ["#"] = "exit exit_extension",
@@ -26,6 +22,10 @@ help_keys = {
 -- comparing a string to a number, so guard against it.
 if total_messages ~= "" and total_messages > 0 then
   help_keys["1"] = "play_messages"
+  help_keys["3"] = "advanced_options"
+  help_keys["4"] = "prev_message"
+  help_keys["5"] = "repeat_message"
+  help_keys["6"] = "next_message"
 end
 
 -- Overide option for not playing the folder announcement -- used when first

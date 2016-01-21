@@ -10,8 +10,8 @@ assume you already have Jester installed correctly:
    NOTE: table structure is totally subject to change in future releases,
    you're on your own with that for now!
 
-3. Create an ODBC resource to connect to the database.  See HANDLERS -> odbc at
-   'help module data' for more information.
+3. Create an ODBC resource to connect to the database.  See Handlers -> odbc in
+   the Jester help for more information.
 
 4. If necessary, edit the database configuration settings in
    'profiles/voicemail/conf.lua'
@@ -39,112 +39,10 @@ assume you already have Jester installed correctly:
 
 8. Call Jester from the dialplan, passing the voicemail profile as the first
    argument, the sequence to call as the second argument, and optional
-   arguments for the sequence as the third argument --see 'help intro run'
-   and 'help sequences arguments' for more information.  The dialplan
-   should look something like this:
-
-    <!-- Leave a message. -->
-    <extension name="voicemail">
-      <condition field="destination_number" expression="^(\d+)$" break="on-true">
-        <action application="answer"/>
-        <action application="sleep" data="1000"/>
-        <!--
-          If the call is coming from another domain, you can set this variable
-          to store the caller's domain with the message -- this can be useful
-          for message replies across domains.  If this is not set, the caller
-          is assumed to be in the same domain as the voicemail.
-        -->
-        <!-- <action application="set" data="voicemail_caller_domain=example.com"/> -->
-        <!--
-          The arguments to the main_greeting sequence should be:
-          <mailbox>[,domain][,group]
-          Domain defaults to the value of the 'domain' channel varaible if not
-          provided.  If the optional 'group' argument is included, the message
-          will be sent to all members of the defined message group.
-        -->
-        <action application="lua" data="jester/jester.lua voicemail main_greeting $1"/>
-        <action application="hangup"/>
-      </condition>
-    </extension>
-    <!-- Check messages. -->
-    <extension name="check_messages">
-      <condition field="destination_number" expression="^(\d+)$" break="on-true">
-        <action application="answer"/>
-        <action application="sleep" data="1000"/>
-        <!--
-          Setting this value to anything other than an empty string will allow
-          the user to log in without password validation.
-        -->
-        <!-- <action application="set" data="voicemail_login_without_password=true"/> -->
-        <!--
-          The arguments to the login sequence should be:
-          [mailbox][,domain]
-          Domain defaults to the value of the 'domain' channel varaible if not
-          provided.  You can do ',somedomain' to provide a custom domain with
-          no mailbox.
-        -->
-        <action application="lua" data="jester/jester.lua voicemail login $1,somedomain"/>
-        <action application="hangup"/>
-      </condition>
-    </extension>
-    <!--
-      Operator extension.
-      The 'operator_extension' setting for a mailbox looks for an extension
-      in the current context that matches the setting's value, and transfers
-      to it.  Leave empty to disable operator outdial.
-    -->
-    <extension name="operator">
-      <condition field="destination_number" expression="^operator$" break="on-true">
-        <!-- Do stuff here to handle dialing the operator. -->
-      </condition>
-    </extension>
-    <!--
-      Outdial extension.
-      The 'outdial_extension' setting for a mailbox looks for an extension
-      in the current context that matches the setting's value, and transfers
-      to it.  Leave empty to disable outdial.
-    -->
-    <extension name="outdial">
-      <condition field="destination_number" expression="^outdial$" break="on-true">
-        <!--
-          Do stuff here to handle dialing an outside line.  The number
-          to call is stored in the channel variable
-          'voicemail_outdial_number'.
-        -->
-        <action application="say" data="en number iterated ${voicemail_outdial_number}"/>
-      </condition>
-    </extension>
-    <!--
-      Callback extension.
-      The 'callback_extension' setting for a mailbox looks for an extension
-      in the current context that matches the setting's value, and transfers
-      to it.  Leave empty to disable calling back the caller.
-    -->
-    <extension name="callback">
-      <condition field="destination_number" expression="^callback$" break="on-true">
-        <!--
-          Do stuff here to handle dialing a callback number.  The number
-          to call is stored in the channel variable
-          'voicemail_outdial_number'.
-        -->
-        <action application="say" data="en number iterated ${voicemail_outdial_number}"/>
-      </condition>
-    </extension>
-    <!--
-      Exit extension.
-      The 'exit_extension' setting for a mailbox looks for an extension
-      in the current context that matches the setting's value, and transfers
-      to it.  Leave empty to disable exiting voicemail to another part of the
-      dialplan.
-    -->
-    <extension name="exit_voicemail">
-      <condition field="destination_number" expression="^exit_voicemail$" break="on-true">
-        <!--
-          Do stuff here to handle the call.  All channel variables from the
-          Jester session will still be available.
-        -->
-      </condition>
-    </extension>
+   arguments for the sequence as the third argument -- see
+   Intro -> Running Jester and Sequences -> Passing arguments
+   for more information. The 'example_dialplan.xml' include with the profile
+   has a fully functional set of extensions, check it out for usage info.
 
 9. The voicemail profile fires three types of events:
      new_message:
