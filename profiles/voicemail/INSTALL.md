@@ -22,7 +22,7 @@ assume you already have Jester installed correctly:
 6. From within the Asterisk sounds directory, create a symlink from the digits
    directory to 'time'.  If you're on a Linux/Unix system this should do it:
 
-     ```sh
+     ```
      ln -s digits time
      ```
 
