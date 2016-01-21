@@ -76,11 +76,7 @@ Jester is relatively easy to install, especially if you have a modern package-ba
    appropriately.
 
 7. Jester is now installed.  If you want to additionally install the default
-   profile, see the INSTALL.txt located at
-
-    ```
-      jester/profiles/voicemail/INSTALL.txt
-    ```
+   'voicemail' profile, see the [INSTALL](profiles/voicemail/INSTALL.md) file.
 
 
 #### Note to Windows users:
