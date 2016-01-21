@@ -1,7 +1,7 @@
 # Jester
 
 ## Introduction
-Jester is a scripting toolkit for [FreeSWITCH](https://freeswitch.org) written in the Lua programming language. It's functionality sits squarely between the feature set of the XML dialplan, IVR menus, and custom scripting. The goal of Jester is to ease development of voice workflows by providing a simple, unified way to implement more complex features that normally require custom scripting.
+Jester is a scripting toolkit for [FreeSWITCH](https://freeswitch.org) written in the [Lua](http://www.lua.org) programming language. It's functionality sits squarely between the feature set of the XML dialplan, IVR menus, and custom scripting. The goal of Jester is to ease development of voice workflows by providing a simple, unified way to implement more complex features that normally require custom scripting.
 
 ## Installation
 See [INSTALL.md](INSTALL.md) for installation instructions.
