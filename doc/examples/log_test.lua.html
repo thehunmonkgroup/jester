@@ -31,19 +31,12 @@
   <li><a href="../index.html">Index</a></li>
 </ul>
 
-<h2>Contents</h2>
-<ul>
-<li><a href="#jsequence">jsequence </a></li>
-</ul>
 
 
-<h2>Topics</h2>
+<h2>Examples</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
-  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
-  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
-  <li><strong>04-Scripts</strong></li>
-  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+  <li><strong>log_test.lua</strong></li>
+  <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
 <h2>Modules</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
@@ -75,56 +68,40 @@
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
-<h2>Examples</h2>
+<h2>Topics</h2>
 <ul class="$(kind=='Topics' and '' or 'nowrap'">
-  <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
-  <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 
 </div>
 
 <div id="content">
 
-
-<h1>Various helper scripts</h1>
-
-<p>Developing in any code system can be a complicated process, and developers inevitably come up with various helper scripts to help smooth the process.</p>
-
-<p>Here you will find some scripts that ease working with Jester.</p>
-
-<p><a name="jsequence"></a></p>
-<h2>jsequence</h2>
-
-<p>Easily generate properly formatted sequence templates or action fragments with one command.</p>
-
-<p>jsequence removes the headache of getting initial sequence templates laid out. Probably the most frustrating part of building sequences is dealing with syntax errors due to improper formatting, and this script eliminates many of those issues.</p>
-
-<p>When called with no arguments, it brings up a dialog asking a few simple questions which it uses to generate the template. Alternatively, it can be called with a variable number of arguments, each the name of an action, and it will output just the structure for the passed actions, which can then be copied or piped into an existing sequence.</p>
-
-<p>You can also call it with the following special arguments:</p>
-
-<ul>
-    <li><code>keys</code>: outputs the template for the rather complex <code>keys</code> parameter.</li>
-    <li><code>actions</code>: outputs a list of all known actions.</li>
-</ul>
-
-<h4>Installation</h4>
-
-
-<!--
-###### Via Luarocks
-
-The script is installed into your path if the [Luarocks](https://luarocks.org) package manager is used to install Jester.
--->
-
-
-<h6>Manually</h6>
-
-<ol>
-    <li>Follow the instructions in the <a href="https://github.com/thehunmonkgroup/jester/blob/master/INSTALL.md">main Jester installation instructions</a> for properly setting your LUA_PATH environment variable.</li>
-    <li>Move (or better yet, symlink) this script somewhere into your $PATH (~/bin, /usr/local/bin, etc.)</li>
-    <li>If you use bash completion, you can place <code>scripts/jsequence.bash_completion</code> in your bash completion directory to enable completion for the command.</li>
-</ol>
+    <h2>log_test.lua</h2>
+<pre>
+<span class="keyword">return</span>
+{
+  {
+    action = <span class="string">"log"</span>,
+    message = <span class="string">"Hello world"</span>,
+  },
+  {
+    action = <span class="string">"log"</span>,
+    message = <span class="string">"Jester sequences directory: "</span> .. global.sequence_path,
+  },
+  {
+    action = <span class="string">"log"</span>,
+    message = <span class="string">"Jester channel variable : "</span> .. variable(<span class="string">"caller_id_number"</span>),
+  },
+  {
+    action = <span class="string">"log"</span>,
+    message = <span class="string">"Jester storage test: "</span> .. storage(<span class="string">"data"</span>, <span class="string">"voicemail_settings_mailbox"</span>),
+  },
+}</pre>
 
 
 </div> <!-- id="content" -->

@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Jester documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+    <link rel="stylesheet" href="../ldoc.custom.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Jester</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+
+
+<h2>Examples</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
+  <li><strong>phone_to_post_test.lua</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../modules/core.html">core</a></li>
+  <li><a href="../modules/core.conf.html">core.conf</a></li>
+  <li><a href="../modules/core_actions.html">core_actions</a></li>
+  <li><a href="../modules/couchdb.html">couchdb</a></li>
+  <li><a href="../modules/data.html">data</a></li>
+  <li><a href="../modules/dialplan_tools.html">dialplan_tools</a></li>
+  <li><a href="../modules/email.html">email</a></li>
+  <li><a href="../modules/event.html">event</a></li>
+  <li><a href="../modules/file.html">file</a></li>
+  <li><a href="../modules/format.html">format</a></li>
+  <li><a href="../modules/get_digits.html">get_digits</a></li>
+  <li><a href="../modules/hangup.html">hangup</a></li>
+  <li><a href="../modules/log.html">log</a></li>
+  <li><a href="../modules/navigation.html">navigation</a></li>
+  <li><a href="../modules/play.html">play</a></li>
+  <li><a href="../modules/record.html">record</a></li>
+  <li><a href="../modules/service.html">service</a></li>
+  <li><a href="../modules/speech_to_text.html">speech_to_text</a></li>
+  <li><a href="../modules/system.html">system</a></li>
+  <li><a href="../modules/tracker.html">tracker</a></li>
+</ul>
+<h2>Scripts</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
+  <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
+  <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
+  <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
+  <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
+  <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
+  <li><a href="../topics/04-Scripts.md.html">04-Scripts</a></li>
+  <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+    <h2>phone_to_post_test.lua</h2>
+<pre>
+<span class="comment">--- Converts phone call audio into web page data.
+</span><span class="comment">--
+</span><span class="comment">-- Records a sound file, converts the speech to text, and stores it on a
+</span><span class="comment">-- public web server.
+</span><span class="comment">--
+</span><span class="comment">-- The <a href="../modules/speech_to_text.html#">speech_to_text</a> module must be properly configured, and the default
+</span><span class="comment">-- FreeSWITCH voicemail phrase macros must be available for this to work.
+</span><span class="comment">--
+</span><span class="comment">-- The recording is limited to 10 seconds, you must wait for the "saved"
+</span><span class="comment">-- prompt to allow the webservice POST to complete.
+</span><span class="comment">--
+</span><span class="comment">-- The location of the web page containing the message will be output to the
+</span><span class="comment">-- FreeSWITCH console -- on that web page the message will be listed in the
+</span><span class="comment">-- QUERY_STRING header.
+</span><span class="comment">--
+</span><span class="comment">-- This is a very simple workflow -- more robust workflows would deal with
+</span><span class="comment">-- the user hanging up before the service requests are made, validating that
+</span><span class="comment">-- the translation was successful, etc.
+</span>
+temp_dir = <span class="string">"/tmp"</span>
+filename = <span class="string">"post_test.wav"</span>
+message = storage(<span class="string">"speech_to_text"</span>, <span class="string">"translation_1"</span>)
+post_response = storage(<span class="string">"service"</span>, <span class="string">"raw"</span>)
+
+<span class="keyword">return</span>
+{
+  {
+    action = <span class="string">"wait"</span>,
+    milliseconds = <span class="number">500</span>,
+  },
+  {
+    action = <span class="string">"play_phrase"</span>,
+    phrase = <span class="string">"voicemail_record_message"</span>,
+  },
+  {
+    action = <span class="string">"record"</span>,
+    location = temp_dir,
+    filename = filename,
+    pre_record_sound = <span class="string">"tone"</span>,
+    max_length = <span class="number">10</span>,
+    silence_secs = <span class="number">2</span>,
+    keys = {
+      [<span class="string">"0"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"1"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"2"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"3"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"4"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"5"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"6"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"7"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"8"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"9"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"*"</span>] = <span class="string">":break"</span>,
+      [<span class="string">"#"</span>] = <span class="string">":break"</span>,
+    },
+  },
+  {
+    action = <span class="string">"speech_to_text_from_file"</span>,
+    filepath = temp_dir .. <span class="string">"/"</span> .. filename,
+    app_key = profile.att_app_key,
+    app_secret = profile.att_app_secret,
+  },
+  {
+    action = <span class="string">"http_request"</span>,
+    path = <span class="string">"post.php"</span>,
+    query = {
+      dir = <span class="string">"jester"</span>,
+      message = message,
+    },
+    server = <span class="string">"posttestserver.com"</span>,
+  },
+  {
+    action = <span class="string">"log"</span>,
+    message = <span class="string">"POST MESSAGE RESPONSE: "</span> .. post_response,
+  },
+  {
+    action = <span class="string">"play_phrase"</span>,
+    phrase = <span class="string">"voicemail_ack"</span>,
+    phrase_arguments = <span class="string">"saved"</span>,
+  },
+  {
+    action = <span class="string">"hangup"</span>,
+  },
+}</pre>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
