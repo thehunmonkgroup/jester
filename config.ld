@@ -37,7 +37,7 @@ topics = {
 }
 format = "markdown"
 all = false
---examples = "./examples"
+examples = "./examples"
 wrap = true
 no_space_before_args = true
 style = "!fixed"
