@@ -62,7 +62,7 @@ if freeswitch then
   conf.base_dir = api:executeString("global_getvar base_dir")
   conf.sounds_dir = api:executeString("global_getvar sounds_dir")
   -- Override this if scripts are hosted in a non-standard location.
-  conf.scripts_dir = conf.base_dir .. "/scripts"
+  conf.scripts_dir = api:executeString("global_getvar script_dir")
   conf.jester_dir = conf.scripts_dir .. "/jester"
   conf.sequence_path = conf.jester_dir .. "/sequences"
   conf.profile_path = conf.jester_dir .. "/profiles"
