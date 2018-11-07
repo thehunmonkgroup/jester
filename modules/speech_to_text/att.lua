@@ -1,3 +1,8 @@
+--[[
+  NOTE: This handler is left for historical purposes, it's doubtful that it
+  still works.
+]]
+
 local core = require "jester.core"
 
 local _M = {}

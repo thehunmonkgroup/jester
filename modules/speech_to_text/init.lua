@@ -10,20 +10,20 @@
 --
 -- @module speech_to_text
 -- @author Chad Phillips
--- @copyright 2011-2015 Chad Phillips
+-- @copyright 2011-2018 Chad Phillips
 
 
---- The AT&T handler (default).
+--- The Watson handler (default).
 --
---  Uses AT&T's Speech to Text service. The service requires a valid developer
---  account and application key/secret, see
---  [here](https://developer.att.com/apis/speech) for more information.
+--  Uses Watson's Speech to Text service. The service requires a valid developer
+--  account and api key, see
+--  [here](https://console.bluemix.net/catalog/services/speech-to-text) for more information.
 --
--- @handler att
+-- @handler watson
 -- @usage
 --   {
 --     action = "speech_to_text_from_file",
---     handler = "att",
+--     handler = "watson",
 --     -- other params...
 --   }
 
@@ -53,10 +53,8 @@
 -- @action speech_to_text_from_file
 -- @string action
 --   speech\_to\_text\_from\_file
--- @string app_key
---   (Optional) The application key used to access the service.
--- @string app_secret
---   (Optional) The application secret used to access the service.
+-- @string api_key
+--   (Optional) The API key used to access the service.
 -- @string filepath
 --   The full path to the file to translate.
 -- @string storage_area
@@ -65,9 +63,8 @@
 -- @usage
 --   {
 --     action = "speech_to_text_from_file",
---     app_key = profile.speech_to_text_app_key,
---     app_secret = profile.speech_to_text_app_secret,
---     filepatch = "/tmp/foo.wav",
+--     api_key = profile.speech_to_text_app_key,
+--     filepath = "/tmp/foo.wav",
 --     storage_area = "foo_to_text",
 --   }
 
@@ -79,7 +76,8 @@ local lfs = require("lfs")
 require "jester.support.file"
 
 --local google = require("jester.modules.speech_to_text.google")
-local att = require("jester.modules.speech_to_text.att")
+--local att = require("jester.modules.speech_to_text.att")
+local watson = require("jester.modules.speech_to_text.watson")
 
 local _M = {}
 
@@ -124,8 +122,15 @@ end
 --[[
   Speech to text using AT&T's API.
 ]]
-function _M.speech_to_text_from_file_att(action)
-  speech_to_text_from_file(action, att.speech_to_text_from_file)
+--function _M.speech_to_text_from_file_att(action)
+--  speech_to_text_from_file(action, att.speech_to_text_from_file)
+--end
+
+--[[
+  Speech to text using Watson's API.
+]]
+function _M.speech_to_text_from_file_watson(action)
+  speech_to_text_from_file(action, watson.speech_to_text_from_file)
 end
 
 return _M
