@@ -164,9 +164,10 @@ function _M.init_channel()
   -- Stores various channel-specific data for the duration of a single call to
   -- the Jester core engine.
   --
-  -- @tab stack
+  -- @table channel
+  -- @field stack
   --   Maintain the different stacks in Jester core.
-  -- @tab storage
+  -- @field storage
   --   Persistant storage areas.
   _M.channel = {
     stack = {},
@@ -862,7 +863,7 @@ end
 --
 -- Unlike session:ready(), this ready check returns true if Jester is in either
 -- its exit or hungup states as well.
-
+--
 -- Do use this if you want to loop until Jester finishes, don't use this if you
 -- want to loop until the call hangs up.
 --
