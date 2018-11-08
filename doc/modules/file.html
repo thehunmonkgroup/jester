@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -62,14 +62,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -77,7 +77,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -150,16 +150,16 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            create_directory
         </li>
         <li><span class="parameter">directory</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The directory to create, including the path. Provide either the full path
    or a relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -170,11 +170,10 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"create_directory"</span>,
-     directory = <span class="string">"/tmp/mynewdir"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"create_directory"</span>,
+  directory = <span class="string">"/tmp/mynewdir"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -190,16 +189,16 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            delete_file
         </li>
         <li><span class="parameter">file</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The file to delete, including the path. Provide either the full path or a
    relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -210,11 +209,10 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"delete_file"</span>,
-     file = <span class="string">"/tmp/afile.txt"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"delete_file"</span>,
+  file = <span class="string">"/tmp/afile.txt"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -234,24 +232,24 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            file_exists
         </li>
         <li><span class="parameter">file</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The file to check, including the path. Provide either the full path or a
    relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">if_false</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The sequence to call if the file does not exist.
         </li>
         <li><span class="parameter">if_true</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The sequence to call if the file exists.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -262,13 +260,12 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"file_exists"</span>,
-     file = <span class="string">"/tmp/afile.txt"</span>,
-     if_false = <span class="string">"do_this"</span>,
-     if_true = <span class="string">"do_that"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"file_exists"</span>,
+  file = <span class="string">"/tmp/afile.txt"</span>,
+  if_false = <span class="string">"do_this"</span>,
+  if_true = <span class="string">"do_that"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -285,16 +282,16 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            file_size
         </li>
         <li><span class="parameter">file</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The file to check, including the path. Provide either the full path or a
    relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -305,11 +302,10 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"file_size"</span>,
-     file = <span class="string">"/tmp/afile.txt"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"file_size"</span>,
+  file = <span class="string">"/tmp/afile.txt"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -325,7 +321,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            move_file
         </li>
         <li><span class="parameter">binary</span>
@@ -340,17 +336,17 @@
    this to true. Default is false.
         </li>
         <li><span class="parameter">destination</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The new destination of the file, including the path. Provide either the
    full path or a relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">source</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The file to move, including the path. Provide either the full path or a
    relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -361,14 +357,13 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"move_file"</span>,
-     binary = <span class="keyword">false</span>,
-     copy = <span class="keyword">false</span>,
-     destination = <span class="string">"storage/mymovedfile.txt"</span>,
-     source = <span class="string">"/tmp/originalfile.txt"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"move_file"</span>,
+  binary = <span class="keyword">false</span>,
+  copy = <span class="keyword">false</span>,
+  destination = <span class="string">"storage/mymovedfile.txt"</span>,
+  source = <span class="string">"/tmp/originalfile.txt"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -385,16 +380,16 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            remove_directory
         </li>
         <li><span class="parameter">directory</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The directory to remove, including the path. Provide either the full path
    or a relative path from the FreeSWITCH 'base_dir' global variable.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -405,11 +400,10 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"remove_directory"</span>,
-     directory = <span class="string">"/tmp/somedir"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"remove_directory"</span>,
+  directory = <span class="string">"/tmp/somedir"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -434,12 +428,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"create_directory"</span>,
-     handler = <span class="string">"filesystem"</span>,
-     <span class="comment">-- other params...
-</span>   }</pre>
+        <pre class="example">{
+  action = <span class="string">"create_directory"</span>,
+  handler = <span class="string">"filesystem"</span>,
+  <span class="comment">-- other params...
+</span>}</pre>
     </ul>
 
 </dd>
@@ -449,8 +442,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

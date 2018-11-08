@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -62,14 +62,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -77,7 +77,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -147,7 +147,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            data_delete
         </li>
         <li><span class="parameter">config</span>
@@ -165,7 +165,7 @@
    <strong>WARNING:</strong> If you exclude this field, all rows will be deleted!
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -176,15 +176,14 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"data_delete"</span>,
-     config = profile.db_config,
-     filters = {
-       context = <span class="string">"default"</span>,
-       __mailbox = <span class="number">1234</span>,
-     },
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"data_delete"</span>,
+  config = profile.db_config,
+  filters = {
+    context = <span class="string">"default"</span>,
+    __mailbox = <span class="number">1234</span>,
+  },
+}</pre>
     </ul>
 
 </dd>
@@ -205,7 +204,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            data_load
         </li>
         <li><span class="parameter">config</span>
@@ -242,22 +241,22 @@
    rows returned.
         </li>
         <li><span class="parameter">sort</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) A field to sort the data by before loading. This is only used
    with the 'mulitple' parameter.
         </li>
         <li><span class="parameter">sort_order</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The sorting order. Only used with the 'sort' and 'multiple'
    parameters. Valid values are 'asc' and 'desc', the default is 'asc'.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -268,25 +267,24 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"data_load"</span>,
-     config = profile.db_config,
-     fields = {
-       <span class="string">"__mailbox"</span>,
-       <span class="string">"context"</span>,
-       <span class="string">"password"</span>,
-       <span class="string">"email"</span>,
-     },
-     filters = {
-       context = <span class="string">"default"</span>,
-       __mailbox = <span class="number">1234</span>,
-     },
-     multiple = <span class="keyword">true</span>,
-     sort = <span class="string">"mailbox"</span>,
-     sort_order = <span class="string">"asc"</span>,
-     storage_area = <span class="string">"mailbox_settings"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"data_load"</span>,
+  config = profile.db_config,
+  fields = {
+    <span class="string">"__mailbox"</span>,
+    <span class="string">"context"</span>,
+    <span class="string">"password"</span>,
+    <span class="string">"email"</span>,
+  },
+  filters = {
+    context = <span class="string">"default"</span>,
+    __mailbox = <span class="number">1234</span>,
+  },
+  multiple = <span class="keyword">true</span>,
+  sort = <span class="string">"mailbox"</span>,
+  sort_order = <span class="string">"asc"</span>,
+  storage_area = <span class="string">"mailbox_settings"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -303,7 +301,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            data_load_count
         </li>
         <li><span class="parameter">config</span>
@@ -312,7 +310,7 @@
    Check <a href="#Handlers">handlers</a> to see the fields for this table.
         </li>
         <li><span class="parameter">count_field</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The field to use for counting.
         </li>
         <li><span class="parameter">filters</span>
@@ -326,17 +324,17 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be counted!
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">storage_key</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The key to store the count under in the 'data' storage area.
    Default is 'count'.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -347,18 +345,17 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"data_load_count"</span>,
-     config = profile.db_config,
-     count_field = <span class="string">"messages"</span>,
-     filters = {
-       context = <span class="string">"default"</span>,
-       __mailbox = <span class="number">1234</span>,
-     },
-     storage_area = <span class="string">"mailbox"</span>,
-     storage_key = <span class="string">"number_of_messages"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"data_load_count"</span>,
+  config = profile.db_config,
+  count_field = <span class="string">"messages"</span>,
+  filters = {
+    context = <span class="string">"default"</span>,
+    __mailbox = <span class="number">1234</span>,
+  },
+  storage_area = <span class="string">"mailbox"</span>,
+  storage_key = <span class="string">"number_of_messages"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -385,7 +382,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            data_query
         </li>
         <li><span class="parameter">config</span>
@@ -395,7 +392,7 @@
    for this action, any table information is provided by the query parameter.
         </li>
         <li><span class="parameter">query</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The custom query to execute. Tokens are replaced prior to running the
    query.
         </li>
@@ -406,7 +403,7 @@
    in the '__count' key. Default is false.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
@@ -419,7 +416,7 @@
    appropriate/available.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -430,17 +427,16 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"data_query"</span>,
-     config = profile.db_config,
-     query = <span class="string">"SELECT mailbox, SUM(messages) AS count FROM messages WHERE context = ':context' GROUP BY mailbox"</span>,
-     return_fields = <span class="keyword">true</span>,
-     storage_area = <span class="string">"message_counts"</span>,
-     tokens = {
-       context = <span class="string">"default"</span>,
-     },
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"data_query"</span>,
+  config = profile.db_config,
+  query = <span class="string">"SELECT mailbox, SUM(messages) AS count FROM messages WHERE context = ':context' GROUP BY mailbox"</span>,
+  return_fields = <span class="keyword">true</span>,
+  storage_area = <span class="string">"message_counts"</span>,
+  tokens = {
+    context = <span class="string">"default"</span>,
+  },
+}</pre>
     </ul>
 
 </dd>
@@ -456,7 +452,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            data_update
         </li>
         <li><span class="parameter">config</span>
@@ -481,14 +477,14 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be updated!
         </li>
         <li><span class="parameter">update_type</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) If this parameter is not provided, the default behavior is to
    first attempt an update, and if no rows were updated, then perform an
    insert. To force either an update or insert, set this to 'update' or
    'insert' respectively.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -499,20 +495,19 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"data_update"</span>,
-     config = profile.db_config,
-     fields = {
-       __max_messages = <span class="number">100</span>,
-       password = <span class="string">"supersecret"</span>,
-     },
-     filters = {
-       context = <span class="string">"default"</span>,
-       __mailbox = <span class="number">1234</span>,
-     },
-     update_type = <span class="string">"update"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"data_update"</span>,
+  config = profile.db_config,
+  fields = {
+    __max_messages = <span class="number">100</span>,
+    password = <span class="string">"supersecret"</span>,
+  },
+  filters = {
+    context = <span class="string">"default"</span>,
+    __mailbox = <span class="number">1234</span>,
+  },
+  update_type = <span class="string">"update"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -561,17 +556,16 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"data_load"</span>,
-     handler = <span class="string">"odbc"</span>,
-     config = {
-       database_type = <span class="string">"sqlite"</span>,
-       database = <span class="string">"/tmp/test.db"</span>,
-       <span class="global">table</span> = <span class="string">"test"</span>,
-     },
-     <span class="comment">-- other params...
-</span>   }</pre>
+        <pre class="example">{
+  action = <span class="string">"data_load"</span>,
+  handler = <span class="string">"odbc"</span>,
+  config = {
+    database_type = <span class="string">"sqlite"</span>,
+    database = <span class="string">"/tmp/test.db"</span>,
+    <span class="global">table</span> = <span class="string">"test"</span>,
+  },
+  <span class="comment">-- other params...
+</span>}</pre>
     </ul>
 
 </dd>
@@ -581,8 +575,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

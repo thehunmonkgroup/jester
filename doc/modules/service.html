@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -62,14 +62,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -77,7 +77,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -137,21 +137,21 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            http_request
         </li>
         <li><span class="parameter">fragment</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) A fragment to append to the URL. It will be properly escaped
    before sending.
         </li>
         <li><span class="parameter">password</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) A password to use for basic authentication. 'user' parameter
    must also be provided.
         </li>
         <li><span class="parameter">path</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The server path to send the request to, no leading or trailing
    slash.
         </li>
@@ -166,7 +166,7 @@
    be properly URL escaped before sending.
         </li>
         <li><span class="parameter">response</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The format to expect the response in:</p>
 <pre><code> lua:
    A string that represents a Lua table, of the following format:
@@ -182,16 +182,16 @@
 <p>   Default is 'raw'.
         </li>
         <li><span class="parameter">server</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The server to send the request to. Default is 'localhost'.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the response in. Defaults to
    'service'.
         </li>
         <li><span class="parameter">user</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) A user name to use for basic authentication.
         </li>
     </ul>
@@ -201,22 +201,21 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"http_request"</span>,
-     fragment = <span class="string">"some fragment"</span>,
-     password = <span class="string">"secret"</span>,
-     path = <span class="string">"path/to/resource"</span>,
-     port = <span class="number">80</span>,
-     query = {
-       foo = <span class="string">"bar"</span>,
-       baz = <span class="string">"two words"</span>
-     },
-     response = <span class="string">"raw"</span>,
-     server = <span class="string">"www.example.com"</span>,
-     storage_area = <span class="string">"my_http_request"</span>,
-     user = <span class="string">"bob"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"http_request"</span>,
+  fragment = <span class="string">"some fragment"</span>,
+  password = <span class="string">"secret"</span>,
+  path = <span class="string">"path/to/resource"</span>,
+  port = <span class="number">80</span>,
+  query = {
+    foo = <span class="string">"bar"</span>,
+    baz = <span class="string">"two words"</span>
+  },
+  response = <span class="string">"raw"</span>,
+  server = <span class="string">"www.example.com"</span>,
+  storage_area = <span class="string">"my_http_request"</span>,
+  user = <span class="string">"bob"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -256,8 +255,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

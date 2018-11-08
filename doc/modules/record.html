@@ -40,7 +40,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -63,14 +63,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -78,7 +78,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -142,7 +142,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            record
         </li>
         <li><span class="parameter">append</span>
@@ -152,7 +152,7 @@
    will be created. Default is false.
         </li>
         <li><span class="parameter">filename</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The name of the recorded file. Defaults to
    '<code>%Y-%m-%d_%H:%M:%S-${uuid}.wav</code>'.
         </li>
@@ -161,7 +161,7 @@
            (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a>.
         </li>
         <li><span class="parameter">location</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) Where to store the file. Default is '/tmp'.
         </li>
         <li><span class="parameter">max_length</span>
@@ -178,7 +178,7 @@
    Default is 200 milliseconds.
         </li>
         <li><span class="parameter">pre_record_sound</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) Set to a file or phrase to play prior to beginning the
    recording, or to 'tone' to play a typical 'wait for the beep' tone.
    Default is to do nothing.
@@ -194,14 +194,14 @@
    silence. Higher numbers mean more noise will be tolerated. Default is 20.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) If set the <a href="../modules/record.html#last_recording">last_recording</a> storage values are also stored in
    this storage area with the 'last_recording_' prefix stripped, eg.
    '<code>storage_area = "message"</code>' would store 'name' in the 'message'
    storage area with the same value as 'last_recording_name'.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -212,22 +212,21 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"record"</span>,
-     append = <span class="keyword">false</span>,
-     filename = greeting .. <span class="string">".tmp.wav"</span>,
-     keys = {
-       [<span class="string">"#"</span>] = <span class="string">":break"</span>,
-     },
-     location = <span class="string">"/tmp"</span>,
-     max_length = profile.max_greeting_length,
-     pre_record_delay = <span class="number">200</span>,
-     pre_record_sound = <span class="string">"phrase:beep"</span>,
-     silence_secs = profile.recording_silence_end,
-     silence_threshold = profile.recording_silence_threshold,
-     storage_area = <span class="string">"record_greeting"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"record"</span>,
+  append = <span class="keyword">false</span>,
+  filename = greeting .. <span class="string">".tmp.wav"</span>,
+  keys = {
+    [<span class="string">"#"</span>] = <span class="string">":break"</span>,
+  },
+  location = <span class="string">"/tmp"</span>,
+  max_length = profile.max_greeting_length,
+  pre_record_delay = <span class="number">200</span>,
+  pre_record_sound = <span class="string">"phrase:beep"</span>,
+  silence_secs = profile.recording_silence_end,
+  silence_threshold = profile.recording_silence_threshold,
+  storage_area = <span class="string">"record_greeting"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -244,26 +243,26 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            record_merge
         </li>
         <li><span class="parameter">base_file</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            Full path to the base file for the merge. The will be the file that
    remains after the merge.
         </li>
         <li><span class="parameter">merge_file</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            Full path to the merge file for the merge. This file will not longer exist
    after the merge.
         </li>
         <li><span class="parameter">merge_type</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The type of merge to perform, valid values are 'append' and
    'prepend'. Default is 'append'.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -274,13 +273,12 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"record_merge"</span>,
-     base_file = <span class="string">"storage/greeting.wav"</span>,
-     merge_file = <span class="string">"/tmp/preroll.wav"</span>,
-     merge_type = <span class="string">"prepend"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"record_merge"</span>,
+  base_file = <span class="string">"storage/greeting.wav"</span>,
+  merge_file = <span class="string">"/tmp/preroll.wav"</span>,
+  merge_type = <span class="string">"prepend"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -305,12 +303,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"record"</span>,
-     handler = <span class="string">"file"</span>,
-     <span class="comment">-- other params...
-</span>   }</pre>
+        <pre class="example">{
+  action = <span class="string">"record"</span>,
+  handler = <span class="string">"file"</span>,
+  <span class="comment">-- other params...
+</span>}</pre>
     </ul>
 
 </dd>
@@ -357,8 +354,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

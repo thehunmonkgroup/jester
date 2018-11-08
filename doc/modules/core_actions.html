@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><strong>core_actions</strong></li>
@@ -61,14 +61,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -76,7 +76,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -164,15 +164,15 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            api_command
         </li>
         <li><span class="parameter">command</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The command to execute.
         </li>
         <li><span class="parameter">storage_key</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The key to store the command result under in the 'api_command'
    storage area. Default is 'result'.
         </li>
@@ -183,12 +183,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"api_command"</span>,
-     command = <span class="string">"uptime"</span>,
-     storage_key = <span class="string">"uptime_result"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"api_command"</span>,
+  command = <span class="string">"uptime"</span>,
+  storage_key = <span class="string">"uptime_result"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -204,11 +203,11 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            call_sequence
         </li>
         <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The new sequence to call. By default the original sequence is not resumed
    when the new sequence completes. To resume the old sequence (effectively
    making the new sequence a subroutine of the original), prefix the sequence
@@ -221,16 +220,15 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"call_sequence"</span>,
-     sequence = <span class="string">"foo_sequence arg1"</span>,
-   }
-   <span class="comment">-- or...
-</span>   {
-     action = <span class="string">"call_sequence"</span>,
-     sequence = <span class="string">"sub:foo_sequence arg1,arg2"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"call_sequence"</span>,
+  sequence = <span class="string">"foo_sequence arg1"</span>,
+}
+<span class="comment">-- or...
+</span>{
+  action = <span class="string">"call_sequence"</span>,
+  sequence = <span class="string">"sub:foo_sequence arg1,arg2"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -246,7 +244,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            clear_storage
         </li>
         <li><span class="parameter">data_keys</span>
@@ -256,7 +254,7 @@
    caution!
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The area to clear. Defaults to 'default'.
         </li>
     </ul>
@@ -266,15 +264,14 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"clear_storage"</span>,
-     data_keys = {
-       <span class="string">"key1"</span>,
-       <span class="string">"key2"</span>,
-     },
-     storage_area = <span class="string">"someplace"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"clear_storage"</span>,
+  data_keys = {
+    <span class="string">"key1"</span>,
+    <span class="string">"key2"</span>,
+  },
+  storage_area = <span class="string">"someplace"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -293,29 +290,29 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            conditional
         </li>
         <li><span class="parameter">compare_to</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The value that you expect it to be, or for pattern matching, any valid Lua
    pattern (see the Lua manual for more information on Lua patterns).
         </li>
         <li><span class="parameter">comparison</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The kind of comparison to perform. Valid values are "equal",
    "match", "greater_than", and "less_than". Default is "equal".
         </li>
         <li><span class="parameter">if_false</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The sequence to call if the comparison is false.
         </li>
         <li><span class="parameter">if_true</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The sequence to call if the comparison is true.
         </li>
         <li><span class="parameter">value</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The value that you want to compare.
         </li>
     </ul>
@@ -325,24 +322,23 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"conditional"</span>,
-     value = number_of_messages,
-     compare_to = <span class="number">0</span>,
-     comparison = <span class="string">"equal"</span>,
-     if_true = <span class="string">"exit"</span>,
-     if_false = <span class="string">"play_messages"</span>,
-   }
-   <span class="comment">-- or...
-</span>   {
-     action = <span class="string">"conditional"</span>,
-     value = name,
-     compare_to = <span class="string">"^bob"</span>,
-     comparison = <span class="string">"match"</span>,
-     if_true = <span class="string">"its_bob"</span>,
-     if_false = <span class="string">"not_bob"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"conditional"</span>,
+  value = number_of_messages,
+  compare_to = <span class="number">0</span>,
+  comparison = <span class="string">"equal"</span>,
+  if_true = <span class="string">"exit"</span>,
+  if_false = <span class="string">"play_messages"</span>,
+}
+<span class="comment">-- or...
+</span>{
+  action = <span class="string">"conditional"</span>,
+  value = name,
+  compare_to = <span class="string">"^bob"</span>,
+  comparison = <span class="string">"match"</span>,
+  if_true = <span class="string">"its_bob"</span>,
+  if_false = <span class="string">"not_bob"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -360,11 +356,11 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            copy_storage
         </li>
         <li><span class="parameter">copy_to</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The storage area to copy the data to. Note that any data already existing
    in this area will be removed prior to the copy.
         </li>
@@ -374,7 +370,7 @@
    which effectively makes the operation a move. Default is false.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The area to copy. Defaults to 'default'.
         </li>
     </ul>
@@ -384,13 +380,12 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"copy_storage"</span>,
-     copy_to = <span class="string">"new_place"</span>,
-     move = <span class="keyword">true</span>,
-     storage_area = <span class="string">"old_place"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"copy_storage"</span>,
+  copy_to = <span class="string">"new_place"</span>,
+  move = <span class="keyword">true</span>,
+  storage_area = <span class="string">"old_place"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -413,11 +408,11 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            exit_sequence
         </li>
         <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The sequence to execute.
         </li>
     </ul>
@@ -431,11 +426,10 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"exit_sequence"</span>,
-     sequence = <span class="string">"perform_maintenance"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"exit_sequence"</span>,
+  sequence = <span class="string">"perform_maintenance"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -453,15 +447,15 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            load_profile
         </li>
         <li><span class="parameter">profile</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The new profile to load.
         </li>
         <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) A sequence to execute after loading the profile. If this is
    provided, any running sequences in the current loop will be discarded, and
    this sequence will be run from the top of a new sequence stack.
@@ -473,12 +467,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"load_profile"</span>,
-     profile = <span class="string">"another_profile"</span>,
-     sequence = <span class="string">"start"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"load_profile"</span>,
+  profile = <span class="string">"another_profile"</span>,
+  sequence = <span class="string">"start"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -495,7 +488,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            none
         </li>
     </ul>
@@ -505,10 +498,9 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"none"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"none"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -524,7 +516,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            set_storage
         </li>
         <li><span class="parameter">data</span>
@@ -533,7 +525,7 @@
    values are the storage values.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The area to store the value in. Defaults to 'default'.
         </li>
     </ul>
@@ -543,15 +535,14 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"set_storage"</span>,
-     data = {
-       foo = <span class="string">"bar"</span>,
-       baz = <span class="string">"bang"</span>,
-     },
-     storage_area = <span class="string">"some_storage"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"set_storage"</span>,
+  data = {
+    foo = <span class="string">"bar"</span>,
+    baz = <span class="string">"bang"</span>,
+  },
+  storage_area = <span class="string">"some_storage"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -568,7 +559,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            set_variable
         </li>
         <li><span class="parameter">data</span>
@@ -583,14 +574,13 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"set_variable"</span>,
-     data = {
-       foo = <span class="string">"bar"</span>,
-       baz = <span class="string">"bang"</span>,
-     },
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"set_variable"</span>,
+  data = {
+    foo = <span class="string">"bar"</span>,
+    baz = <span class="string">"bang"</span>,
+  },
+}</pre>
     </ul>
 
 </dd>
@@ -607,7 +597,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            wait
         </li>
         <li><span class="parameter">keys</span>
@@ -625,12 +615,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"wait"</span>,
-     keys = profile.some_keys_setting,
-     milliseconds = <span class="number">3000</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"wait"</span>,
+  keys = profile.some_keys_setting,
+  milliseconds = <span class="number">3000</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -640,8 +629,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

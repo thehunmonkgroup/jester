@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -62,14 +62,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -77,7 +77,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -138,7 +138,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            email
         </li>
         <li><span class="parameter">attachments</span>
@@ -181,7 +181,7 @@
    either be defined in this parameter or the profile parameter!
         </li>
         <li><span class="parameter">from</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The address to send the email from. Defaults to
    'noreply@[hostname]'.
         </li>
@@ -196,7 +196,7 @@
            (Optional) The port to use to send the message. Defaults to 25.
         </li>
         <li><span class="parameter">server</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The server to use to send the message. Defaults to 'localhost'.
         </li>
         <li><span class="parameter">template</span>
@@ -221,7 +221,7 @@
    searched for in all areas that support tokens.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -232,43 +232,42 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"email"</span>,
-     attachments = {
-       {
-         filetype = <span class="string">"audio/x-wav"</span>,
-         filename = <span class="string">"word.wav"</span>,
-         description = <span class="string">"your word of the day"</span>,
-         filepath = profile.temp_recording_dir .. <span class="string">"/word.wav"</span>,
-       },
-     },
-     email_templates = {
-       custom = {
-         subject = <span class="string">"Hi, :name"</span>,
-         message = <span class="string">"Your word of the day is :word"</span>,
-         allow_attachments = <span class="keyword">true</span>,
-       },
-     },
-     from = <span class="string">"mail@example.com"</span>,
-     headers = {
-       [<span class="string">"Reply-To"</span>] = <span class="string">"baz@example.com"</span>,
-     },
-     port = <span class="number">25</span>,
-     server = <span class="string">'localhost'</span>,
-     template = {
-       <span class="string">"default"</span>,
-       <span class="string">"custom"</span>,
-     },
-     to = {
-       <span class="string">"foo@example.com"</span>,
-       <span class="string">"bar@example.com"</span>,
-     },
-     tokens = {
-       name = <span class="string">"Bob"</span>,
-       word = <span class="string">"cucumber"</span>,
-     },
-   },</pre>
+        <pre class="example">{
+  action = <span class="string">"email"</span>,
+  attachments = {
+    {
+      filetype = <span class="string">"audio/x-wav"</span>,
+      filename = <span class="string">"word.wav"</span>,
+      description = <span class="string">"your word of the day"</span>,
+      filepath = profile.temp_recording_dir .. <span class="string">"/word.wav"</span>,
+    },
+  },
+  email_templates = {
+    custom = {
+      subject = <span class="string">"Hi, :name"</span>,
+      message = <span class="string">"Your word of the day is :word"</span>,
+      allow_attachments = <span class="keyword">true</span>,
+    },
+  },
+  from = <span class="string">"mail@example.com"</span>,
+  headers = {
+    [<span class="string">"Reply-To"</span>] = <span class="string">"baz@example.com"</span>,
+  },
+  port = <span class="number">25</span>,
+  server = <span class="string">'localhost'</span>,
+  template = {
+    <span class="string">"default"</span>,
+    <span class="string">"custom"</span>,
+  },
+  to = {
+    <span class="string">"foo@example.com"</span>,
+    <span class="string">"bar@example.com"</span>,
+  },
+  tokens = {
+    name = <span class="string">"Bob"</span>,
+    word = <span class="string">"cucumber"</span>,
+  },
+},</pre>
     </ul>
 
 </dd>
@@ -292,12 +291,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"email"</span>,
-     handler = <span class="string">"socket"</span>,
-     <span class="comment">-- other params...
-</span>   }</pre>
+        <pre class="example">{
+  action = <span class="string">"email"</span>,
+  handler = <span class="string">"socket"</span>,
+  <span class="comment">-- other params...
+</span>}</pre>
     </ul>
 
 </dd>
@@ -307,8 +305,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

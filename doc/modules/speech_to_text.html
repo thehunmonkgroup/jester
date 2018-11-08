@@ -40,7 +40,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -63,14 +63,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -78,7 +78,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -98,7 +98,7 @@
  <a href="https://luarocks.org/modules/brunoos/luasec">luasec</a> packages.</p>
     <h3>Info:</h3>
     <ul>
-        <li><strong>Copyright</strong>: 2011-2015 Chad Phillips</li>
+        <li><strong>Copyright</strong>: 2011-2018 Chad Phillips</li>
         <li><strong>Author</strong>: Chad Phillips</li>
     </ul>
 
@@ -113,8 +113,8 @@
 <h2><a href="#Handlers">Handlers</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" ><a href="#att">att</a></td>
-	<td class="summary">The AT&amp;T handler (default).</td>
+	<td class="name" ><a href="#watson">watson</a></td>
+	<td class="summary">The Watson handler (default).</td>
 	</tr>
 </table>
 <h2><a href="#Tables">Tables</a></h2>
@@ -145,23 +145,19 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            speech_to_text_from_file
         </li>
-        <li><span class="parameter">app_key</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The application key used to access the service.
-        </li>
-        <li><span class="parameter">app_secret</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-           (Optional) The application secret used to access the service.
+        <li><span class="parameter">api_key</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+           (Optional) The API key used to access the service.
         </li>
         <li><span class="parameter">filepath</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The full path to the file to translate.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the response in. Defaults to
    'speech_to_text'.
         </li>
@@ -172,14 +168,12 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"speech_to_text_from_file"</span>,
-     app_key = profile.speech_to_text_app_key,
-     app_secret = profile.speech_to_text_app_secret,
-     filepatch = <span class="string">"/tmp/foo.wav"</span>,
-     storage_area = <span class="string">"foo_to_text"</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"speech_to_text_from_file"</span>,
+  api_key = profile.speech_to_text_app_key,
+  filepath = <span class="string">"/tmp/foo.wav"</span>,
+  storage_area = <span class="string">"foo_to_text"</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -188,15 +182,15 @@
 
     <dl class="function">
     <dt>
-    <a name = "att"></a>
-    <strong>att</strong>
+    <a name = "watson"></a>
+    <strong>watson</strong>
     </dt>
     <dd>
-    The AT&amp;T handler (default). </p>
+    The Watson handler (default). </p>
 
-<p>  Uses AT&amp;T's Speech to Text service. The service requires a valid developer
-  account and application key/secret, see
-  <a href="https://developer.att.com/apis/speech">here</a> for more information.
+<p>  Uses Watson's Speech to Text service. The service requires a valid developer
+  account and api key, see
+  <a href="https://console.bluemix.net/catalog/services/speech-to-text">here</a> for more information.
 
 
 
@@ -205,12 +199,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"speech_to_text_from_file"</span>,
-     handler = <span class="string">"att"</span>,
-     <span class="comment">-- other params...
-</span>   }</pre>
+        <pre class="example">{
+  action = <span class="string">"speech_to_text_from_file"</span>,
+  handler = <span class="string">"watson"</span>,
+  <span class="comment">-- other params...
+</span>}</pre>
     </ul>
 
 </dd>
@@ -254,8 +247,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -38,7 +38,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -61,14 +61,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -76,7 +76,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -128,17 +128,17 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            format_date
         </li>
         <li><span class="parameter">format</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The format string to use. Should be a string in the form taken
    by <a href="http://linux.die.net/man/3/strftime">strftime</a>.
    Default is '<code>%Y-%m-%d %H:%M:%S</code>'.
         </li>
         <li><span class="parameter">storage_key</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The key to store the formatted result under in the 'format'
    storage area. Default is 'date'.
         </li>
@@ -147,7 +147,7 @@
            The Unix timestamp to format.
         </li>
         <li><span class="parameter">timezone</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The timezone to use to calculate the time. This should be a
    string that represents the <a href="https://en.wikipedia.org/wiki/Tz_database#Names_of_time_zones">timezone name</a>
    as found in server's timezone database (often in '/usr/share/zoneinfo').
@@ -160,14 +160,13 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"format_date"</span>,
-     format = <span class="string">"%Y-%m-%d %H:%M:%S"</span>,
-     storage_key = <span class="string">"formatted_date"</span>,
-     timestamp = <span class="number">1452792192</span>,
-     timezone = <span class="string">"Etc/UTC"</span>,
-   },</pre>
+        <pre class="example">{
+  action = <span class="string">"format_date"</span>,
+  format = <span class="string">"%Y-%m-%d %H:%M:%S"</span>,
+  storage_key = <span class="string">"formatted_date"</span>,
+  timestamp = <span class="number">1452792192</span>,
+  timezone = <span class="string">"Etc/UTC"</span>,
+},</pre>
     </ul>
 
 </dd>
@@ -192,22 +191,22 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            format_string
         </li>
         <li><span class="parameter">mask</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The mask to apply to the string. Default is to do no
    formatting. The mask has two special placeholder characters, the
    exclamation point and the underscore. To ignore a character, use the
    exclamation point. To place a character, use the underscore.
         </li>
         <li><span class="parameter">string</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The string to format.
         </li>
         <li><span class="parameter">storage_key</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) The key to store the formatted result under in the 'format'
    storage area. Default is 'formatted_string'.
         </li>
@@ -218,13 +217,12 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"format_string"</span>,
-     mask = <span class="string">"!!(___) ___-____"</span>,
-     <span class="global">string</span> = <span class="string">"+15555551212"</span>,
-     storage_key = <span class="string">"formatted_phone_number"</span>,
-   },</pre>
+        <pre class="example">{
+  action = <span class="string">"format_string"</span>,
+  mask = <span class="string">"!!(___) ___-____"</span>,
+  <span class="global">string</span> = <span class="string">"+15555551212"</span>,
+  storage_key = <span class="string">"formatted_phone_number"</span>,
+},</pre>
     </ul>
 
 </dd>
@@ -234,8 +232,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

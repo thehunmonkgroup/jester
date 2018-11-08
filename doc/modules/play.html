@@ -39,7 +39,7 @@
 
 
 <h2>Modules</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../modules/core.html">core</a></li>
   <li><a href="../modules/core.conf.html">core.conf</a></li>
   <li><a href="../modules/core_actions.html">core_actions</a></li>
@@ -62,14 +62,14 @@
   <li><a href="../modules/tracker.html">tracker</a></li>
 </ul>
 <h2>Scripts</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../scripts/jester.lua.html">jester.lua</a></li>
   <li><a href="../scripts/socket.lua.html">socket.lua</a></li>
   <li><a href="../scripts/extract_actions.lua.html">extract_actions.lua</a></li>
   <li><a href="../scripts/action_map.lua.html">action_map.lua</a></li>
 </ul>
 <h2>Topics</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="">
   <li><a href="../topics/01-Intro.md.html">01-Intro</a></li>
   <li><a href="../topics/02-Profiles.md.html">02-Profiles</a></li>
   <li><a href="../topics/03-Sequences.md.html">03-Sequences</a></li>
@@ -77,7 +77,7 @@
   <li><a href="../topics/05-Developer.md.html">05-Developer</a></li>
 </ul>
 <h2>Examples</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap'">
+<ul class="nowrap">
   <li><a href="../examples/log_test.lua.html">log_test.lua</a></li>
   <li><a href="../examples/phone_to_post_test.lua.html">phone_to_post_test.lua</a></li>
 </ul>
@@ -140,7 +140,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            play
         </li>
         <li><span class="parameter">file</span>
@@ -172,7 +172,7 @@
    is no wait.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -183,18 +183,17 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"play"</span>,
-     file = {
-       <span class="string">"/tmp/foo.wav"</span>,
-       <span class="string">"bar.wav"</span>,
-       <span class="string">"phrase:goodbye"</span>,
-     },
-     keys = profile.play_keys,
-     repititions = <span class="number">3</span>,
-     wait = <span class="number">2000</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"play"</span>,
+  file = {
+    <span class="string">"/tmp/foo.wav"</span>,
+    <span class="string">"bar.wav"</span>,
+    <span class="string">"phrase:goodbye"</span>,
+  },
+  keys = profile.play_keys,
+  repititions = <span class="number">3</span>,
+  wait = <span class="number">2000</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -220,7 +219,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            play_keys
         </li>
         <li><span class="parameter">key_announcements</span>
@@ -254,23 +253,22 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"play_keys"</span>,
-     key_announcements = {
-       [<span class="string">"4"</span>] = <span class="string">"play_previous"</span>,
-       [<span class="string">"6"</span>] = <span class="string">"play_next"</span>,
-       [<span class="string">"#"</span>] = <span class="string">"exit"</span>,
-     },
-     keys = {
-       [<span class="string">"4"</span>] = <span class="string">"previous_sequence"</span>,
-       [<span class="string">"6"</span>] = <span class="string">"next_sequence"</span>,
-       [<span class="string">"#"</span>] = <span class="string">"exit_sequence"</span>,
-     },
-     order = {<span class="string">"6"</span>, <span class="string">"4"</span>, <span class="string">"#"</span>}
-     repititions = <span class="number">3</span>,
-     wait = <span class="number">2000</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"play_keys"</span>,
+  key_announcements = {
+    [<span class="string">"4"</span>] = <span class="string">"play_previous"</span>,
+    [<span class="string">"6"</span>] = <span class="string">"play_next"</span>,
+    [<span class="string">"#"</span>] = <span class="string">"exit"</span>,
+  },
+  keys = {
+    [<span class="string">"4"</span>] = <span class="string">"previous_sequence"</span>,
+    [<span class="string">"6"</span>] = <span class="string">"next_sequence"</span>,
+    [<span class="string">"#"</span>] = <span class="string">"exit_sequence"</span>,
+  },
+  order = {<span class="string">"6"</span>, <span class="string">"4"</span>, <span class="string">"#"</span>}
+  repititions = <span class="number">3</span>,
+  wait = <span class="number">2000</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -286,7 +284,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            play_phrase
         </li>
         <li><span class="parameter">keys</span>
@@ -294,16 +292,16 @@
            (Optional) See <a href="../topics/03-Sequences.md.html#Capturing_user_key_input">Capturing user key input</a>.
         </li>
         <li><span class="parameter">language</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) Language to play the phrase in. Defaults to the language set on
    the channel or the default global language.
         </li>
         <li><span class="parameter">phrase</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The name of the phrase macro to play.
         </li>
         <li><span class="parameter">phrase_arguments</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            (Optional) Arguments to pass to the phrase macro, if any.
         </li>
         <li><span class="parameter">repetitions</span>
@@ -322,16 +320,15 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"play"</span>,
-     keys = profile.play_keys,
-     language = <span class="string">"en"</span>,
-     phrase = <span class="string">"some_phrase"</span>,
-     phrase_arguments = <span class="string">"arg1,arg2,arg3"</span>,
-     repititions = <span class="number">3</span>,
-     wait = <span class="number">2000</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"play"</span>,
+  keys = profile.play_keys,
+  language = <span class="string">"en"</span>,
+  phrase = <span class="string">"some_phrase"</span>,
+  phrase_arguments = <span class="string">"arg1,arg2,arg3"</span>,
+  repititions = <span class="number">3</span>,
+  wait = <span class="number">2000</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -350,7 +347,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            play_valid_file
         </li>
         <li><span class="parameter">files</span>
@@ -379,7 +376,7 @@
    is no wait.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="http://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -390,18 +387,17 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"play_valid_file"</span>,
-     files = {
-       <span class="string">"/tmp/customgreeting.wav"</span>,
-       <span class="string">"standardgreeting.wav"</span>,
-       <span class="string">"phrase:invalid_entry"</span>,
-     },
-     keys = profile.play_keys,
-     repititions = <span class="number">3</span>,
-     wait = <span class="number">2000</span>,
-   }</pre>
+        <pre class="example">{
+  action = <span class="string">"play_valid_file"</span>,
+  files = {
+    <span class="string">"/tmp/customgreeting.wav"</span>,
+    <span class="string">"standardgreeting.wav"</span>,
+    <span class="string">"phrase:invalid_entry"</span>,
+  },
+  keys = profile.play_keys,
+  repititions = <span class="number">3</span>,
+  wait = <span class="number">2000</span>,
+}</pre>
     </ul>
 
 </dd>
@@ -426,12 +422,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">
-   {
-     action = <span class="string">"play"</span>,
-     handler = <span class="string">"file"</span>,
-     <span class="comment">-- other params...
-</span>   }</pre>
+        <pre class="example">{
+  action = <span class="string">"play"</span>,
+  handler = <span class="string">"file"</span>,
+  <span class="comment">-- other params...
+</span>}</pre>
     </ul>
 
 </dd>
@@ -441,8 +436,8 @@
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2016-01-24 13:33:02 </i>
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
