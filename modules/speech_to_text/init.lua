@@ -17,14 +17,17 @@
 --
 --  Uses Watson's Speech to Text service. The service requires a valid developer
 --  account and api key, see
---  [here](https://console.bluemix.net/catalog/services/speech-to-text) for more information.
+--  [here](https://cloud.ibm.com/catalog/services/speech-to-text) for more information.
 --
 -- @handler watson
 -- @usage
 --   {
 --     action = "speech_to_text_from_file",
 --     handler = "watson",
---     -- other params...
+--     -- ...other required params...
+--     service_uri = "[obtain from service]",
+--     -- ...other optional params...
+--     language_model = "en-US_NarrowbandModel",
 --   }
 
 
