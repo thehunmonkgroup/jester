@@ -13,7 +13,7 @@ local DEFAULT_LANGUAGE_MODEL = "en-US_NarrowbandModel"
 ]]
 function _M.speech_to_text_from_file(action, attributes)
   local status = 1
-  local translations = {}
+  local transcriptions = {}
   local language_model = action.language_model or DEFAULT_LANGUAGE_MODEL
 
   local api_key = action.api_key
@@ -44,13 +44,13 @@ function _M.speech_to_text_from_file(action, attributes)
       core.debug_log("JSON response string '%s'", response_string)
       local data = cjson.decode(response_string)
       -- Doesn't look like Watson provides any kind of status data for the
-      -- translation, so assume it succeeded.
+      -- transcription, so assume it succeeded.
       status = 0
       if status == 0 then
         for k, chunk in ipairs(data.results) do
-          translations[k] = {}
-          translations[k].text = chunk.alternatives[1].transcript
-          translations[k].confidence = chunk.alternatives[1].confidence
+          transcriptions[k] = {}
+          transcriptions[k].text = chunk.alternatives[1].transcript
+          transcriptions[k].confidence = chunk.alternatives[1].confidence
         end
       end
     else
@@ -60,7 +60,7 @@ function _M.speech_to_text_from_file(action, attributes)
     core.debug_log("ERROR: Missing API key, service URI, or filepath")
   end
 
-  return status, translations
+  return status, transcriptions
 end
 
 return _M
