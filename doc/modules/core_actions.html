@@ -164,15 +164,15 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            api_command
         </li>
         <li><span class="parameter">command</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The command to execute.
         </li>
         <li><span class="parameter">storage_key</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The key to store the command result under in the 'api_command'
    storage area. Default is 'result'.
         </li>
@@ -203,11 +203,11 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            call_sequence
         </li>
         <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The new sequence to call. By default the original sequence is not resumed
    when the new sequence completes. To resume the old sequence (effectively
    making the new sequence a subroutine of the original), prefix the sequence
@@ -244,7 +244,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            clear_storage
         </li>
         <li><span class="parameter">data_keys</span>
@@ -254,7 +254,7 @@
    caution!
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The area to clear. Defaults to 'default'.
         </li>
     </ul>
@@ -290,29 +290,29 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            conditional
         </li>
         <li><span class="parameter">compare_to</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The value that you expect it to be, or for pattern matching, any valid Lua
    pattern (see the Lua manual for more information on Lua patterns).
         </li>
         <li><span class="parameter">comparison</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The kind of comparison to perform. Valid values are "equal",
    "match", "greater_than", and "less_than". Default is "equal".
         </li>
         <li><span class="parameter">if_false</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The sequence to call if the comparison is false.
         </li>
         <li><span class="parameter">if_true</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The sequence to call if the comparison is true.
         </li>
         <li><span class="parameter">value</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The value that you want to compare.
         </li>
     </ul>
@@ -356,11 +356,11 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            copy_storage
         </li>
         <li><span class="parameter">copy_to</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The storage area to copy the data to. Note that any data already existing
    in this area will be removed prior to the copy.
         </li>
@@ -370,7 +370,7 @@
    which effectively makes the operation a move. Default is false.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The area to copy. Defaults to 'default'.
         </li>
     </ul>
@@ -408,11 +408,11 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            exit_sequence
         </li>
         <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The sequence to execute.
         </li>
     </ul>
@@ -447,15 +447,15 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            load_profile
         </li>
         <li><span class="parameter">profile</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The new profile to load.
         </li>
         <li><span class="parameter">sequence</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) A sequence to execute after loading the profile. If this is
    provided, any running sequences in the current loop will be discarded, and
    this sequence will be run from the top of a new sequence stack.
@@ -488,7 +488,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            none
         </li>
     </ul>
@@ -516,7 +516,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            set_storage
         </li>
         <li><span class="parameter">data</span>
@@ -525,7 +525,7 @@
    values are the storage values.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The area to store the value in. Defaults to 'default'.
         </li>
     </ul>
@@ -559,7 +559,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            set_variable
         </li>
         <li><span class="parameter">data</span>
@@ -597,7 +597,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            wait
         </li>
         <li><span class="parameter">keys</span>
@@ -630,7 +630,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
+<i style="float:right;">Last updated 2021-02-21 18:57:48 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

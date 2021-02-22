@@ -147,7 +147,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_delete
         </li>
         <li><span class="parameter">config</span>
@@ -165,7 +165,7 @@
    <strong>WARNING:</strong> If you exclude this field, all rows will be deleted!
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -204,7 +204,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_load
         </li>
         <li><span class="parameter">config</span>
@@ -241,22 +241,22 @@
    rows returned.
         </li>
         <li><span class="parameter">sort</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) A field to sort the data by before loading. This is only used
    with the 'mulitple' parameter.
         </li>
         <li><span class="parameter">sort_order</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The sorting order. Only used with the 'sort' and 'multiple'
    parameters. Valid values are 'asc' and 'desc', the default is 'asc'.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -301,7 +301,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_load_count
         </li>
         <li><span class="parameter">config</span>
@@ -310,7 +310,7 @@
    Check <a href="#Handlers">handlers</a> to see the fields for this table.
         </li>
         <li><span class="parameter">count_field</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The field to use for counting.
         </li>
         <li><span class="parameter">filters</span>
@@ -324,17 +324,17 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be counted!
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
         <li><span class="parameter">storage_key</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The key to store the count under in the 'data' storage area.
    Default is 'count'.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -382,7 +382,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_query
         </li>
         <li><span class="parameter">config</span>
@@ -392,7 +392,7 @@
    for this action, any table information is provided by the query parameter.
         </li>
         <li><span class="parameter">query</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The custom query to execute. Tokens are replaced prior to running the
    query.
         </li>
@@ -403,7 +403,7 @@
    in the '__count' key. Default is false.
         </li>
         <li><span class="parameter">storage_area</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) The storage area to store the data in after loading. Defaults
    to 'data'.
         </li>
@@ -416,7 +416,7 @@
    appropriate/available.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -452,7 +452,7 @@
 
     <ul>
         <li><span class="parameter">action</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            data_update
         </li>
         <li><span class="parameter">config</span>
@@ -477,14 +477,14 @@
    <strong>WARNING:</strong> if you exclude this field, all rows will be updated!
         </li>
         <li><span class="parameter">update_type</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            (Optional) If this parameter is not provided, the default behavior is to
    first attempt an update, and if no rows were updated, then perform an
    insert. To force either an update or insert, set this to 'update' or
    'insert' respectively.
         </li>
         <li><span class="parameter">handler</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
            The handler to use, see <a href="#Handlers">handlers</a>. If not specified, defaults
    to the default handler for the module.
         </li>
@@ -576,7 +576,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-11-07 21:33:15 </i>
+<i style="float:right;">Last updated 2021-02-21 18:57:48 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
