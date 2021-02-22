@@ -33,11 +33,11 @@ Here's a slightly more complex sequence:
   return
   {
     {
-      action = play,
+      action = "play",
       file = "/var/voicemail/" .. mailbox_number .. "/greeting.wav",
     },
     {
-      action = record,
+      action = "record",
       location = record_location .. "/messages",
     },
   }
