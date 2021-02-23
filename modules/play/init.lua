@@ -307,7 +307,7 @@ function _M.play_key_macros(action)
     local language = action.language or "en"
     local rep = reps(action)
     for i = 1, rep do
-      core.debug_log("Announcing keys, repitition %d", i)
+      core.debug_log("Announcing keys, repetition %d", i)
       for _, key in ipairs(order) do
         -- Break out of the loop if an actionable key was pressed.
         if not core.ready() or core.actionable_key() then return end
