@@ -27,7 +27,11 @@
 --     -- ...other required params...
 --     service_uri = "[obtain from service]",
 --     -- ...other optional params...
---     language_model = "en-US_NarrowbandModel",
+--     query_parameters = {
+--       -- key/value pairs to pass as query parameters
+--     },
+--     retries = 3,
+--     retry_wait_seconds = 60,
 --   }
 
 
