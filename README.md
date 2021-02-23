@@ -1,5 +1,9 @@
 # Jester
 
+## Deprecated branch -- 1.x
+
+**NOTE: This branch is no longer in development. The 2.x version of Jester has been converted into a suite of libraries, and all of the templating logic has been removed.**
+
 ## Introduction
 Jester is a scripting toolkit for [FreeSWITCH](https://freeswitch.org) written in the [Lua](http://www.lua.org) programming language. It's functionality sits squarely between the feature set of the XML dialplan, IVR menus, and custom scripting. The goal of Jester is to ease development of voice workflows by providing a simple, unified way to implement more complex features that normally require custom scripting.
 
