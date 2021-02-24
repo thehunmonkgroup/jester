@@ -1,3 +1,7 @@
+--[[
+  Support functions for tables.
+]]
+
 local url = require("socket.url")
 
 --[[

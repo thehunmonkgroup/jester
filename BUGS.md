@@ -1,3 +1,4 @@
+TODO: Update for 2.x
 ## Known bugs
  * Navigation stack probably doesn't work properly in inside any subsequences
  * DTMF in the global key handler is not queued --  keys that are pressed

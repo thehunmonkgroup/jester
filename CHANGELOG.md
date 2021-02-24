@@ -1,3 +1,4 @@
+TODO: Update for 2.x
 New in 2.0:
  * Sequence environment now has full access to most Lua globals: previously,
    sequences were loaded in a highly restricted environment, without access

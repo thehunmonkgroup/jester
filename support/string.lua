@@ -1,4 +1,8 @@
 --[[
+  Support functions for strings.
+]]
+
+--[[
   Trims whitespace from either end of a string.
 ]]
 function string:trim()

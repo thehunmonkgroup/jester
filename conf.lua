@@ -3,11 +3,9 @@
 -- Probably not a good idea to change any of these settings unless you know
 -- what you're doing.
 --
--- Some values can be overridden per-profile, check the documentation below.
---
 -- @module core.conf
 -- @author Chad Phillips
--- @copyright 2011-2015 Chad Phillips
+-- @copyright 2011-2021 Chad Phillips
 
 
 --- Global configuration table.
@@ -28,9 +26,6 @@
 --   Full path to FreeSWITCH scripts directory.
 -- @field jester_dir
 --   Full path to Jester directory.
--- @field sequence_path
---   Full path to Jester's global sequence directory.
---   This value can be overridden per profile.
 -- @field profile_path
 --   Full path to Jester's global profile directory.
 -- @field key_order

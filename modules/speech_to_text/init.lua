@@ -10,7 +10,7 @@
 --
 -- @module speech_to_text
 -- @author Chad Phillips
--- @copyright 2011-2018 Chad Phillips
+-- @copyright 2011-2021 Chad Phillips
 
 
 --- The Watson handler (default).
@@ -35,109 +35,72 @@
 --   }
 
 
---- Speech to text storage.
---
--- Translations are stored in the specified storage area with the following
--- keys, where <code>X</code> is the chunk number:
---
--- A 'status' key is also placed in the storage area, indicating the result of
--- the translation. A value of 0 indicates the translation was successful.
---
--- @table speech_to_text
---
--- @field translation_X
---   The translated text for the chunk.
--- @field confidence_X
---   The confidence level of the translated chunk, a decimal number in the
---   range of 0 to 1.
+require "jester.support.file"
 
+local socket = require "socket"
+local core = require "jester.core"
+
+local DEFAULT_HANDLER = require("jester.modules.speech_to_text.watson")
+local DEFAULT_RETRIES = 3
+local DEFAULT_RETRY_WAIT_SECONDS = 60
+local DEFAULT_FILE_TYPE = "audio/wav"
+
+local _M = {}
 
 --- Translates a sound file to text.
 --
--- This action requires that [flac](https://xiph.org/flac) is installed and
--- executable by FreeSWITCH.
---
--- @action speech_to_text_from_file
--- @string action
---   speech\_to\_text\_from\_file
 -- @string api_key
 --   (Optional) The API key used to access the service.
 -- @string filepath
 --   The full path to the file to translate.
--- @string storage_area
---   (Optional) The storage area to store the response in. Defaults to
---   'speech\_to\_text'.
 -- @usage
 --   {
---     action = "speech_to_text_from_file",
 --     api_key = profile.speech_to_text_app_key,
 --     filepath = "/tmp/foo.wav",
 --     storage_area = "foo_to_text",
 --   }
+function _M.speech_to_text_from_file(arguments, handler)
 
-
-local core = require "jester.core"
-
-local io = require("io")
-local lfs = require("lfs")
-require "jester.support.file"
-
---local google = require("jester.modules.speech_to_text.google")
---local att = require("jester.modules.speech_to_text.att")
-local watson = require("jester.modules.speech_to_text.watson")
-
-local _M = {}
-
---[[
-  Speech to text base function.
-
-  This function wraps the handler's specific functionaliy.
-]]
-local function speech_to_text_from_file(action, handler)
-  local filepath = action.filepath
-  local area = action.storage_area or "speech_to_text"
-
+  local filepath = arguments.filepath
+  local file_type = arguments.file_type or DEFAULT_FILE_TYPE
+  handler = handler or DEFAULT_HANDLER
+  local status = 1
+  local transcriptions = {}
   if filepath then
-    -- Verify file exists.
-    local success, file_error = lfs.attributes(filepath, "mode")
-    if success then
-      local file = io.open(filepath, "rb")
-      local filesize = (filesize(file))
-      local attributes = {
-        file = file,
-        filesize = filesize,
-      }
-      status, translations = handler(action, attributes)
-      core.set_storage(area, "status", status)
-      for k, translation in ipairs(translations) do
-        core.set_storage(area, "translation_" .. k, translation.text)
-        core.set_storage(area, "confidence_" .. k, translation.confidence)
+    for i = 1, retries do
+      local content_length
+      local file, data = load_file(filepath)
+      if file then
+        local attributes = {
+          file = file,
+          file_type = file_type,
+          content_length = data.filesize
+        }
+        local success, data = handler.make_request(arguments, attributes)
+        if success then
+          success, data = handler.parse_transcriptions(data)
+          if success then
+            status = 0
+            transcriptions = data
+            return status, transcriptions
+          else
+            core.debug_log("ERROR: Parsing Speech to Text API response failed: %s", data)
+          end
+        else
+          core.debug_log([[ERROR: Speech to Text API attempt #%d failed: %s]], i, data)
+        end
+      else
+        core.debug_log("ERROR: could not open '%s': %s", filepath, data)
       end
-    else
-      core.debug_log("ERROR: File %s does not exist", filepath)
+      if i < retries then
+        core.debug_log([[ERROR: Re-trying Speech to Text API in %d seconds]], retry_wait_seconds)
+        socket.sleep(retry_wait_seconds)
+      end
     end
+  else
+    core.debug_log("ERROR: Missing filepath")
   end
-end
-
---[[
-  Speech to text using Google's API.
-]]
---function speech_to_text_from_file_google(action)
---  speech_to_text_from_file(action, google.speech_to_text_from_file)
---end
-
---[[
-  Speech to text using AT&T's API.
-]]
---function _M.speech_to_text_from_file_att(action)
---  speech_to_text_from_file(action, att.speech_to_text_from_file)
---end
-
---[[
-  Speech to text using Watson's API.
-]]
-function _M.speech_to_text_from_file_watson(action)
-  speech_to_text_from_file(action, watson.speech_to_text_from_file)
+  return status, transcriptions
 end
 
 return _M

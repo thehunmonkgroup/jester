@@ -1,3 +1,4 @@
+-- TODO: What is this for?
 --- Table of Jester actions as extracted from Jester using ldoc.
 --
 -- It is a simple map of all actions, their parameters (minus the action

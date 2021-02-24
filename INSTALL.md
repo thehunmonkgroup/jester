@@ -1,21 +1,24 @@
 ## System requirements
+
  * Most recent Jester code
  * FreeSWITCH 1.0.7 or later
  * Lua 5.1 or later.
+ * LuaSocket 2.0.2 or later
  * LuaFilesystem 1.4.2 or later
  * For data module support:
     * Any database that supports standard SQL queries. A recent version of
       MySQL, Postgres, or SQLite should work just fine.
     * ODBC and the ODBC driver for the above database.
  * For email module support:
-    * LuaSocket 2.0.2 or later
     * A mailserver with an open socket that you can send messages through.
  * For Jester's event listener support via socket.lua (experimental):
     * A mod_event_socket connection to the FreeSWITCH server.
  * *Note that some other core modules have other dependencies, these are
     documented in the main description for each particular module.*
 
+
 ## Installation
+
 Jester is relatively easy to install, especially if you have a modern package-based Linux distribution.  Here are the basic steps:
 
 1. Install Lua (should be readily available from your packaging system)
@@ -75,12 +78,11 @@ Jester is relatively easy to install, especially if you have a modern package-ba
    the value of the ```jester_dir``` variable in ```jester/conf.lua```
    appropriately.
 
-7. Jester is now installed.  If you want to additionally install the default
-   'voicemail' profile, see the [INSTALL](profiles/voicemail/INSTALL.md) file.
+7. Jester is now installed.
 
 
 #### Note to Windows users:
+
   Jester won't work on Windows unless you figure out the path separator
   issue, as Jester assumes that paths are ```/path/to/blah```, and not
   ```C:\\path\to\blah```.  If you can solve that, it *should* work.
-

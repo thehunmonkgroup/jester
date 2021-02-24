@@ -1,3 +1,4 @@
+-- TODO: Rewrite for library.
 --- Socket listener.
 --
 -- This is a socket listener for running Jester sequences via the FreeSWITCH
