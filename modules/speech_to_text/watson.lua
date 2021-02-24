@@ -23,6 +23,7 @@
 --   Table of query parameters to pass to the API call.
 
 local core = require "jester.core"
+require "jester.support.table"
 
 local _M = {}
 
@@ -40,6 +41,7 @@ local function process_response(response, status_code, status_description)
     core.debug_log("JSON response string '%s'", response_string)
     return true, response_string
   else
+    core.error_log("Request failed, status %s: '%s'", status_code, status_description)
     return false, status_description
   end
 end
@@ -77,6 +79,39 @@ local function check_params(params)
   else
     return false, "ERROR: Missing API key, service URI, or filepath"
   end
+end
+
+local function assemble_transcriptions_to_text(confidence_sum, text_parts, data, next_i)
+  local i, part = next(data, next_i)
+  if i then
+    confidence_sum = confidence_sum + part.confidence
+    table.insert(text_parts, part.text)
+    return assemble_transcriptions_to_text(confidence_sum, text_parts, data, i)
+  else
+    local confidence = confidence_sum == 0 and 0 or (confidence_sum / #data * 100)
+    local text = table.concat(text_parts, "\n\n")
+    return confidence, text
+  end
+end
+
+--- Format transcription data to plain text.
+--
+-- @tab data
+--   A table of transcription data as returned by @{parse_transcriptions}.
+-- @treturn number confidence
+--   Number from zero to one hundred, representing the average confidence of all
+--   translated parts.
+-- @treturn string text
+--   Concatenated transcription.
+-- @usage
+--   confidence, text = transcriptions_to_text(data)
+function _M.transcriptions_to_text(data)
+  local confidence_sum = 0
+  local text_parts = {}
+  local confidence, text = assemble_transcriptions_to_text(confidence_sum, text_parts, data)
+  core.debug_log("Confidence in transcription: %.2f%%\n", confidence)
+  core.debug_log("TEXT: \n\n%s", text)
+  return confidence, text
 end
 
 --- Parse a response from a successful API call.
