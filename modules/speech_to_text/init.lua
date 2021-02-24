@@ -59,7 +59,7 @@ local function check_filepath(filepath)
   end
 end
 
-local function load_file(params)
+local function load_file_attributes(params)
   local filepath = params.filepath
   local file_type = params.file_type or DEFAULT_FILE_TYPE
   local content_length
@@ -70,7 +70,7 @@ local function load_file(params)
       file_type = file_type,
       content_length = data.filesize
     }
-    return file, data
+    return file, attributes
   else
     return false, string.format([[ERROR: could not open '%s': %s]], filepath, data)
   end
@@ -95,7 +95,7 @@ local function make_request_using_handler(handler, params, attributes)
 end
 
 local function make_request(params, handler)
-  local success, data = load_file(params)
+  local success, data = load_file_attributes(params)
   if success then
     success, data = make_request_using_handler(handler, params, data)
   end
@@ -113,6 +113,7 @@ end
 
 local function make_request_with_retry(params, handler)
   local success, data
+  local retries = params.retries or DEFAULT_RETRIES
   for attempt = 1, retries do
     success, data = make_request(params, handler)
     if success then
