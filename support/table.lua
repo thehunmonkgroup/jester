@@ -30,6 +30,9 @@ function table.ordervalues(t)
   return list
 end
 
+--[[
+  Given an associative array table, returns a properly escaped query string.
+]]
 function table.stringify(params, sep, eq)
   if not sep then sep = '&' end
   if not eq then eq = '=' end
