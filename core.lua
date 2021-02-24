@@ -18,9 +18,10 @@ local _M = {}
 --- Bootstrap the Jester environment.
 --
 -- @tab config
---   The @{core.conf|global configuration}.
+--   Optional. Defaults to @{core.conf|global configuration}.
 -- @usage
---   core.bootstrap(conf)
+--   config = require "jester.conf"
+--   core.bootstrap(config)
 function _M.bootstrap(config)
 
   -- Use regular log here, debug_log needs config.
@@ -31,7 +32,7 @@ function _M.bootstrap(config)
   -- As configured in @{core.conf}.
   --
   -- @field conf
-  _M.conf = config
+  _M.conf = config or require "jester.conf"
 
   --- Boolean indicating if the script was called from within FreeSWITCH.
   --
@@ -392,6 +393,18 @@ function _M.debug_log(msg, ...)
   if _M.conf.debug and _M.conf.debug_output.log then
     _M.log(string.format(msg, ...), "JESTER DEBUG")
   end
+end
+
+--- Error logger.
+--
+-- Extra arguments are substituted for placeholders using @{string.format}.
+--
+-- @string msg
+--   The message to log.
+-- @usage
+--   core.error_log("Hello %s", name)
+function _M.error_log(msg, ...)
+  _M.log(string.format(msg, ...), "JESTER ERROR", "error")
 end
 
 --- Wrapper to grab session variables.
