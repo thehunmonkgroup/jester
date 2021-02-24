@@ -23,10 +23,10 @@ file = {
   "./modules/record/init.lua",
   "./modules/service/init.lua",
   "./modules/speech_to_text/init.lua",
+  "./modules/speech_to_text/watson.lua",
   "./modules/system/init.lua",
   "./modules/tracker/init.lua",
   -- Scripts.
-  "./jester.lua",
   "./socket.lua",
   "./scripts/extract_actions.lua",
   "./action_map.lua",

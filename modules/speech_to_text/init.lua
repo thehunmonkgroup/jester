@@ -1,8 +1,9 @@
---- Speech to text translation (experimental).
+--- Speech to text translation.
 --
--- **WARNING:** totally experimental, no guarantees it will work!
+-- This module provides speech to text translation. Specific services are
+-- supported by the various handlers:
 --
--- This module provides speech to text translation.
+-- @{speech_to_text_watson_handler|Watson Speech to Text API}
 --
 -- The module requires the Lua
 -- [lua-cjson](https://luarocks.org/modules/luarocks/lua-cjson) and
@@ -12,28 +13,31 @@
 -- @author Chad Phillips
 -- @copyright 2011-2021 Chad Phillips
 
-
---- The Watson handler (default).
+--- Parameters used to configure the speech to text request.
 --
---  Uses Watson's Speech to Text service. The service requires a valid developer
---  account and api key, see
---  [here](https://cloud.ibm.com/catalog/services/speech-to-text) for more information.
+-- These are common to all handlers, see the specific handler for additional
+-- parameters.
 --
--- @handler watson
--- @usage
---   {
---     action = "speech_to_text_from_file",
---     handler = "watson",
---     -- ...other required params...
---     service_uri = "[obtain from service]",
---     -- ...other optional params...
---     query_parameters = {
---       -- key/value pairs to pass as query parameters
---     },
---     retries = 3,
---     retry_wait_seconds = 60,
---   }
+-- @table params
+--
+-- @field retries
+--   Number of times to try the request.
+-- @field retry_wait_seconds
+--   Number of seconds to wait between retries.
 
+--- Attributes passed to handlers.
+--
+-- These are attributes calculated by the speech_to_text module, and passed to
+-- handlers.
+--
+-- @table attributes
+--
+-- @field file
+--   The opened file object for the filepath being transcribed.
+-- @field file_type
+--   Mime type of the file, default "audio/wav".
+-- @field content_length
+--   File size in bytes.
 
 require "jester.support.file"
 
@@ -55,9 +59,9 @@ local function check_filepath(filepath)
   end
 end
 
-local function load_file(arguments)
-  local filepath = arguments.filepath
-  local file_type = arguments.file_type or DEFAULT_FILE_TYPE
+local function load_file(params)
+  local filepath = params.filepath
+  local file_type = params.file_type or DEFAULT_FILE_TYPE
   local content_length
   local file, data = load_file(filepath)
   if file then
@@ -81,8 +85,8 @@ local function parse_response(handler, data)
   end
 end
 
-local function make_request_using_handler(handler, arguments, attributes)
-  local success, data = handler.make_request(arguments, attributes)
+local function make_request_using_handler(handler, params, attributes)
+  local success, data = handler.make_request(params, attributes)
   if success then
     return parse_response(handler, data)
   else
@@ -90,31 +94,31 @@ local function make_request_using_handler(handler, arguments, attributes)
   end
 end
 
-local function make_request(arguments, handler)
-  local success, data = load_file(arguments)
+local function make_request(params, handler)
+  local success, data = load_file(params)
   if success then
-    success, data = make_request_using_handler(handler, arguments, data)
+    success, data = make_request_using_handler(handler, params, data)
   end
   return success, data
 end
 
-local function retry_wait(arguments, attempt)
-  local retries = arguments.retries or DEFAULT_RETRIES
-  local retry_wait_seconds = arguments.retry_wait_seconds or DEFAULT_RETRY_WAIT_SECONDS
+local function retry_wait(params, attempt)
+  local retries = params.retries or DEFAULT_RETRIES
+  local retry_wait_seconds = params.retry_wait_seconds or DEFAULT_RETRY_WAIT_SECONDS
   if attempt < retries then
     core.debug_log([[ERROR: Attempt #%d failed, re-trying Speech to Text API in %d seconds]], attempt, retry_wait_seconds)
     socket.sleep(retry_wait_seconds)
   end
 end
 
-local function make_request_with_retry(arguments, handler)
+local function make_request_with_retry(params, handler)
   local success, data
   for attempt = 1, retries do
-    success, data = make_request(arguments, handler)
+    success, data = make_request(params, handler)
     if success then
       break
     else
-      retry_wait(arguments, attempt)
+      retry_wait(params, attempt)
     end
   end
   return success, data
@@ -122,21 +126,27 @@ end
 
 --- Translates a sound file to text.
 --
--- @string api_key
---   (Optional) The API key used to access the service.
--- @string filepath
---   The full path to the file to translate.
+-- @tab params
+--   Method params, see @{params}.
+-- @tab handler
+--   Speech to text handler module.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @return data
+--   Table of transcriptions on success, error message on fail.
 -- @usage
---   {
---     api_key = profile.speech_to_text_app_key,
+--   params = {
+--     api_key = "some_api_key",
 --     filepath = "/tmp/foo.wav",
---     storage_area = "foo_to_text",
+--     -- other params...
 --   }
-function _M.speech_to_text_from_file(arguments, handler)
-  local success, data = check_filepath(arguments.filepath)
+--   handler = require "jester.modules.speech_to_text.watson"
+--   success, data = speech_to_text_from_file(params, handler)
+function _M.speech_to_text_from_file(params, handler)
+  local success, data = check_filepath(params.filepath)
   if success then
     handler = handler or DEFAULT_HANDLER
-    success, data = make_request_with_retry(arguments, handler)
+    success, data = make_request_with_retry(params, handler)
   end
   return success, data
 end
