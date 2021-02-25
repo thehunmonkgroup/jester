@@ -14,6 +14,10 @@ function filesize(file)
   return size
 end
 
+function filepath_elements(filepath)
+  return string.match(filepath, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+end
+
 function load_file(filepath)
   local file, err = io.open(filepath, "rb")
   local data
