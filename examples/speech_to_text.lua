@@ -1,8 +1,8 @@
 local core = require "jester.core"
 local stt = require "jester.modules.speech_to_text"
-local watson = require "jester.modules.speech_to_text.watson"
+local rev_ai = require "jester.modules.speech_to_text.rev_ai"
 
-local API_KEY = "[API KEY]"
+local API_KEY = "02hlLQXTyjZZeljnahmYDK9dhzFw8vGUTQSCbpiIK5p489WWrGrj1hYf50Vhift7oFXaQ7lFe7eKPUUVJfI43XigGZCjs"
 local SERVICE_URI = "[SERVICE URL]"
 
 function speech_to_text_from_file(filepath)
@@ -10,18 +10,18 @@ function speech_to_text_from_file(filepath)
     api_key = API_KEY,
     service_uri = SERVICE_URI,
     filepath = filepath,
-    query_parameters = {
-      model = "en-US_NarrowbandModel",
-      smart_formatting = true,
-      split_transcript_at_phrase_end = true,
+    options = {
+      speaker_channels_count = 1,
+      remove_disfluencies = true,
+      delete_after_seconds = 120,
     },
     retries = 10,
     retry_wait_seconds = 30,
   }
   local confidence, text
-  local success, data = stt.speech_to_text_from_file(params, watson)
+  local success, data = stt.speech_to_text_from_file(params, rev_ai)
   if success then
-    confidence, text = watson.transcriptions_to_text(data)
+    confidence, text = rev_ai.transcriptions_to_text(data)
   else
     core.error_log(data)
   end

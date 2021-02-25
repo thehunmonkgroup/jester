@@ -1,16 +1,16 @@
---- Speech to text translation handler, Watson Speech to Text API.
+--- Speech to text translation handler, Rev.ai API.
 --
---  Uses Watson's Speech to Text service. The service requires a valid developer
+--  Uses Rev.ai's service. The service requires a valid developer
 --  account and API key, see
---  [here](https://cloud.ibm.com/catalog/services/speech-to-text) for more information.
+--  [here](https://www.rev.ai/getting_started) for more information.
 --
--- @module speech_to_text_watson_handler
+-- @module speech_to_text_rev_ai_handler
 -- @author Chad Phillips
--- @copyright 2011-2021 Chad Phillips
+-- @copyright 2021 Chad Phillips
 
 --- Parameters used to configure the speech to text request.
 --
--- These are specific to the Watson handler, see @{speech_to_text.params} for
+-- These are specific to the Rev.ai handler, see @{speech_to_text.params} for
 -- general parameters.
 --
 -- @table params
@@ -28,8 +28,12 @@ require "jester.support.table"
 local _M = {}
 
 local https = require 'ssl.https'
+--local http = require 'socket.http'
 local ltn12 = require("ltn12")
 local cjson = require("cjson")
+
+local BASE_URL = "https://api.rev.ai/speechtotext/v1"
+--local BASE_URL = "http://localhost:8080"
 
 local function process_response(response, status_code, status_description)
   if status_code == 200 then
@@ -42,25 +46,47 @@ local function process_response(response, status_code, status_description)
   end
 end
 
-local function request(url, attributes)
+local function request(url, api_key, options, attributes)
   local response = {}
+  local boundary = "--------------------------------df65e19a-7716-11eb-bec2-576bf3999234"
+  local options_string = cjson.encode(options)
+  local _file = string.format([[%s
+Content-Disposition: form-data; name="audio_file"; filename="audio_file"
+Content-Type: %s
+
+]], boundary, attributes.file_type)
+  local _table1 = string.format([[
+
+%s
+Content-Disposition: form-data; name="options";
+
+%s
+%s--]], boundary, options_string, boundary)
+  local content_length = attributes.content_length + string.len(_file) + string.len(_table1)
+  --local body, status_code, headers, status_description = http.request({
   local body, status_code, headers, status_description = https.request({
     method = "POST",
     headers = {
-      ["content-length"] = attributes.content_length,
-      ["content-type"] = attributes.file_type,
+      ["authorization"] = string.format([[Bearer %s]], api_key),
+      ["content-length"] = content_length,
+      ["content-type"] = string.format([[multipart/form-data;boundary=%s]], boundary),
       ["accept"] = "application/json",
     },
     url = url,
     sink = ltn12.sink.table(response),
     source = ltn12.source.file(attributes.file),
+    source = ltn12.source.cat(ltn12.source.string(_file),ltn12.source.file(attributes.file),ltn12.source.string(_table1)),
   })
+  local inspect = require "inspect"
+  print(inspect({body, status_code, headers, status_description}))
   return process_response(response, status_code, status_description)
 end
 
 local function parse(response)
   local transcriptions = {}
   local data = cjson.decode(response)
+  local inspect = require "inspect"
+  print(inspect(data))
   for k, chunk in ipairs(data.results) do
     transcriptions[k] = {}
     transcriptions[k].text = chunk.alternatives[1].transcript
@@ -70,7 +96,7 @@ local function parse(response)
 end
 
 local function check_params(params)
-  if params.api_key and params.service_uri and params.filepath then
+  if params.api_key and params.filepath then
     return true
   else
     return false, "ERROR: Missing API key, service URI, or filepath"
@@ -140,12 +166,10 @@ end
 function _M.make_request(params, attributes)
   local success, response = check_params(params)
   if success then
-    local service_uri = params.service_uri:gsub("https?://", "")
-    local query_parameters = params.query_parameters or {}
-    local query_string = table.stringify(query_parameters)
-    local url = string.format("https://apikey:%s@%s/v1/recognize?%s", params.api_key, service_uri, query_string)
+    local url = string.format("%s/jobs", BASE_URL)
+    --local url = string.format("%s", BASE_URL)
     core.debug_log("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
-    success, response = request(url, attributes)
+    success, response = request(url, params.api_key, params.options, attributes)
   end
   return success, response
 end
