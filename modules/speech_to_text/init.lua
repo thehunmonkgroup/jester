@@ -65,10 +65,14 @@ local function load_file_attributes(params)
   local content_length
   local file, data = load_file(filepath)
   if file then
+    local dirname, basename, ext = filepath_elements(filepath)
     local attributes = {
       file = file,
       file_type = file_type,
-      content_length = data.filesize
+      content_length = data.filesize,
+      dirname = dirname,
+      basename = basename,
+      ext = ext,
     }
     return file, attributes
   else
