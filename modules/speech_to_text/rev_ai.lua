@@ -47,7 +47,8 @@ local function process_response(response, status_code, status_description)
   end
 end
 
-local function request(url, api_key, options, attributes)
+local function request(url, api_key, options, params, attributes)
+  local request_handler = params.request_handler or https
   local response = {}
   local boundary = "------------------------b218dd781dd98907"
   local options_string = cjson.encode(options)
@@ -65,7 +66,7 @@ Content-Disposition: form-data; name="options";
 %s--]], boundary, attributes.basename, attributes.file_type, file_content, boundary, options_string, boundary)
   local content_length = string.len(body)
   --local body, status_code, headers, status_description = http.request({
-  local body, status_code, headers, status_description = https.request({
+  local body, status_code, headers, status_description = request_handler.request({
     method = "POST",
     headers = {
       ["authorization"] = string.format([[Bearer %s]], api_key),
@@ -168,7 +169,7 @@ function _M.make_request(params, attributes)
     local url = string.format("%s/jobs", BASE_URL)
     local options = params.options or DEFAULT_OPTIONS
     core.debug_log("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
-    success, response = request(url, params.api_key, options, attributes)
+    success, response = request(url, params.api_key, options, params, attributes)
   end
   return success, response
 end

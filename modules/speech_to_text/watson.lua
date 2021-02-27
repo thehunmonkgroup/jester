@@ -42,9 +42,10 @@ local function process_response(response, status_code, status_description)
   end
 end
 
-local function request(url, attributes)
+local function request(url, params, attributes)
+  local request_handler = params.request_handler or https
   local response = {}
-  local body, status_code, headers, status_description = https.request({
+  local body, status_code, headers, status_description = request_handler.request({
     method = "POST",
     headers = {
       ["content-length"] = attributes.content_length,
@@ -145,7 +146,7 @@ function _M.make_request(params, attributes)
     local query_string = table.stringify(query_parameters)
     local url = string.format("https://apikey:%s@%s/v1/recognize?%s", params.api_key, service_uri, query_string)
     core.debug_log("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
-    success, response = request(url, attributes)
+    success, response = request(url, params, attributes)
   end
   return success, response
 end
