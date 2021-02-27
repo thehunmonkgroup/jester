@@ -92,7 +92,9 @@ function _M.logger(config)
         output = string.format(msg, ...)
       end
       output = prefix .. output
-      if _M.is_freeswitch then
+      if _M._TEST then
+        return name, output
+      elseif _M.is_freeswitch then
         freeswitch.consoleLog(name, output .. "\n")
       else
         local info = debug.getinfo(2, "Sl")
@@ -145,6 +147,20 @@ function _M.bootstrap(config)
   --
   -- @field conf
   _M.conf = config or require "jester.conf"
+
+end
+
+--- Bootstrap Jester for a testing environment.
+--
+-- @tab config
+--   Optional. Defaults to @{core.conf|global configuration}.
+-- @usage
+--   config = require "jester.conf"
+--   core.bootstrap_test(config)
+function _M.bootstrap_test(config)
+
+  _M.bootstrap(config)
+  _M._TEST = true
 
 end
 
