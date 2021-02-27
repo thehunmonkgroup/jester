@@ -34,6 +34,7 @@ local cjson = require("cjson")
 
 local BASE_URL = "https://api.rev.ai/speechtotext/v1"
 --local BASE_URL = "http://localhost:8080"
+DEFAULT_OPTIONS = {}
 
 local function process_response(response, status_code, status_description)
   if status_code == 200 then
@@ -48,21 +49,21 @@ end
 
 local function request(url, api_key, options, attributes)
   local response = {}
-  local boundary = "--------------------------------df65e19a-7716-11eb-bec2-576bf3999234"
+  local boundary = "------------------------b218dd781dd98907"
   local options_string = cjson.encode(options)
-  local _file = string.format([[%s
-Content-Disposition: form-data; name="audio_file"; filename="audio_file"
+  local file_content = attributes.file:read( "*a" )
+  attributes.file:close()
+  local body = string.format([[%s
+Content-Disposition: form-data; name="media"; filename="%s"
 Content-Type: %s
 
-]], boundary, attributes.file_type)
-  local _table1 = string.format([[
-
+%s
 %s
 Content-Disposition: form-data; name="options";
 
 %s
-%s--]], boundary, options_string, boundary)
-  local content_length = attributes.content_length + string.len(_file) + string.len(_table1)
+%s--]], boundary, attributes.basename, attributes.file_type, file_content, boundary, options_string, boundary)
+  local content_length = string.len(body)
   --local body, status_code, headers, status_description = http.request({
   local body, status_code, headers, status_description = https.request({
     method = "POST",
@@ -74,11 +75,9 @@ Content-Disposition: form-data; name="options";
     },
     url = url,
     sink = ltn12.sink.table(response),
-    source = ltn12.source.file(attributes.file),
-    source = ltn12.source.cat(ltn12.source.string(_file),ltn12.source.file(attributes.file),ltn12.source.string(_table1)),
+    source = ltn12.source.string(body),
   })
   local inspect = require "inspect"
-  print(inspect({body, status_code, headers, status_description}))
   return process_response(response, status_code, status_description)
 end
 
@@ -167,9 +166,9 @@ function _M.make_request(params, attributes)
   local success, response = check_params(params)
   if success then
     local url = string.format("%s/jobs", BASE_URL)
-    --local url = string.format("%s", BASE_URL)
+    local options = params.options or DEFAULT_OPTIONS
     core.debug_log("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
-    success, response = request(url, params.api_key, params.options, attributes)
+    success, response = request(url, params.api_key, options, attributes)
   end
   return success, response
 end
