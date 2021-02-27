@@ -46,8 +46,15 @@ local _M = {}
 --      err
 --      crit
 -- @usage
---   logger = core.logger({level = "warn"})
---   logger.error("Some message")
+--   logger = core.logger({level = "warning"})
+--   logger.warning("Some message")
+--   -- By default, log methods wrap @{string.format}, so token replacement is
+--   -- supported.
+--   logger.err("Count: %d, type: %s", count, type)
+--   -- For custom formatting, pass a function as the first argument, which will
+--   -- be called with the additional arguments. The function should return the
+--   -- output string.
+--   logger.info(function(c) return "Count is: " .. c end, count)
 function _M.logger(config)
   config = config or {}
   local default_config = {
@@ -71,16 +78,22 @@ function _M.logger(config)
   end
   for i, x in ipairs(log.modes) do
     local name = x.name
-    log[name] = function(...)
+    log[name] = function(msg, ...)
       -- Return early if we're below the log level
       if i < levels[log.level] then
         return
       end
       local name_upper = name:upper()
       local prefix = log.prefix and string.format("[%s] ", log.prefix:upper()) or ""
-      local msg = prefix .. string.format(...)
+      local output
+      if type(msg) == "function" then
+        output = msg(...)
+      else
+        output = string.format(msg, ...)
+      end
+      output = prefix .. output
       if _M.is_freeswitch then
-        freeswitch.consoleLog(name, msg .. "\n")
+        freeswitch.consoleLog(name, output .. "\n")
       else
         local info = debug.getinfo(2, "Sl")
         local lineinfo = info.short_src .. ":" .. info.currentline
@@ -91,7 +104,7 @@ function _M.logger(config)
                             os.date("%H:%M:%S"),
                             log.use_color and "\27[0m" or "",
                             lineinfo,
-                            msg))
+                            output))
       end
       -- Output to log file
       if log.outfile then
@@ -100,7 +113,7 @@ function _M.logger(config)
                                   name_upper,
                                   os.date(),
                                   lineinfo,
-                                  msg)
+                                  output)
         fp:write(str)
         fp:close()
       end
