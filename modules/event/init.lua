@@ -70,7 +70,7 @@ function _M.fire_event(action)
       -- Ensure that the event body has terminating newlines.
       event:addBody(body .. "\n\n")
     end
-    core.debug_log("Firing custom event 'jester::%s'", event_type)
+    core.log.debug("Firing custom event 'jester::%s'", event_type)
     event:fire()
   end
 end

@@ -197,7 +197,7 @@ function _M.load_data(action)
     local load_sort = sort and build_sort(sort, sort_order) or ""
     -- Build the query.
     local sql = "SELECT " .. build_load_fields(fields) .. " FROM " .. conf.table .. build_where(filters) .. load_sort .. limit
-    core.debug_log("Executing query: %s", sql)
+    core.log.debug("Executing query: %s", sql)
     local count, suffix = 0, ""
     -- Clean out storage area before loading in new data.
     core.clear_storage(area)
@@ -215,7 +215,7 @@ function _M.load_data(action)
     dbh:release()
     -- Multi-row results get a special count key.
     if multiple then
-      core.debug_log("Query rows returned: %d", count)
+      core.log.debug("Query rows returned: %d", count)
       core.set_storage(area, "__count", tonumber(count))
     end
   end
@@ -233,7 +233,7 @@ function _M.load_data_count(action)
     local dbh, conf = connect(action)
     -- Build the query.
     local sql = "SELECT COUNT(" .. count_field .. ") AS count FROM " .. conf.table .. build_where(filters)
-    core.debug_log("Executing query: %s", sql)
+    core.log.debug("Executing query: %s", sql)
     local count
     -- Loop through the returned rows.
     assert(dbh:query(sql, function(row) count = tonumber(row.count) end))
@@ -257,7 +257,7 @@ function _M.update_data(action)
     -- No type specified, or update forced, so try an update first.
     if not update_type or update_type == "update" then
       sql = "UPDATE " .. conf.table .. " SET " .. build_update_fields(fields) .. where
-      core.debug_log("Executing query: %s", sql)
+      core.log.debug("Executing query: %s", sql)
       assert(dbh:query(sql))
       message = "updated"
       count = dbh:affected_rows()
@@ -266,13 +266,13 @@ function _M.update_data(action)
     if update_type == "insert" or (count == 0 and update_type ~= "update") then
       local insert_fields, values = build_insert(filters, fields)
       sql = "INSERT INTO " .. conf.table .. " (" .. insert_fields .. ") VALUES (" .. values .. ")"
-      core.debug_log("Executing query: %s", sql)
+      core.log.debug("Executing query: %s", sql)
       assert(dbh:query(sql))
       message = "inserted"
       count = 1
     end
     dbh:release()
-    core.debug_log("Rows %s: %d", message, count)
+    core.log.debug("Rows %s: %d", message, count)
   end
 end
 
@@ -283,7 +283,7 @@ function _M.delete_data(action)
   local filters = action.filters or {}
   local dbh, conf = connect(action)
   local sql = "DELETE FROM " .. conf.table .. build_where(filters)
-  core.debug_log("Executing query: %s", sql)
+  core.log.debug("Executing query: %s", sql)
   assert(dbh:query(sql))
   dbh:release()
 end
@@ -309,7 +309,7 @@ function _M.query_data(action)
   else
     sql = query
   end
-  core.debug_log("Executing query: %s", sql)
+  core.log.debug("Executing query: %s", sql)
   if return_fields then
     local count = 0
     -- Clean out storage area before loading in new data.
@@ -322,7 +322,7 @@ function _M.query_data(action)
       end
     end))
     dbh:release()
-    core.debug_log("Query rows returned: %d", count)
+    core.log.debug("Query rows returned: %d", count)
     core.set_storage(area, "__count", tonumber(count))
   else
     assert(dbh:query(sql))

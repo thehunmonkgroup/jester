@@ -23,7 +23,7 @@ function speech_to_text_from_file(filepath)
   if success then
     confidence, text = rev_ai.transcriptions_to_text(data)
   else
-    core.error_log(data)
+    core.log.error(data)
   end
   return success, data, confidence, text
 end

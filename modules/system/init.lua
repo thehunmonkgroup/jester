@@ -80,7 +80,7 @@ function _M.shell_command(action)
     else
       ret = val3
     end
-    core.debug_log("Executed command: %s, return code: %s", command, ret)
+    core.log.debug("Executed command: %s, return code: %s", command, ret)
     core.set_storage(area, "return_code", tonumber(ret))
   end
 end
@@ -107,7 +107,7 @@ function _M.shell_command_with_output(action)
       output = "Unable to parse command output"
       ret = 1
     end
-    core.debug_log("Executed command: %s, output: %s, return code: %s", command, output, ret)
+    core.log.debug("Executed command: %s, output: %s, return code: %s", command, output, ret)
     core.set_storage(area, "output", output)
     core.set_storage(area, "return_code", tonumber(ret))
   end

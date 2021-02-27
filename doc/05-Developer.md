@@ -29,12 +29,9 @@ The core code and modules are fairly well documented, and much can be learned fr
     -- Different than session:ready()!
     core.ready()
  * logging:
-    -- Discouraged to use in a module, let the user do their own custom
-    -- logging with the log action.
-    core.log(msg, [prefix], [level])
     -- Recommended, use extensively so that problems can be easily spotted
     -- when debugging is turned on.
-    core.debug_log(msg, ...)
+    core.log.debug(msg)
  * misc:
     core.wait(milliseconds)
     core.trim(string)

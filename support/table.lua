@@ -52,3 +52,54 @@ function table.stringify(params, sep, eq)
   end
   return ''
 end
+
+--[[
+  Clone tables, internal function.
+]]
+local function table_clone_internal(t, copies)
+  if type(t) ~= "table" then return t end
+  copies = copies or {}
+  if copies[t] then return copies[t] end
+  local copy = {}
+  copies[t] = copy
+  for k, v in pairs(t) do
+    copy[table_clone_internal(k, copies)] = table_clone_internal(v, copies)
+  end
+  setmetatable(copy, table_clone_internal(getmetatable(t), copies))
+  return copy
+end
+
+--[[
+  Clone tables.
+]]
+function table.clone(t)
+  -- We need to implement this with a helper function to make sure that
+  -- user won't call this function with a second parameter as it can cause
+  -- unexpected troubles
+  return table_clone_internal(t)
+end
+
+--[[
+  Clone tables.
+]]
+function table.merge(...)
+  local tables_to_merge = {...}
+  assert(#tables_to_merge > 1, "There should be at least two tables to merge them")
+  for k, t in ipairs(tables_to_merge) do
+    assert(type(t) == "table", string.format("Expected a table as function parameter %d", k))
+  end
+  local result = table.clone(tables_to_merge[1])
+  for i = 2, #tables_to_merge do
+    local from = tables_to_merge[i]
+    for k, v in pairs(from) do
+      if type(v) == "table" then
+        result[k] = result[k] or {}
+        assert(type(result[k]) == "table", string.format("Expected a table: '%s'", k))
+        result[k] = table.merge(result[k], v)
+      else
+      result[k] = v
+      end
+    end
+  end
+  return result
+end

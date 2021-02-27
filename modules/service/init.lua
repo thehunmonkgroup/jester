@@ -132,7 +132,7 @@ function _M.http_request(action)
     user_string = user_string .. "@"
   end
   url = "http://" .. user_string .. server .. ":" .. port .. path .. query_string .. fragment
-  core.debug_log("HTTP request, URL: %s", url)
+  core.log.debug("HTTP request, URL: %s", url)
 
   local code, description, data
   -- Send the request.
@@ -161,10 +161,10 @@ function _M.http_request(action)
               core.set_storage(area, k, v)
             end
           else
-            core.debug_log("ERROR: Returned data is not a Lua table.")
+            core.log.debug("ERROR: Returned data is not a Lua table.")
           end
         else
-          core.debug_log("ERROR: Failed to parse response body as Lua code.")
+          core.log.debug("ERROR: Failed to parse response body as Lua code.")
         end
       end
     end
@@ -176,7 +176,7 @@ function _M.http_request(action)
   end
   core.set_storage("last_http_request", "code", code)
   core.set_storage("last_http_request", "description", description)
-  core.debug_log("HTTP response, Code: %s, Description: %s, Data: %s", code, description, data)
+  core.log.debug("HTTP response, Code: %s, Description: %s, Data: %s", code, description, data)
 end
 
 return _M

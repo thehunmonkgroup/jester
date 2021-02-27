@@ -290,7 +290,7 @@ local function doc_handler(action)
   if database then
     local doc = document:new(database, server)
     if type(doc) == "table" then
-      core.debug_log("New document handler for database: %s", action.database)
+      core.log.debug("New document handler for database: %s", action.database)
       return doc
     end
   end
@@ -309,7 +309,7 @@ function _M.retrieve(action)
   if doc then
     local resp, code = doc:retrieve(path, params)
     if code == http_code_ok then
-      core.debug_log("Path '%s' retrieved from database: %s", path, action.database)
+      core.log.debug("Path '%s' retrieved from database: %s", path, action.database)
       core.set_storage(storage_area, "data", resp)
     end
   end
@@ -325,7 +325,7 @@ function _M.retrieve_document(action)
   if doc then
     local resp, code = doc:retrieve(id, params)
     if code == http_code_ok then
-      core.debug_log("Document ID '%s' retrieved from database: %s", resp._id, action.database)
+      core.log.debug("Document ID '%s' retrieved from database: %s", resp._id, action.database)
       core.set_storage(storage_area, "id", resp._id)
       core.set_storage(storage_area, "rev", resp._rev)
       core.set_storage(storage_area, "document", resp)
@@ -342,7 +342,7 @@ function _M.create_document(action)
   if doc then
     local resp = doc:create(data, id)
     if doc:response_ok(resp) then
-      core.debug_log("New document created for database: %s, id: %s", action.database, resp.id)
+      core.log.debug("New document created for database: %s, id: %s", action.database, resp.id)
       core.set_storage(storage_area, "id", resp.id)
       core.set_storage(storage_area, "rev", resp.rev)
     end
@@ -359,7 +359,7 @@ function _M.update_document(action)
   if doc then
     local resp = doc:update(data, id, rev)
     if doc:response_ok(resp) then
-      core.debug_log("Document id '%s' updated for database: %s", resp.id, action.database)
+      core.log.debug("Document id '%s' updated for database: %s", resp.id, action.database)
       core.set_storage(storage_area, "id", resp.id)
       core.set_storage(storage_area, "rev", resp.rev)
     end
@@ -375,7 +375,7 @@ function _M.delete_document(action)
   if doc then
     local resp = doc:delete(id, rev)
     if doc:response_ok(resp) then
-      core.debug_log("Document id '%s' deleted from database: %s", resp.id, action.database)
+      core.log.debug("Document id '%s' deleted from database: %s", resp.id, action.database)
       core.set_storage(storage_area, "id", resp.id)
       core.set_storage(storage_area, "rev", resp.rev)
     end
@@ -396,7 +396,7 @@ function _M.retrieve_attachment(action)
       local file = io.open(file_path, "w")
       if file then
         if file:write(file_data) then
-          core.debug_log("Attachment '%s' retrieved from document ID '%s' in database '%s', written to file '%s'.", name, id, action.database, file_path)
+          core.log.debug("Attachment '%s' retrieved from document ID '%s' in database '%s', written to file '%s'.", name, id, action.database, file_path)
           core.set_storage(storage_area, "attachment_name", name)
           core.set_storage(storage_area, "file_path", file_path)
         end
@@ -418,7 +418,7 @@ function _M.add_attachment(action)
   if doc then
     local resp = doc:add_standalone_attachment(file_path, content_type, name, id, rev)
     if doc:response_ok(resp) then
-      core.debug_log("File '%s' added as attachment '%s' to document ID '%s' in database: %s", file_path, name, resp.id, action.database)
+      core.log.debug("File '%s' added as attachment '%s' to document ID '%s' in database: %s", file_path, name, resp.id, action.database)
       core.set_storage(storage_area, "id", resp.id)
       core.set_storage(storage_area, "rev", resp.rev)
     end
@@ -435,7 +435,7 @@ function _M.delete_attachment(action)
   if doc then
     local resp = doc:delete_attachment(name, id, rev)
     if doc:response_ok(resp) then
-      core.debug_log("Attachment '%s' deleted from  document ID '%s' in database: %s", name, resp.id, action.database)
+      core.log.debug("Attachment '%s' deleted from  document ID '%s' in database: %s", name, resp.id, action.database)
       core.set_storage(storage_area, "id", resp.id)
       core.set_storage(storage_area, "rev", resp.rev)
     end

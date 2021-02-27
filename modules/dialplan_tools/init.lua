@@ -147,7 +147,7 @@ function _M.execute(action)
   local application = action.application
   local data = action.data or ""
   if application then
-    core.debug_log("Executing dialplan application '%s' with data: %s", application, data)
+    core.log.debug("Executing dialplan application '%s' with data: %s", application, data)
     session:execute(application, data)
   end
 end
@@ -163,7 +163,7 @@ function _M.transfer(action)
     -- Kill all other sequences in the current stack.
     core.reset_stack("sequence")
     core.reset_stack("sequence_name")
-    core.debug_log("Transferring to: %s %s %s", extension, dialplan, context)
+    core.log.debug("Transferring to: %s %s %s", extension, dialplan, context)
     session:transfer(extension, dialplan, context)
   end
 end
@@ -221,7 +221,7 @@ function _M.bridge(action)
       data = channel .. extension
     end
     data = global_vars .. data
-    core.debug_log("Bridging call to: %s", data)
+    core.log.debug("Bridging call to: %s", data)
     session:execute("bridge", data)
     -- Restore the original state of the variable.
     core.set_variable("hangup_after_bridge", hangup_var)

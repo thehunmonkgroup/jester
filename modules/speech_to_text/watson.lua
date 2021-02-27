@@ -34,10 +34,10 @@ local cjson = require("cjson")
 local function process_response(response, status_code, status_description)
   if status_code == 200 then
     response_string = table.concat(response)
-    core.debug_log("JSON response string '%s'", response_string)
+    core.log.debug("JSON response string '%s'", response_string)
     return true, response_string
   else
-    core.error_log("Request failed, status %s: '%s'", status_code, status_description)
+    core.log.error("Request failed, status %s: '%s'", status_code, status_description)
     return false, status_description
   end
 end
@@ -106,8 +106,8 @@ function _M.transcriptions_to_text(data)
   local confidence_sum = 0
   local text_parts = {}
   local confidence, text = assemble_transcriptions_to_text(confidence_sum, text_parts, data)
-  core.debug_log("Confidence in transcription: %.2f%%\n", confidence)
-  core.debug_log("TEXT: \n\n%s", text)
+  core.log.debug("Confidence in transcription: %.2f%%\n", confidence)
+  core.log.debug("TEXT: \n\n%s", text)
   return confidence, text
 end
 
@@ -145,7 +145,7 @@ function _M.make_request(params, attributes)
     local query_parameters = params.query_parameters or {}
     local query_string = table.stringify(query_parameters)
     local url = string.format("https://apikey:%s@%s/v1/recognize?%s", params.api_key, service_uri, query_string)
-    core.debug_log("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
+    core.log.debug("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
     success, response = request(url, params, attributes)
   end
   return success, response

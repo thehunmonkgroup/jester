@@ -128,13 +128,13 @@ function _M.get_digits(action)
   local digits_regex = action.digits_regex or "\\d+"
   local key = action.storage_key or "digits"
   local digits = session:playAndGetDigits(min_digits, max_digits, max_tries, timeout, terminators, audio_files, bad_input, digits_regex)
-  core.debug_log("Got digits: %s", digits)
+  core.log.debug("Got digits: %s", digits)
   core.set_storage("get_digits", key, digits)
 end
 
 function _M.flush_digits()
   session:flushDigits()
-  core.debug_log("Flushing Digits")
+  core.log.debug("Flushing Digits")
 end
 
 return _M

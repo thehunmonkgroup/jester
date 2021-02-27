@@ -31,16 +31,16 @@ local function att_get_access_token(action)
 
   if status_code == 200 then
     local response_string = table.concat(response)
-    core.debug_log("JSON response string '%s'", response_string)
+    core.log.debug("JSON response string '%s'", response_string)
     local data = cjson.decode(response_string)
     for key, value in pairs(data) do
       if key == "access_token" then
         return value
       end
     end
-    core.debug_log("ERROR: No access token found")
+    core.log.debug("ERROR: No access token found")
   else
-    core.debug_log("ERROR: Request to AT&T token server failed: %s", status_description)
+    core.log.debug("ERROR: Request to AT&T token server failed: %s", status_description)
   end
 end
 
@@ -76,7 +76,7 @@ function _M.speech_to_text_from_file(action, attributes)
 
     if status_code == 200 then
       local response_string = table.concat(response)
-      core.debug_log("JSON response string '%s'", response_string)
+      core.log.debug("JSON response string '%s'", response_string)
       local data = cjson.decode(response_string)
       status = data.Recognition.Status == "OK" and 0 or 1
       if status == 0 and type(data.Recognition.NBest) == "table" then
@@ -87,7 +87,7 @@ function _M.speech_to_text_from_file(action, attributes)
         end
       end
     else
-      core.debug_log("ERROR: Request to AT&T API server failed: %s", status_description)
+      core.log.debug("ERROR: Request to AT&T API server failed: %s", status_description)
     end
   end
 

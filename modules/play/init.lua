@@ -224,7 +224,7 @@ function _M.play_file(action)
     end
     local rep = reps(action)
     for i = 1, rep do
-      core.debug_log("Streaming file '%s'", action.file)
+      core.log.debug("Streaming file '%s'", action.file)
       -- Break out of the loop if an actionable key was pressed.
       if not core.ready() or core.actionable_key() then return end
       session:streamFile(action.file)
@@ -261,7 +261,7 @@ function _M.play_valid_file(action)
       end
       -- Play the file if it exists.
       if success then
-        core.debug_log("Found valid file to play: %s", file)
+        core.log.debug("Found valid file to play: %s", file)
         -- Store the name of the valid file found.
         core.set_storage("play", "valid_file_played", file)
         action.file = file
@@ -271,7 +271,7 @@ function _M.play_valid_file(action)
   end
   -- No valid file found, make sure to clear out this value from any previous
   -- attempts.
-  core.debug_log("No valid file found to play.")
+  core.log.debug("No valid file found to play.")
   core.set_storage("play", "valid_file_played", "")
 end
 
@@ -283,7 +283,7 @@ function _M.play_phrase_macro(action)
     local phrase_arguments = action.phrase_arguments or ""
     local rep = reps(action)
     for i = 1, rep do
-      core.debug_log("Playing phrase '%s' with arguments '%s', language: %s", action.phrase, phrase_arguments, tostring(action.language))
+      core.log.debug("Playing phrase '%s' with arguments '%s', language: %s", action.phrase, phrase_arguments, tostring(action.language))
       -- Break out of the loop if an actionable key was pressed.
       if not core.ready() or core.actionable_key() then return end
       if action.language then
@@ -307,12 +307,12 @@ function _M.play_key_macros(action)
     local language = action.language or "en"
     local rep = reps(action)
     for i = 1, rep do
-      core.debug_log("Announcing keys, repetition %d", i)
+      core.log.debug("Announcing keys, repetition %d", i)
       for _, key in ipairs(order) do
         -- Break out of the loop if an actionable key was pressed.
         if not core.ready() or core.actionable_key() then return end
         if macros[key] then
-          core.debug_log("Playing key phrase '%s' with key '%s'", macros[key], key)
+          core.log.debug("Playing key phrase '%s' with key '%s'", macros[key], key)
           session:sayPhrase(macros[key], key, language)
         end
       end

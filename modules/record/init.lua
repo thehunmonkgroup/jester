@@ -182,7 +182,7 @@ function _M.record_file(action)
     session:execute("sleep", pre_record_delay)
   end
 
-  core.debug_log("Recording file to location: %s", filepath)
+  core.log.debug("Recording file to location: %s", filepath)
   -- Capture recording duration by getting timestamps immediately before and
   -- after the recording.
   local startstamp = os.time()
@@ -232,12 +232,12 @@ function _M.record_file_merge(action)
           session:insertFile(merge_file, base_file, 0)
           os.rename(merge_file, base_file)
         end
-        core.debug_log("Merged file '%s' with '%s'", base_file, merge_file)
+        core.log.debug("Merged file '%s' with '%s'", base_file, merge_file)
       else
-        core.debug_log("Merge file '%s' does not exist!: %s", merge_file, file_error)
+        core.log.debug("Merge file '%s' does not exist!: %s", merge_file, file_error)
       end
     else
-      core.debug_log("Base file '%s' does not exist!: %s", base_file, file_error)
+      core.log.debug("Base file '%s' does not exist!: %s", base_file, file_error)
     end
   end
 end

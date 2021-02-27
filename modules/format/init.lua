@@ -114,7 +114,7 @@ function _M.format_string(action)
     else
       formatted_string = f_string
     end
-    core.debug_log("Formatted string '%s' to '%s'", f_string, formatted_string)
+    core.log.debug("Formatted string '%s' to '%s'", f_string, formatted_string)
     core.set_storage("format", key, formatted_string)
   end
 end
@@ -131,7 +131,7 @@ function _M.format_date(action)
     local api = freeswitch.API()
     local command = string.format("strftime_tz %s %s|%s", timezone, timestamp, format)
     local formatted = api:executeString(command)
-    core.debug_log("Formatted timestamp '%s' to '%s'", timestamp, formatted)
+    core.log.debug("Formatted timestamp '%s' to '%s'", timestamp, formatted)
     core.set_storage("format", key, formatted)
   end
 end

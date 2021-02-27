@@ -298,7 +298,7 @@ function _M.conditional(action)
   local if_true = action.if_true
   local if_false = action.if_false
   if value and compare_to then
-    core.debug_log("Comparing '%s' to '%s' using comparison method '%s'", tostring(value), tostring(compare_to), operator)
+    core.log.debug("Comparing '%s' to '%s' using comparison method '%s'", tostring(value), tostring(compare_to), operator)
     local match
     if operator == "equal" then
       match = value == compare_to
@@ -310,14 +310,14 @@ function _M.conditional(action)
       match = value < compare_to
     end
     if match == nil then
-      core.debug_log("Invalid comparison operator")
+      core.log.debug("Invalid comparison operator")
     elseif match == false then
-      core.debug_log("Comparison result: false")
+      core.log.debug("Comparison result: false")
       if if_false then
         core.queue_sequence(if_false)
       end
     else
-      core.debug_log("Comparison result: true")
+      core.log.debug("Comparison result: true")
       if if_true then
         core.queue_sequence(if_true)
       end
@@ -356,7 +356,7 @@ function _M.copy_storage(action)
   if copy_area then
     -- Clear out the copy area before copying.
     core.clear_storage(copy_area)
-    core.debug_log("Copying data from area '%s' to area '%s'", area, copy_area)
+    core.log.debug("Copying data from area '%s' to area '%s'", area, copy_area)
     for k, v in pairs(core.channel.storage[area]) do
       -- Only copy basic data types, others will not copy reliably.
       if type(v) == "string" or type(v) == "number" or type(v) == "boolean" then
@@ -396,7 +396,7 @@ function _M.register_exit_sequence(action)
     event.event_type = "sequence"
     event.sequence = sequence
     table.insert(core.channel.stack.exit, event)
-    core.debug_log("Registered exit sequence: %s", sequence)
+    core.log.debug("Registered exit sequence: %s", sequence)
   end
 end
 
@@ -438,12 +438,12 @@ function _M.api_command(action)
   local command = action.command
   local key = action.storage_key or "result"
   if command then
-    core.debug_log("Executing API command: %s", command)
+    core.log.debug("Executing API command: %s", command)
     local api = freeswitch.API()
     local result = api:executeString(command)
     -- Remove final carriage return from result.
     result = string.sub(result, 1, -2)
-    core.debug_log("Command result: %s", result)
+    core.log.debug("Command result: %s", result)
     core.set_storage("api_command", key, result)
   end
 end

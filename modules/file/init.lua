@@ -193,18 +193,18 @@ function _M.create_directory(action)
     -- Look for existing directory.
     success, file_error = lfs.attributes(path, "mode")
     if success then
-      core.debug_log("Directory '%s' already exists, skipping creation.", path)
+      core.log.debug("Directory '%s' already exists, skipping creation.", path)
     else
       -- Create new directory.
       success, file_error = lfs.mkdir(path)
       if success then
-        core.debug_log("Created directory '%s'", path)
+        core.log.debug("Created directory '%s'", path)
       else
-        core.debug_log("Failed to create directory '%s'!: %s", path, file_error)
+        core.log.debug("Failed to create directory '%s'!: %s", path, file_error)
       end
     end
   else
-    core.debug_log("Cannot create directory, no 'path' parameter defined!")
+    core.log.debug("Cannot create directory, no 'path' parameter defined!")
   end
 end
 
@@ -223,15 +223,15 @@ function _M.remove_directory(action)
       -- Remove directory.
       success, file_error = lfs.rmdir(path)
       if success then
-        core.debug_log("Deleted directory '%s'", path)
+        core.log.debug("Deleted directory '%s'", path)
       else
-        core.debug_log("Failed to delete directory '%s'!: %s", path, file_error)
+        core.log.debug("Failed to delete directory '%s'!: %s", path, file_error)
       end
     else
-      core.debug_log("Directory '%s' does not exist, skipping removal.", path)
+      core.log.debug("Directory '%s' does not exist, skipping removal.", path)
     end
   else
-    core.debug_log("Cannot delete directory, no 'path' parameter defined!")
+    core.log.debug("Cannot delete directory, no 'path' parameter defined!")
   end
 end
 
@@ -263,12 +263,12 @@ function _M.move_file(action)
       end
     end
     if success then
-      core.debug_log("Successful file %s from '%s' to '%s'", operation, source_file, destination_file)
+      core.log.debug("Successful file %s from '%s' to '%s'", operation, source_file, destination_file)
     else
-      core.debug_log("Failed file %s from '%s' to '%s'!: %s", operation, source_file, destination_file, file_error)
+      core.log.debug("Failed file %s from '%s' to '%s'!: %s", operation, source_file, destination_file, file_error)
     end
   else
-    core.debug_log("Cannot perform file %s, missing parameter! Source: %s, Destination: %s", operation, tostring(action.source), tostring(action.destination))
+    core.log.debug("Cannot perform file %s, missing parameter! Source: %s, Destination: %s", operation, tostring(action.source), tostring(action.destination))
   end
 end
 
@@ -280,12 +280,12 @@ function _M.delete_file(action)
     local file = get_filepath(action.file)
     local success, file_error = os.remove(file)
     if success then
-      core.debug_log("Deleted file '%s'", file)
+      core.log.debug("Deleted file '%s'", file)
     else
-      core.debug_log("Failed to delete file '%s'!: %s", file, file_error)
+      core.log.debug("Failed to delete file '%s'!: %s", file, file_error)
     end
   else
-    core.debug_log("Cannot delete file, no 'file' parameter defined!")
+    core.log.debug("Cannot delete file, no 'file' parameter defined!")
   end
 end
 
@@ -310,19 +310,19 @@ function _M.file_exists(action)
   -- Store the result of the check.
   core.set_storage("file", "file_exists", result)
   if result == "false" then
-    core.debug_log("File '%s' does not exist", file)
+    core.log.debug("File '%s' does not exist", file)
     -- Run false sequence if specified.
     if action.if_false then
       core.queue_sequence(action.if_false)
     end
   elseif result == "true" then
-    core.debug_log("File '%s' exists", file)
+    core.log.debug("File '%s' exists", file)
     -- Run true sequence if specified.
     if action.if_true then
       core.queue_sequence(action.if_true)
     end
   else
-    core.debug_log("Cannot check file, no 'file' parameter defined!")
+    core.log.debug("Cannot check file, no 'file' parameter defined!")
   end
 end
 

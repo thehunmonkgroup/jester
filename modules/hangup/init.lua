@@ -64,7 +64,7 @@ function _M.hangup(action)
   if action.play then
     session:streamFile(action.play)
   end
-  core.debug_log("Hangup called in sequence action")
+  core.log.debug("Hangup called in sequence action")
   session:hangup();
 end
 
@@ -77,7 +77,7 @@ function _M.register_hangup_sequence(action)
     event.event_type = "sequence"
     event.sequence = action.sequence
     table.insert(core.channel.stack.hangup, event)
-    core.debug_log("Registered hangup sequence: %s", event.sequence)
+    core.log.debug("Registered hangup sequence: %s", event.sequence)
   end
 end
 

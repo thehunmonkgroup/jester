@@ -33,7 +33,7 @@ function _M.speech_to_text_from_file_google(action, attributes)
 
   if status_code == 200 then
     local response_string = table.concat(response)
-    core.debug_log("Google API server response: %s", response_string)
+    core.log.debug("Google API server response: %s", response_string)
     local data = cjson.decode(response_string)
     status = data.status
     if status == 0 and data.hypotheses then
@@ -44,7 +44,7 @@ function _M.speech_to_text_from_file_google(action, attributes)
       end
     end
   else
-    core.debug_log("ERROR: Request to Google API server failed: %s", status_description)
+    core.log.debug("ERROR: Request to Google API server failed: %s", status_description)
   end
 
   return status, translations

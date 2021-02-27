@@ -77,7 +77,7 @@ local function load_file_attributes(params)
     return file, attributes
   else
     local message = string.format([[ERROR: could not open '%s': %s]], filepath, data)
-    core.error_log(message)
+    core.log.error(message)
     return false, message
   end
 end
@@ -112,7 +112,7 @@ local function retry_wait(params, attempt)
   local retries = params.retries or DEFAULT_RETRIES
   local retry_wait_seconds = params.retry_wait_seconds or DEFAULT_RETRY_WAIT_SECONDS
   if attempt < retries then
-    core.debug_log([[ERROR: Attempt #%d failed, re-trying Speech to Text API in %d seconds]], attempt, retry_wait_seconds)
+    core.log.debug([[ERROR: Attempt #%d failed, re-trying Speech to Text API in %d seconds]], attempt, retry_wait_seconds)
     socket.sleep(retry_wait_seconds)
   end
 end

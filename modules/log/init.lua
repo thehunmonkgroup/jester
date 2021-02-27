@@ -101,7 +101,7 @@ function _M.log_file(action)
       destination:write(message)
       destination:close()
     else
-      core.debug_log("Failed writing to log file '%s'!: %s", file, file_error)
+      core.log.debug("Failed writing to log file '%s'!: %s", file, file_error)
     end
   end
 end

@@ -263,12 +263,12 @@ function _M.send_email_socket(action)
         )
 
         if error_message then
-          core.debug_log("Mail error: " .. tostring(error_message))
+          core.log.debug("Mail error: " .. tostring(error_message))
         else
-          core.debug_log("Sent email from '%s' to '%s', subject '%s', server '%s', port '%s'", from, recipient, tostring(subject), server, port)
+          core.log.debug("Sent email from '%s' to '%s', subject '%s', server '%s', port '%s'", from, recipient, tostring(subject), server, port)
         end
       else
-        core.debug_log("Mail send error, missing template: " .. tostring(template[k] or "default"))
+        core.log.debug("Mail send error, missing template: " .. tostring(template[k] or "default"))
       end
     end
   end

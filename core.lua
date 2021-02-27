@@ -12,8 +12,102 @@
 -- @author Chad Phillips
 -- @copyright 2011-2021 Chad Phillips
 
+require "jester.support.table"
 
 local _M = {}
+
+
+--- Create a logging object.
+--
+-- The created logger will detect if it's running in a FreeSWITCH environment,
+-- and if not, it will log to console.
+--
+-- Only messages at or above the configured log level will be logged.
+--
+-- @tab config
+--   The log configuration.
+-- @param config.level
+--   The log level, one of debug, info, warn, error, crit.
+--   Default: info
+-- @param config.outfile
+--   File to write log messages to.
+--   Default: nil
+-- @param config.prefix
+--   Prefix for log messages.
+--   Default: jester
+-- @param config.use_color
+--   Use color when logging to terminal.
+--   Default: true
+-- @return The log object
+--   The object has the following log methods:
+--      debug
+--      info
+--      warning
+--      err
+--      crit
+-- @usage
+--   logger = core.logger({level = "warn"})
+--   logger.error("Some message")
+function _M.logger(config)
+  config = config or {}
+  local default_config = {
+    level = "info",
+    outfile = nil,
+    prefix = "jester",
+    use_color = true,
+    modes = {
+      { name = "debug", color = "\27[36m", },
+      { name = "info",  color = "\27[32m", },
+      { name = "warning",  color = "\27[33m", },
+      { name = "err", color = "\27[31m", },
+      { name = "crit", color = "\27[31m", },
+      --{ name = "crit", color = "\27[35m", },
+    }
+  }
+  local log = table.merge(default_config, config)
+  local levels = {}
+  for i, v in ipairs(log.modes) do
+    levels[v.name] = i
+  end
+  for i, x in ipairs(log.modes) do
+    local name = x.name
+    log[name] = function(...)
+      -- Return early if we're below the log level
+      if i < levels[log.level] then
+        return
+      end
+      local name_upper = name:upper()
+      local prefix = log.prefix and string.format("[%s] ", log.prefix:upper()) or ""
+      local msg = prefix .. string.format(...)
+      if _M.is_freeswitch then
+        freeswitch.consoleLog(name, msg .. "\n")
+      else
+        local info = debug.getinfo(2, "Sl")
+        local lineinfo = info.short_src .. ":" .. info.currentline
+        -- Output to console
+        print(string.format("%s[%-6s%s]%s %s: %s",
+                            log.use_color and x.color or "",
+                            name_upper,
+                            os.date("%H:%M:%S"),
+                            log.use_color and "\27[0m" or "",
+                            lineinfo,
+                            msg))
+      end
+      -- Output to log file
+      if log.outfile then
+        local fp = io.open(log.outfile, "a")
+        local str = string.format("[%-6s%s] %s: %s\n",
+                                  name_upper,
+                                  os.date(),
+                                  lineinfo,
+                                  msg)
+        fp:write(str)
+        fp:close()
+      end
+    end
+  end
+  return log
+end
 
 --- Bootstrap the Jester environment.
 --
@@ -24,8 +118,13 @@ local _M = {}
 --   core.bootstrap(config)
 function _M.bootstrap(config)
 
-  -- Use regular log here, debug_log needs config.
-  _M.log("Bootstrapping Jester")
+  --- Boolean indicating if the script was called from within FreeSWITCH.
+  --
+  -- @field is_freeswitch
+  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
+
+  _M.log = _M.logger()
+  _M.log.info("Bootstrapping Jester")
 
   --- Global configuration table.
   --
@@ -33,11 +132,6 @@ function _M.bootstrap(config)
   --
   -- @field conf
   _M.conf = config or require "jester.conf"
-
-  --- Boolean indicating if the script was called from within FreeSWITCH.
-  --
-  -- @field is_freeswitch
-  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
 
 end
 
@@ -65,9 +159,9 @@ function _M.init_modules(modules)
       for action, data in pairs(config.action_map) do
         _M.action_map[action] = data
       end
-      _M.debug_log("Loaded module configuration '%s'", conf_file)
+      _M.log.debug("Loaded module configuration '%s'", conf_file)
     else
-      _M.debug_log("Failed loading module configuration '%s'!", conf_file)
+      _M.log.debug("Failed loading module configuration '%s'!", conf_file)
     end
   end
 end
@@ -82,7 +176,7 @@ end
 --   core.init_profile("demo")
 function _M.init_profile(profile_name)
 
-  _M.debug_log("Loading profile '%s'", profile_name)
+  _M.log.debug("Loading profile '%s'", profile_name)
   --- Currently loaded profile.
   --
   -- Set up access to channel variables, storage, global configs, and initial
@@ -105,7 +199,7 @@ function _M.init_profile(profile_name)
     global = _M.conf,
     args = function(i)
       local arg = _M.initial_args[tonumber(i)] or ""
-      _M.debug_log("Got profile arg(%d): '%s'", i, arg)
+      _M.log.debug("Got profile arg(%d): '%s'", i, arg)
       return arg
     end,
     storage = protected_get_storage,
@@ -132,7 +226,7 @@ function _M.init_profile(profile_name)
   }
   for _, override in ipairs(overrides) do
     if _M.profile[override] ~= nil then
-      _M.debug_log("Overriding global config '%s' in profile '%s'", override, profile_name)
+      _M.log.debug("Overriding global config '%s' in profile '%s'", override, profile_name)
       _M.conf[override] = _M.profile[override]
     end
   end
@@ -189,7 +283,7 @@ function _M.set_keys(action, sequence)
     _M.keys = nil
     message = "No keys to set for action '%s'"
   end
-  _M.debug_log(message, action.action)
+  _M.log.debug(message, action.action)
 end
 
 --- Global key handler for all key press events in Jester.
@@ -207,7 +301,7 @@ function _M.key_handler(session, input_type, data)
     -- Pressed key is in the current key map, so it's valid.
     if _M.keys[_M.key_pressed.digit] then
       _M.key_pressed.valid = _M.key_pressed.digit
-      _M.debug_log("Key pressed: %s, valid", _M.key_pressed.valid)
+      _M.log.debug("Key pressed: %s, valid", _M.key_pressed.valid)
       -- Parse the key value.  Values prefixed with @ are ad hoc actions,
       -- values prefixed with : are playback commands to return to core
       -- for playback control (break, seek, etc).
@@ -227,7 +321,7 @@ function _M.key_handler(session, input_type, data)
       -- invalid key.
       if _M.keys.invalid or _M.keys.invalid_sound or _M.keys.invalid_sequence then
         _M.key_pressed.invalid = _M.key_pressed.digit
-        _M.debug_log("Key pressed: %s, invalid!", _M.key_pressed.invalid)
+        _M.log.debug("Key pressed: %s, invalid!", _M.key_pressed.invalid)
         -- By default, replay the current action, but give the option
         -- to load a custom sequence instead.
         if _M.keys.invalid_sequence then
@@ -237,7 +331,7 @@ function _M.key_handler(session, input_type, data)
         end
         -- Play an invalid sound if specified.
         if _M.keys.invalid_sound then
-          _M.debug_log("Playing invalid sound file: %s", _M.keys.invalid_sound)
+          _M.log.debug("Playing invalid sound file: %s", _M.keys.invalid_sound)
           session:streamFile(_M.keys.invalid_sound)
         end
         return "break"
@@ -268,7 +362,7 @@ function _M.run_action(action)
     -- Load the module.  Since Lua caches loaded modules, this is only an
     -- expensive operation the first time the module code is loaded.
     local mod = require("jester.modules." .. mod_name .. ".init")
-    _M.debug_log("Loaded module '%s'", mod_name)
+    _M.log.debug("Loaded module '%s'", mod_name)
     -- Load the handler for the action.
     local func = _M.load_action_handler(action)
     action_func = mod[func]
@@ -277,9 +371,9 @@ function _M.run_action(action)
       -- are not on the sequence stack, so check here if it's an ad hoc
       -- action.
       if action.ad_hoc then
-        _M.debug_log("Running ad hoc action '%s'", action.action)
+        _M.log.debug("Running ad hoc action '%s'", action.action)
       else
-        _M.debug_log("Running action %d (%s) from sequence '%s', function '%s'", stack[p].position, action.action, stack[p].name, func)
+        _M.log.debug("Running action %d (%s) from sequence '%s', function '%s'", stack[p].position, action.action, stack[p].name, func)
       end
       -- Set up key presses for this action -- ad hoc actions don't have key
       -- presses, and may be run when no valid sequence stack is present, so
@@ -287,10 +381,10 @@ function _M.run_action(action)
       if not action.ad_hoc then _M.set_keys(action, stack[p].sequence) end
       action_func(action)
     else
-      _M.debug_log("Error executing action function '%s', does not exist!", func)
+      _M.log.debug("Error executing action function '%s', does not exist!", func)
     end
   elseif not action.action then
-    _M.debug_log("No valid action parameter, skipping")
+    _M.log.debug("No valid action parameter, skipping")
   end
 end
 
@@ -356,55 +450,9 @@ end
 -- @usage
 --   core.wait(1000)
 function _M.wait(milliseconds)
-  _M.debug_log("Waiting %d milliseconds", milliseconds)
+  _M.log.debug("Waiting %d milliseconds", milliseconds)
   -- TODO: switch to socket.sleep
   session:streamFile("silence_stream://" .. milliseconds)
-end
-
---- Log to FreeSWITCH console or stdout depending on the environment.
---
--- @string msg
---   The message to log.
--- @string prefix
---   Prefix the message with this string.
--- @string level
---   Log level.
--- @usage
---   core.log("Some message", "CUSTOM LOG", "info")
-function _M.log(msg, prefix, level)
-  if _M.is_freeswitch then
-    prefix = prefix or "JESTER"
-    level = level or "info"
-    freeswitch.consoleLog(level, prefix .. ": " .. tostring(msg) .. "\n")
-  else
-    print(msg)
-  end
-end
-
---- Conditional debug logger.
---
--- Extra arguments are substituted for placeholders using @{string.format}.
---
--- @string msg
---   The message to log.
--- @usage
---   core.debug_log("Hello %s", name)
-function _M.debug_log(msg, ...)
-  if _M.conf.debug and _M.conf.debug_output.log then
-    _M.log(string.format(msg, ...), "JESTER DEBUG")
-  end
-end
-
---- Error logger.
---
--- Extra arguments are substituted for placeholders using @{string.format}.
---
--- @string msg
---   The message to log.
--- @usage
---   core.error_log("Hello %s", name)
-function _M.error_log(msg, ...)
-  _M.log(string.format(msg, ...), "JESTER ERROR", "error")
 end
 
 --- Wrapper to grab session variables.
@@ -421,12 +469,12 @@ end
 function _M.get_variable(chan_var, default)
   local value = session:getVariable(chan_var)
   if value then
-    _M.debug_log("Got value %s: %s", chan_var, tostring(value))
+    _M.log.debug("Got value %s: %s", chan_var, tostring(value))
   elseif default then
     value = default
-    _M.debug_log("Variable %s returned default: %s", chan_var, tostring(default))
+    _M.log.debug("Variable %s returned default: %s", chan_var, tostring(default))
   else
-    _M.debug_log("Variable %s: not set", chan_var)
+    _M.log.debug("Variable %s: not set", chan_var)
   end
 
   return value
@@ -455,7 +503,7 @@ function _M.set_variable(chan_var, value, default)
     message = "Set value %s to default: %s"
   end
   session:setVariable(chan_var, value)
-  _M.debug_log(message, chan_var, tostring(value))
+  _M.log.debug(message, chan_var, tostring(value))
 end
 
 --- Dumps values to console.
