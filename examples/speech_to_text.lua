@@ -2,7 +2,7 @@ local core = require "jester.core"
 local stt = require "jester.modules.speech_to_text"
 local rev_ai = require "jester.modules.speech_to_text.rev_ai"
 
-local API_KEY = "023fsnQlV656K361V3JQNuKrBG6qwZHKSgc1-p8C9By1dNzQx-kMAQBDCsnjRv5vq6m9teTHtYSXMa_fZ3HTOadu1RFN4"
+local API_KEY = "[API KEY]"
 local SERVICE_URI = "[SERVICE URL]"
 
 function speech_to_text_from_file(filepath)
