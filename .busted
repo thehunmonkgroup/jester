@@ -1,0 +1,17 @@
+return {
+  _all = {
+    coverage = false,
+    verbose = true,
+    lpath = "../?/init.lua;../?.lua",
+  },
+  default = {
+  },
+  unit = {
+    ROOT = {"spec/unit"},
+  },
+  integration = {
+    ROOT = {"spec/integration"},
+  },
+}
+
+-- vi: ft=lua
