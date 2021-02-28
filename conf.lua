@@ -14,8 +14,8 @@
 --
 -- @table conf
 -- @field debug
---   Enable this setting to turn on debuggging.
---   This value can be overridden per profile.
+--   Enable this setting to turn on debuggging by default.
+--   Default: false
 -- @field debug_output
 --   Control debug output.
 -- @field base_dir
@@ -37,7 +37,7 @@
 --   This value can be overridden per profile.
 local conf = {}
 
-conf.debug = true
+conf.debug = false
 
 -- These settings control what debugging information is output, only edit the
 -- values of the table, not the keys.
