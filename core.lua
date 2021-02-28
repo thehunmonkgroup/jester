@@ -38,8 +38,11 @@ local _M = {}
 -- @param config.use_color
 --   Use color when logging to terminal.
 --   Default: true
+-- @param config.modes
+--   Table configuring the available logging modes.
+--   Default: See default_config.modes in logger method of @{core.lua}
 -- @return The log object
---   The object has the following log methods:
+--   The object has the following log modes by default:
 --      debug
 --      info
 --      warning
@@ -92,6 +95,17 @@ function _M.logger(config)
         output = string.format(msg, ...)
       end
       output = prefix .. output
+      -- Output to log file
+      if log.outfile then
+        local fp = io.open(log.outfile, "a")
+        local str = string.format("[%-6s%s] %s: %s\n",
+                                  name_upper,
+                                  os.date(),
+                                  lineinfo,
+                                  output)
+        fp:write(str)
+        fp:close()
+      end
       if _M._TEST then
         return name, output
       elseif _M.is_freeswitch then
@@ -107,17 +121,6 @@ function _M.logger(config)
                             log.use_color and "\27[0m" or "",
                             lineinfo,
                             output))
-      end
-      -- Output to log file
-      if log.outfile then
-        local fp = io.open(log.outfile, "a")
-        local str = string.format("[%-6s%s] %s: %s\n",
-                                  name_upper,
-                                  os.date(),
-                                  lineinfo,
-                                  output)
-        fp:write(str)
-        fp:close()
       end
     end
   end
