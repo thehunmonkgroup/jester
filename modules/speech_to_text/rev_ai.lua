@@ -42,7 +42,7 @@ local function process_response(response, status_code, status_description)
     core.log.debug("JSON response string '%s'", response_string)
     return true, response_string
   else
-    core.log.error("Request failed, status %s: '%s'", status_code, status_description)
+    core.log.err("Request failed, status %s: '%s'", status_code, status_description)
     return false, status_description
   end
 end

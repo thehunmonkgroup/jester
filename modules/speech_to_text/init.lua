@@ -77,7 +77,7 @@ local function load_file_attributes(params)
     return file, attributes
   else
     local message = string.format([[ERROR: could not open '%s': %s]], filepath, data)
-    core.log.error(message)
+    core.log.err(message)
     return false, message
   end
 end
