@@ -71,7 +71,7 @@ function _M.logger(config)
       --{ name = "crit", color = "\27[35m", },
     }
   }
-  local log = table.merge(default_config, config)
+  local log = table.merge(default_config, config, false)
   local levels = {}
   for i, v in ipairs(log.modes) do
     levels[v.name] = i
@@ -79,7 +79,7 @@ function _M.logger(config)
   for i, x in ipairs(log.modes) do
     local name = x.name
     log[name] = function(msg, ...)
-      -- Return early if we're below the log level
+      assert(levels[log.level], string.format([[ERROR: missing log level '%s']], log.level))
       if i < levels[log.level] then
         return
       end
