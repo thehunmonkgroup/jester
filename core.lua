@@ -136,20 +136,24 @@ end
 --   core.bootstrap(config)
 function _M.bootstrap(config)
 
-  --- Boolean indicating if the script was called from within FreeSWITCH.
-  --
-  -- @field is_freeswitch
-  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
-
-  _M.log = _M.logger()
-  _M.log.info("Bootstrapping Jester")
-
   --- Global configuration table.
   --
   -- As configured in @{core.conf}.
   --
   -- @field conf
   _M.conf = config or require "jester.conf"
+
+  --- Boolean indicating if the script was called from within FreeSWITCH.
+  --
+  -- @field is_freeswitch
+  _M.is_freeswitch = freeswitch and freeswitch.consoleLog
+
+  local log_config = {}
+  if _M.conf.debug then
+    log_config.level = "debug"
+  end
+  _M.log = _M.logger(log_config)
+  _M.log.info("Bootstrapping Jester")
 
 end
 
