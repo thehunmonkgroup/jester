@@ -18,6 +18,19 @@ function filepath_elements(filepath)
   return string.match(filepath, "(.-)([^\\/]-%.?([^%.\\/]*))$")
 end
 
+--[[
+  Checks for the existence of a file.
+]]
+function file_exists(n)
+  local f = io.open(n)
+  if f == nil then
+    return false
+  else
+    io.close(f)
+    return true
+  end
+end
+
 function load_file(filepath)
   local file, err = io.open(filepath, "rb")
   local data
