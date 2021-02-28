@@ -84,6 +84,11 @@ end
 ]]
 function table.merge(...)
   local tables_to_merge = {...}
+  local recurse = true
+  if type(tables_to_merge[#tables_to_merge]) == "boolean" then
+    recurse = tables_to_merge[#tables_to_merge]
+    table.remove(tables_to_merge, #tables_to_merge)
+  end
   assert(#tables_to_merge > 1, "There should be at least two tables to merge them")
   for k, t in ipairs(tables_to_merge) do
     assert(type(t) == "table", string.format("Expected a table as function parameter %d", k))
@@ -92,12 +97,12 @@ function table.merge(...)
   for i = 2, #tables_to_merge do
     local from = tables_to_merge[i]
     for k, v in pairs(from) do
-      if type(v) == "table" then
+      if recurse and type(v) == "table" then
         result[k] = result[k] or {}
         assert(type(result[k]) == "table", string.format("Expected a table: '%s'", k))
         result[k] = table.merge(result[k], v)
       else
-      result[k] = v
+        result[k] = v
       end
     end
   end
