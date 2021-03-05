@@ -25,8 +25,8 @@ function speech_to_text_from_file(filepath)
     retry_wait_seconds = 30,
   }
   local confidence, text
-  --local success, data = stt.speech_to_text_from_file(params, rev_ai)
-  local success, data = stt.speech_to_text_from_file(params, watson)
+  local success, data = stt.speech_to_text_from_file(params, rev_ai)
+  --local success, data = stt.speech_to_text_from_file(params, watson)
   if success then
     confidence, text = rev_ai.transcriptions_to_text(data)
   else
