@@ -22,7 +22,6 @@
 -- @field query_parameters
 --   Table of query parameters to pass to the API call.
 
-local inspect = require "inspect"
 local core = require "jester.core"
 require "jester.support.table"
 local mp = require "jester.support.multipart-post"
@@ -75,7 +74,6 @@ local function request_new_job(url, api_key, options, params, attributes)
   rq.sink = ltn12.sink.table(response)
   --local body, status_code, headers, status_description = http.request(rq)
   local body, status_code, headers, status_description = request_handler.request(rq)
-  --core.log.debug(inspect(table.concat(response)))
   return process_response(response, status_code, status_description)
 end
 
@@ -93,7 +91,6 @@ local function request_job_status(url, api_key, options, params, attributes, cou
     url = string.format([[%s/%s]], url, params.job_id),
     sink = ltn12.sink.table(response),
   })
-  --core.log.debug(inspect(table.concat(response)))
   core.log.debug("Job status request %d", count)
   local success, response = process_response(response, status_code, status_description)
   if success then
@@ -135,7 +132,6 @@ local function request_job_transcript(url, api_key, options, params, attributes)
     url = string.format([[%s/%s/transcript]], url, params.job_id),
     sink = ltn12.sink.table(response),
   })
-  --core.log.debug(inspect(table.concat(response)))
   core.log.debug("Job transcript request")
   return process_response(response, status_code, status_description)
 end
