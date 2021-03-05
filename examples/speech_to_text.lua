@@ -38,3 +38,5 @@ end
 local filepath = arg[1]
 core.bootstrap()
 local success, data, confidence, text = speech_to_text_from_file(filepath)
+core.log.info("Confidence in transcription: %.2f%%\n", confidence)
+core.log.info("TEXT: \n\n%s", text)

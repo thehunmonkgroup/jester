@@ -33,10 +33,18 @@ local https = require 'ssl.https'
 --local http = require 'socket.http'
 local ltn12 = require("ltn12")
 local cjson = require("cjson")
+local socket = require("socket")
 
 --local BASE_URL = "http://localhost:3000/v1"
 local BASE_URL = "https://api.rev.ai/speechtotext/v1"
 local DEFAULT_OPTIONS = {}
+
+--- Parse a response from a successful API call.
+local function parse_response(response)
+  core.log.debug("Parsing response: %s", response)
+  local data = cjson.decode(response)
+  return data
+end
 
 local function process_response(response, status_code, status_description)
   if status_code == 200 then
@@ -49,7 +57,7 @@ local function process_response(response, status_code, status_description)
   end
 end
 
-local function request(url, api_key, options, params, attributes)
+local function request_new_job(url, api_key, options, params, attributes)
   local request_handler = params.request_handler or https
   local response = {}
   local options_string = cjson.encode(options)
@@ -71,17 +79,109 @@ local function request(url, api_key, options, params, attributes)
   return process_response(response, status_code, status_description)
 end
 
-local function parse(response)
-  local transcriptions = {}
-  local data = cjson.decode(response)
-  local inspect = require "inspect"
-  print(inspect(data))
-  for k, chunk in ipairs(data.results) do
-    transcriptions[k] = {}
-    transcriptions[k].text = chunk.alternatives[1].transcript
-    transcriptions[k].confidence = chunk.alternatives[1].confidence
+local function request_job_status(url, api_key, options, params, attributes, count)
+  local request_handler = params.request_handler or https
+  local count = count or 1
+  local response = {}
+  --local body, status_code, headers, status_description = http.request({
+  local body, status_code, headers, status_description = request_handler.request({
+    method = "GET",
+    headers = {
+      ["authorization"] = string.format([[Bearer %s]], api_key),
+      ["accept"] = "application/json",
+    },
+    url = string.format([[%s/%s]], url, params.job_id),
+    sink = ltn12.sink.table(response),
+  })
+  --core.log.debug(inspect(table.concat(response)))
+  core.log.debug("Job status request %d", count)
+  local success, response = process_response(response, status_code, status_description)
+  if success then
+    success, data = pcall(parse_response, response)
+    if success then
+      if data.status == "failed" then
+        return false, string.format([[API transcription failed: %s]], data.failure)
+      elseif data.status == "transcribed" then
+        core.log.debug("Transcription success")
+        return success, data
+      else
+        if count < 100 then
+          core.log.debug("Still waiting on transcription")
+          socket.sleep(1)
+          count = count + 1
+          return request_job_status(url, api_key, options, params, attributes, count)
+        else
+          local message = "Job status request timed out"
+          core.log.err(message)
+          return false, message
+        end
+      end
+    else
+      core.log.err("Parsing job status response failed: %s", data)
+    end
   end
-  return transcriptions
+end
+
+local function request_job_transcript(url, api_key, options, params, attributes)
+  local request_handler = params.request_handler or https
+  local response = {}
+  --local body, status_code, headers, status_description = http.request({
+  local body, status_code, headers, status_description = request_handler.request({
+    method = "GET",
+    headers = {
+      ["authorization"] = string.format([[Bearer %s]], api_key),
+      ["accept"] = "application/vnd.rev.transcript.v1.0+json",
+    },
+    url = string.format([[%s/%s/transcript]], url, params.job_id),
+    sink = ltn12.sink.table(response),
+  })
+  --core.log.debug(inspect(table.concat(response)))
+  core.log.debug("Job transcript request")
+  return process_response(response, status_code, status_description)
+end
+
+local function request(url, api_key, options, params, attributes)
+  success, response = request_new_job(url, api_key, options, params, attributes)
+  if success then
+    core.log.debug("New job submitted successfully")
+    success, data = pcall(parse_response, response)
+    if success then
+      params.job_id = data.id
+      core.log.debug("Requesting job status")
+      success, response = request_job_status(url, api_key, options, params, attributes)
+      if success then
+        core.log.debug("Requesting job transcript")
+        success, response = request_job_transcript(url, api_key, options, params, attributes)
+        if not success then
+          core.log.err("Requesting job transcript failed: %s", response)
+        end
+      end
+    else
+      core.log.err("Parsing new job response failed: %s", data)
+    end
+  end
+  return success, response
+end
+
+local function parse_transcriptions(response)
+  local monologues = {}
+  local data = cjson.decode(response)
+  for mk, monologue in ipairs(data.monologues) do
+    monologues[mk] = {}
+    for tk, element in ipairs(monologue.elements) do
+      monologues[mk][tk] = {}
+      if element.type == "text" or element.type == "punct" then
+        monologues[mk][tk].text = element.value
+        if element.type == "text" then
+          monologues[mk][tk].confidence = element.confidence
+        end
+      else
+        monologues[mk][tk].text = "..."
+        monologues[mk][tk].confidence = 0
+      end
+    end
+  end
+  return monologues
 end
 
 local function check_params(params)
@@ -92,14 +192,32 @@ local function check_params(params)
   end
 end
 
-local function assemble_transcriptions_to_text(confidence_sum, text_parts, data, next_i)
-  local i, part = next(data, next_i)
+local function assemble_elements(elements_confidence_sum, elements_confidence_count, element_parts, elements, next_element)
+  local i, element = next(elements, next_element)
   if i then
-    confidence_sum = confidence_sum + part.confidence
-    table.insert(text_parts, part.text)
-    return assemble_transcriptions_to_text(confidence_sum, text_parts, data, i)
+    if element.confidence then
+      elements_confidence_count = elements_confidence_count + 1
+      elements_confidence_sum = elements_confidence_sum + element.confidence
+    end
+    table.insert(element_parts, element.text)
+    return assemble_elements(elements_confidence_sum, elements_confidence_count, element_parts, elements, i)
   else
-    local confidence = confidence_sum == 0 and 0 or (confidence_sum / #data * 100)
+    local text = table.concat(element_parts)
+    return elements_confidence_sum, elements_confidence_count, text
+  end
+end
+
+local function assemble_transcriptions_to_text(confidence_sum, confidence_count, text_parts, data, next_i)
+  local i, monologue = next(data, next_i)
+  if i then
+    local element_parts = {}
+    local elements_confidence_sum, elements_confidence_count, elements_text = assemble_elements(0, 0, element_parts, monologue)
+    confidence_sum = confidence_sum + elements_confidence_sum
+    confidence_count = confidence_count + elements_confidence_count
+    table.insert(text_parts, elements_text)
+    return assemble_transcriptions_to_text(confidence_sum, confidence_count, text_parts, data, i)
+  else
+    local confidence = confidence_sum == 0 and 0 or (confidence_sum / confidence_count * 100)
     local text = table.concat(text_parts, "\n\n")
     return confidence, text
   end
@@ -118,8 +236,9 @@ end
 --   confidence, text = transcriptions_to_text(data)
 function _M.transcriptions_to_text(data)
   local confidence_sum = 0
+  local confidence_count = 0
   local text_parts = {}
-  local confidence, text = assemble_transcriptions_to_text(confidence_sum, text_parts, data)
+  local confidence, text = assemble_transcriptions_to_text(confidence_sum, confidence_count, text_parts, data)
   core.log.debug("Confidence in transcription: %.2f%%\n", confidence)
   core.log.debug("TEXT: \n\n%s", text)
   return confidence, text
@@ -136,7 +255,10 @@ end
 -- @usage
 --   success, data = parse_transcriptions(response)
 function _M.parse_transcriptions(response)
-  success, data = pcall(parse, response)
+  success, data = pcall(parse_transcriptions, response)
+  if not success then
+    core.log.err("Error parsing transcription: %s", data)
+  end
   return success, data
 end
 
@@ -157,7 +279,7 @@ function _M.make_request(params, attributes)
   if success then
     local url = string.format("%s/jobs", BASE_URL)
     local options = params.options or DEFAULT_OPTIONS
-    core.log.debug("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
+    core.log.info("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
     success, response = request(url, params.api_key, options, params, attributes)
   end
   return success, response
