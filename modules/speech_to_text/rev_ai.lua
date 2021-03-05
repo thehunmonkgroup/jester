@@ -22,8 +22,10 @@
 -- @field query_parameters
 --   Table of query parameters to pass to the API call.
 
+local inspect = require "inspect"
 local core = require "jester.core"
 require "jester.support.table"
+local mp = require "jester.support.multipart-post"
 
 local _M = {}
 
@@ -32,9 +34,9 @@ local https = require 'ssl.https'
 local ltn12 = require("ltn12")
 local cjson = require("cjson")
 
+--local BASE_URL = "http://localhost:3000/v1"
 local BASE_URL = "https://api.rev.ai/speechtotext/v1"
---local BASE_URL = "http://localhost:8080"
-DEFAULT_OPTIONS = {}
+local DEFAULT_OPTIONS = {}
 
 local function process_response(response, status_code, status_description)
   if status_code == 200 then
@@ -50,35 +52,22 @@ end
 local function request(url, api_key, options, params, attributes)
   local request_handler = params.request_handler or https
   local response = {}
-  local boundary = "------------------------b218dd781dd98907"
   local options_string = cjson.encode(options)
-  local file_content = attributes.file:read( "*a" )
-  attributes.file:close()
-  local body = string.format([[%s
-Content-Disposition: form-data; name="media"; filename="%s"
-Content-Type: %s
-
-%s
-%s
-Content-Disposition: form-data; name="options";
-
-%s
-%s--]], boundary, attributes.basename, attributes.file_type, file_content, boundary, options_string, boundary)
-  local content_length = string.len(body)
-  --local body, status_code, headers, status_description = http.request({
-  local body, status_code, headers, status_description = request_handler.request({
-    method = "POST",
-    headers = {
-      ["authorization"] = string.format([[Bearer %s]], api_key),
-      ["content-length"] = content_length,
-      ["content-type"] = string.format([[multipart/form-data;boundary=%s]], boundary),
-      ["accept"] = "application/json",
+  local rq = mp.gen_request({
+    media = {
+      filename = attributes.basename,
+      data = attributes.file,
+      len = attributes.content_length,
+      content_type = attributes.file_type,
     },
-    url = url,
-    sink = ltn12.sink.table(response),
-    source = ltn12.source.string(body),
+    options = options_string,
   })
-  local inspect = require "inspect"
+  rq.url = url
+  rq.headers.authorization = string.format([[Bearer %s]], api_key)
+  rq.sink = ltn12.sink.table(response)
+  --local body, status_code, headers, status_description = http.request(rq)
+  local body, status_code, headers, status_description = request_handler.request(rq)
+  --core.log.debug(inspect(table.concat(response)))
   return process_response(response, status_code, status_description)
 end
 
