@@ -196,7 +196,7 @@ end
 
 local function check_params(params)
   if params.api_key then
-    if params.filepath or options and options.media_url then
+    if params.filepath or params.options and params.options.media_url then
       return true
     else
       return false, "ERROR: options.media_url or filepath required"
