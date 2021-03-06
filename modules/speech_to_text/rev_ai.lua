@@ -60,15 +60,29 @@ local function request_new_job(url, api_key, options, params, attributes)
   local request_handler = params.request_handler or https
   local response = {}
   local options_string = cjson.encode(options)
-  local rq = mp.gen_request({
-    media = {
-      filename = attributes.basename,
-      data = attributes.file,
-      len = attributes.content_length,
-      content_type = attributes.file_type,
-    },
-    options = options_string,
-  })
+  local rq
+  -- media_url means JSON body with no local file.
+  if options.media_url then
+    rq = {
+      method = "POST",
+      headers = {
+        ["content-length"] = string.len(options_string),
+        ["content-type"] = "application/json",
+      },
+      source = ltn12.source.string(options_string),
+    }
+  else
+    -- Otherwise local file upload via multipart form.
+    rq = mp.gen_request({
+      media = {
+        filename = attributes.basename,
+        data = attributes.file,
+        len = attributes.content_length,
+        content_type = attributes.file_type,
+      },
+      options = options_string,
+    })
+  end
   rq.url = url
   rq.headers.authorization = string.format([[Bearer %s]], api_key)
   rq.sink = ltn12.sink.table(response)
@@ -77,7 +91,7 @@ local function request_new_job(url, api_key, options, params, attributes)
   return process_response(response, status_code, status_description)
 end
 
-local function request_job_status(url, api_key, options, params, attributes, count)
+local function request_job_status(url, api_key, params, count)
   local request_handler = params.request_handler or https
   local count = count or 1
   local response = {}
@@ -106,7 +120,7 @@ local function request_job_status(url, api_key, options, params, attributes, cou
           core.log.debug("Still waiting on transcription")
           socket.sleep(1)
           count = count + 1
-          return request_job_status(url, api_key, options, params, attributes, count)
+          return request_job_status(url, api_key, params, count)
         else
           local message = "Job status request timed out"
           core.log.err(message)
@@ -119,7 +133,7 @@ local function request_job_status(url, api_key, options, params, attributes, cou
   end
 end
 
-local function request_job_transcript(url, api_key, options, params, attributes)
+local function request_job_transcript(url, api_key, params)
   local request_handler = params.request_handler or https
   local response = {}
   --local body, status_code, headers, status_description = http.request({
@@ -144,10 +158,10 @@ local function request(url, api_key, options, params, attributes)
     if success then
       params.job_id = data.id
       core.log.debug("Requesting job status")
-      success, response = request_job_status(url, api_key, options, params, attributes)
+      success, response = request_job_status(url, api_key, params)
       if success then
         core.log.debug("Requesting job transcript")
-        success, response = request_job_transcript(url, api_key, options, params, attributes)
+        success, response = request_job_transcript(url, api_key, params)
         if not success then
           core.log.err("Requesting job transcript failed: %s", response)
         end
@@ -181,10 +195,14 @@ local function parse_transcriptions(response)
 end
 
 local function check_params(params)
-  if params.api_key and params.filepath then
-    return true
+  if params.api_key then
+    if params.filepath or options and options.media_url then
+      return true
+    else
+      return false, "ERROR: options.media_url or filepath required"
+    end
   else
-    return false, "ERROR: Missing API key, service URI, or filepath"
+    return false, "ERROR: Missing API key"
   end
 end
 
