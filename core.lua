@@ -136,6 +136,10 @@ end
 --   core.bootstrap(config)
 function _M.bootstrap(config)
 
+  if _M.bootstrapped then
+    return
+  end
+
   --- Global configuration table.
   --
   -- As configured in @{core.conf}.
@@ -154,6 +158,7 @@ function _M.bootstrap(config)
   end
   _M.log = _M.logger(log_config)
   _M.log.info("Bootstrapping Jester")
+  _M.bootstrapped = true
 
 end
 
