@@ -51,16 +51,11 @@ local DEFAULT_FILE_TYPE = "audio/wav"
 
 local _M = {}
 
-local function check_filepath(filepath)
-  if filepath then
-    return true
-  else
-    return false, "ERROR: Missing filepath"
-  end
-end
-
 local function load_file_attributes(params)
   local filepath = params.filepath
+  if not filepath then
+    return true
+  end
   local file_type = params.file_type or DEFAULT_FILE_TYPE
   local content_length
   local file, data = load_file(filepath)
@@ -150,11 +145,8 @@ end
 --   handler = require "jester.modules.speech_to_text.watson"
 --   success, data = speech_to_text_from_file(params, handler)
 function _M.speech_to_text_from_file(params, handler)
-  local success, data = check_filepath(params.filepath)
-  if success then
-    handler = handler or DEFAULT_HANDLER
-    success, data = make_request_with_retry(params, handler)
-  end
+  handler = handler or DEFAULT_HANDLER
+  local success, data = make_request_with_retry(params, handler)
   return success, data
 end
 
