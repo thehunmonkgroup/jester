@@ -27,7 +27,7 @@ local _M = {}
 -- @tab config
 --   The log configuration.
 -- @param config.level
---   The log level, one of debug, info, warn, error, crit.
+--   The log level, one of trace, debug, info, warn, error, crit.
 --   Default: info
 -- @param config.outfile
 --   File to write log messages to.
@@ -43,6 +43,7 @@ local _M = {}
 --   Default: See default_config.modes in logger method of @{core.lua}
 -- @return The log object
 --   The object has the following log modes by default:
+--      trace
 --      debug
 --      info
 --      warning
@@ -61,11 +62,12 @@ local _M = {}
 function _M.logger(config)
   config = config or {}
   local default_config = {
-    level = "info",
+    level = _M.conf.log.level,
     outfile = nil,
     prefix = "jester",
     use_color = true,
     modes = {
+      { name = "trace", color = "\27[34m", },
       { name = "debug", color = "\27[36m", },
       { name = "info",  color = "\27[32m", },
       { name = "warning",  color = "\27[33m", },
@@ -152,10 +154,9 @@ function _M.bootstrap(config)
   -- @field is_freeswitch
   _M.is_freeswitch = freeswitch and freeswitch.consoleLog
 
-  local log_config = {}
-  if _M.conf.debug then
-    log_config.level = "debug"
-  end
+  local log_config = {
+    level = _M.conf.log.level,
+  }
   _M.log = _M.logger(log_config)
   _M.log.info("Bootstrapping Jester")
   _M.bootstrapped = true

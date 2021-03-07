@@ -37,6 +37,9 @@
 --   This value can be overridden per profile.
 local conf = {}
 
+DEFAULT_LOG_LEVEL = "info"
+conf.log = {}
+
 -- These settings control what debugging information is output, only edit the
 -- values of the table, not the keys.
 conf.debug_output = {
@@ -59,13 +62,11 @@ if freeswitch then
   conf.jester_dir = conf.scripts_dir .. "/jester"
   conf.sequence_path = conf.jester_dir .. "/sequences"
   conf.profile_path = conf.jester_dir .. "/profiles"
-  conf.debug_var = api:executeString("global_getvar jester_debug")
+  conf.log.level = api:executeString("global_getvar jester_log_level")
 end
 
-if conf.debug_var == "true" then
-  conf.debug = true
-else
-  conf.debug = false
+if conf.log.level == "" then
+  conf.log.level = DEFAULT_LOG_LEVEL
 end
 
 conf.key_order = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "*", "#" }
