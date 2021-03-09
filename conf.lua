@@ -65,7 +65,7 @@ if freeswitch then
   conf.log.level = api:executeString("global_getvar jester_log_level")
 end
 
-if conf.log.level == "" then
+if not conf.log.level or conf.log.level == "" then
   conf.log.level = DEFAULT_LOG_LEVEL
 end
 
