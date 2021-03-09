@@ -10,6 +10,13 @@ function string:trim()
 end
 
 --[[
+  Trims whitespace from either end of a string.
+]]
+function trim(s)
+  return s:trim()
+end
+
+--[[
   Splits a string by a given delimter and returns a table of ordered pieces.
 ]]
 function string:split(delimiter, notrim)
