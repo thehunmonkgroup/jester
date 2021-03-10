@@ -1,4 +1,4 @@
---- Speech to text translation handler, Watson Speech to Text API.
+--- Speech to text transcription handler, Watson Speech to Text API.
 --
 --  Uses Watson's Speech to Text service. The service requires a valid developer
 --  account and API key, see
@@ -99,7 +99,7 @@ end
 --   A table of transcription data as returned by @{parse_transcriptions}.
 -- @treturn number confidence
 --   Number from zero to one hundred, representing the average confidence of all
---   translated parts.
+--   transcribed parts.
 -- @treturn string text
 --   Concatenated transcription.
 -- @usage
@@ -148,7 +148,7 @@ function _M.make_request(params, attributes)
     local query_parameters = params.query_parameters or {}
     local query_string = table.stringify(query_parameters)
     local url = string.format("https://apikey:%s@%s/v1/recognize?%s", params.api_key, service_uri, query_string)
-    core.log.debug("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
+    core.log.debug("Got request to transcribe file '%s', using request URI '%s'", params.filepath, url)
     success, response = request(url, params, attributes)
   end
   return success, response

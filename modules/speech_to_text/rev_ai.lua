@@ -1,4 +1,4 @@
---- Speech to text translation handler, Rev.ai API.
+--- Speech to text transcription handler, Rev.ai API.
 --
 --  Uses Rev.ai's service. The service requires a valid developer
 --  account and API key, see
@@ -245,7 +245,7 @@ end
 --   A table of transcription data as returned by @{parse_transcriptions}.
 -- @treturn number confidence
 --   Number from zero to one hundred, representing the average confidence of all
---   translated parts.
+--   transcribed parts.
 -- @treturn string text
 --   Concatenated transcription.
 -- @usage
@@ -296,7 +296,8 @@ function _M.make_request(params, attributes)
     params = response
     local url = string.format("%s/jobs", BASE_URL)
     local options = params.options or DEFAULT_OPTIONS
-    core.log.info("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
+    local to_transcribe = params.options.media_url or params.filepath
+    core.log.info("Got request to transcribe file '%s', using request URI '%s'", to_transcribe, url)
     success, response = request(url, params.api_key, options, params, attributes)
   end
   return success, response

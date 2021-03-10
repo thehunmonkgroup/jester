@@ -5,7 +5,7 @@
   The recording is limited to 10 seconds.
 ]]
 
-file_to_translate = "speech_to_text_demo.wav"
+file_to_transcribe = "speech_to_text_demo.wav"
 
 -- Set up initial recording keys.
 record_keys = {
@@ -21,7 +21,7 @@ return
   {
     action = "record",
     location = profile.temp_recording_dir,
-    filename = file_to_translate,
+    filename = file_to_transcribe,
     pre_record_sound = "phrase:beep",
     max_length = 10,
     silence_secs = 2,
@@ -34,7 +34,7 @@ return
   },
   {
     action = "speech_to_text_from_file",
-    filepath = profile.temp_recording_dir .. "/" .. file_to_translate,
+    filepath = profile.temp_recording_dir .. "/" .. file_to_transcribe,
   },
 }
 
