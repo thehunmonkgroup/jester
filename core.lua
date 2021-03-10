@@ -158,7 +158,7 @@ function _M.bootstrap(config)
     level = _M.conf.log.level,
   }
   _M.log = _M.logger(log_config)
-  _M.log.info("Bootstrapping Jester")
+  _M.log.debug("Bootstrapping Jester")
   _M.bootstrapped = true
 
 end
