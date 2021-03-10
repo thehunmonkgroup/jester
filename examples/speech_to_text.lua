@@ -1,7 +1,11 @@
+local inspect = require("inspect")
 local core = require "jester.core"
 local stt = require "jester.modules.speech_to_text"
 local rev_ai = require "jester.modules.speech_to_text.rev_ai"
 local watson = require "jester.modules.speech_to_text.watson"
+
+local handler = rev_ai
+--local handler = watson
 
 local API_KEY = "[API KEY]"
 local SERVICE_URI = "[SERVICE URL]"
@@ -23,12 +27,12 @@ function speech_to_text_from_file(filepath)
     },
     retries = 10,
     retry_wait_seconds = 30,
+    timeout_seconds = 300,
   }
   local confidence, text
-  local success, data = stt.speech_to_text_from_file(params, rev_ai)
-  --local success, data = stt.speech_to_text_from_file(params, watson)
+  local success, data = stt.speech_to_text_from_file(params, handler)
   if success then
-    confidence, text = rev_ai.transcriptions_to_text(data)
+    confidence, text = handler.transcriptions_to_text(data)
   else
     core.log.err(data)
   end
@@ -38,5 +42,8 @@ end
 local filepath = arg[1]
 core.bootstrap()
 local success, data, confidence, text = speech_to_text_from_file(filepath)
-core.log.info("Confidence in transcription: %.2f%%\n", confidence)
-core.log.info("TEXT: \n\n%s", text)
+if success then
+  core.log.info("RAW DATA: \n\n%s", inspect(data))
+  core.log.info("Confidence in transcription: %.2f%%\n", confidence)
+  core.log.info("TEXT: \n\n%s", text)
+end

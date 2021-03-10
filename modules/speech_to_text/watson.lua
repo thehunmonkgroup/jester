@@ -24,6 +24,7 @@
 
 local core = require "jester.core"
 require "jester.support.table"
+require "jester.modules.speech_to_text.support"
 
 local _M = {}
 
@@ -72,7 +73,8 @@ end
 
 local function check_params(params)
   if params.api_key and params.service_uri and params.filepath then
-    return true
+    params = set_start_end_timestamps(params)
+    return true, params
   else
     return false, "ERROR: Missing API key, service URI, or filepath"
   end
@@ -141,6 +143,7 @@ end
 function _M.make_request(params, attributes)
   local success, response = check_params(params)
   if success then
+    params = response
     local service_uri = params.service_uri:gsub("https?://", "")
     local query_parameters = params.query_parameters or {}
     local query_string = table.stringify(query_parameters)

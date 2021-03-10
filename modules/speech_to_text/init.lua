@@ -24,6 +24,17 @@
 --   Number of times to try the request.
 -- @field retry_wait_seconds
 --   Number of seconds to wait between retries.
+-- @start_timestamp
+--   Unix timestamp of the start time of the request. Defaults to current UNIX
+--   timestamp.
+-- @end_timestamp
+--   Unix timestamp after which the request should time out. Default is no end
+--   timestamp.
+-- @timeout_seconds
+--   Number of seconds to wait before timing out the request. This can be
+--   provided instead of end_timestamp, in which case end_timestamp will be
+--   calculated by adding timeout_seconds to start_timestamp. Default is
+--   no timeout.
 
 --- Attributes passed to handlers.
 --
@@ -40,6 +51,7 @@
 --   File size in bytes.
 
 require "jester.support.file"
+require "jester.modules.speech_to_text.support"
 
 local socket = require "socket"
 local core = require "jester.core"
@@ -120,6 +132,9 @@ local function make_request_with_retry(params, handler)
     if success then
       break
     else
+      if params.end_timestamp and os.time() > params.end_timestamp then
+        return false, format_timeout_message(params.end_timestamp)
+      end
       retry_wait(params, attempt)
     end
   end
@@ -145,6 +160,7 @@ end
 --   handler = require "jester.modules.speech_to_text.watson"
 --   success, data = speech_to_text_from_file(params, handler)
 function _M.speech_to_text_from_file(params, handler)
+  params = set_start_end_timestamps(params)
   handler = handler or DEFAULT_HANDLER
   local success, data = make_request_with_retry(params, handler)
   return success, data

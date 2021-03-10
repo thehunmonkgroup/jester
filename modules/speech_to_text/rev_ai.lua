@@ -25,6 +25,7 @@
 local core = require "jester.core"
 require "jester.support.table"
 local mp = require "jester.support.multipart-post"
+require "jester.modules.speech_to_text.support"
 
 local _M = {}
 
@@ -36,6 +37,7 @@ local socket = require("socket")
 
 --local BASE_URL = "http://localhost:3000/v1"
 local BASE_URL = "https://api.rev.ai/speechtotext/v1"
+local JOB_STATUS_RETRY_SECONDS = 10
 local DEFAULT_OPTIONS = {}
 
 --- Parse a response from a successful API call.
@@ -116,15 +118,14 @@ local function request_job_status(url, api_key, params, count)
         core.log.debug("Transcription success")
         return success, data
       else
-        if count < 100 then
-          core.log.debug("Still waiting on transcription")
-          socket.sleep(1)
+        if params.end_timestamp and os.time() > params.end_timestamp then
+          core.log.err("Job status request timed out")
+          return false, format_timeout_message(params.end_timestamp)
+        else
+          core.log.debug("Still waiting on transcription, sleeping %d seconds", JOB_STATUS_RETRY_SECONDS)
+          socket.sleep(JOB_STATUS_RETRY_SECONDS)
           count = count + 1
           return request_job_status(url, api_key, params, count)
-        else
-          local message = "Job status request timed out"
-          core.log.err(message)
-          return false, message
         end
       end
     else
@@ -197,7 +198,8 @@ end
 local function check_params(params)
   if params.api_key then
     if params.filepath or params.options and params.options.media_url then
-      return true
+      params = set_start_end_timestamps(params)
+      return true, params
     else
       return false, "ERROR: options.media_url or filepath required"
     end
@@ -291,6 +293,7 @@ end
 function _M.make_request(params, attributes)
   local success, response = check_params(params)
   if success then
+    params = response
     local url = string.format("%s/jobs", BASE_URL)
     local options = params.options or DEFAULT_OPTIONS
     core.log.info("Got request to translate file '%s', using request URI '%s'", params.filepath, url)
