@@ -48,12 +48,12 @@ local function parse_response(response)
 end
 
 local function process_response(response, status_code, status_description)
+  local response_string = table.concat(response)
   if status_code == 200 then
-    response_string = table.concat(response)
     core.log.debug("JSON response string '%s'", response_string)
     return true, response_string
   else
-    core.log.err("Request failed, status %s: '%s'", status_code, status_description)
+    core.log.err("Request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
     return false, status_description
   end
 end
@@ -88,7 +88,6 @@ local function request_new_job(url, api_key, options, params, attributes)
   rq.url = url
   rq.headers.authorization = string.format([[Bearer %s]], api_key)
   rq.sink = ltn12.sink.table(response)
-  --local body, status_code, headers, status_description = http.request(rq)
   local body, status_code, headers, status_description = request_handler.request(rq)
   return process_response(response, status_code, status_description)
 end
@@ -97,7 +96,6 @@ local function request_job_status(url, api_key, params, count)
   local request_handler = params.request_handler or https
   local count = count or 1
   local response = {}
-  --local body, status_code, headers, status_description = http.request({
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
     headers = {
@@ -137,7 +135,6 @@ end
 local function request_job_transcript(url, api_key, params)
   local request_handler = params.request_handler or https
   local response = {}
-  --local body, status_code, headers, status_description = http.request({
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
     headers = {
@@ -239,6 +236,84 @@ local function assemble_transcriptions_to_text(confidence_sum, confidence_count,
   end
 end
 
+--- Make a generic POST to the Rev.ai API.
+--
+-- @string path
+--   Path to POST to.
+-- @tab params
+--   Method params, see @{speech_to_text.params} and @{params}.
+-- @tab json
+--   Table of data to translate to JSON.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn response
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, response = post_json("vocabularies", params, json)
+function _M.post_json(path, params, json)
+  local request_handler = params.request_handler or https
+  local response = {}
+  local url = string.format("%s/%s", BASE_URL, path)
+  local json_string = cjson.encode(json)
+  local body, status_code, headers, status_description = request_handler.request({
+    method = "POST",
+    url = url,
+    headers = {
+      ["content-length"] = string.len(json_string),
+      ["authorization"] = string.format([[Bearer %s]], params.api_key),
+      ["content-type"] = "application/json",
+    },
+    source = ltn12.source.string(json_string),
+    sink = ltn12.sink.table(response),
+  })
+  core.log.debug("POST request to: %s", url)
+  local success, response = process_response(response, status_code, status_description)
+  if success then
+    core.log.debug("POST request success to: %s", url)
+    success, data = pcall(parse_response, response)
+    return success, data
+  else
+    core.log.err("POST request failed to: %s, %s", url, response)
+    return success, response
+  end
+end
+
+--- Make a generic GET request to the Rev.ai API.
+--
+-- @string path
+--   Path to GET.
+-- @tab params
+--   Method params, see @{speech_to_text.params} and @{params}.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn response
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, response = get("vocabularies", params)
+function _M.get(path, params)
+  local request_handler = params.request_handler or https
+  local response = {}
+  local body, status_code, headers, status_description = request_handler.request({
+    method = "GET",
+    headers = {
+      ["authorization"] = string.format([[Bearer %s]], params.api_key),
+      ["accept"] = "application/json",
+    },
+    url = string.format([[%s/%s]], BASE_URL, path),
+    sink = ltn12.sink.table(response),
+  })
+  core.log.debug("GET request to: %s", url)
+  local success, response = process_response(response, status_code, status_description)
+  if success then
+    core.log.debug("GET request success to: %s", url)
+    success, data = pcall(parse_response, response)
+    return success, data
+  else
+    core.log.err("GET request failed to: %s, %s", url, response)
+    return success, response
+  end
+end
+
 --- Format transcription data to plain text.
 --
 -- @tab data
@@ -278,7 +353,7 @@ function _M.parse_transcriptions(response)
   return success, data
 end
 
---- Make a request to the Watson Speech to Text API to transcribe an audio file.
+--- Make a request to the Rev.ai Speech to Text API to transcribe an audio file.
 --
 -- @tab params
 --   Method params, see @{speech_to_text.params} and @{params}.

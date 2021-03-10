@@ -33,12 +33,12 @@ local ltn12 = require("ltn12")
 local cjson = require("cjson")
 
 local function process_response(response, status_code, status_description)
+  local response_string = table.concat(response)
   if status_code == 200 then
-    response_string = table.concat(response)
     core.log.debug("JSON response string '%s'", response_string)
     return true, response_string
   else
-    core.log.err("Request failed, status %s: '%s'", status_code, status_description)
+    core.log.err("Request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
     return false, status_description
   end
 end
