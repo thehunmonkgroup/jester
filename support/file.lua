@@ -31,8 +31,9 @@ function file_exists(n)
   end
 end
 
-function load_file(filepath)
-  local file, err = io.open(filepath, "rb")
+function load_file(filepath, mode)
+  mode = mode and mode or "rb"
+  local file, err = io.open(filepath, mode)
   local data
   if file then
     data = {
