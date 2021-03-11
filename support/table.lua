@@ -80,7 +80,7 @@ function table.clone(t)
 end
 
 --[[
-  Clone tables.
+  Merge tables.
 ]]
 function table.merge(...)
   local tables_to_merge = {...}
@@ -107,4 +107,18 @@ function table.merge(...)
     end
   end
   return result
+end
+
+--[[
+  Joins indexed tables.
+]]
+function table.join(...)
+  local tables_to_concat = {...}
+  local concat_table = {}
+  for _, tab in ipairs(tables_to_concat) do
+    for _, v in ipairs(tab) do
+      table.insert(concat_table, v)
+    end
+  end
+  return concat_table
 end
