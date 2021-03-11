@@ -236,7 +236,7 @@ local function assemble_transcriptions_to_text(confidence_sum, confidence_count,
   end
 end
 
---- Make a generic POST to the Rev.ai API.
+--- Make a generic POST request to the Rev.ai API.
 --
 -- @string path
 --   Path to POST to.
@@ -255,6 +255,7 @@ function _M.post_json(path, params, json)
   local response = {}
   local url = string.format("%s/%s", BASE_URL, path)
   local json_string = cjson.encode(json)
+  core.log.debug("POST request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "POST",
     url = url,
@@ -266,7 +267,6 @@ function _M.post_json(path, params, json)
     source = ltn12.source.string(json_string),
     sink = ltn12.sink.table(response),
   })
-  core.log.debug("POST request to: %s", url)
   local success, response = process_response(response, status_code, status_description)
   if success then
     core.log.debug("POST request success to: %s", url)
@@ -293,6 +293,7 @@ end
 function _M.get(path, params)
   local request_handler = params.request_handler or https
   local response = {}
+  core.log.debug("GET request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
     headers = {
@@ -302,7 +303,6 @@ function _M.get(path, params)
     url = string.format([[%s/%s]], BASE_URL, path),
     sink = ltn12.sink.table(response),
   })
-  core.log.debug("GET request to: %s", url)
   local success, response = process_response(response, status_code, status_description)
   if success then
     core.log.debug("GET request success to: %s", url)
@@ -311,6 +311,41 @@ function _M.get(path, params)
   else
     core.log.err("GET request failed to: %s, %s", url, response)
     return success, response
+  end
+end
+
+--- Make a generic DELETE request to the Rev.ai API.
+--
+-- @string path
+--   Path to DELETE.
+-- @tab params
+--   Method params, see @{speech_to_text.params} and @{params}.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn response
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, response = delete("vocabularies", params)
+function _M.delete(path, params)
+  local request_handler = params.request_handler or https
+  local response = {}
+  core.log.debug("DELETE request to: %s", url)
+  local body, status_code, headers, status_description = request_handler.request({
+    method = "DELETE",
+    headers = {
+      ["authorization"] = string.format([[Bearer %s]], params.api_key),
+      ["accept"] = "application/json",
+    },
+    url = string.format([[%s/%s]], BASE_URL, path),
+    sink = ltn12.sink.table(response),
+  })
+  local response_string = table.concat(response)
+  if status_code == 204 then
+    core.log.debug("DELETE request success to: %s", url)
+    return true, response_string
+  else
+    core.log.err("DELETE request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
+    return false, status_description
   end
 end
 
