@@ -22,9 +22,11 @@ local DEFAULT_HANDLER = "watson"
 local rev_ai_handler = rev_ai:new({
   api_key = REV_AI_API_KEY,
   options = {
-    speaker_channels_count = 1,
+    speaker_channels_count = 2,
     remove_disfluencies = true,
     delete_after_seconds = 120,
+    skip_diarization = true,
+    filter_profanity = true,
   },
 })
 local watson_handler = watson:new({
@@ -69,6 +71,6 @@ core.bootstrap()
 local success, data, confidence, text = speech_to_text_from_file(filepath, handler)
 if success then
   core.log.info("RAW DATA: \n\n%s", inspect(data))
-  core.log.info("Confidence in transcription: %.2f%%\n", confidence)
+  core.log.info("Confidence in transcription: %s\n", confidence)
   core.log.info("TEXT: \n\n%s", text)
 end
