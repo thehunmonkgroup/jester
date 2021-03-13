@@ -55,9 +55,9 @@ local function request(self, url, attributes)
   return process_response(self, response, status_code, status_description)
 end
 
-local function build_and_execute_request(self, attributes)
+local function build_and_execute_request(self, attributes, query_parameters)
   local service_uri = self.params.service_uri:gsub("https?://", "")
-  local query_string = table.stringify(self.params.query_parameters)
+  local query_string = table.stringify(query_parameters)
   local url = string.format("https://apikey:%s@%s/v1/recognize?%s", self.params.api_key, service_uri, query_string)
   self.log.debug("Got request to transcribe file '%s', using request URI '%s'", attributes.path, url)
   return request(self, url, attributes)
@@ -138,6 +138,8 @@ end
 -- @param self
 -- @param file_params
 --   Table of file parameters, as passed to @{speech_to_text_support.load_file_attributes}.
+-- @tab query_parameters
+--   Optional. Query parameters to pass to the API request.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn string response
@@ -147,13 +149,15 @@ end
 --     path = "/tmp/myfile.wav",
 --   }
 --   success, response = handler:make_request(file_params)
-function _M:make_request(file_params)
+function _M:make_request(file_params, query_parameters)
+  query_parameters = query_parameters and query_parameters or {}
+  query_parameters = table.merge(self.params.query_parameters, query_parameters)
   local success, response = check_params(self.params, file_params)
   if success then
     self.params = response
     success, response = load_file_attributes(file_params)
     if success then
-      return build_and_execute_request(self, response)
+      return build_and_execute_request(self, response, query_parameters)
     end
   end
   return success, response
@@ -169,7 +173,7 @@ end
 -- @param params.service_uri
 --   Service URL as obtained from the service credentials.
 -- @param params.query_parameters
---   Table of query parameters to pass to the API call.
+--   Optional. Table of query parameters to pass to the API call.
 -- @return A Watson speech to text handler object.
 -- @usage
 --   local watson = require("jester.modules.speech_to_text.watson")

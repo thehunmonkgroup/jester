@@ -409,7 +409,7 @@ end
 --   success, response = handler:make_request(file_params, options)
 function _M:make_request(file_params, options)
   options = options and options or {}
-  options = table.merge(options, self.params.options)
+  options = table.merge(self.params.options, options)
   local success, response = check_params(self, file_params, options)
   if success then
     self.params = response
@@ -433,7 +433,7 @@ end
 -- @param params.api_key
 --   Developer API key as obtained from the service credentials.
 -- @param params.options
---   Table of options to pass to the API call.
+--   Optional. Table of options to pass to the API call.
 -- @return A Rev.ai speech to text handler object.
 -- @usage
 --   local rev_ai = require("jester.modules.speech_to_text.rev_ai")
