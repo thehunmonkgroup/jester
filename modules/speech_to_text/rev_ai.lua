@@ -8,24 +8,19 @@
 -- @author Chad Phillips
 -- @copyright 2021 Chad Phillips
 
---- Parameters used to configure the speech to text request.
---
--- These are specific to the Rev.ai handler, see @{speech_to_text.params} for
--- general parameters.
---
--- @table params
---
--- @field api_key
---   Developer API key as obtained from the service credentials.
--- @field service_uri
---   Service URL as obtained from the service credentials.
--- @field query_parameters
---   Table of query parameters to pass to the API call.
-
-local core = require "jester.core"
 require "jester.support.table"
-local mp = require "jester.support.multipart-post"
 require "jester.modules.speech_to_text.support"
+local mp = require "jester.support.multipart-post"
+local core = require "jester.core"
+core.bootstrap()
+
+local LOG_PREFIX = "JESTER::MODULE::SPEECH_TO_TEXT::REV_AI"
+local DEFAULT_PARAMS = {
+  retries = 3,
+  retry_wait_seconds = 60,
+  options = {
+  },
+}
 
 local _M = {}
 
@@ -41,25 +36,25 @@ local JOB_STATUS_RETRY_SECONDS = 10
 local DEFAULT_OPTIONS = {}
 
 --- Parse a response from a successful API call.
-local function parse_response(response)
-  core.log.debug("Parsing response: %s", response)
+local function parse_response(self, response)
+  self.log.debug("Parsing response: %s", response)
   local data = cjson.decode(response)
   return data
 end
 
-local function process_response(response, status_code, status_description)
+local function process_response(self, response, status_code, status_description)
   local response_string = table.concat(response)
   if status_code == 200 then
-    core.log.debug("JSON response string '%s'", response_string)
+    self.log.debug("JSON response string '%s'", response_string)
     return true, response_string
   else
-    core.log.err("Request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
+    self.log.err("Request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
     return false, status_description
   end
 end
 
-local function request_new_job(url, api_key, options, params, attributes)
-  local request_handler = params.request_handler or https
+local function request_new_job(self, url, options, attributes)
+  local request_handler = self.params.request_handler or https
   local response = {}
   local options_string = cjson.encode(options)
   local rq
@@ -86,92 +81,99 @@ local function request_new_job(url, api_key, options, params, attributes)
     })
   end
   rq.url = url
-  rq.headers.authorization = string.format([[Bearer %s]], api_key)
+  rq.headers.authorization = string.format([[Bearer %s]], self.params.api_key)
   rq.sink = ltn12.sink.table(response)
   local body, status_code, headers, status_description = request_handler.request(rq)
-  return process_response(response, status_code, status_description)
+  return process_response(self, response, status_code, status_description)
 end
 
-local function request_job_status(url, api_key, params, count)
-  local request_handler = params.request_handler or https
+local function request_job_status(self, url, count)
+  local request_handler = self.params.request_handler or https
   local count = count or 1
   local response = {}
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
     headers = {
-      ["authorization"] = string.format([[Bearer %s]], api_key),
+      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["accept"] = "application/json",
     },
-    url = string.format([[%s/%s]], url, params.job_id),
+    url = string.format([[%s/%s]], url, self.params.job_id),
     sink = ltn12.sink.table(response),
   })
-  core.log.debug("Job status request %d", count)
-  local success, response = process_response(response, status_code, status_description)
+  self.log.debug("Job status request %d", count)
+  local success, response = process_response(self, response, status_code, status_description)
   if success then
-    success, data = pcall(parse_response, response)
+    success, data = pcall(parse_response, self, response)
     if success then
       if data.status == "failed" then
         return false, string.format([[API transcription failed: %s]], data.failure)
       elseif data.status == "transcribed" then
-        core.log.debug("Transcription success")
+        self.log.debug("Transcription success")
         return success, data
       else
-        if params.end_timestamp and os.time() > params.end_timestamp then
-          core.log.err("Job status request timed out")
-          return false, format_timeout_message(params.end_timestamp)
+        if self.params.end_timestamp and os.time() > self.params.end_timestamp then
+          self.log.err("Job status request timed out")
+          return false, stt_format_timeout_message(self.params.end_timestamp)
         else
-          core.log.debug("Still waiting on transcription, sleeping %d seconds", JOB_STATUS_RETRY_SECONDS)
+          self.log.debug("Still waiting on transcription, sleeping %d seconds", JOB_STATUS_RETRY_SECONDS)
           socket.sleep(JOB_STATUS_RETRY_SECONDS)
           count = count + 1
-          return request_job_status(url, api_key, params, count)
+          return request_job_status(self, url, count)
         end
       end
     else
-      core.log.err("Parsing job status response failed: %s", data)
+      self.log.err("Parsing job status response failed: %s", data)
     end
   end
 end
 
-local function request_job_transcript(url, api_key, params)
-  local request_handler = params.request_handler or https
+local function request_job_transcript(self, url)
+  local request_handler = self.params.request_handler or https
   local response = {}
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
     headers = {
-      ["authorization"] = string.format([[Bearer %s]], api_key),
+      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["accept"] = "application/vnd.rev.transcript.v1.0+json",
     },
-    url = string.format([[%s/%s/transcript]], url, params.job_id),
+    url = string.format([[%s/%s/transcript]], url, self.params.job_id),
     sink = ltn12.sink.table(response),
   })
-  core.log.debug("Job transcript request")
-  return process_response(response, status_code, status_description)
+  self.log.debug("Job transcript request")
+  return process_response(self, response, status_code, status_description)
 end
 
-local function request(url, api_key, options, params, attributes)
-  success, response = request_new_job(url, api_key, options, params, attributes)
+local function request(self, url, options, attributes)
+  success, response = request_new_job(self, url, options, attributes)
   if success then
-    core.log.debug("New job submitted successfully")
-    success, data = pcall(parse_response, response)
+    self.log.debug("New job submitted successfully")
+    success, data = pcall(parse_response, self, response)
     if success then
-      params.job_id = data.id
-      core.log.debug("Requesting job status")
-      success, response = request_job_status(url, api_key, params)
+      self.params.job_id = data.id
+      self.log.debug("Requesting job status")
+      success, response = request_job_status(self, url)
       if success then
-        core.log.debug("Requesting job transcript")
-        success, response = request_job_transcript(url, api_key, params)
+        self.log.debug("Requesting job transcript")
+        success, response = request_job_transcript(self, url)
         if not success then
-          core.log.err("Requesting job transcript failed: %s", response)
+          self.log.err("Requesting job transcript failed: %s", response)
         end
       end
     else
-      core.log.err("Parsing new job response failed: %s", data)
+      self.log.err("Parsing new job response failed: %s", data)
     end
   end
   return success, response
 end
 
-local function parse_transcriptions(response)
+local function build_and_execute_request(self, options, attributes)
+  local url = string.format("%s/jobs", BASE_URL)
+  local to_transcribe = options.media_url or attributes.path
+  self.log.info("Got request to transcribe file '%s', using request URI '%s'", to_transcribe, url)
+  return request(self, url, options, attributes)
+end
+
+local function parse_transcriptions(self, response)
   local monologues = {}
   local data = cjson.decode(response)
   for mk, monologue in ipairs(data.monologues) do
@@ -192,20 +194,20 @@ local function parse_transcriptions(response)
   return monologues
 end
 
-local function check_params(params)
-  if params.api_key then
-    if params.filepath or params.options and params.options.media_url then
-      params = set_start_end_timestamps(params)
-      return true, params
+local function check_params(self, file_params, options)
+  if self.params.api_key then
+    if file_params and file_params.path or options and options.media_url then
+      self.params = stt_set_start_end_timestamps(self.params)
+      return true, self.params
     else
-      return false, "ERROR: options.media_url or filepath required"
+      return false, "options.media_url or filepath required"
     end
   else
-    return false, "ERROR: Missing API key"
+    return false, "Missing API key"
   end
 end
 
-local function assemble_elements(elements_confidence_sum, elements_confidence_count, element_parts, elements, next_element)
+local function assemble_elements(self, elements_confidence_sum, elements_confidence_count, element_parts, elements, next_element)
   local i, element = next(elements, next_element)
   if i then
     if element.confidence then
@@ -213,22 +215,22 @@ local function assemble_elements(elements_confidence_sum, elements_confidence_co
       elements_confidence_sum = elements_confidence_sum + element.confidence
     end
     table.insert(element_parts, element.text)
-    return assemble_elements(elements_confidence_sum, elements_confidence_count, element_parts, elements, i)
+    return assemble_elements(self, elements_confidence_sum, elements_confidence_count, element_parts, elements, i)
   else
     local text = table.concat(element_parts)
     return elements_confidence_sum, elements_confidence_count, text
   end
 end
 
-local function assemble_transcriptions_to_text(confidence_sum, confidence_count, text_parts, data, next_i)
+local function assemble_transcriptions_to_text(self, confidence_sum, confidence_count, text_parts, data, next_i)
   local i, monologue = next(data, next_i)
   if i then
     local element_parts = {}
-    local elements_confidence_sum, elements_confidence_count, elements_text = assemble_elements(0, 0, element_parts, monologue)
+    local elements_confidence_sum, elements_confidence_count, elements_text = assemble_elements(self, 0, 0, element_parts, monologue)
     confidence_sum = confidence_sum + elements_confidence_sum
     confidence_count = confidence_count + elements_confidence_count
     table.insert(text_parts, elements_text)
-    return assemble_transcriptions_to_text(confidence_sum, confidence_count, text_parts, data, i)
+    return assemble_transcriptions_to_text(self, confidence_sum, confidence_count, text_parts, data, i)
   else
     local confidence = confidence_sum == 0 and 0 or (confidence_sum / confidence_count * 100)
     local text = table.concat(text_parts, "\n\n")
@@ -240,8 +242,6 @@ end
 --
 -- @string path
 --   Path to POST to.
--- @tab params
---   Method params, see @{speech_to_text.params} and @{params}.
 -- @tab json
 --   Table of data to translate to JSON.
 -- @treturn bool success
@@ -249,31 +249,31 @@ end
 -- @treturn response
 --   Table of json data on success, error message on fail.
 -- @usage
---   success, response = post_json("vocabularies", params, json)
-function _M.post_json(path, params, json)
-  local request_handler = params.request_handler or https
+--   success, response = handler:post_json("vocabularies", json)
+function _M:post_json(path, json)
+  local request_handler = self.params.request_handler or https
   local response = {}
   local url = string.format("%s/%s", BASE_URL, path)
   local json_string = cjson.encode(json)
-  core.log.debug("POST request to: %s", url)
+  self.log.debug("POST request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "POST",
     url = url,
     headers = {
       ["content-length"] = string.len(json_string),
-      ["authorization"] = string.format([[Bearer %s]], params.api_key),
+      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["content-type"] = "application/json",
     },
     source = ltn12.source.string(json_string),
     sink = ltn12.sink.table(response),
   })
-  local success, response = process_response(response, status_code, status_description)
+  local success, response = process_response(self, response, status_code, status_description)
   if success then
-    core.log.debug("POST request success to: %s", url)
-    success, data = pcall(parse_response, response)
+    self.log.debug("POST request success to: %s", url)
+    success, data = pcall(parse_response, self, response)
     return success, data
   else
-    core.log.err("POST request failed to: %s, %s", url, response)
+    self.log.err("POST request failed to: %s, %s", url, response)
     return success, response
   end
 end
@@ -282,34 +282,32 @@ end
 --
 -- @string path
 --   Path to GET.
--- @tab params
---   Method params, see @{speech_to_text.params} and @{params}.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn response
 --   Table of json data on success, error message on fail.
 -- @usage
---   success, response = get("vocabularies", params)
-function _M.get(path, params)
-  local request_handler = params.request_handler or https
+--   success, response = handler:get("vocabularies")
+function _M:get(path)
+  local request_handler = self.params.request_handler or https
   local response = {}
-  core.log.debug("GET request to: %s", url)
+  self.log.debug("GET request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
     headers = {
-      ["authorization"] = string.format([[Bearer %s]], params.api_key),
+      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["accept"] = "application/json",
     },
     url = string.format([[%s/%s]], BASE_URL, path),
     sink = ltn12.sink.table(response),
   })
-  local success, response = process_response(response, status_code, status_description)
+  local success, response = process_response(self, response, status_code, status_description)
   if success then
-    core.log.debug("GET request success to: %s", url)
-    success, data = pcall(parse_response, response)
+    self.log.debug("GET request success to: %s", url)
+    success, data = pcall(parse_response, self, response)
     return success, data
   else
-    core.log.err("GET request failed to: %s, %s", url, response)
+    self.log.err("GET request failed to: %s, %s", url, response)
     return success, response
   end
 end
@@ -318,22 +316,20 @@ end
 --
 -- @string path
 --   Path to DELETE.
--- @tab params
---   Method params, see @{speech_to_text.params} and @{params}.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn response
 --   Table of json data on success, error message on fail.
 -- @usage
---   success, response = delete("vocabularies", params)
-function _M.delete(path, params)
-  local request_handler = params.request_handler or https
+--   success, response = handler:delete("vocabularies")
+function _M:delete(path)
+  local request_handler = self.params.request_handler or https
   local response = {}
-  core.log.debug("DELETE request to: %s", url)
+  self.log.debug("DELETE request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "DELETE",
     headers = {
-      ["authorization"] = string.format([[Bearer %s]], params.api_key),
+      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["accept"] = "application/json",
     },
     url = string.format([[%s/%s]], BASE_URL, path),
@@ -341,10 +337,10 @@ function _M.delete(path, params)
   })
   local response_string = table.concat(response)
   if status_code == 204 then
-    core.log.debug("DELETE request success to: %s", url)
+    self.log.debug("DELETE request success to: %s", url)
     return true, response_string
   else
-    core.log.err("DELETE request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
+    self.log.err("DELETE request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
     return false, status_description
   end
 end
@@ -359,18 +355,18 @@ end
 -- @treturn string text
 --   Concatenated transcription.
 -- @usage
---   confidence, text = transcriptions_to_text(data)
-function _M.transcriptions_to_text(data)
+--   confidence, text = handler:transcriptions_to_text(data)
+function _M:transcriptions_to_text(data)
   local confidence_sum = 0
   local confidence_count = 0
   local text_parts = {}
-  local confidence, text = assemble_transcriptions_to_text(confidence_sum, confidence_count, text_parts, data)
-  core.log.debug("Confidence in transcription: %.2f%%\n", confidence)
-  core.log.debug("TEXT: \n\n%s", text)
+  local confidence, text = assemble_transcriptions_to_text(self, confidence_sum, confidence_count, text_parts, data)
+  self.log.debug("Confidence in transcription: %.2f%%\n", confidence)
+  self.log.debug("TEXT: \n\n%s", text)
   return confidence, text
 end
 
---- Parse a response from a successful API call.
+--- Parse a transcription response from a successful API call.
 --
 -- @string response
 --   The response from the API call.
@@ -379,38 +375,81 @@ end
 -- @return data
 --   Table of transcriptions on success, error message on fail.
 -- @usage
---   success, data = parse_transcriptions(response)
-function _M.parse_transcriptions(response)
-  success, data = pcall(parse_transcriptions, response)
+--   success, data = handler:parse_transcriptions(response)
+function _M:parse_transcriptions(response)
+  success, data = pcall(parse_transcriptions, self, response)
   if not success then
-    core.log.err("Error parsing transcription: %s", data)
+    self.log.err("Error parsing transcription: %s", data)
   end
   return success, data
 end
 
 --- Make a request to the Rev.ai Speech to Text API to transcribe an audio file.
 --
--- @tab params
---   Method params, see @{speech_to_text.params} and @{params}.
--- @tab attributes
---   Method attributes, see @{speech_to_text.attributes}.
+-- @param file_params
+--   Optional. Table of file parameters, as passed to @{speech_to_text_support.load_file_attributes},
+--   Required if options are not set.
+-- @tab options
+--   Optional. Options to pass to the API request.
+--   Required if file_params are not set.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn string response
 --   Contents of response on success, error message on fail.
 -- @usage
---   success, response = make_request(params, attributes)
-function _M.make_request(params, attributes)
-  local success, response = check_params(params)
+--   local file_params = {
+--     path = "/tmp/myfile.wav",
+--     -- ...other options...
+--   }
+--   -- ...or...
+--   local options = {
+--     media_url = "http://example.com/myfile.wav",
+--     -- ...other options...
+--   }
+--   success, response = handler:make_request(file_params, options)
+function _M:make_request(file_params, options)
+  options = options and options or {}
+  options = table.merge(options, self.params.options)
+  local success, response = check_params(self, file_params, options)
   if success then
-    params = response
-    local url = string.format("%s/jobs", BASE_URL)
-    local options = params.options or DEFAULT_OPTIONS
-    local to_transcribe = params.options.media_url or params.filepath
-    core.log.info("Got request to transcribe file '%s', using request URI '%s'", to_transcribe, url)
-    success, response = request(url, params.api_key, options, params, attributes)
+    self.params = response
+    if file_params then
+      success, response = load_file_attributes(file_params)
+    else
+      response = {}
+    end
+    if success then
+      return build_and_execute_request(self, options, response)
+    end
   end
   return success, response
+end
+
+--- Create a new Rev.ai speech to text handler object.
+--
+-- @param self
+-- @param params
+--   Configuration parameters, see @{speech_to_text.new} for general parameters.
+-- @param params.api_key
+--   Developer API key as obtained from the service credentials.
+-- @param params.options
+--   Table of options to pass to the API call.
+-- @return A Rev.ai speech to text handler object.
+-- @usage
+--   local rev_ai = require("jester.modules.speech_to_text.rev_ai")
+--   local params = {
+--     api_key = "some_api_key",
+--     -- other params...
+--   }
+--   local handler = rev_ai:new(params)
+function _M.new(self, params)
+  local rev_ai = {}
+  rev_ai.params = table.merge(DEFAULT_PARAMS, params or {})
+  rev_ai.log = core.logger({prefix = LOG_PREFIX})
+  setmetatable(rev_ai, self)
+  self.__index = self
+  rev_ai.log.debug("New Rev.ai speech to text handler object")
+  return rev_ai
 end
 
 return _M

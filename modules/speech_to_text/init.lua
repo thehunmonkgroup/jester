@@ -13,129 +13,58 @@
 -- @author Chad Phillips
 -- @copyright 2011-2021 Chad Phillips
 
---- Parameters used to configure the speech to text request.
---
--- These are common to all handlers, see the specific handler for additional
--- parameters.
---
--- @table params
---
--- @field retries
---   Number of times to try the request.
--- @field retry_wait_seconds
---   Number of seconds to wait between retries.
--- @start_timestamp
---   Unix timestamp of the start time of the request. Defaults to current UNIX
---   timestamp.
--- @end_timestamp
---   Unix timestamp after which the request should time out. Default is no end
---   timestamp.
--- @timeout_seconds
---   Number of seconds to wait before timing out the request. This can be
---   provided instead of end_timestamp, in which case end_timestamp will be
---   calculated by adding timeout_seconds to start_timestamp. Default is
---   no timeout.
-
---- Attributes passed to handlers.
---
--- These are attributes calculated by the speech_to_text module, and passed to
--- handlers.
---
--- @table attributes
---
--- @field file
---   The opened file object for the filepath being transcribed.
--- @field file_type
---   Mime type of the file, default "audio/wav".
--- @field content_length
---   File size in bytes.
-
-require "jester.support.file"
 require "jester.modules.speech_to_text.support"
 
 local socket = require "socket"
 local core = require "jester.core"
+core.bootstrap()
 
-local DEFAULT_HANDLER = require("jester.modules.speech_to_text.watson")
-local DEFAULT_RETRIES = 3
-local DEFAULT_RETRY_WAIT_SECONDS = 60
-local DEFAULT_FILE_TYPE = "audio/wav"
+local LOG_PREFIX = "JESTER::MODULE::SPEECH_TO_TEXT"
+local DEFAULT_CONTENT_TYPE = "audio/wav"
+local DEFAULT_PARAMS = {
+  retries = 3,
+  retry_wait_seconds = 60,
+}
 
 local _M = {}
 
-local function load_file_attributes(params)
-  local filepath = params.filepath
-  if not filepath then
-    return true
-  end
-  local file_type = params.file_type or DEFAULT_FILE_TYPE
-  local content_length
-  local file, data = load_file(filepath)
-  if file then
-    local dirname, basename, ext = filepath_elements(filepath)
-    local attributes = {
-      file = file,
-      file_type = file_type,
-      content_length = data.filesize,
-      dirname = dirname,
-      basename = basename,
-      ext = ext,
-    }
-    return file, attributes
-  else
-    local message = string.format([[ERROR: could not open '%s': %s]], filepath, data)
-    core.log.err(message)
-    return false, message
-  end
-end
-
-local function parse_response(handler, data)
-  local success, data = handler.parse_transcriptions(data)
+local function parse_response(self, data)
+  local success, data = self.handler:parse_transcriptions(data)
   if success then
     return success, data
   else
-    return false, string.format([[ERROR: Parsing Speech to Text API response failed: %s]], data)
+    return false, string.format([[Parsing Speech to Text API response failed: %s]], data)
   end
 end
 
-local function make_request_using_handler(handler, params, attributes)
-  local success, data = handler.make_request(params, attributes)
+local function make_request_using_handler(self, attributes)
+  local success, data = self.handler:make_request(attributes)
   if success then
-    return parse_response(handler, data)
+    return parse_response(self, data)
   else
-    return false, string.format([[ERROR: Speech to Text API failed: %s]], data)
+    return false, string.format([[Speech to Text API failed: %s]], data)
   end
 end
 
-local function make_request(params, handler)
-  local success, data = load_file_attributes(params)
-  if success then
-    success, data = make_request_using_handler(handler, params, data)
-  end
-  return success, data
-end
-
-local function retry_wait(params, attempt)
-  local retries = params.retries or DEFAULT_RETRIES
-  local retry_wait_seconds = params.retry_wait_seconds or DEFAULT_RETRY_WAIT_SECONDS
-  if attempt < retries then
-    core.log.debug([[ERROR: Attempt #%d failed, re-trying Speech to Text API in %d seconds]], attempt, retry_wait_seconds)
-    socket.sleep(retry_wait_seconds)
+local function retry_wait(self, attempt)
+  if attempt < self.params.retries then
+    self.log.warning([[Attempt #%d failed, re-trying Speech to Text API in %d seconds]], attempt, self.params.retry_wait_seconds)
+    socket.sleep(self.params.retry_wait_seconds)
   end
 end
 
-local function make_request_with_retry(params, handler)
+local function make_request_with_retry(self, file_params)
   local success, data
-  local retries = params.retries or DEFAULT_RETRIES
-  for attempt = 1, retries do
-    success, data = make_request(params, handler)
+  for attempt = 1, self.params.retries do
+    success, data = make_request_using_handler(self, file_params)
     if success then
       break
     else
-      if params.end_timestamp and os.time() > params.end_timestamp then
-        return false, format_timeout_message(params.end_timestamp)
+      if self.params.end_timestamp and os.time() > self.params.end_timestamp then
+        return false, stt_format_timeout_message(self.params.end_timestamp)
       end
-      retry_wait(params, attempt)
+      self.log.warning([[Request failed: %s]], data)
+      retry_wait(self, attempt)
     end
   end
   return success, data
@@ -143,27 +72,69 @@ end
 
 --- Translates a sound file to text.
 --
--- @tab params
---   Method params, see @{params}.
--- @tab handler
---   Speech to text handler module.
+-- @param file_params
+--   Table of file parameters, as passed to @{speech_to_text_support.load_file_attributes}.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @return data
 --   Table of transcriptions on success, error message on fail.
 -- @usage
---   params = {
+--   local file_params = {
+--     path = "/tmp/myfile.wav",
+--   }
+--   success, data = stt_obj:speech_to_text_from_file(file_params)
+function _M:speech_to_text_from_file(file_params)
+  self.params = stt_set_start_end_timestamps(self.params)
+  local success, data = make_request_with_retry(self, file_params)
+  return success, data
+end
+
+--- Create a new speech to text object.
+--
+-- @param self
+-- @tab handler
+--   Required. Speech to text handler module.
+-- @param params
+--   Optional. Table of configuration parameters.
+-- @param params.retries
+--   Number of times to try the request. Default is 3.
+-- @param params.retry_wait_seconds
+--   Number of seconds to wait between retries. Default is 60.
+-- @param params.end_timestamp
+--   Unix timestamp after which the request should time out. Default is no end
+--   timestamp.
+-- @param params.timeout_seconds
+--   Number of seconds to wait before timing out the request. This can be
+--   provided instead of end_timestamp, in which case end_timestamp will be
+--   calculated by adding timeout_seconds to the current UNIX time of the request.
+--   Default is no timeout.
+-- @return A speech to text object.
+-- @usage
+--   stt = require("jester.modules.speech_to_text")
+--   rev_ai = require("jester.modules.speech_to_text.rev_ai")
+--   local handler_params = {
 --     api_key = "some_api_key",
---     filepath = "/tmp/foo.wav",
 --     -- other params...
 --   }
---   handler = require "jester.modules.speech_to_text.watson"
---   success, data = speech_to_text_from_file(params, handler)
-function _M.speech_to_text_from_file(params, handler)
-  params = set_start_end_timestamps(params)
-  handler = handler or DEFAULT_HANDLER
-  local success, data = make_request_with_retry(params, handler)
-  return success, data
+--   local handler = rev_ai:new(handler_params)
+--   local stt_params = {
+--     retries = 3,
+--     -- other params...
+--   }
+--   stt_obj = stt:new(handler, stt_params)
+function _M.new(self, handler, params)
+  if not handler then
+    error("Handler is required")
+  end
+  local stt = {}
+  stt.handler = handler
+  stt.params = table.merge(DEFAULT_PARAMS, params or {})
+  stt.handler.params = stt_merge_params(stt.handler.params, stt.params)
+  stt.log = core.logger({prefix = LOG_PREFIX})
+  setmetatable(stt, self)
+  self.__index = self
+  stt.log.debug("New speech to text object")
+  return stt
 end
 
 return _M
