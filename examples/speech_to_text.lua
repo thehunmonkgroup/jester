@@ -58,11 +58,11 @@ function speech_to_text_from_file(filepath, handler)
 end
 
 local filepath = arg[1]
-local handler_arg = arg[2] or DEFAULT_HANDLER
+local handler_string = arg[2] or DEFAULT_HANDLER
 local handler
-if handler_arg == "watson" then
+if handler_string == "watson" then
   handler = watson_handler
-elseif handler_arg == "revai" then
+elseif handler_string == "revai" then
   handler = rev_ai_handler
 end
 core.bootstrap()
