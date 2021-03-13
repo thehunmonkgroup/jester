@@ -173,27 +173,6 @@ local function build_and_execute_request(self, options, attributes)
   return request(self, url, options, attributes)
 end
 
-local function parse_transcriptions(self, response)
-  local monologues = {}
-  local data = cjson.decode(response)
-  for mk, monologue in ipairs(data.monologues) do
-    monologues[mk] = {}
-    for tk, element in ipairs(monologue.elements) do
-      monologues[mk][tk] = {}
-      if element.type == "text" or element.type == "punct" then
-        monologues[mk][tk].text = element.value
-        if element.type == "text" then
-          monologues[mk][tk].confidence = element.confidence
-        end
-      else
-        monologues[mk][tk].text = "..."
-        monologues[mk][tk].confidence = 0
-      end
-    end
-  end
-  return monologues
-end
-
 local function check_params(self, file_params, options)
   if self.params.api_key then
     if file_params and file_params.path or options and options.media_url then
@@ -207,35 +186,186 @@ local function check_params(self, file_params, options)
   end
 end
 
-local function assemble_elements(self, elements_confidence_sum, elements_confidence_count, element_parts, elements, next_element)
-  local i, element = next(elements, next_element)
-  if i then
-    if element.confidence then
-      elements_confidence_count = elements_confidence_count + 1
-      elements_confidence_sum = elements_confidence_sum + element.confidence
+local function find_next_talker(self, m_indexes)
+  local next_talker, next_talk_time
+  for m_index, data in ipairs(m_indexes) do
+    local _, el = next(data.elements, data.el_idx)
+    if el and el.ts then
+      if not next_talk_time or el.ts < next_talk_time then
+        next_talker = m_index
+        next_talk_time = el.ts
+      end
     end
-    table.insert(element_parts, element.text)
-    return assemble_elements(self, elements_confidence_sum, elements_confidence_count, element_parts, elements, i)
+  end
+  return next_talker
+end
+
+local function recalculate_confidences(self, el, speaker, metadata)
+  if el.confidence then
+    speaker.word_count = speaker.word_count + 1
+    speaker.confidence_sum = speaker.confidence_sum + el.confidence
+    metadata.word_count = metadata.word_count + 1
+    metadata.confidence_sum = metadata.confidence_sum + el.confidence
+  end
+  return speaker
+end
+
+local function add_next_talker_pieces(self, m_indexes, next_talker, metadata)
+  local new_speaker = m_indexes[next_talker]
+  local pieces = {}
+  local el_idx, el, next_idx
+  repeat
+    el_idx, el = next(new_speaker.elements, new_speaker.el_idx)
+    if el_idx then
+      new_speaker.el_idx = el_idx
+      table.insert(pieces, el.value)
+      new_speaker = recalculate_confidences(self, el, new_speaker, metadata)
+      next_idx, next_el = next(new_speaker.elements, el_idx)
+    end
+  until not next_idx or next_el.ts
+  return new_speaker, pieces
+end
+
+local function add_speaking_to_conversation(self, conversation, new_speaker, pieces, active_talker, next_talker)
+  if next_talker == active_talker then
+    conversation[#conversation].pieces = table.join(conversation[#conversation].pieces, pieces)
   else
-    local text = table.concat(element_parts)
-    return elements_confidence_sum, elements_confidence_count, text
+    table.insert(conversation, {
+      speaker = new_speaker.speaker,
+      pieces = pieces,
+    })
+  end
+  return conversation
+end
+
+local function summate_confidences(self, m_indexes, metadata)
+  local speaker_metadata
+  for speaker_idx, speaker in ipairs(m_indexes) do
+    metadata.speakers[speaker_idx].word_count = speaker.word_count
+    metadata.speakers[speaker_idx].confidence_sum = speaker.confidence_sum
+    metadata.speakers[speaker_idx].confidence_average = speaker.confidence_sum / speaker.word_count
+  end
+  metadata.confidence_average = metadata.confidence_sum / metadata.word_count
+  self.log.debug("Summated confidences")
+  return metadata
+end
+
+local function monologues_to_conversation(self, composition_data, conversation, active_talker)
+  local m_indexes = composition_data.m_indexes
+  local metadata = composition_data.metadata
+  conversation = conversation and conversation or {}
+  local next_talker = find_next_talker(self, m_indexes)
+  if next_talker then
+    local new_speaker, pieces = add_next_talker_pieces(self, m_indexes, next_talker, metadata)
+    conversation = add_speaking_to_conversation(self, conversation, new_speaker, pieces, active_talker, next_talker)
+    return monologues_to_conversation(self, composition_data, conversation, next_talker)
+  else
+    metadata = summate_confidences(self, m_indexes, metadata)
+    self.log.debug("Returning monologues converted to conversation")
+    return conversation, metadata
   end
 end
 
-local function assemble_transcriptions_to_text(self, confidence_sum, confidence_count, text_parts, data, next_i)
-  local i, monologue = next(data, next_i)
-  if i then
-    local element_parts = {}
-    local elements_confidence_sum, elements_confidence_count, elements_text = assemble_elements(self, 0, 0, element_parts, monologue)
-    confidence_sum = confidence_sum + elements_confidence_sum
-    confidence_count = confidence_count + elements_confidence_count
-    table.insert(text_parts, elements_text)
-    return assemble_transcriptions_to_text(self, confidence_sum, confidence_count, text_parts, data, i)
-  else
-    local confidence = confidence_sum == 0 and 0 or (confidence_sum / confidence_count * 100)
-    local text = table.concat(text_parts, "\n\n")
-    return confidence, text
+function set_speaker_label(self, speaker_labels, speaker_index)
+  local default_label = string.format([[Speaker %d]], speaker_index)
+  if speaker_labels then
+    if type(speaker_labels[speaker_index]) == "string" then
+      return speaker_labels[speaker_index]
+    elseif speaker_labels[speaker_index] == false then
+      return false
+    end
   end
+  return default_label
+end
+
+function talk_stream_to_conversation(self, data, metadata, accum, next_i)
+  accum = accum and accum or {}
+  next_i, section = next(data, next_i)
+  if next_i then
+    formatted_section = {
+      text = table.concat(section.pieces),
+    }
+    speaker_label = metadata.speakers[section.speaker + 1].label
+    if speaker_label then
+      formatted_section.speaker = speaker_label
+    end
+    table.insert(accum, formatted_section)
+    return talk_stream_to_conversation(self, data, metadata, accum, next_i)
+  else
+    self.log.debug("Returning talk stream converted to conversation")
+    return accum
+  end
+end
+
+function format_metadata_line(self, label, confidence_average)
+  local percentage = string.format([[%.2f]], confidence_average)
+  -- TODO: This is ugly, how to format 100% more elegantly?
+  if percentage == "1.00" then
+    percentage = "100"
+  end
+  return string.format([[%s: %s%%]], label, percentage)
+end
+
+function format_metadata(self, metadata, speaker_labels)
+  local formatted_metadata = {
+    format_metadata_line(self, "Total", metadata.confidence_average),
+  }
+  local speaker_label
+  for _, speaker in ipairs(metadata.speakers) do
+    if speaker.label then
+      table.insert(formatted_metadata, format_metadata_line(self, speaker.label, speaker.confidence_average))
+    end
+  end
+  self.log.debug("Returning formatted metadata")
+  return table.concat(formatted_metadata, "\n")
+end
+
+function format_conversation(self, conversation, accum, next_i)
+  accum = accum and accum or {}
+  local formatted_section
+  next_i, section = next(conversation, next_i)
+  if next_i then
+    formatted_section = section.speaker and string.format("%s:\n%s", section.speaker, section.text) or section.text
+    table.insert(accum, formatted_section)
+    return format_conversation(self, conversation, accum, next_i)
+  else
+    self.log.debug("Returning formatted conversation")
+    return table.concat(accum, "\n\n")
+  end
+end
+
+function parse_transcriptions(self, response, speaker_labels)
+  local data = cjson.decode(response)
+  local m_indexes = {}
+  local metadata = {
+    word_count = 0,
+    confidence_sum = 0,
+    confidence_average = 0,
+    speakers = {},
+  }
+  for m_index, monologue in ipairs(data.monologues) do
+    m_indexes[m_index] = {
+      elements = monologue.elements,
+      speaker = monologue.speaker,
+      word_count = 0,
+      confidence_sum = 0,
+      confidence_average = 0,
+    }
+    metadata.speakers[m_index] = {
+      label = set_speaker_label(self, speaker_labels, m_index)
+    }
+  end
+  local composition_data = {
+    m_indexes = m_indexes,
+    metadata = metadata,
+  }
+  self.log.debug("Parsing %d monologues into conversation", #m_indexes)
+  local data, metadata = monologues_to_conversation(self, composition_data)
+  local conversation = talk_stream_to_conversation(self, data, metadata)
+  return {
+    conversation = conversation,
+    metadata = metadata,
+  }
 end
 
 --- Make a generic POST request to the Rev.ai API.
@@ -349,35 +479,37 @@ end
 --
 -- @tab data
 --   A table of transcription data as returned by @{parse_transcriptions}.
--- @treturn number confidence
---   Number from zero to one hundred, representing the average confidence of all
---   transcribed parts.
+-- @treturn string formatted_metadata
+--   Text representation of the metadata, which includes total confidence, and
+--   condifence per speaker.
 -- @treturn string text
 --   Concatenated transcription.
 -- @usage
 --   confidence, text = handler:transcriptions_to_text(data)
 function _M:transcriptions_to_text(data)
-  local confidence_sum = 0
-  local confidence_count = 0
-  local text_parts = {}
-  local confidence, text = assemble_transcriptions_to_text(self, confidence_sum, confidence_count, text_parts, data)
-  self.log.debug("Confidence in transcription: %.2f%%\n", confidence)
-  self.log.debug("TEXT: \n\n%s", text)
-  return confidence, text
+  local formatted_metadata = format_metadata(self, data.metadata)
+  local text = format_conversation(self, data.conversation)
+  return formatted_metadata, text
 end
 
 --- Parse a transcription response from a successful API call.
 --
 -- @string response
 --   The response from the API call.
+-- @tab speaker_labels
+--   Optional. List of speaker labels. If provided, they will be applied in
+--   order of speaker to replace the generic speaker labels.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @return data
---   Table of transcriptions on success, error message on fail.
+--   Table of transcription data on success, error message on fail.
+--   Transcription data has two keys: conversation, which contains the
+--   conversation data, and metadata, which contains the metadata, such as
+--   predicted accuracies.
 -- @usage
 --   success, data = handler:parse_transcriptions(response)
-function _M:parse_transcriptions(response)
-  success, data = pcall(parse_transcriptions, self, response)
+function _M:parse_transcriptions(response, speaker_labels)
+  success, data = pcall(parse_transcriptions, self, response, speaker_labels)
   if not success then
     self.log.err("Error parsing transcription: %s", data)
   end
