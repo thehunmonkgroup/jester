@@ -36,6 +36,9 @@ local watson_handler = watson:new({
     model = "en-US_NarrowbandModel",
     smart_formatting = true,
     split_transcript_at_phrase_end = true,
+    speaker_labels = true,
+    word_confidence = true,
+    profanity_filter = true,
   },
 })
 
