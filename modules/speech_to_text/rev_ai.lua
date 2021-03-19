@@ -368,6 +368,21 @@ function parse_transcriptions(self, response, speaker_labels)
   }
 end
 
+--- Retrieves jobs.
+--
+-- @tab query_parameters
+--   Optional. Table of query parameters to filter the list.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Table of json data on success, error message on fail.
+-- @usage
+--   local query_parameters = { limit = 1000 }
+--   success, data = handler:get_jobs(query_parameters)
+function _M:get_jobs(query_parameters)
+  return self:get("jobs", query_parameters)
+end
+
 --- Retrieves custom vocabularies.
 --
 -- @treturn bool success
@@ -377,7 +392,7 @@ end
 -- @usage
 --   success, data = handler:get_custom_vocabularies()
 function _M:get_custom_vocabularies()
-  return self:get("vocabularies", params)
+  return self:get("vocabularies")
 end
 
 --- Add a custom vocabulary.
@@ -476,15 +491,19 @@ end
 --
 -- @string path
 --   Path to GET.
+-- @tab query_parameters
+--   Optional. Table of query parameters to pass to the request.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn response
 --   Table of json data on success, error message on fail.
 -- @usage
 --   success, response = handler:get("vocabularies")
-function _M:get(path)
+function _M:get(path, query_parameters)
   local request_handler = self.params.request_handler or https
+  local query_string = table.stringify(query_parameters)
   local response = {}
+  local url = string.format([[%s/%s?%s]], BASE_URL, path, query_string)
   self.log.debug("GET request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
@@ -492,7 +511,7 @@ function _M:get(path)
       ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["accept"] = "application/json",
     },
-    url = string.format([[%s/%s]], BASE_URL, path),
+    url = url,
     sink = ltn12.sink.table(response),
   })
   local success, response = process_response(self, response, status_code, status_description)
