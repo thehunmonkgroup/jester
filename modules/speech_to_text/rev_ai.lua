@@ -368,6 +368,70 @@ function parse_transcriptions(self, response, speaker_labels)
   }
 end
 
+--- Retrieves custom vocabularies.
+--
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, data = handler:get_custom_vocabularies()
+function _M:get_custom_vocabularies()
+  return self:get("vocabularies", params)
+end
+
+--- Add a custom vocabulary.
+--
+-- @tab data
+--   Table of data describing the vocabulary.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Table of json data on success, error message on fail.
+-- @usage
+--   local data = {
+--     "metadata": "foo",
+--     "custom_vocabularies": [
+--       {
+--         "phrases": [
+--           "bar",
+--         ],
+--       },
+--     ],
+--   }
+--   success, data = handler:add_custom_vocabulary(data)
+function _M:add_custom_vocabulary(data)
+  return self:post_json("vocabularies", data)
+end
+
+--- Show a custom vocabulary.
+--
+-- @string id
+--   Vocabulary ID.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, data = handler:show_vocabulary()
+function _M:show_vocabulary(id)
+  return self:get(string.format([[vocabularies/%s]], id))
+end
+
+--- Remove a custom vocabulary.
+--
+-- @string id
+--   Vocabulary ID.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Response string on success, error message on fail.
+-- @usage
+--   success, data = handler:remove_vocabulary(id)
+function _M:remove_vocabulary(id)
+  return self:delete(string.format([[vocabularies/%s]], id))
+end
+
 --- Make a generic POST request to the Rev.ai API.
 --
 -- @string path
@@ -449,7 +513,7 @@ end
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn response
---   Table of json data on success, error message on fail.
+--   Response string on success, error message on fail.
 -- @usage
 --   success, response = handler:delete("vocabularies")
 function _M:delete(path)
