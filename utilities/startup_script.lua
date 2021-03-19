@@ -49,7 +49,7 @@ local function require_module(name)
   if success then
     return M
   else
-    log("err", "Could not require module '%s': make sure the module is available via a standard require() call", name)
+    log("err", "Could not require module '%s': make sure the module is available via a standard require() call, error output follows: %s", name, M)
     return false
   end
 end
