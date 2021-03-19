@@ -37,7 +37,7 @@
 --   This value can be overridden per profile.
 local conf = {}
 
-DEFAULT_LOG_LEVEL = "trace"
+DEFAULT_LOG_LEVEL = "debug"
 conf.log = {}
 
 -- These settings control what debugging information is output, only edit the
