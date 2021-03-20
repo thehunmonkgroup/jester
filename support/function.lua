@@ -31,7 +31,7 @@ function call_function_with_retry(tries, retry_interval_seconds, func, ...)
     end
     tries = tries - 1
     if tries > 0 then
-      log.err("Trying function '%s' call again in %d seconds", name, retry_interval_seconds)
+      log.debug("Trying function '%s' call again in %d seconds", name, retry_interval_seconds)
       socket.sleep(retry_interval_seconds)
       return call_function_with_retry(tries, retry_interval_seconds, func, ...)
     else
