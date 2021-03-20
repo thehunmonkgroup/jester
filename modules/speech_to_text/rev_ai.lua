@@ -593,8 +593,8 @@ end
 
 --- Parse a transcription response from a successful API call.
 --
--- @string response
---   The response from the API call.
+-- @tab data
+--   The JSON data from the API call.
 -- @tab speaker_labels
 --   Optional. List of speaker labels. If provided, they will be applied in
 --   order of speaker to replace the generic speaker labels.
@@ -606,9 +606,9 @@ end
 --   conversation data, and metadata, which contains the metadata, such as
 --   predicted accuracies.
 -- @usage
---   success, data = handler:parse_transcriptions(response)
-function _M:parse_transcriptions(response, speaker_labels)
-  success, data = pcall(parse_transcriptions, self, response, speaker_labels)
+--   success, data = handler:parse_transcriptions(data)
+function _M:parse_transcriptions(data, speaker_labels)
+  success, data = pcall(parse_transcriptions, self, data, speaker_labels)
   if not success then
     self.log.err("Error parsing transcription: %s", data)
   end
