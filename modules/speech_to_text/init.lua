@@ -126,10 +126,10 @@ function _M.new(self, handler, params)
     error("Handler is required")
   end
   local stt = {}
+  stt.log = core.logger({prefix = LOG_PREFIX})
   stt.handler = handler
   stt.params = table.merge(DEFAULT_PARAMS, params or {})
   stt.handler.params = stt_merge_params(stt.handler.params, stt.params)
-  stt.log = core.logger({prefix = LOG_PREFIX})
   setmetatable(stt, self)
   self.__index = self
   stt.log.debug("New speech to text object")
