@@ -393,6 +393,21 @@ function _M:get_job(job_id)
   return request_job_transcript(self, job_id)
 end
 
+--- Deletes a job.
+--
+-- @string job_id
+--   Required. Job ID.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn response
+--   Response string on success, error message on fail.
+-- @usage
+--   success, response = handler:delete_job("somejobid")
+function _M:delete_job(job_id)
+  local path = string.format([[jobs/%s]], job_id)
+  return self:delete(path)
+end
+
 --- Retrieves custom vocabularies.
 --
 -- @treturn bool success
