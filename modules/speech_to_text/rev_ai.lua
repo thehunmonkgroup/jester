@@ -143,22 +143,32 @@ local function request_job_transcript(self, url)
   return process_response(self, response, status_code, status_description)
 end
 
+local function request_wait_for_transcript(self, url)
+  self.log.debug("Requesting job status")
+  local success, response = request_job_status(self, url)
+  if success then
+    self.log.debug("Requesting job transcript")
+    success, response = request_job_transcript(self, url)
+    if not success then
+      self.log.err("Requesting job transcript failed: %s", response)
+    end
+  else
+    self.log.err("Requesting job status failed: %s", response)
+  end
+  return success, response
+end
+
 local function request(self, url, options, attributes)
-  success, response = request_new_job(self, url, options, attributes)
+  local success, response = request_new_job(self, url, options, attributes)
   if success then
     self.log.debug("New job submitted successfully")
     success, data = pcall(parse_response, self, response)
     if success then
-      self.params.job_id = data.id
-      self.log.debug("Requesting job status")
-      success, response = request_job_status(self, url)
-      if success then
-        self.log.debug("Requesting job transcript")
-        success, response = request_job_transcript(self, url)
-        if not success then
-          self.log.err("Requesting job transcript failed: %s", response)
-        end
+      if self.params.jobs_only then
+        return success, data
       end
+      self.params.job_id = data.id
+      success, response = request_wait_for_transcript(self, url)
     else
       self.log.err("Parsing new job response failed: %s", data)
     end
