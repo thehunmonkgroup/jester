@@ -161,12 +161,12 @@ end
 local function request(self, url, options, attributes)
   local success, response = request_new_job(self, url, options, attributes)
   if success then
+    if self.params.jobs_only then
+      return success, response
+    end
     self.log.debug("New job submitted successfully")
     success, data = pcall(parse_response, self, response)
     if success then
-      if self.params.jobs_only then
-        return success, data
-      end
       self.params.job_id = data.id
       success, response = request_wait_for_transcript(self, url)
     else
@@ -346,6 +346,11 @@ end
 
 function parse_transcriptions(self, response, speaker_labels)
   local data = cjson.decode(response)
+  -- This is kind of a hack, but it does allow the generic speech_to_text
+  -- module to be used for jobs_only configuration.
+  if self.params.jobs_only then
+    return data
+  end
   local m_indexes = {}
   local metadata = {
     word_count = 0,
