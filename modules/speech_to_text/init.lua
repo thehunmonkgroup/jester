@@ -20,7 +20,6 @@ local core = require "jester.core"
 core.bootstrap()
 
 local LOG_PREFIX = "JESTER::MODULE::SPEECH_TO_TEXT"
-local DEFAULT_CONTENT_TYPE = "audio/wav"
 local DEFAULT_PARAMS = {
   retries = 3,
   retry_wait_seconds = 60,

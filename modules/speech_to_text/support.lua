@@ -33,6 +33,8 @@ core.bootstrap()
 
 local log = core.logger({prefix = "JESTER::MODULE::SPEECH_TO_TEXT::SUPPORT"})
 
+local DEFAULT_CONTENT_TYPE = "audio/wav"
+
 function stt_set_start_end_timestamps(params)
   params.start_timestamp = params.start_timestamp and tonumber(params.start_timestamp) or os.time()
   if not params.end_timestamp and params.timeout_seconds then
