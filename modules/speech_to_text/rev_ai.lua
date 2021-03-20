@@ -42,6 +42,11 @@ local function parse_response(self, response)
   return data
 end
 
+local function build_url(path)
+  local url = string.format("%s/%s", BASE_URL, path)
+  return url
+end
+
 local function process_response(self, response, status_code, status_description)
   local response_string = table.concat(response)
   if status_code == 200 then
@@ -53,7 +58,7 @@ local function process_response(self, response, status_code, status_description)
   end
 end
 
-local function request_new_job(self, url, options, attributes)
+local function request_new_job(self, options, attributes)
   local request_handler = self.params.request_handler or https
   local response = {}
   local options_string = cjson.encode(options)
@@ -80,75 +85,54 @@ local function request_new_job(self, url, options, attributes)
       options = options_string,
     })
   end
-  rq.url = url
+  rq.url = build_url("jobs")
   rq.headers.authorization = string.format([[Bearer %s]], self.params.api_key)
   rq.sink = ltn12.sink.table(response)
   local body, status_code, headers, status_description = request_handler.request(rq)
   return process_response(self, response, status_code, status_description)
 end
 
-local function request_job_status(self, url, count)
-  local request_handler = self.params.request_handler or https
+local function request_job_status(self, job_id, count)
   local count = count or 1
-  local response = {}
-  local body, status_code, headers, status_description = request_handler.request({
-    method = "GET",
-    headers = {
-      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
-      ["accept"] = "application/json",
-    },
-    url = string.format([[%s/%s]], url, self.params.job_id),
-    sink = ltn12.sink.table(response),
-  })
   self.log.debug("Job status request %d", count)
-  local success, response = process_response(self, response, status_code, status_description)
+  local job_path = string.format([[jobs/%s]], job_id)
+  local success, data = self:get(job_path)
   if success then
-    success, data = pcall(parse_response, self, response)
-    if success then
-      if data.status == "failed" then
-        return false, string.format([[API transcription failed: %s]], data.failure)
-      elseif data.status == "transcribed" then
-        self.log.debug("Transcription success")
-        return success, data
-      else
-        if self.params.end_timestamp and os.time() > self.params.end_timestamp then
-          self.log.err("Job status request timed out")
-          return false, stt_format_timeout_message(self.params.end_timestamp)
-        else
-          self.log.debug("Still waiting on transcription, sleeping %d seconds", JOB_STATUS_RETRY_SECONDS)
-          socket.sleep(JOB_STATUS_RETRY_SECONDS)
-          count = count + 1
-          return request_job_status(self, url, count)
-        end
-      end
+    if data.status == "failed" then
+      return false, string.format([[API transcription failed: %s]], data.failure)
+    elseif data.status == "transcribed" then
+      self.log.debug("Transcription success")
+      return success, data
     else
-      self.log.err("Parsing job status response failed: %s", data)
+      if self.params.end_timestamp and os.time() > self.params.end_timestamp then
+        self.log.err("Job status request timed out")
+        return false, stt_format_timeout_message(self.params.end_timestamp)
+      else
+        self.log.debug("Still waiting on transcription, sleeping %d seconds", JOB_STATUS_RETRY_SECONDS)
+        socket.sleep(JOB_STATUS_RETRY_SECONDS)
+        count = count + 1
+        return request_job_status(self, job_id, count)
+      end
     end
+  else
+    self.log.err("Fetching job status failed: %s", data)
   end
 end
 
-local function request_job_transcript(self, url)
-  local request_handler = self.params.request_handler or https
-  local response = {}
-  local body, status_code, headers, status_description = request_handler.request({
-    method = "GET",
-    headers = {
-      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
-      ["accept"] = "application/vnd.rev.transcript.v1.0+json",
-    },
-    url = string.format([[%s/%s/transcript]], url, self.params.job_id),
-    sink = ltn12.sink.table(response),
-  })
-  self.log.debug("Job transcript request")
-  return process_response(self, response, status_code, status_description)
+local function request_job_transcript(self, job_id)
+  local headers = {
+    ["accept"] = "application/vnd.rev.transcript.v1.0+json",
+  }
+  local path = string.format([[jobs/%s/transcript]], job_id)
+  return self:get(path, {}, headers)
 end
 
-local function request_wait_for_transcript(self, url)
+local function request_wait_for_transcript(self, job_id)
   self.log.debug("Requesting job status")
-  local success, response = request_job_status(self, url)
+  local success, response = request_job_status(self, job_id)
   if success then
     self.log.debug("Requesting job transcript")
-    success, response = request_job_transcript(self, url)
+    success, response = request_job_transcript(self, job_id)
     if not success then
       self.log.err("Requesting job transcript failed: %s", response)
     end
@@ -158,8 +142,8 @@ local function request_wait_for_transcript(self, url)
   return success, response
 end
 
-local function request(self, url, options, attributes)
-  local success, response = request_new_job(self, url, options, attributes)
+local function request(self, options, attributes)
+  local success, response = request_new_job(self, options, attributes)
   if success then
     if self.params.jobs_only then
       return success, response
@@ -167,8 +151,7 @@ local function request(self, url, options, attributes)
     self.log.debug("New job submitted successfully")
     success, data = pcall(parse_response, self, response)
     if success then
-      self.params.job_id = data.id
-      success, response = request_wait_for_transcript(self, url)
+      success, response = request_wait_for_transcript(self, data.id)
     else
       self.log.err("Parsing new job response failed: %s", data)
     end
@@ -177,10 +160,9 @@ local function request(self, url, options, attributes)
 end
 
 local function build_and_execute_request(self, options, attributes)
-  local url = string.format("%s/jobs", BASE_URL)
   local to_transcribe = options.media_url or attributes.path
-  self.log.info("Got request to transcribe file '%s', using request URI '%s'", to_transcribe, url)
-  return request(self, url, options, attributes)
+  self.log.info("Got request to transcribe file '%s', using request URI '%s'", to_transcribe, build_url("jobs"))
+  return request(self, options, attributes)
 end
 
 local function check_params(self, file_params, options)
@@ -344,8 +326,7 @@ function format_conversation(self, conversation, accum, next_i)
   end
 end
 
-function parse_transcriptions(self, response, speaker_labels)
-  local data = cjson.decode(response)
+function parse_transcriptions(self, data, speaker_labels)
   -- This is kind of a hack, but it does allow the generic speech_to_text
   -- module to be used for jobs_only configuration.
   if self.params.jobs_only then
@@ -396,6 +377,20 @@ end
 --   success, data = handler:get_jobs(query_parameters)
 function _M:get_jobs(query_parameters)
   return self:get("jobs", query_parameters)
+end
+
+--- Retrieves a job.
+--
+-- @string job_id
+--   Required. Job ID.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, data = handler:get_job("somejobid")
+function _M:get_job(job_id)
+  return request_job_transcript(self, job_id)
 end
 
 --- Retrieves custom vocabularies.
@@ -477,7 +472,7 @@ end
 function _M:post_json(path, json)
   local request_handler = self.params.request_handler or https
   local response = {}
-  local url = string.format("%s/%s", BASE_URL, path)
+  local url = build_url(path)
   local json_string = cjson.encode(json)
   self.log.debug("POST request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
@@ -508,24 +503,29 @@ end
 --   Path to GET.
 -- @tab query_parameters
 --   Optional. Table of query parameters to pass to the request.
+-- @tab headers
+--   Optional. Table of headers to pass to the request, these will be merged
+--   with the default headers.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @treturn response
 --   Table of json data on success, error message on fail.
 -- @usage
 --   success, response = handler:get("vocabularies")
-function _M:get(path, query_parameters)
+function _M:get(path, query_parameters, headers)
   local request_handler = self.params.request_handler or https
   local query_string = table.stringify(query_parameters)
   local response = {}
-  local url = string.format([[%s/%s?%s]], BASE_URL, path, query_string)
+  local default_headers = {
+    ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
+    ["accept"] = "application/json",
+  }
+  local headers = table.merge(default_headers, headers or {})
+  local url = string.format([[%s?%s]], build_url(path), query_string)
   self.log.debug("GET request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "GET",
-    headers = {
-      ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
-      ["accept"] = "application/json",
-    },
+    headers = headers,
     url = url,
     sink = ltn12.sink.table(response),
   })
@@ -553,6 +553,7 @@ end
 function _M:delete(path)
   local request_handler = self.params.request_handler or https
   local response = {}
+  local url = build_url(path)
   self.log.debug("DELETE request to: %s", url)
   local body, status_code, headers, status_description = request_handler.request({
     method = "DELETE",
@@ -560,7 +561,7 @@ function _M:delete(path)
       ["authorization"] = string.format([[Bearer %s]], self.params.api_key),
       ["accept"] = "application/json",
     },
-    url = string.format([[%s/%s]], BASE_URL, path),
+    url = url,
     sink = ltn12.sink.table(response),
   })
   local response_string = table.concat(response)
