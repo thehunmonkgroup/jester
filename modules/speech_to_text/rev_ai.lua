@@ -61,6 +61,11 @@ end
 local function request_new_job(self, options, attributes)
   local request_handler = self.params.request_handler or https
   local response = {}
+  -- Metadata could be a simple string, if it's a table, assume it's JSON data
+  -- that needs to be properly encoded.
+  if options.metadata and type(options.metadata) == "table" then
+    options.metadata = cjson.encode(options.metadata)
+  end
   local options_string = cjson.encode(options)
   local rq
   -- media_url means JSON body with no local file.
@@ -145,15 +150,15 @@ end
 local function request(self, options, attributes)
   local success, response = request_new_job(self, options, attributes)
   if success then
-    if self.params.jobs_only then
-      return success, response
-    end
     self.log.debug("New job submitted successfully")
-    success, data = pcall(parse_response, self, response)
+    success, response = pcall(parse_response, self, response)
     if success then
-      success, response = request_wait_for_transcript(self, data.id)
+      if self.params.jobs_only then
+        return success, response
+      end
+      success, response = request_wait_for_transcript(self, response.id)
     else
-      self.log.err("Parsing new job response failed: %s", data)
+      self.log.err("Parsing new job response failed: %s", response)
     end
   end
   return success, response
@@ -504,8 +509,8 @@ function _M:post_json(path, json)
   local success, response = process_response(self, response, status_code, status_description)
   if success then
     self.log.debug("POST request success to: %s", url)
-    success, data = pcall(parse_response, self, response)
-    return success, data
+    success, response = pcall(parse_response, self, response)
+    return success, response
   else
     self.log.err("POST request failed to: %s, %s", url, response)
     return success, response
@@ -547,8 +552,8 @@ function _M:get(path, query_parameters, headers)
   local success, response = process_response(self, response, status_code, status_description)
   if success then
     self.log.debug("GET request success to: %s", url)
-    success, data = pcall(parse_response, self, response)
-    return success, data
+    success, response = pcall(parse_response, self, response)
+    return success, response
   else
     self.log.err("GET request failed to: %s, %s", url, response)
     return success, response
