@@ -395,6 +395,21 @@ end
 -- @usage
 --   success, data = handler:get_job("somejobid")
 function _M:get_job(job_id)
+  local path = string.format([[jobs/%s]], job_id)
+  return self:get(path)
+end
+
+--- Retrieves a job transcript.
+--
+-- @string job_id
+--   Required. Job ID.
+-- @treturn bool success
+--   Indicates if operation succeeded.
+-- @treturn data
+--   Table of json data on success, error message on fail.
+-- @usage
+--   success, data = handler:get_job_transcript("somejobid")
+function _M:get_job_transcript(job_id)
   return request_job_transcript(self, job_id)
 end
 
