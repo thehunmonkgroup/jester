@@ -275,19 +275,19 @@ function set_speaker_label(self, speaker_labels, speaker_index)
   return default_label
 end
 
-function talk_stream_to_conversation(self, data, metadata, accum, next_i)
+function talk_stream_to_conversation(self, data, metadata, speaker_labels, accum, next_i)
   accum = accum and accum or {}
   next_i, section = next(data, next_i)
   if next_i then
     formatted_section = {
       text = table.concat(section.pieces),
     }
-    speaker_label = metadata.speakers[section.speaker + 1].label
+    speaker_label = speaker_labels and speaker_labels[section.speaker + 1]
     if speaker_label then
       formatted_section.speaker = speaker_label
     end
     table.insert(accum, formatted_section)
-    return talk_stream_to_conversation(self, data, metadata, accum, next_i)
+    return talk_stream_to_conversation(self, data, metadata, speaker_labels, accum, next_i)
   else
     self.log.debug("Returning talk stream converted to conversation")
     return accum
@@ -362,7 +362,7 @@ function parse_transcriptions(self, data, speaker_labels)
   }
   self.log.debug("Parsing %d monologues into conversation", #m_indexes)
   local data, metadata = monologues_to_conversation(self, composition_data)
-  local conversation = talk_stream_to_conversation(self, data, metadata)
+  local conversation = talk_stream_to_conversation(self, data, metadata, speaker_labels)
   return {
     conversation = conversation,
     metadata = metadata,
