@@ -240,9 +240,9 @@ local function summate_confidences(self, m_indexes, metadata)
   for speaker_idx, speaker in ipairs(m_indexes) do
     metadata.speakers[speaker_idx].word_count = speaker.word_count
     metadata.speakers[speaker_idx].confidence_sum = speaker.confidence_sum
-    metadata.speakers[speaker_idx].confidence_average = speaker.confidence_sum / speaker.word_count
+    metadata.speakers[speaker_idx].confidence_average = speaker.word_count > 0 and (speaker.confidence_sum / speaker.word_count) or 0
   end
-  metadata.confidence_average = metadata.confidence_sum / metadata.word_count
+  metadata.confidence_average = metadata.word_count > 0 and (metadata.confidence_sum / metadata.word_count) or 0
   self.log.debug("Summated confidences")
   return metadata
 end
