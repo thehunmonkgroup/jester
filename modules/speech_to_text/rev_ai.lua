@@ -264,12 +264,11 @@ local function monologues_to_conversation(self, composition_data, conversation, 
 end
 
 function set_speaker_label(self, speaker_labels, speaker_index)
-  local speaker_labels_index = speaker_index + 1
-  local default_label = string.format([[Speaker %d]], speaker_labels_index)
+  local default_label = string.format([[Speaker %d]], speaker_index)
   if speaker_labels then
-    if type(speaker_labels[speaker_labels_index]) == "string" then
-      return speaker_labels[speaker_labels_index]
-    elseif speaker_labels[speaker_labels_index] == false then
+    if type(speaker_labels[speaker_index]) == "string" then
+      return speaker_labels[speaker_index]
+    elseif speaker_labels[speaker_index] == false then
       return false
     end
   end
@@ -342,15 +341,16 @@ function parse_transcriptions(self, data, speaker_labels)
     speakers = {},
   }
   for m_index, monologue in ipairs(data.monologues) do
-    m_indexes[monologue.speaker] = {
+    local monologue_index = monologue.speaker + 1
+    m_indexes[monologue_index] = {
       elements = monologue.elements,
-      speaker = monologue.speaker,
+      speaker = monologue_index,
       word_count = 0,
       confidence_sum = 0,
       confidence_average = 0,
     }
-    metadata.speakers[monologue.speaker] = {
-      label = set_speaker_label(self, speaker_labels, monologue.speaker)
+    metadata.speakers[monologue_index] = {
+      label = set_speaker_label(self, speaker_labels, monologue_index)
     }
   end
   local composition_data = {
