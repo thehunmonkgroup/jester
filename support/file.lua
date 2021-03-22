@@ -4,6 +4,13 @@
 
 local io = require("io")
 
+local core = require "jester.core"
+core.bootstrap()
+
+local LOG_PREFIX = "JESTER::SUPPORT::FILE"
+
+local log = core.logger({prefix = LOG_PREFIX})
+
 --[[
   Returns file size.
 ]]
@@ -69,8 +76,9 @@ end
 function remove_file(filepath)
   local ok, err = os.remove(filepath)
   if ok then
-    debug_print(string.format("Removed filepath: %s", filepath))
+    log.debug("Removed filepath: %s", filepath)
   else
-    error_print(string.format("ERROR: could not remove filepath %s: %s", filepath, err))
+    log.err("Could not remove filepath %s: %s", filepath, err)
   end
+  return ok, err
 end
