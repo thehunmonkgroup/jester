@@ -133,12 +133,15 @@ end
 --
 -- @tab config
 --   Optional. Defaults to @{core.conf|global configuration}.
+-- @tab force
+--   Optional. Boolean. Jester normally remembers that it's bootstrapped, set
+--   this to true to override and bootstrap again.
 -- @usage
 --   config = require "jester.conf"
 --   core.bootstrap(config)
-function _M.bootstrap(config)
+function _M.bootstrap(config, force)
 
-  if _M.bootstrapped then
+  if _M.bootstrapped and not force then
     return
   end
 
@@ -158,7 +161,7 @@ function _M.bootstrap(config)
     level = _M.conf.log.level,
   }
   _M.log = _M.logger(log_config)
-  _M.log.debug("Bootstrapping Jester")
+  _M.log.trace("Bootstrapping Jester")
   _M.bootstrapped = true
 
 end
