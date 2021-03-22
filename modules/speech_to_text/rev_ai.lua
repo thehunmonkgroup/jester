@@ -185,7 +185,7 @@ end
 
 local function find_next_talker(self, m_indexes)
   local next_talker, next_talk_time
-  for m_index, data in ipairs(m_indexes) do
+  for m_index, data in pairs(m_indexes) do
     local _, el = next(data.elements, data.el_idx)
     if el and el.ts then
       if not next_talk_time or el.ts < next_talk_time then
@@ -237,7 +237,7 @@ end
 
 local function summate_confidences(self, m_indexes, metadata)
   local speaker_metadata
-  for speaker_idx, speaker in ipairs(m_indexes) do
+  for speaker_idx, speaker in pairs(m_indexes) do
     metadata.speakers[speaker_idx].word_count = speaker.word_count
     metadata.speakers[speaker_idx].confidence_sum = speaker.confidence_sum
     metadata.speakers[speaker_idx].confidence_average = speaker.word_count > 0 and (speaker.confidence_sum / speaker.word_count) or 0
@@ -304,7 +304,7 @@ function format_metadata(self, metadata, speaker_labels)
     format_metadata_line(self, "Total", metadata.confidence_average),
   }
   local speaker_label
-  for _, speaker in ipairs(metadata.speakers) do
+  for _, speaker in pairs(metadata.speakers) do
     if speaker.label then
       table.insert(formatted_metadata, format_metadata_line(self, speaker.label, speaker.confidence_average))
     end
