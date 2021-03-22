@@ -264,11 +264,12 @@ local function monologues_to_conversation(self, composition_data, conversation, 
 end
 
 function set_speaker_label(self, speaker_labels, speaker_index)
-  local default_label = string.format([[Speaker %d]], speaker_index)
+  local speaker_labels_index = speaker_index + 1
+  local default_label = string.format([[Speaker %d]], speaker_labels_index)
   if speaker_labels then
-    if type(speaker_labels[speaker_index]) == "string" then
-      return speaker_labels[speaker_index]
-    elseif speaker_labels[speaker_index] == false then
+    if type(speaker_labels[speaker_labels_index]) == "string" then
+      return speaker_labels[speaker_labels_index]
+    elseif speaker_labels[speaker_labels_index] == false then
       return false
     end
   end
@@ -282,7 +283,7 @@ function talk_stream_to_conversation(self, data, metadata, speaker_labels, accum
     formatted_section = {
       text = table.concat(section.pieces),
     }
-    speaker_label = speaker_labels and speaker_labels[section.speaker + 1]
+    speaker_label = set_speaker_label(self, speaker_labels, section.speaker)
     if speaker_label then
       formatted_section.speaker = speaker_label
     end
@@ -295,11 +296,7 @@ function talk_stream_to_conversation(self, data, metadata, speaker_labels, accum
 end
 
 function format_metadata_line(self, label, confidence_average)
-  local percentage = string.format([[%.2f]], confidence_average)
-  -- TODO: This is ugly, how to format 100% more elegantly?
-  if percentage == "1.00" then
-    percentage = "100"
-  end
+  local percentage = string.format([[%.0f]], confidence_average * 100)
   return string.format([[%s: %s%%]], label, percentage)
 end
 
@@ -345,15 +342,15 @@ function parse_transcriptions(self, data, speaker_labels)
     speakers = {},
   }
   for m_index, monologue in ipairs(data.monologues) do
-    m_indexes[m_index] = {
+    m_indexes[monologue.speaker] = {
       elements = monologue.elements,
       speaker = monologue.speaker,
       word_count = 0,
       confidence_sum = 0,
       confidence_average = 0,
     }
-    metadata.speakers[m_index] = {
-      label = set_speaker_label(self, speaker_labels, m_index)
+    metadata.speakers[monologue.speaker] = {
+      label = set_speaker_label(self, speaker_labels, monologue.speaker)
     }
   end
   local composition_data = {
@@ -632,7 +629,8 @@ end
 --   The JSON data from the API call.
 -- @tab speaker_labels
 --   Optional. List of speaker labels. If provided, they will be applied in
---   order of speaker to replace the generic speaker labels.
+--   order of speaker to replace the generic speaker labels. If not provided
+--   and a speaker_labels parameter was provided, it will be used.
 -- @treturn bool success
 --   Indicates if operation succeeded.
 -- @return data
@@ -643,6 +641,7 @@ end
 -- @usage
 --   success, data = handler:parse_transcriptions(data)
 function _M:parse_transcriptions(data, speaker_labels)
+  speaker_labels = speaker_labels or self.params.speaker_labels
   success, data = pcall(parse_transcriptions, self, data, speaker_labels)
   if not success then
     self.log.err("Error parsing transcription: %s", data)
@@ -698,6 +697,8 @@ end
 --   Configuration parameters, see @{speech_to_text.new} for general parameters.
 -- @param params.api_key
 --   Developer API key as obtained from the service credentials.
+-- @param params.speaker_labels
+--   Optional. Table of speaker labels to apply to transcription parsing.
 -- @param params.options
 --   Optional. Table of options to pass to the API call.
 -- @return A Rev.ai speech to text handler object.
@@ -708,6 +709,7 @@ end
 --     -- other params...
 --   }
 --   local handler = rev_ai:new(params)
+-- @see parse_transcriptions
 function _M.new(self, params)
   local rev_ai = {}
   rev_ai.params = table.merge(DEFAULT_PARAMS, params or {})
