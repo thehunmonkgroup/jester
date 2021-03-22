@@ -235,6 +235,15 @@ local function add_speaking_to_conversation(self, conversation, new_speaker, pie
   return conversation
 end
 
+local function squash_speakers(self, speakers)
+  self.log.debug("Squashing speakers")
+  local squashed = {}
+  for _, speaker in pairs(speakers) do
+    table.insert(squashed, speaker)
+  end
+  return squashed
+end
+
 local function summate_confidences(self, m_indexes, metadata)
   local speaker_metadata
   for speaker_idx, speaker in pairs(m_indexes) do
@@ -243,6 +252,7 @@ local function summate_confidences(self, m_indexes, metadata)
     metadata.speakers[speaker_idx].confidence_average = speaker.word_count > 0 and (speaker.confidence_sum / speaker.word_count) or 0
   end
   metadata.confidence_average = metadata.word_count > 0 and (metadata.confidence_sum / metadata.word_count) or 0
+  metadata.speakers = squash_speakers(self, metadata.speakers)
   self.log.debug("Summated confidences")
   return metadata
 end
