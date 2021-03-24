@@ -12,7 +12,7 @@ local LOG_PREFIX = "JESTER::SUPPORT::FILE"
 local log = core.logger({prefix = LOG_PREFIX})
 
 --[[
-  Returns file size.
+  Returns the file size in bytes.
 ]]
 function filesize(file)
   local current = file:seek()
@@ -63,7 +63,10 @@ function write_file(filepath, data, mode)
   if file then
     success, err = file:write(data)
     if success then
+      log.debug("Wrote file: %s", filepath)
       success = true
+    else
+      log.err("Could not write file %s: %s", filepath, err)
     end
     file:close()
   end
