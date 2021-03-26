@@ -46,6 +46,7 @@ local _M = {}
 --      trace
 --      debug
 --      info
+--      notice
 --      warning
 --      err
 --      crit
@@ -70,6 +71,7 @@ function _M.logger(config)
       { name = "trace", color = "\27[34m", },
       { name = "debug", color = "\27[36m", },
       { name = "info",  color = "\27[32m", },
+      { name = "notice",  color = "\27[32m", },
       { name = "warning",  color = "\27[33m", },
       { name = "err", color = "\27[31m", },
       { name = "crit", color = "\27[31m", },
