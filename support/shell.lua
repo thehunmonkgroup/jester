@@ -1,3 +1,13 @@
+require "jester.support.string"
+
+function standardize_output(output)
+  local lines = output:split("\n")
+  if lines[#lines] == "\n" then
+    table.remove(lines)
+  end
+  return lines
+end
+
 function run_shell_command(command, collect_stderr)
   if collect_stderr then
     command = string.format([[%s  2>&1]], command)
