@@ -35,7 +35,7 @@ function call_function_with_retry(tries, retry_interval_seconds, func, ...)
       socket.sleep(retry_interval_seconds)
       return call_function_with_retry(tries, retry_interval_seconds, func, ...)
     else
-      log.err("All tries on calling function '%s' exhausted, giving up", name)
+      log.err("All tries on calling function '%s' exhausted, giving up, error: %s, %s", name, first_return_value, debug.traceback())
     end
     return false
   end
