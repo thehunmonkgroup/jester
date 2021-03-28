@@ -2,7 +2,7 @@ require "jester.support.string"
 
 function standardize_output(output)
   local lines = output:split("\n")
-  if lines[#lines] == "\n" then
+  if lines[#lines] == "" then
     table.remove(lines)
   end
   return lines
