@@ -45,6 +45,13 @@ function directify_path(path)
   return path
 end
 
+function strip_trailing_slash(path)
+  if path:sub(-1) == "/" then
+    path = path:sub(1, -2)
+  end
+  return path
+end
+
 function load_file(filepath, mode)
   mode = mode and mode or "rb"
   local file, err = io.open(filepath, mode)
