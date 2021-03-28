@@ -31,6 +31,18 @@ function table.ordervalues(t)
 end
 
 --[[
+  Checks for the existence of a value in a table.
+]]
+function table.contains(table, element)
+  for _, value in pairs(table) do
+    if value == element then
+      return true
+    end
+  end
+  return false
+end
+
+--[[
   Given an associative array table, returns a properly escaped query string.
 ]]
 function table.stringify(params, sep, eq)
