@@ -38,6 +38,13 @@ function file_exists(n)
   end
 end
 
+function directify_path(path)
+  if path:sub(-1) ~= "/" then
+    path = path .. "/"
+  end
+  return path
+end
+
 function load_file(filepath, mode)
   mode = mode and mode or "rb"
   local file, err = io.open(filepath, mode)
