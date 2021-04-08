@@ -3,7 +3,10 @@ html, body {
   width: 100%;
   padding: 0;
   margin: 0;
+  /*
   font-family: "Comic Sans MS", cursive, sans-serif;
+  */
+  font-family: arial, helvetica, geneva, sans-serif;
 }
 
 body,
