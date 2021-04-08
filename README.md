@@ -1,5 +1,7 @@
 # Jester
 
+**IMPORTANT: The master/2.x branch of Jester is under heavy development, and not guaranteed to work, or show accurate documentation. You may use the [1.x branch](https://github.com/thehunmonkgroup/jester/tree/v1.x) if you need stable functionality, just know that it is unsupported.**
+
 ## Introduction
 Jester is a scripting toolkit for [FreeSWITCH](https://freeswitch.org) written in the [Lua](http://www.lua.org) programming language.
 
