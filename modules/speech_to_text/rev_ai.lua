@@ -610,6 +610,9 @@ function _M:delete(path)
   if status_code == 204 then
     self.log.debug("DELETE request success to: %s", url)
     return true, response_string
+  elseif status_code == 404 then
+    self.log.warning("DELETE request soft failure, status %s: description: %s, response: %s", status_code, status_description, response_string)
+    return true, status_description
   else
     self.log.err("DELETE request failed, status %s: description: %s, response: %s", status_code, status_description, response_string)
     return false, status_description
