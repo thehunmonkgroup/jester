@@ -6,7 +6,6 @@
 
 local ltn12 = require "ltn12"
 local url = require "socket.url"
-local unpack = table.unpack or unpack
 
 local _M = {}
 
@@ -146,7 +145,7 @@ local function source(t, boundary, ctx)
         n = n + 3
     end
     sources[n] = ltn12.source.string(string.format("--%s--\r\n", boundary))
-    return ltn12.source.cat(unpack(sources))
+    return ltn12.source.cat(table.unpack(sources))
 end
 _M.source = source
 

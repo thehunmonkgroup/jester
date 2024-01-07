@@ -22,7 +22,7 @@ function call_function_with_retry(tries, retry_interval_seconds, func, ...)
   local success = table.remove(data, 1)
   local first_return_value = data[1]
   if success and first_return_value ~= nil then
-    return unpack(data)
+    return table.unpack(data)
   else
     if success then
       log.debug("Function '%s' returned nil, will retry", name)
